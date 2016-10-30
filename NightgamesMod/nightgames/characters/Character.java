@@ -287,6 +287,7 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public int getPure(Attribute a) {
+        if (a==null) {throw new RuntimeException("getPure(null) called; att="+att.toString());}
         int total = 0;
         if (att.containsKey(a) && !a.equals(Attribute.Willpower)) {
             total = att.get(a);
@@ -1481,9 +1482,19 @@ public abstract class Character extends Observable implements Cloneable {
                 c.write(this, "Experiencing so much pleasure inside of " + opponent + " reinforces" + " your faith.");
                 p.addict(AddictionType.ZEAL, opponent, Addiction.MED_INCREASE);
             }
+            if (p.checkAddiction(AddictionType.ZEAL, opponent) && selfPart != null && opponentPart != null 
+                            && opponentPart.isType("cock") && (selfPart
+                            .isType("pussy") || selfPart.isType("ass"))) {
+                c.write(this, "Experiencing so much pleasure from " + opponent.nameOrPossessivePronoun() + " cock inside you reinforces" + " your faith.");
+                p.addict(AddictionType.ZEAL, opponent, Addiction.MED_INCREASE);
+            }
             if (p.checkAddiction(AddictionType.BREEDER)) {
                 // Clear combat addiction
                 p.unaddictCombat(AddictionType.BREEDER, opponent, 1.f, c);
+            }
+            if (p.checkAddiction(AddictionType.DOMINANCE) && c.getStance().dom(opponent)) {
+                c.write(this, "Getting dominated by "+opponent+" seems to exceite you even more.");
+                p.addict(AddictionType.DOMINANCE, opponent, Addiction.LOW_INCREASE);
             }
         }
         orgasms += 1;
@@ -1568,6 +1579,9 @@ public abstract class Character extends Observable implements Cloneable {
                       .addict(AddictionType.MIND_CONTROL, opponent, Addiction.MED_INCREASE);
             }
             c.write(this, message);
+        }
+        if (human() && opponent.getName()=="Jewel" && cloned==0) {
+            Global.getPlayer().addict(AddictionType.DOMINANCE, opponent, Addiction.MED_INCREASE);
         }
     }
 
@@ -1877,7 +1891,7 @@ public abstract class Character extends Observable implements Cloneable {
             mojo.reduce(10);
         }
         if (has(Trait.exhibitionist) && mostlyNude()) {
-            mojo.gain(5);
+            mojo.restore(5); //This used to be gain and it was horribly fucking up max mojo
         }
         if (bound()) {
             free();

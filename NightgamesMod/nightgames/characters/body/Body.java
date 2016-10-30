@@ -543,7 +543,9 @@ public class Body implements Cloneable {
         }
         Optional<BodyFetish> fetish = getFetish(with.getType());
         if (fetish.isPresent()) {
-            bonusDamage += magnitude * (1 + fetish.get().magnitude);
+            double fetishBonus = magnitude * (1 + fetish.get().magnitude);
+            if(with.getType()=="ass" && character.has(Trait.analFanatic)) fetishBonus/=4;
+            bonusDamage += fetishBonus;
             character.add(c, new BodyFetish(character, opponent, with.getType(), .05));
         }
         double origBase = bonusDamage + magnitude;
@@ -917,6 +919,12 @@ public class Body implements Cloneable {
                             "<br><b>{other:NAME-POSSESSIVE} hypnotic semen takes its toll on {self:name-possessive} willpower, rendering {self:direct-object} doe-eyed and compliant.</b>",
                             character, opponent));
             character.loseWillpower(c, 10 + Global.random(10));
+        }
+        if (opponent.has(Trait.heatedsemen)) {
+            c.write(Global.format(
+                            "<br><b>{other:NAME-POSSESSIVE} boiling semen takes its toll on {self:name-possessive} stamina, rendering {self:direct-object} limp and compliant.</b>",
+                            character, opponent));
+            character.pain(c, character.getStamina().max()/3+20);
         }
     }
 

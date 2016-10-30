@@ -153,6 +153,8 @@ public enum Trait {
 
     polecontrol("Pole Control", "Always hit the right spots"), // Dick damage upgrade
     hypnoticsemen("Hypnotic Semen", "Cum drains willpower"), // Semen willpower damage trait
+    heatedsemen("Heated Semen", "Cum drains stamina"), // Jewel stamina draining semen trait
+
     testosterone("Testosterone", "More powerful muscles"), // Having a cock gives + to power
     pussyhandler("Pussy Handler", "Expert at pleasing the pussy"), // Bonus damage to pussies
     dickhandler("Dick Handler", "Expert at pleasing cocks"), // Bonus damage to cocks
@@ -447,7 +449,7 @@ public enum Trait {
         });
         resistances.put(Trait.mindcontrolresistance, (c, s) -> {
             // TODO: We should not be getting combat information from the gui; the gui should be focused on display and interaction.
-           if (s.mindgames() && !Global.gui().combat.getOther(c).has(Trait.mindcontroller)) {
+           if (s.mindgames() && (Global.gui().combat == null || !Global.gui().combat.getOther(c).has(Trait.mindcontroller))) {
                float magnitude =
                                Global.getPlayer().getAddiction(AddictionType.MIND_CONTROL).map(Addiction::getMagnitude)
                                                .orElse(0f);

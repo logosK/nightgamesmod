@@ -159,6 +159,8 @@ public class Player extends Character {
         if (c.getStance()
              .inserted() && c.getStance()
                              .dom(this)) {
+            System.out.println("Increasing mojo by 2/4 for "+name+" for dominant inserted victory");
+            
             getMojo().gain(2);
             if (has(Trait.mojoMaster)) {
                 getMojo().gain(2);
@@ -196,6 +198,7 @@ public class Player extends Character {
     public void draw(Combat c, Result flag) {
         if (c.getStance()
              .inserted()) {
+            System.out.println("increasing mojo for "+c.p1.name+" and "+c.p2.name+" by 3 for inserted draw");
             c.p1.getMojo()
                 .gain(3);
             c.p2.getMojo()
@@ -382,6 +385,7 @@ public class Player extends Character {
         getStamina().gain(growth.stamina);
         getArousal().gain(growth.arousal);
         getMojo().gain(growth.mojo);
+        System.out.println("increasing mojo for "+name+" by <growth>+1 for lvlup");
         availableAttributePoints += growth.attributes[Math.min(rank, growth.attributes.length-1)];
         getMojo().gain(1);
         gui.message("You've gained a Level!<br>Select which attributes to increase.");
@@ -717,6 +721,12 @@ public class Player extends Character {
     @Override
     public String nameDirectObject() {
         return "you";
+    }
+    
+    @Override
+    public void add(Trait t) {
+        super.add(t);
+        if (t==Trait.nymphomania) {mod(Attribute.Nymphomania, 1);}
     }
 
     @Override

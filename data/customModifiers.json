@@ -78,9 +78,15 @@
 		"acceptance":"<i>Great! I'll let the girls know their pussies are safe tonight. Well, as safe as they want them to be, anyway.</i>",
 		"skill": [
 			{
-				"type":"ban-tactic",
+				"type":"ban-skills",
 				"value": {
-					"tactic": "fucking"
+					"skill":"Fuck"
+				}
+			},
+			{
+				"type":"ban-skills",
+				"value": {
+					"skill":"Ass Fuck"
 				}
 			}
 		]
