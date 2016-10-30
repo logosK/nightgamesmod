@@ -66,7 +66,7 @@ public class Cassie extends BasePersonality {
         growth.stamina = 2;
         growth.arousal = 4;
         growth.mojo = 3;
-        growth.willpower = .4f;
+        growth.willpower = .7f;
         growth.bonusStamina = 1;
         growth.bonusArousal = 3;
         growth.bonusMojo = 1;

@@ -53,6 +53,11 @@ public class Eve extends BasePersonality {
         character.body.add(BreastsPart.d);
         character.body.add(BasicCockPart.big);
         character.body.add(PussyPart.normal);
+        
+        character.getStamina().setMax(40);// eve originally had nothing explicitly setting max stats, and they were oddly high (200 arousal at level 1).
+        character.getArousal().setMax(100);//I have no idea where they were coming from
+        character.getMojo().setMax(70);
+        
         // somewhat androgynous face
         character.body.add(new FacePart(.1, .9));
         character.initialGender = CharacterSex.herm;
@@ -64,8 +69,9 @@ public class Eve extends BasePersonality {
         growth.stamina = 2;
         growth.arousal = 3;
         growth.mojo = 2;
-        growth.bonusStamina = 1;
-        growth.bonusArousal = 3;
+        growth.willpower = 1.0f;
+        growth.bonusStamina = 2;
+        growth.bonusArousal = 4;
         growth.bonusMojo = 2;
         preferredAttributes.add(c -> c.get(Attribute.Fetish) < 80 ? Optional.of(Attribute.Fetish) : Optional.empty());
         preferredAttributes.add(c -> Optional.of(Attribute.Seduction));

@@ -71,9 +71,9 @@ public class Airi extends BasePersonality {
         growth.arousal = 1;
         growth.mojo = 2;
         growth.willpower = 1.5f;
-        growth.bonusStamina = 1;
-        growth.bonusArousal = 1;
-        growth.bonusMojo = 2;
+        growth.bonusStamina = 2;
+        growth.bonusArousal = 2;
+        growth.bonusMojo = 3;
         growth.addTrait(9, Trait.limbTraining1);
         growth.addTrait(12, Trait.lacedjuices);
         growth.addTrait(15, Trait.QuickRecovery);

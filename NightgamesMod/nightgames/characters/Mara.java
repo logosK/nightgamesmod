@@ -14,6 +14,8 @@ import nightgames.items.clothing.Clothing;
 import nightgames.start.NpcConfiguration;
 import nightgames.status.Hypersensitive;
 import nightgames.status.Oiled;
+import nightgames.status.addiction.Addiction;
+import nightgames.status.addiction.AddictionType;
 
 public class Mara extends BasePersonality {
     /**
@@ -57,6 +59,7 @@ public class Mara extends BasePersonality {
         growth.stamina = 2;
         growth.arousal = 2;
         growth.mojo = 3;
+        growth.willpower = 1.0f;
         growth.bonusStamina = 1;
         growth.bonusArousal = 2;
         growth.bonusMojo = 2;
@@ -213,6 +216,25 @@ public class Mara extends BasePersonality {
                             + "mind numbing orgasm you just went through. <i>\"Once again you never disappoint.\"</i> she smiles down to you as she slowly lowers herself onto you. <i>\"Hope you "
                             + "know how to give as well as take.\"</i> She jokes as she begins to work up a steady rhythm. Not to be outdone you quickly shift yourself and begin to thrust into her "
                             + "earnestly, intent on showing just how well you can 'give'. Soon Mara is collapsed on top of you breathing hard and her eyes unfocused. You stand and take your leave. You may have lost the battle but the war is far from over.";
+        }
+        if (character.has(Trait.madscientist) && c.getStance().vaginallyPenetrated(target)) {
+            Global.getPlayer().addict(AddictionType.MIND_CONTROL, character, Addiction.HIGH_INCREASE);
+            return "You raise your hands and try to cover your eyes. At this point you know you've lost- you're seconds from orgams and Mara is still pounding away wantonly "
+                            + "at your cunt- and you just want to evade Mara's hypnotic eyes. Mara responds by grabbing your hips and thrusting her bionic cock as deep as it "
+                            + "can go- and then you feel a thin tube brushing past your cervix. As aphrodesiac sprays from the tube into your depths, your entire body convulses "
+                            + "with a massive orgasm, and your distraction lets Mara easily pull your hands apart and you feel everything else falling away as you sink into Mara's "
+                            + "hypnotic eyes.<p> An unknowable length of time later, you lie on the ground gasping for breath, still staring at Mara with her cock still deep in your "
+                            + "pussy. She smirks. \"You're so lucky I can't just squirt out that stuff constantly and turn off the nerves in my cock.\" Mara snorts, slowly beginning"
+                            + " to rock her dick in and out of your abused pussy as you whimer from the stimulation.<p> \"I'm kind of disturbed that the benefactor sent me a "
+                            + "massive set of rules literally minutes after I finished it, but I have to admit they're not keeping me from winning- though that may have less to do "
+                            + "with them being balanced and more to do with you being a massive slut.\" She grins and leans down to whisper in your ear \"'Cause you are a massive "
+                            + "slut. Tell me what a massive slut you are.\" At this point, she has control of so much of your mind that you find yourself immediately babbling out "
+                            + "declarations of your sluttiness and and how much you want to be held down and fucked. Mara shivers in obvious ecstacy, pausing in her penetration. "
+                            + "\"You know what? Beg for my dick. You want it, you feel so achingly empty inside without it, it makes you come instantly and constantly, like you "
+                            + "were custom-designed for me to fuck.\"<p> Immediately you feel a yawning chams in your depths that you <i>know</i> only Mara's cock can fill. You "
+                            + "weakly try to grind your hips against Mara as supplications and implausible promises pour from your lips. With a smile that seems 20% adoring pet "
+                            + "owner, 30% dominatrix, and 50% exultant mad scientist, Mara resumes pounding at your pussy and your first orgam comes within a second, and feels "
+                            + "like it will never stop. Your last thought falls apart half-formed as the patterns on Mara's irises push everything else out of your brain.";
         }
         if (character.has(Trait.madscientist) && character.has(Item.Lubricant)) {
             target.add(c, new Oiled(target));
@@ -446,7 +468,7 @@ public class Mara extends BasePersonality {
                             target.possessivePronoun(), target.possessivePronoun(), target.name(), target.pronoun(),
                             target.possessivePronoun(), target.possessivePronoun(), target.possessivePronoun(),
                             target.name(), target.possessivePronoun(), target.directObject(), target.pronoun(),
-                            Global.capitalizeFirstLetter(target.possessivePronoun()));
+                            Global.capitalizeFirstLetter(target.pronoun()));
         }
         return "Mara approaches " + target.name()
                         + " like a panther claiming its prey. She runs her fingers down the length of " + target.name()

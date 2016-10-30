@@ -40,7 +40,7 @@ public class Reyka extends BasePersonality {
         character.set(Attribute.Speed, 5);
         character.setTrophy(Item.ReykaTrophy);
         character.getStamina().setMax(40);
-        character.getArousal().setMax(200);
+        character.getArousal().setMax(100);
         character.getMojo().setMax(70);
         character.add(Trait.succubus);
         character.add(Trait.proheels);
@@ -67,9 +67,10 @@ public class Reyka extends BasePersonality {
         growth.stamina = 1;
         growth.arousal = 6;
         growth.mojo = 2;
-        growth.bonusStamina = 1;
-        growth.bonusArousal = 3;
-        growth.bonusMojo = 2;
+        growth.willpower = 1.0f;
+        growth.bonusStamina = 3;
+        growth.bonusArousal = 0;
+        growth.bonusMojo = 1;
         preferredAttributes.add(c -> c.get(Attribute.Dark) < 50 && c.get(Attribute.Dark) <= c.get(Attribute.Fetish) + 10
                         ? Optional.of(Attribute.Dark) : Optional.empty());
         preferredAttributes
