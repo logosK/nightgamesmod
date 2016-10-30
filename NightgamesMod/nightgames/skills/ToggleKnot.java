@@ -32,6 +32,12 @@ public class ToggleKnot extends Skill {
     public String describe(Combat c) {
         return "Inflate or deflate your knot.";
     }
+    
+    @Override
+    public float priorityMod(Combat c) {
+        if(c.getOther(getSelf()).hasStatus(Stsflag.knotted)) return -5.0f;
+        return 0.0f;
+    }
 
     @Override
     public String getLabel(Combat c) {

@@ -30,10 +30,19 @@ import nightgames.global.Global;
 import nightgames.items.Item;
 import nightgames.items.clothing.Clothing;
 import nightgames.items.clothing.ClothingSlot;
+import nightgames.skills.Blowjob;
+import nightgames.skills.FondleBreasts;
+import nightgames.skills.FootPump;
+import nightgames.skills.Footjob;
+import nightgames.skills.Frottage;
+import nightgames.skills.Handjob;
+import nightgames.skills.LickNipples;
 import nightgames.skills.Nothing;
 import nightgames.skills.Skill;
 import nightgames.skills.Stage;
+import nightgames.skills.Suckle;
 import nightgames.skills.Tactics;
+import nightgames.skills.TailJob;
 import nightgames.stance.Behind;
 import nightgames.stance.Neutral;
 import nightgames.stance.Position;
@@ -833,7 +842,13 @@ public class NPC extends Character {
                 raw_rating += rateMove(wskill.skill, c, selfFit, otherFit);
             }
 
-            wskill.weight += ai.getAiModifiers().modAttack(wskill.skill.getClass());
+            Class<? extends Skill> clazz=wskill.skill.getClass();
+            wskill.weight += ai.getAiModifiers().modAttack(clazz);
+            if (clazz==FondleBreasts.class || clazz==LickNipples.class || clazz==Suckle.class) {wskill.weight*=(1+other.body.getRandomBreasts().getSensitivity(null))/2.;}
+            if (clazz==Frottage.class || clazz==Handjob.class || clazz==Blowjob.class || clazz==FootPump.class || clazz==Footjob.class || clazz==TailJob.class) {
+                wskill.weight*=(1+other.body.getRandomCock().getSensitivity(null))/2.;
+                }
+
             // Sum up rating, add to map
             rating = (double) Math.pow(2, RATING_FACTOR * raw_rating + wskill.weight + wskill.skill.priorityMod(c)
                             + Global.getMatch().condition.getSkillModifier().encouragement(wskill.skill, c, this));
