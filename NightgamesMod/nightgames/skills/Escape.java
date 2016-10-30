@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.body.CockMod;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.stance.Neutral;
@@ -46,59 +47,68 @@ public class Escape extends Skill {
                 getSelf().struggle();
                 return false;
             }
-        } else if (getSelf().check(Attribute.Cunning, 10 + target.get(Attribute.Cunning) - getSelf().escape(c))) {
-            if (getSelf().human()) {
-                if (getSelf().hasStatus(Stsflag.cockbound)) {
-                    c.write(getSelf(), "You somehow managed to wiggle out of " + target.name()
-                                    + "'s iron grip on your dick.");
-                    getSelf().removeStatus(Stsflag.cockbound);
-                    return true;
-                }
-                c.write(getSelf(), "Your quick wits find a gap in " + target.name() + "'s hold and you slip away.");
-            } else if (c.shouldPrintReceive(target)) {
-                if (getSelf().hasStatus(Stsflag.cockbound)) {
-                    c.write(getSelf(),
-                                    String.format("%s somehow managed to wiggle out of %s iron grip on %s dick.",
-                                                    getSelf().pronoun(), target.nameOrPossessivePronoun(),
-                                                    getSelf().possessivePronoun()));
-                    getSelf().removeStatus(Stsflag.cockbound);
-                    return true;
-                }
-                c.write(getSelf(), String.format(
-                                "%s goes limp and %s the opportunity to adjust %s grip on %s"
-                                                + ". As soon as %s %s, %s bolts out of %s weakened hold. "
-                                                + "It was a trick!",
-                                getSelf().name(), target.subjectAction("take"),
-                                target.possessivePronoun(), getSelf().directObject(),
-                                target.pronoun(), target.action("move"), getSelf().pronoun(),
-                                target.possessivePronoun()));
-            }
-            c.setStance(new Neutral(getSelf(), target));
         } else {
-            if (getSelf().human()) {
-                if (getSelf().hasStatus(Stsflag.cockbound)) {
-                    c.write(getSelf(), "You try to escape " + target.name()
-                                    + "'s iron grip on your dick. However, her pussy tongue has other ideas. She runs her tongue up and down your cock and leaves you gasping with pleasure.");
-                    int m = 8;
-                    getSelf().body.pleasure(target, target.body.getRandom("pussy"), getSelf().body.getRandom("cock"), m,
-                                    c, this);
-                } else if (getSelf().crotchAvailable()) {
-                    c.write(getSelf(), "You try to take advantage of an opening in " + target.name()
-                                    + "'s stance to slip away, but she catches you by your protruding penis and reasserts her position.");
-                } else {
-                    c.write(getSelf(), "You think you see an opening in " + target.name()
-                                    + "'s stance, but she corrects it before you can take advantage.");
+            int difficulty=10 + target.get(Attribute.Cunning) - getSelf().escape(c);
+            if (c.getStance().insertedPartFor(target).moddedPartCountsAs(target, CockMod.enlightened)) {difficulty+=15;}
+            if (c.getStance().insertedPartFor(getSelf()).moddedPartCountsAs(getSelf(), CockMod.enlightened)) {difficulty-=15;}
+            if (getSelf().hasStatus(Stsflag.knotted)) {difficulty+=50;}
+            if (target.is(Stsflag.enthralled) || target.is(Stsflag.trance) || target.is(Stsflag.lovestruck)) {difficulty-=target.get(Attribute.Cunning)/2;}
+            if (getSelf().is(Stsflag.bondage) || getSelf().is(Stsflag.charmed) || target.is(Stsflag.lovestruck)) {difficulty+=target.get(Attribute.Cunning)/4;}
+            if (getSelf().check(Attribute.Cunning, difficulty)) {
+                if (getSelf().human()) {
+                    if (getSelf().hasStatus(Stsflag.cockbound)) {
+                        c.write(getSelf(), "You somehow managed to wiggle out of " + target.name()
+                                        + "'s iron grip on your dick.");
+                        getSelf().removeStatus(Stsflag.cockbound);
+                        return true;
+                    }
+                    c.write(getSelf(), "Your quick wits find a gap in " + target.name() + "'s hold and you slip away.");
+                } else if (c.shouldPrintReceive(target)) {
+                    if (getSelf().hasStatus(Stsflag.cockbound)) {
+                        c.write(getSelf(),
+                                        String.format("%s somehow managed to wiggle out of %s iron grip on %s dick.",
+                                                        getSelf().pronoun(), target.nameOrPossessivePronoun(),
+                                                        getSelf().possessivePronoun()));
+                        getSelf().removeStatus(Stsflag.cockbound);
+                        return true;
+                    }
+                    c.write(getSelf(), String.format(
+                                    "%s goes limp and %s the opportunity to adjust %s grip on %s"
+                                                    + ". As soon as %s %s, %s bolts out of %s weakened hold. "
+                                                    + "It was a trick!",
+                                    getSelf().name(), target.subjectAction("take"),
+                                    target.possessivePronoun(), getSelf().directObject(),
+                                    target.pronoun(), target.action("move"), getSelf().pronoun(),
+                                    target.possessivePronoun()));
                 }
-            } else if (c.shouldPrintReceive(target)) {
-                c.write(getSelf(),
-                                String.format("%s manages to slip out of %s grip for a moment, but %s %s %s "
-                                                + "before %s can get far and %s control.", getSelf().name(),
-                                                target.nameOrPossessivePronoun(), getSelf().pronoun(),
-                                                getSelf().action("tickle"), target.directObject(),
-                                                getSelf().pronoun(), target.action("regain")));
+                c.setStance(new Neutral(getSelf(), target));
+
+            } else {
+                if (getSelf().human()) {
+                    if (getSelf().hasStatus(Stsflag.cockbound)) {
+                        c.write(getSelf(), "You try to escape " + target.name()
+                                        + "'s iron grip on your dick. However, her pussy tongue has other ideas. She runs her tongue up and down your cock and leaves you gasping with pleasure.");
+                        int m = 8;
+                        getSelf().body.pleasure(target, target.body.getRandom("pussy"), getSelf().body.getRandom("cock"), m,
+                                        c, this);
+                    } else if (getSelf().crotchAvailable()) {
+                        c.write(getSelf(), "You try to take advantage of an opening in " + target.name()
+                                        + "'s stance to slip away, but she catches you by your protruding penis and reasserts her position.");
+                    } else {
+                        c.write(getSelf(), "You think you see an opening in " + target.name()
+                                        + "'s stance, but she corrects it before you can take advantage.");
+                    }
+                } else if (c.shouldPrintReceive(target)) {
+                    c.write(getSelf(),
+                                    String.format("%s manages to slip out of %s grip for a moment, but %s %s %s "
+                                                    + "before %s can get far and %s control.", getSelf().name(),
+                                                    target.nameOrPossessivePronoun(), target.pronoun(),
+                                                    target.action("tickle"), getSelf().directObject(),
+                                                    getSelf().pronoun(), target.action("regain")));
+                }
+                getSelf().struggle();
+                return false;
             }
-            getSelf().struggle();
-            return false;
         }
         return true;
     }

@@ -72,11 +72,14 @@ public class Struggle extends Skill {
         } else if (c.getStance().havingSex()) {
             boolean knotted = getSelf().hasStatus(Stsflag.knotted);
             if (c.getStance().enumerate() == Stance.anal) {
-                int diffMod = knotted ? 50 : 0;
-                if (getSelf().check(Attribute.Power,
-                                target.getStamina().get() / 2 - getSelf().getStamina().get() / 2
-                                                + target.get(Attribute.Power) - getSelf().get(Attribute.Power)
-                                                - getSelf().escape(c) + diffMod)) {
+                int difficulty = target.getStamina().get() / 2 - getSelf().getStamina().get() / 2
+                                + target.get(Attribute.Power) - getSelf().get(Attribute.Power) - getSelf().escape(c);
+                if (c.getStance().insertedPartFor(target).moddedPartCountsAs(target, CockMod.enlightened)) {difficulty+=15;}
+                if (c.getStance().insertedPartFor(getSelf()).moddedPartCountsAs(getSelf(), CockMod.enlightened)) {difficulty-=15;}
+                if (knotted) {difficulty+=50;}
+                if (target.is(Stsflag.enthralled) || target.is(Stsflag.trance) || target.is(Stsflag.lovestruck)) {difficulty-=target.get(Attribute.Power);}
+                if (getSelf().is(Stsflag.bondage) || getSelf().is(Stsflag.charmed) || getSelf().is(Stsflag.lovestruck)) {difficulty+=target.get(Attribute.Power)/2;}
+                if (getSelf().check(Attribute.Power, difficulty)) {
                     if (getSelf().human()) {
                         if (knotted) {
                             c.write(getSelf(), "With a herculean effort, you painfully force "
@@ -129,16 +132,14 @@ public class Struggle extends Skill {
                     return false;
                 }
             } else {
-                int diffMod = 0;
-                if (c.getStance().insertedPartFor(target).moddedPartCountsAs(target, CockMod.enlightened)) {
-                    diffMod = 15;
-                } else if (c.getStance().insertedPartFor(getSelf()).moddedPartCountsAs(getSelf(), CockMod.enlightened)) {
-                    diffMod = -15;
-                }
-                if (getSelf().check(Attribute.Power,
-                                target.getStamina().get() / 2 - getSelf().getStamina().get() / 2
-                                                + target.get(Attribute.Power) - getSelf().get(Attribute.Power)
-                                                - getSelf().escape(c) + diffMod)) {
+                int difficulty = target.getStamina().get() / 2 - getSelf().getStamina().get() / 2
+                                + target.get(Attribute.Power) - getSelf().get(Attribute.Power) - getSelf().escape(c);
+                if (c.getStance().insertedPartFor(target).moddedPartCountsAs(target, CockMod.enlightened)) {difficulty+=15;}
+                if (c.getStance().insertedPartFor(getSelf()).moddedPartCountsAs(getSelf(), CockMod.enlightened)) {difficulty-=15;}
+                if (knotted) {difficulty+=50;}
+                if (target.is(Stsflag.enthralled) || target.is(Stsflag.trance) || target.is(Stsflag.lovestruck)) {difficulty-=target.get(Attribute.Power);}
+                if (getSelf().is(Stsflag.bondage) || getSelf().is(Stsflag.charmed) || target.is(Stsflag.lovestruck)) {difficulty+=target.get(Attribute.Power)/2;}
+                if (getSelf().check(Attribute.Power, difficulty)) {
                     if (getSelf().hasStatus(Stsflag.cockbound)) {
                         CockBound s = (CockBound) getSelf().getStatus(Stsflag.cockbound);
                         c.write(getSelf(),
@@ -217,8 +218,11 @@ public class Struggle extends Skill {
                 }
             }
         } else {
-            if (getSelf().check(Attribute.Power, target.getStamina().get() / 2 - getSelf().getStamina().get() / 2
-                            + target.get(Attribute.Power) - getSelf().get(Attribute.Power) - getSelf().escape(c))) {
+            int difficulty = target.getStamina().get() / 2 - getSelf().getStamina().get() / 2
+                            + target.get(Attribute.Power) - getSelf().get(Attribute.Power) - getSelf().escape(c);
+            if (target.is(Stsflag.enthralled) || target.is(Stsflag.trance) || target.is(Stsflag.lovestruck)) {difficulty-=target.get(Attribute.Power);}
+            if (getSelf().is(Stsflag.bondage) || getSelf().is(Stsflag.charmed) || target.is(Stsflag.lovestruck)) {difficulty+=target.get(Attribute.Power)/2;}
+            if (getSelf().check(Attribute.Power, difficulty)) {
                 if (getSelf().human()) {
                     c.write(getSelf(), "You manage to scrabble out of " + target.name() + "'s grip.");
                 } else if (c.shouldPrintReceive(target)) {
