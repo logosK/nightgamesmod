@@ -27,6 +27,8 @@ public enum BreastsPart implements BodyPart {
     public String desc;
     public String name;
     public int size;
+    
+    private double bonusSensitivity=0;
 
     BreastsPart(String name, String desc, int size) {
         this.desc = desc;
@@ -115,7 +117,7 @@ public enum BreastsPart implements BodyPart {
 
     @Override
     public double getSensitivity(BodyPart target) {
-        return .75 + size * .2;
+        return .75 + size * .2 + bonusSensitivity;
     }
 
     @Override
@@ -126,6 +128,13 @@ public enum BreastsPart implements BodyPart {
         } else {
             return this;
         }
+    }
+    
+    public BodyPart upgrade(int sizes, double bonusSens) {
+        BreastsPart values[] = BreastsPart.values();
+        BreastsPart temp = values[Math.min(ordinal()+sizes, values.length - 1)];
+        temp.bonusSensitivity += bonusSens;
+        return temp;
     }
 
     @Override

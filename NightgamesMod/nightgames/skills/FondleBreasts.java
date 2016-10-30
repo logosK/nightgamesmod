@@ -29,7 +29,8 @@ public class FondleBreasts extends Skill {
         if (target.roll(this, c, accuracy(c))) {
             if (target.breastsAvailable()) {
                 m += 4;
-                if (getSelf().human()) {
+                if (getSelf().getName()=="Cassie" && target.body.getLargestBreasts().getSensitivity(null) > 4) {c.write(getSelf(),receive(c,m,Result.special,target));}
+                else if (getSelf().human()) {
                     c.write(getSelf(), deal(c, m, Result.normal, target));
                 } else {
                     c.write(getSelf(), receive(c, m, Result.normal, target));
@@ -96,6 +97,14 @@ public class FondleBreasts extends Skill {
             return String.format("%s gropes at %s %s, but misses the mark.",
                             getSelf().subject(), target.nameOrPossessivePronoun(),
                             target.body.getRandomBreasts().describe(target));
+        } else if (modifier == Result.special) {
+            return "Cassie grabs your "+target.body.getLargestBreasts().describe(target, true)+" and caresses them, pinching your exquisitely sensitive nipples. An incredibly"
+                            + " sensual moan is torn from your lips as you instinctively arch your back, pushing your breasts and rock-hard, massive nipples into Cassie's hands. \"Damn, you "
+                            + "really are a total cow-slut now, this is great!\" Cassie exclaims. \"I'll have to see if I can train you to moo though, that would be even hotter"
+                            + " than you just moaning. I can't wait to see what happens when I jack up your sensitivity some more.\" She leers at you, a look that seems out of place"
+                            + " on her usually-demure face. \"The Benefactor said I can't pump up your breasts until they're so big you can't move, but I've been talking with him"
+                            + " and I think he's going to let me do it if I can make sure it's temporary. Doesn'\t that sound amazing!\" She punctuates her comment with a tug on"
+                            + " your nipples and a finger rubbing across your aereolae that draws a shockingly loud moan from your mouth that sounds a lot like an affirmation.";
         } else if (target.breastsAvailable()) {
             return String.format("%s massages %s %s, and pinches %s nipples, causing %s to moan with desire.",
                             getSelf().subject(), target.nameOrPossessivePronoun(),

@@ -31,13 +31,17 @@ public class FTCMatch extends Match {
     
     public FTCMatch(Collection<Character> combatants, Character prey) {
         super(combatants, new FTCModifier(prey));
-        assert combatants.size() == 5; // 4 hunters + prey = 5
-        this.prey = prey;
-        this.gracePeriod = 3;
-        this.flagCounter = 0;
         List<Character> hunters = new ArrayList<>(combatants);
         hunters.remove(prey);
         Collections.shuffle(hunters);
+        hunters=hunters.subList(0, 4);
+//        System.out.println(hunters);
+        this.combatants=new ArrayList<Character>();this.combatants.add(prey);this.combatants.addAll(hunters);
+        combatants=this.combatants;
+        assert hunters.size() == 4; // 4 hunters + prey = 5
+        this.prey = prey;
+        this.gracePeriod = 3;
+        this.flagCounter = 0;
         buildFTCMap(hunters.get(0), hunters.get(1), hunters.get(2), hunters.get(3), prey);
         bases.forEach(Character::place);
         flagInCenter = false;
@@ -62,6 +66,9 @@ public class FTCMatch extends Match {
     }
 
     public boolean isBase(Character ch, Area loc) {
+        //System.out.println(bases);
+        //System.out.println(combatants);
+        //System.out.println(ch);
         return bases.get(ch).equals(loc);
     }
 

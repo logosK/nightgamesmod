@@ -156,6 +156,8 @@ public class Global {
     public static double xpRate = 1.0;
     public static ContextFactory factory;
     public static Context cx;
+    
+    private static final int LINEUP_SIZE = 5;
 
     public static final Path COMBAT_LOG_DIR = new File("combatlogs").toPath();
 
@@ -238,7 +240,7 @@ public class Global {
         if (!cfgFlags.isEmpty()) {
             flags = cfgFlags.stream().map(Flag::name).collect(Collectors.toSet());
         }
-        Set<Character> lineup = pickCharacters(players, Collections.singleton(human), 4);
+        Set<Character> lineup = pickCharacters(players, Collections.singleton(human), LINEUP_SIZE);
         match = new Match(lineup, new NoModifier());
         time = Time.NIGHT;
         saveWithDialog();
@@ -442,6 +444,7 @@ public class Global {
         getSkillPool().add(new Invitation(ch));
         getSkillPool().add(new SubmissiveHold(ch));
         getSkillPool().add(new BreastGrowth(ch));
+        getSkillPool().add(new BreastGrowthSuper(ch));
         getSkillPool().add(new CockGrowth(ch));
         getSkillPool().add(new BreastRay(ch));
         getSkillPool().add(new FootSmother(ch));
@@ -458,6 +461,7 @@ public class Global {
         getSkillPool().add(new LeechSeed(ch));
         getSkillPool().add(new Beg(ch));
         getSkillPool().add(new Cowardice(ch));
+        getSkillPool().add(new Kneel(ch));
         getSkillPool().add(new Dive(ch));
         getSkillPool().add(new Offer(ch));
         getSkillPool().add(new ShamefulDisplay(ch));
@@ -750,13 +754,13 @@ public class Global {
             randomizer.addAll(players);
             Collections.shuffle(randomizer);
             for (Character player : randomizer) {
-                if (!lineup.contains(player) && !player.human() && lineup.size() < 4 && !player.has(Trait.event)) {
+                if (!lineup.contains(player) && !player.human() && lineup.size() < LINEUP_SIZE && !player.has(Trait.event)) {
                     lineup.add(player);
-                } else if (lineup.size() >= 4 || player.has(Trait.event)) {
+                } else if (lineup.size() >= LINEUP_SIZE || player.has(Trait.event)) {
                     resting.add(player);
                 }
             }
-            lineup = pickCharacters(players, lineup, 4);
+            lineup = pickCharacters(players, lineup, LINEUP_SIZE);
             if (!checkFlag(Flag.Maya)) {
                 newChallenger(new Maya(human.getLevel()));
                 flag(Flag.Maya);
@@ -786,7 +790,7 @@ public class Global {
             lineup.add(prey);
             if (!prey.human())
                 lineup.add(human);
-            lineup = pickCharacters(players, lineup, 4);
+            lineup = pickCharacters(players, lineup, LINEUP_SIZE);
             resting = new HashSet<>(players);
             resting.removeAll(lineup);
             match = buildMatch(lineup, matchmod);
@@ -795,7 +799,7 @@ public class Global {
                 lineup.add(lover);
             }
             lineup.add(human);
-            lineup = pickCharacters(players, lineup, 4);
+            lineup = pickCharacters(players, lineup, LINEUP_SIZE);
             resting = new HashSet<>(players);
             resting.removeAll(lineup);
             match = buildMatch(lineup, matchmod);
