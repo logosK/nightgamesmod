@@ -106,7 +106,7 @@ public class CombatStats {
     private Record recordOf(Character c) {
         return records.get(c.name());
     }
-
+/*
     public static void main(String[] args) {
         new Global(true);
         Global.newGame("Dummy");
@@ -122,7 +122,7 @@ public class CombatStats {
         }
 
         System.exit(0);
-    }
+    }*/
 
     private class Record {
 
@@ -200,7 +200,7 @@ public class CombatStats {
                 c.modMoney(level * 500);
                 Global.day = new Daytime(new Player("<player>"));
                 Global.day.advance(999);
-                Global.day.plan(true);
+                Global.day.plan();
             });
 
             return combatants;

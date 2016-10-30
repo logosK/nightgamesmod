@@ -16,7 +16,7 @@ import nightgames.characters.NPC;
 import nightgames.characters.Personality;
 import nightgames.characters.Player;
 import nightgames.characters.custom.CustomNPC;
-import nightgames.characters.custom.JSONSourceNPCDataLoader;
+import nightgames.characters.custom.JsonSourceNPCDataLoader;
 import nightgames.combat.Combat;
 import nightgames.global.Global;
 import nightgames.skills.Skill;
@@ -55,7 +55,7 @@ public class SkillsTest {
 	List<Personality> npcs2;
 	List<Position> stances;
 	Area area;
-
+/*
 	@Before
 	public void prepare() throws ParseException, IOException {
 		new Global(true);
@@ -63,16 +63,16 @@ public class SkillsTest {
 		npcs1 = new ArrayList<Personality>();
 		npcs2 = new ArrayList<Personality>();
 		try {
-			npcs1.add(new CustomNPC(JSONSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("hermtestnpc.js"))));
-			npcs1.add(new CustomNPC(JSONSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("femaletestnpc.js"))));
-			npcs1.add(new CustomNPC(JSONSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("maletestnpc.js"))));
-			npcs1.add(new CustomNPC(JSONSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("asextestnpc.js"))));
+			npcs1.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("hermtestnpc.js"))));
+			npcs1.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("femaletestnpc.js"))));
+			npcs1.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("maletestnpc.js"))));
+			npcs1.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("asextestnpc.js"))));
 			npcs1.forEach(npc -> npc.getCharacter().setFakeHuman(true));
 
-			npcs2.add(new CustomNPC(JSONSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("hermtestnpc.js"))));
-			npcs2.add(new CustomNPC(JSONSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("femaletestnpc.js"))));
-			npcs2.add(new CustomNPC(JSONSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("maletestnpc.js"))));
-			npcs2.add(new CustomNPC(JSONSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("asextestnpc.js"))));
+			npcs2.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("hermtestnpc.js"))));
+			npcs2.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("femaletestnpc.js"))));
+			npcs2.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("maletestnpc.js"))));
+			npcs2.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("asextestnpc.js"))));
 		} catch (ParseException e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -108,7 +108,7 @@ public class SkillsTest {
 		stances.add(new UpsideDownFemdom(npcs1.get(0).getCharacter(), npcs1.get(1).getCharacter()));
 		stances.add(new UpsideDownMaledom(npcs1.get(0).getCharacter(), npcs1.get(1).getCharacter()));
 	}
-
+*/
 	public void testSkill(Character npc1, Character npc2, Position pos) throws CloneNotSupportedException {
 		Combat c = new Combat(npc1, npc2, area, pos);
 		pos.checkOngoing(c);
