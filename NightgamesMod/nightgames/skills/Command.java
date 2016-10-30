@@ -179,7 +179,7 @@ public class Command extends Skill {
                            .isPresent() && getSelf().hasPussy())
                 available.add(CommandType.WORSHIP_PUSSY);
 
-            if (getSelf().hasDick())
+            if (getSelf().hasDick()/* && !c TODO: is inserted- .*/)
                 available.add(CommandType.GIVE_BLOWJOB);
 
             if (getSelf().hasPussy())
@@ -369,13 +369,14 @@ public class Command extends Skill {
                 Clothing removed = getStripTarget(getSelf());
                 if (removed == null)
                     return;
-                getSelf().getOutfit()
-                         .unequip(removed);
+                //getSelf().getOutfit()
+                //         .unequip(removed);
+                getSelf().undress(c);
                 c.write(getSelf(),
                                 String.format("%s tells %s to remove %s %s for %s."
                                                 + " %s gladly %s, eager to see more of %s perfect physique.",
                                                 getSelf().subject(), target.subject(), 
-                                                getSelf().possessivePronoun(), removed.getName(),
+                                                getSelf().possessivePronoun(), /*removed.getName()*/"clothes",
                                                 getSelf().directObject(), 
                                                 Global.capitalizeFirstLetter(target.pronoun()),
                                                 target.action("comply", "complies"),
@@ -385,15 +386,16 @@ public class Command extends Skill {
                 removed = getStripTarget(target);
                 if (removed == null)
                     return;
-                target.getOutfit()
-                      .unequip(removed);
+                //target.getOutfit()
+                //      .unequip(removed);
+                target.undress(c);
                 c.write(getSelf(),
                                 String.format("With a dismissive gesture, %s tells %s"
                                                 + " that %s would feel far better without %s %s on. Of course!"
                                                 + " That would make <i>everything</i> better! %s eagerly %s"
                                                 + " the offending garment.", getSelf().name(), 
                                                 target.subject(), target.pronoun(), 
-                                                target.possessivePronoun(), removed.getName(),
+                                                target.possessivePronoun(), /*removed.getName()*/"clothes",
                                                 Global.capitalizeFirstLetter(target.pronoun()),
                                                 target.action("remove")));
                 break;

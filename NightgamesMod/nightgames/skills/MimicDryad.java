@@ -7,6 +7,7 @@ import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.EarPart;
 import nightgames.characters.body.PussyPart;
+import nightgames.characters.body.TentaclePart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
@@ -49,6 +50,7 @@ public class MimicDryad extends Skill {
         getSelf().addTemporaryTrait(Trait.magicEyeFrenzy, 10);
         getSelf().addTemporaryTrait(Trait.frenzyingjuices, 10);
         getSelf().body.temporaryAddOrReplacePartWithType(EarPart.pointed, 10);
+        getSelf().body.temporaryAddOrReplacePartWithType(new TentaclePart("vines", "back", "nectar", 0.1, 1.2, 0), 10);
         BreastsPart part = getSelf().body.getBreastsBelow(BreastsPart.h.size);
         if (part != null) {
             getSelf().body.temporaryAddOrReplacePartWithType(part.upgrade(), 10);
