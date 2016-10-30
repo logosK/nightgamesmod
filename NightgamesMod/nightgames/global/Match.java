@@ -14,6 +14,7 @@ import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.State;
 import nightgames.characters.Trait;
+import nightgames.combat.Combat;
 import nightgames.modifier.Modifier;
 import nightgames.status.BodyFetish;
 import nightgames.status.addiction.Addiction;
@@ -106,7 +107,7 @@ public class Match {
                     combatants.get(index).upkeep();
                     manageConditions(combatants.get(index));
                     combatants.get(index).move();
-                    if (Global.isDebugOn(DebugFlags.DEBUG_SCENE) && index < combatants.size()) {
+                    if ((Global.isDebugOn(DebugFlags.DEBUG_SCENE) || Global.isDebugOn(DebugFlags.DEBUG_LOCATIONS)) && index < combatants.size()) {
                         System.out.println(combatants.get(index).name() + " is in "
                                         + combatants.get(index).location().name);
                     }
@@ -225,6 +226,7 @@ public class Match {
                 character.add(Trait.masterheels);
             }
         }
+        if(Global.isDebugOn(DebugFlags.DEBUG_SCENE)) System.out.println("Win/loss tracker: "+Combat.getResultTracker());
         Global.getPlayer().getAddictions().forEach(Addiction::endNight);
         new Postmatch(Global.getPlayer(), combatants);
     }

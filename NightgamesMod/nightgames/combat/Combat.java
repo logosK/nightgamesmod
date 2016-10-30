@@ -65,6 +65,36 @@ public class Combat extends Observable implements Cloneable {
     private boolean beingObserved;
 
     String imagePath = "";
+    
+    private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new HashMap<String, HashMap<String, List<Integer>>>();
+    
+    // result: 0 = not actually a fight, 1=p1 win, 2=p2 win, 3=draw
+    private static void registerCombatResult(Character p1, Character p2, int result) {
+        if (!getResultTracker().containsKey(p1.name())) {getResultTracker().put(p1.name(), new HashMap<String,List<Integer>>());}
+        if (!getResultTracker().containsKey(p2.name())) {getResultTracker().put(p2.name(), new HashMap<String,List<Integer>>());}
+        HashMap<String, List<Integer>> p1Results = getResultTracker().get(p1.name());
+        HashMap<String, List<Integer>> p2Results = getResultTracker().get(p2.name());
+        if (!p1Results.containsKey(p2.name())) {p1Results.put(p2.name(), Arrays.asList(0,0,0,0));}
+        if (!p2Results.containsKey(p1.name())) {p2Results.put(p1.name(), Arrays.asList(0,0,0,0));}
+        List<Integer> p1p2Results = p1Results.get(p2.name());
+        List<Integer> p2p1Results = p2Results.get(p1.name());
+        int reverseresult = (result==3?3:(result==1?2:0));
+        p1p2Results.set(result, 1+p1p2Results.get(result));
+        p2p1Results.set(reverseresult, 1+p2p1Results.get(reverseresult));
+        if(Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {System.out.println("The combat record for "+p1.name()+" against "+p2.name()+" is: "+p1p2Results.get(1)+" wins, "+p1p2Results.get(2)+" losses, and "+p1p2Results.get(3)+" draws.");}
+    }
+    /*
+    private static void printResultsTracker() {
+        for (String key:resultTracker.keySet()) {
+            System.out.print(key);
+            for(String key2:resultTracker.get(key)) {
+                
+            }
+        }
+    }*/
+    public static HashMap<String, HashMap<String, List<Integer>>> getResultTracker() {
+        return resultTracker;
+    }
 
     public Combat(Character p1, Character p2, Area loc) {
         this.p1 = p1;
@@ -161,6 +191,7 @@ public class Combat extends Observable implements Cloneable {
     }
 
     public void doVictory(Character victor, Character loser) {
+        registerCombatResult(victor, loser, 1);
         if (loser.hasDick() && victor.has(Trait.succubus)) {
             victor.gain(Item.semen, 3);
             if (loser.human()) {
@@ -259,6 +290,7 @@ public class Combat extends Observable implements Cloneable {
             p1.evalChallenges(this, null);
             p2.evalChallenges(this, null);
             p2.draw(this, state);
+            registerCombatResult(p1, p2, 3);
             phase = 2;
             updateMessage();
             winner = Optional.of(Global.noneCharacter());
@@ -541,6 +573,7 @@ public class Combat extends Observable implements Cloneable {
             p1.evalChallenges(this, null);
             p2.evalChallenges(this, null);
             p2.draw(this, state);
+            registerCombatResult(p1, p2, 3);
             winner = Optional.of(Global.noneCharacter());
             end();
             return;
@@ -602,6 +635,7 @@ public class Combat extends Observable implements Cloneable {
                     System.out.println(p2.name() + " draw with " + p1.name());
                 }
                 p2.draw(this, state);
+                registerCombatResult(p1, p2, 3);
                 phase = 2;
                 updateMessage();
                 if (shouldAutoresolve()) {
@@ -1010,4 +1044,5 @@ public class Combat extends Observable implements Cloneable {
     public String bothSubject() {
         return beingObserved ? "they" : "you";
     }
+
 }
