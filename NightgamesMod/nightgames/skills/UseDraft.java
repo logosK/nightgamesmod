@@ -100,7 +100,7 @@ public class UseDraft extends Skill {
             boolean eventful = false;
             if (shouldPrint(target))
                 c.write(getSelf(), Global.format(
-                            String.format("{self:SUBJECT-ACTION:%s|%ss} %s%s", used.getEffects().get(0).getSelfVerb(),
+                            String.format("{self:SUBJECT-ACTION:%s|(%ss)} %s%s", used.getEffects().get(0).getSelfVerb(),
                                             used.getEffects().get(0).getSelfVerb(), used.pre(), used.getName()),
                             getSelf(), target));
             for (ItemEffect e : used.getEffects()) {

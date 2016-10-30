@@ -38,7 +38,7 @@ public class ReverseCarry extends Carry {
             if (getSelf().human()) {
                 c.write(getSelf(), premessage + deal(c, premessage.length(), Result.normal, target));
             } else if (c.shouldPrintReceive(target)) {
-                c.write(getSelf(), premessage + receive(c, premessage.length(), Result.normal, getSelf()));
+                c.write(getSelf(), premessage + receive(c, premessage.length(), Result.normal, target));
             }
             int m = 5 + Global.random(5);
             int otherm = m;

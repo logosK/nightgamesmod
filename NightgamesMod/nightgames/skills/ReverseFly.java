@@ -44,7 +44,7 @@ public class ReverseFly extends Fly {
         if (getSelf().human()) {
             c.write(getSelf(), premessage + deal(c, 0, result, target));
         } else if (c.shouldPrintReceive(target)) {
-            c.write(getSelf(), premessage + receive(c, 0, result, getSelf()));
+            c.write(getSelf(), premessage + receive(c, 0, result, target));
         }
         if (result == Result.normal) {
             getSelf().emote(Emotion.dominant, 50);

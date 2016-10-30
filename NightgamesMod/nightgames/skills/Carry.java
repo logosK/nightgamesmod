@@ -44,7 +44,7 @@ public class Carry extends Fuck {
                 c.write(getSelf(), Global.capitalizeFirstLetter(
                                 premessage + deal(c, premessage.length(), Result.normal, target)));
             } else if (c.shouldPrintReceive(target)) {
-                c.write(getSelf(), premessage + receive(c, premessage.length(), Result.normal, getSelf()));
+                c.write(getSelf(), premessage + receive(c, premessage.length(), Result.normal, target));
             }
             int m = 5 + Global.random(5);
             int otherm = m;
@@ -95,11 +95,12 @@ public class Carry extends Fuck {
 
     @Override
     public String receive(Combat c, int damage, Result modifier, Character target) {
+        //System.out.println("carry: self: "+getSelf().toString()+", target: "+target.toString());
         if (modifier == Result.miss) {
             return Global.format(
                             (damage > 0 ? "" : "{self:subject} ")
                                             + "picks {other:subject} up, but {other:pronoun-action:manage|manages} out of"
-                                            + " {self:posessive} grip before {self:pronoun} can do anything. Moreover, "
+                                            + " {self:possessive} grip before {self:pronoun} can do anything. Moreover, "
                                             + "{other:pronoun-action:scramble|scrambles} to trip {self:direct-object} "
                                             + "while she's distracted.",
                             getSelf(), target);
@@ -107,7 +108,7 @@ public class Carry extends Fuck {
             return Global.format(
                             (damage > 0 ? "" : "{self:subject} ")
                                             + "scoops {other:subject} up in {self:possessive} powerful arms and simultaneously thrusts"
-                                            + " {self:posessive} {self:body-part:cock} into {other:possessive} {other:body-part:pussy}.",
+                                            + " {self:possessive} {self:body-part:cock} into {other:possessive} {other:body-part:pussy}.",
                             getSelf(), target);
         }
     }

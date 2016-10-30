@@ -106,18 +106,18 @@ public class LevelDrain extends Drain {
     public String deal(Combat c, int damage, Result modifier, Character target) {
         if (getSelf().hasPussy()) {
             String base = "You put your powerful vaginal muscles to work whilst" + " transfixing " + target.name()
-                            + "'s gaze with your own, goading his energy into his cock." + " Soon it erupts from him, ";
+                            + "'s gaze with your own, goading "+target.possessivePronoun()+" energy into "+target.possessivePronoun()+" cock." + " Soon it erupts from "+target.nameDirectObject()+", ";
             switch (damage) {
                 case 0:
                     return base + "but unfortunately you made a mistake, and the feedback leaves"
                                     + " you on the edge of climax!";
                 case 1:
-                    return base + "and you can feel his memories and experiences flow"
+                    return base + "and you can feel "+target.possessivePronoun()+" memories and experiences flow"
                                     + " into you, adding to your skill.";
                 case 2:
                     return base + "far more powerfully than you even thought possible."
-                                    + " You feel a fragment of his soul break away from him and"
-                                    + " spew into you, taking with it a portion of his very being"
+                                    + " You feel a fragment of "+target.possessivePronoun()+" soul break away from "+target.nameDirectObject()+" and"
+                                    + " spew into you, taking with it a portion of "+target.possessivePronoun()+" very being"
                                     + "and merging with your own. You have clearly"
                                     + " won this fight, and a lot more than that.";
                 default:
