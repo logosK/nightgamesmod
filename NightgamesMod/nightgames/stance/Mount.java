@@ -21,13 +21,9 @@ public class Mount extends AbstractFacingStance {
 
     @Override
     public String image() {
-        if (top.hasPussy() && bottom.hasPussy()) {
-            return "mount_ff.jpg";
-        } else if (bottom.hasPussy()) {
-            return "mount_m.jpg";
-        } else {
-            return "mount_f.jpg";
-        }
+        if (!top.hasPussy()) {return "mount_m.jpg";}
+        if (bottom.hasPussy() && Math.random()<0.5) {return "mount_ff.jpg";}
+        else {return "mount_f.jpg";}
     }
 
     @Override

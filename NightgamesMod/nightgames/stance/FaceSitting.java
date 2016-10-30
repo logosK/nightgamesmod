@@ -43,7 +43,8 @@ public class FaceSitting extends AbstractBehindStance {
 
     @Override
     public String image() {
-        if (top.hasPussy() && bottom.hasPussy()) {
+        if (top.hasPussy() && bottom.hasBreasts()) {
+            if (top.hasDick() && Math.random()>0.5) {return "facesitting_h.jpg";}
             return "facesitting_ff.jpg";
         }
         return "facesitting.jpg";
