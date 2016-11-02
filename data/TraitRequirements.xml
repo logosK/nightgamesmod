@@ -35,7 +35,7 @@
 		</Requirements>
 	</Trait>
 	<Trait>
-		<Name>entrallingjuices</Name>
+		<Name>enthrallingjuices</Name>
 		<Requirements>
 			<TraitReq>lacedjuices</TraitReq>
 			<LevelReq>20</LevelReq>

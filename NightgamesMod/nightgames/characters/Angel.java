@@ -76,7 +76,7 @@ public class Angel extends BasePersonality {
         growth.addTrait(36, Trait.objectOfWorship);
         growth.addTrait(39, Trait.tight);
         growth.addTrait(42, Trait.desensitized);
-        growth.addTrait(45, Trait.entrallingjuices);
+        growth.addTrait(45, Trait.enthrallingjuices);
         growth.addTrait(48, Trait.magicEyeArousal);
         growth.addTrait(51, Trait.pussyTraining3);
         growth.addTrait(54, Trait.desensitized2);
