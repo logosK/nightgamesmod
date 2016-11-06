@@ -1093,20 +1093,20 @@ public abstract class Character extends Observable implements Cloneable {
         if (regen > 0) {
             heal(c, regen);
         } else {
-            weaken(c, regen);
+            weaken(c, -regen);
         }
         if (combat) {
             if (has(Trait.exhibitionist) && mostlyNude()) {
-                buildMojo(c, 5);
+                buildMojo(c, 2);
             }
             if (outfit.has(ClothingTrait.stylish)) {
-                buildMojo(c, 3);
+                buildMojo(c, 1);
             }
             if (has(Trait.SexualGroove)) {
                 buildMojo(c, 2);
             }
             if (outfit.has(ClothingTrait.lame)) {
-                buildMojo(c, -2);
+                buildMojo(c, -1);
             }
         }
         orgasmed = false;
@@ -1473,13 +1473,7 @@ public abstract class Character extends Observable implements Cloneable {
 
         {
             outfitPlan.clear();
-            // TODO Clothing loading, this is for compatibility, remove this later.
             JsonUtils.getOptionalArray(object, "outfit").ifPresent(this::addClothes);
-
-            JsonUtils.getOptionalArray(object, "top").ifPresent(this::addClothes);
-            JsonUtils.getOptionalArray(object, "bottom").ifPresent(this::addClothes);
-            JsonUtils.getOptionalArray(object, "closet").ifPresent(this::addClothes);
-            // End Clothing loading
         }
 
         {
@@ -1847,7 +1841,7 @@ public abstract class Character extends Observable implements Cloneable {
                                                 + selfOrgan.describe(this) + " through your connection.",
                                 this, opponent));
                 int m = Global.random(5) + 5;
-                opponent.drain(c, this, m);
+                opponent.drain(c, this, (int) this.modifyDamage(DamageType.drain, opponent, m));
             }
             // TODO this works weirdly when both have both organs.
             body.tickHolding(c, opponent, selfOrgan, otherOrgan);
@@ -1958,7 +1952,7 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public void forget(Skill copy) {
-        skills.remove(copy);
+        getSkills().remove(copy);
     }
 
     public boolean stealthCheck(int perception) {
@@ -2013,7 +2007,11 @@ public abstract class Character extends Observable implements Cloneable {
             mojo.reduce(10);
         }
         if (has(Trait.exhibitionist) && mostlyNude()) {
+<<<<<<< HEAD
+            mojo.restore(5); //This used to be gain and it was horribly fucking up max mojo
+=======
             mojo.restore(2);
+>>>>>>> b0fa9506b7c2292941e32bd534ca8beb9bdb4028
         }
         if (bound()) {
             free();
@@ -2337,6 +2335,7 @@ public abstract class Character extends Observable implements Cloneable {
         if (other == null) {
             System.err.println("Other is null");
             Thread.dumpStack();
+            return;
         }
         if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {
             System.out.printf("%s gained attraction for %s\n", name(), other.name());
@@ -2373,6 +2372,7 @@ public abstract class Character extends Observable implements Cloneable {
         if (other == null) {
             System.err.println("Other is null");
             Thread.dumpStack();
+            return;
         }
         if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {
             System.out.printf("%s gained affection for %s\n", name(), other.name());
@@ -2522,7 +2522,7 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public boolean knows(Skill skill) {
-        for (Skill s : skills) {
+        for (Skill s : getSkills()) {
             if (s.equals(skill)) {
                 return true;
             }
@@ -2636,7 +2636,7 @@ public abstract class Character extends Observable implements Cloneable {
         }
         HashSet<Skill> available = new HashSet<>();
         HashSet<Skill> cds = new HashSet<>();
-        for (Skill a : skills) {
+        for (Skill a : getSkills()) {
             if (Skill.skillIsUsable(c, a, target)) {
                 if (cooldownAvailable(a)) {
                     available.add(a);
@@ -2797,7 +2797,7 @@ public abstract class Character extends Observable implements Cloneable {
         float fit = 0;
         // Urgency marks
         float arousalMod = 1.0f;
-        float staminaMod = 1.0f;
+        float staminaMod = 2.0f;
         float mojoMod = 1.0f;
         float usum = arousalMod + staminaMod + mojoMod;
         Character other = c.getOther(this);
@@ -3035,7 +3035,7 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public boolean checkLoss(Combat c) {
-        return (orgasmed || c.getTimer() > 20) && willpower.isEmpty();
+        return (orgasmed || c.getTimer() > 150) && willpower.isEmpty();
     }
 
     public boolean isCustomNPC() {
@@ -3352,7 +3352,7 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public abstract Growth getGrowth();
-    
+
     public Collection<Skill> getSkills() {
         return skills;
     }
