@@ -85,4 +85,5 @@ public class NpcConfiguration extends CharacterConfiguration {
 
         return config;
     }
+    @Override public String toString() {return "type: "+type+", start: "+isStartCharacter+"; "+super.toString();}
 }

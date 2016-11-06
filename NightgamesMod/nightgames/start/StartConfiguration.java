@@ -88,6 +88,14 @@ public class StartConfiguration {
         npcs.forEach(element -> cfg.npcs.add(NpcConfiguration.parse(element.getAsJsonObject())));
         JsonArray flags = root.getAsJsonArray("flags");
         cfg.flags = JsonUtils.collectionFromJson(flags, Flag.class);
+        
+        //debugging:
+        if (cfg.name=="Futa++ Accelerated" || true) {
+            System.out.println(cfg.name);
+            System.out.println(cfg.npcs);
+            System.out.println(cfg.flags);
+        }
+        
         return cfg;
     }
 
