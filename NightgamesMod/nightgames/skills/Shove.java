@@ -40,7 +40,8 @@ public class Shove extends Skill {
             target.shred(ClothingSlot.top);
             target.pain(c, Global.random(10) + 15 + (getSelf().get(Attribute.Power) + getSelf().get(Attribute.Ki)) / 4);
             if (getSelf().check(Attribute.Power, target.knockdownDC() - getSelf().get(Attribute.Ki))) {
-                c.setStance(new Neutral(getSelf(), target));
+                //c.setStance(new Neutral(getSelf(), target));
+                target.add(c, new Falling(target));
             }
         } else if (c.getStance().getClass() == Mount.class || c.getStance().getClass() == ReverseMount.class) {
             if (getSelf().check(Attribute.Power, target.knockdownDC() + 5)) {
