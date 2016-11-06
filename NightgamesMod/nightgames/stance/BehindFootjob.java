@@ -1,24 +1,32 @@
 package nightgames.stance;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import nightgames.characters.Character;
+import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Global;
 
 public class BehindFootjob extends AbstractBehindStance {
-    public BehindFootjob(Character top, Character bottom) {
+    public BehindFootjob(Character top, Character bottom, boolean analPenetration) {
         super(top, bottom, Stance.behindfootjob);
     }
+    
+    private boolean analPenetration=false;
 
     @Override
     public String describe() {
         return Global.format(
                         "{self:SUBJECT-ACTION:are|is} holding {other:name-do} from behind with {self:possessive} legs wrapped around {other:direct-object}",
-                        top, bottom);
+                        top, bottom)+(analPenetration?" "+top.name()+" is also fucking "+bottom+" in the ass.":"");
     }
 
     @Override
     public int pinDifficulty(Combat c, Character self) {
-        return 6;
+        return analPenetration?8:6;
     }
 
     @Override
@@ -28,7 +36,7 @@ public class BehindFootjob extends AbstractBehindStance {
 
     @Override
     public String image() {
-        if (bottom.hasDick()) {
+        if (bottom.hasDick() && (!bottom.hasPussy() || Global.random(2)==0)) {
             return "behind_footjob.jpg";
         } else {
             return "heelgrind.jpg";
@@ -82,12 +90,12 @@ public class BehindFootjob extends AbstractBehindStance {
 
     @Override
     public boolean inserted(Character c) {
-        return false;
+        return analPenetration && (c == top);
     }
 
     @Override
     public float priorityMod(Character self) {
-        return getSubDomBonus(self, 4.0f);
+        return getSubDomBonus(self, analPenetration?6.0f:4.0f );
     }
 
     @Override
@@ -100,11 +108,27 @@ public class BehindFootjob extends AbstractBehindStance {
 
     @Override
     public double pheromoneMod(Character self) {
-        return 1.5;
+        return analPenetration?2.0:1.5;
     }
     
     @Override
     public int dominance() {
-        return 4;
+        return analPenetration?6:4;
     }
+    
+    @Override
+    public List<BodyPart> topParts() {
+        if(!analPenetration) return Collections.emptyList();
+        return Arrays.asList(top.body.getRandomInsertable()).stream().filter(part -> part != null && part.present())
+                        .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BodyPart> bottomParts() {
+        if(!analPenetration) return Collections.emptyList();
+        return Arrays.asList(bottom.body.getRandomAss()).stream().filter(part -> part != null && part.present())
+                        .collect(Collectors.toList());
+    }
+    
+
 }
