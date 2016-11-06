@@ -53,15 +53,20 @@ import nightgames.skills.Tactics;
 import nightgames.stance.Position;
 import nightgames.stance.Stance;
 import nightgames.status.Alluring;
+import nightgames.status.Charmed;
+import nightgames.status.Cynical;
 import nightgames.status.DivineCharge;
 import nightgames.status.DivineRecoil;
+import nightgames.status.DurationStatus;
 import nightgames.status.Enthralled;
 import nightgames.status.Falling;
 import nightgames.status.Feral;
 import nightgames.status.Frenzied;
+import nightgames.status.Lovestruck;
 import nightgames.status.Resistance;
 import nightgames.status.Status;
 import nightgames.status.Stsflag;
+import nightgames.status.Suckling;
 import nightgames.status.Trance;
 import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
@@ -114,6 +119,10 @@ public abstract class Character extends Observable implements Cloneable {
     private boolean pleasured;
     public int orgasms;
     public int cloned;
+    
+    private BodyPart lastOrgasmPart;
+    public void setLastOrgasmPart(BodyPart part) {lastOrgasmPart=part;}
+    public BodyPart getLastOrgasmPart() {return lastOrgasmPart;}
 
     public Character(String name, int level) {
         this.name = name;
@@ -1116,6 +1125,26 @@ public abstract class Character extends Observable implements Cloneable {
         return 1 + (get(Attribute.Animism) + get(Attribute.Bio)) / 10;
     }
 
+    public void inflictControl(DurationStatus status, String name, int strength) {
+        Cynical cynic = getCynical();
+        int resistance=0;
+        if(cynic!=null) {resistance = cynic.getDuration();}
+        if(resistance>strength){cynic.tick(strength);return;}
+        if(cynic!=null) {cynic.tick(resistance);strength-=resistance;}
+        status.setDuration(strength);
+        addlist.add(status);
+        addlist.add(new Cynical(this, getWillpower().get()+getWillpower().max()));
+    }
+    
+    public boolean isControlled() {
+        for (Status s:status) {
+            if(!(s instanceof DurationStatus)) continue;
+            if (((DurationStatus)s).getDuration()==0) continue;
+            return (s instanceof Suckling || s instanceof Charmed || s instanceof Trance || s instanceof Enthralled || s instanceof Lovestruck || s instanceof Frenzied);
+        }
+        return false;
+    }
+    
     public void dropStatus(Combat c, Character opponent) {
         Set<Status> removedStatuses = status.stream().filter(s -> !s.meetsRequirements(c, this, opponent))
                         .collect(Collectors.toSet());
@@ -1127,13 +1156,25 @@ public abstract class Character extends Observable implements Cloneable {
             s.onRemove(c, opponent);
         });
         status.removeAll(removedStatuses);
+        //Cynical cynic = getCynical();
         for (Status s : addlist) {
+            //if (s instanceof Cynical) {
+                //Cynical cy = (Cynical)s;
+                //if(cynic==null) {add(c, s);cynic=cy;}
+                //else {cynic.tick(-cy.getDuration());}
+               // continue;
+            //}
             add(c, s);
         }
         removelist.clear();
         addlist.clear();
     }
 
+    public Cynical getCynical() {
+        for (Status s:status) {if (s instanceof Cynical) return (Cynical) s;}
+        return null;
+    }
+    
     public void removeStatusNoSideEffects() {
         status.removeAll(removelist);
         removelist.clear();
@@ -1586,6 +1627,7 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     private void resolvePostOrgasmForOpponent(Combat c, Character opponent, BodyPart selfPart, BodyPart opponentPart) {
+        setLastOrgasmPart(selfPart);
         if (selfPart != null && opponentPart != null) {
             selfPart.onOrgasmWith(c, this, opponent, opponentPart, true);
             opponentPart.onOrgasmWith(c, opponent, this, selfPart, false);
@@ -1658,11 +1700,11 @@ public abstract class Character extends Observable implements Cloneable {
         String reduced = "";
         if (has(Trait.strongwilled) && primary) {
             amt = amt * 2 / 3 + 1;
-            reduced = " (Strong-willed)";
+            reduced += " (Strong-willed)";
         }
         if (is(Stsflag.feral) && primary) {
             amt = amt / 3;
-            reduced = " (Feral)";
+            reduced += " (Feral)";
         }
         int old = willpower.get();
         willpower.reduce(amt);
@@ -1677,7 +1719,7 @@ public abstract class Character extends Observable implements Cloneable {
                                             + "%s.", subject(), amt, source));
         }
         if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {
-            System.out.printf("will power reduced from %d to %d\n", old, willpower.get());
+            System.out.printf("willpower for "+subject()+" reduced"+reduced+" from %d to %d\n with %d base and %d extra by"+source+".\n", old, willpower.get(),i,extra);
         }
     }
 
@@ -1685,6 +1727,9 @@ public abstract class Character extends Observable implements Cloneable {
         willpower.restore(i);
         c.writeSystemMessage(String.format(
                         "%s regained <font color='rgb(181,230,30)'>%d<font color='white'> willpower.", subject(), i));
+        if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {
+            System.out.printf("willpower for "+subject()+" restored by %d",i);
+        }
     }
 
     public void eot(Combat c, Character opponent, Skill last) {
