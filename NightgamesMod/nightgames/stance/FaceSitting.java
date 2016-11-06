@@ -8,6 +8,7 @@ import nightgames.characters.Character;
 import nightgames.characters.Emotion;
 import nightgames.characters.Trait;
 import nightgames.combat.Combat;
+import nightgames.global.Flag;
 import nightgames.global.Global;
 import nightgames.skills.Anilingus;
 import nightgames.skills.Blowjob;
@@ -44,7 +45,7 @@ public class FaceSitting extends AbstractBehindStance {
     @Override
     public String image() {
         if (top.hasPussy() && bottom.hasBreasts()) {
-            if (top.hasDick() && Math.random()>0.5) {return "facesitting_h.jpg";}
+            if (top.hasDick() && Global.checkFlag(Flag.isFuta) && Math.random()>0.5) {return "futa_facesitting_h.jpg";}
             return "facesitting_ff.jpg";
         }
         return "facesitting.jpg";

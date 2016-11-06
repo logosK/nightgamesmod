@@ -70,10 +70,9 @@ public class Kat extends BasePersonality {
         growth.stamina = 2;
         growth.arousal = 2;
         growth.mojo = 1;
-        growth.willpower = 1.0f;
-        growth.bonusStamina = 2;
-        growth.bonusArousal = 3;
-        growth.bonusMojo = 3;
+        growth.bonusStamina = 1;
+        growth.bonusArousal = 2;
+        growth.bonusMojo = 2;
         preferredAttributes.add(c -> Optional.of(Attribute.Animism));
 
         growth.addTrait(10, Trait.sympathetic);

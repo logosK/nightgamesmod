@@ -2,6 +2,7 @@ package nightgames.stance;
 
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
+import nightgames.global.Flag;
 import nightgames.global.Global;
 
 public class HeldOral extends AbstractFacingStance {
@@ -28,7 +29,9 @@ public class HeldOral extends AbstractFacingStance {
 
     @Override
     public String image() {
-        if (bottom.hasDick()) {
+        if (bottom.hasDick() && bottom.hasPussy() && top.hasBreasts() && Global.checkFlag(Flag.isFuta)) {
+            return "futa_oralhold_fh";
+        } else if (bottom.hasDick()) {
             return "oralhold_fm.jpg";
         } else if (bottom.hasPussy() && top.hasPussy()) {
             return "oralhold_ff.jpg";

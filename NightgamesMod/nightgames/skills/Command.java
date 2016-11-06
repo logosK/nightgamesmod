@@ -46,7 +46,7 @@ public class Command extends Skill {
 
     @Override
     public float priorityMod(Combat c) {
-        return 10.0f;
+        return 20.0f;
     }
 
     @Override

@@ -59,13 +59,12 @@ public class Jewel extends BasePersonality {
 
     @Override
     public void setGrowth() {
-        growth.stamina = 5;
+        growth.stamina = 3;
         growth.arousal = 3;
         growth.mojo = 1;
-        growth.willpower = 1.0f;
-        growth.bonusStamina = 1;
-        growth.bonusArousal = 3;
-        growth.bonusMojo = 3;
+        growth.bonusStamina = 3;
+        growth.bonusArousal = 1;
+        growth.bonusMojo = 1;
         growth.willpower = .7f;
         preferredAttributes.add(c -> c.get(Attribute.Ki) < 15 ? Optional.of(Attribute.Ki) : Optional.empty());
         preferredAttributes.add(c -> c.get(Attribute.Ki) >= 15 && c.get(Attribute.Fetish) < 100

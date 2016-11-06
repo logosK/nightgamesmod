@@ -66,7 +66,7 @@ public class Cassie extends BasePersonality {
         growth.stamina = 2;
         growth.arousal = 4;
         growth.mojo = 3;
-        growth.willpower = .7f;
+        growth.willpower = .4f;
         growth.bonusStamina = 1;
         growth.bonusArousal = 3;
         growth.bonusMojo = 1;
@@ -209,7 +209,11 @@ public class Cassie extends BasePersonality {
 
     @Override
     public String victory(Combat c, Result flag) {
-        if (c.getStance().anallyPenetrated(c.getOther(character))) {
+        if (c.getOther(character).getLastOrgasmPart() instanceof BreastsPart && c.getOther(character).body.getLargestBreasts().getSensitivity(null)>5 && false) {
+            character.arousal.empty();
+            return "incomplete, should be a series of scenes including one where Cassie makes the player lactate magicmilk that only affects themself and prevents breast size reduction"
+                            + "and one where Cassie gives the player a bra that reduces breast sensitivity to reasonable levels while worn, but also makes them moo on orgasm, and vibrates while fighting Cassie";
+        } else if (c.getStance().anallyPenetrated(c.getOther(character))) {
             character.arousal.empty();
             return "Cassie bucks her hips against your ass wildly causing the strapon to rub hard against your prostate. Your arms and legs feel like jelly as she thrusts in again and again. "
                             + "You're almost shocked as you feel yourself on the edge of orgasm and you're certain you wouldn't be able to stop yourself if Cassie keeps this pace up. Above you Cassie moans "
@@ -264,13 +268,13 @@ public class Cassie extends BasePersonality {
                             + "Cassie's cheerful face hovering above yours, or the way her lips catch the light, soft pulses of magic continue to ripple out from her penis. The "
                             + "pulses break up and dissipate as they pass through your body, but each wave seems to leave a little more of your body still and tingling, and you "
                             + "know from experience that you couldn't move those parts of your body even if you wanted to. Each wave reaches farther and farther, and in only a "
-                            + "few more they'll be washing over your brain. You might be worried about that concept if you're head had something in it besides jizz, but instead "
-                            + "you lie there placidly, staring up into Cassie's beautiful face.<p>As the ripples each through your head, nothing much seem to change- though you "
+                            + "few more they'll be washing over your brain. You might be worried about that concept if your head had something in it besides jizz, but instead "
+                            + "you lie there placidly, staring up into Cassie's beautiful face.<p>As the ripples echo through your head, nothing much seem to change- though you "
                             + "do notice that the pool of jizz replacing your thoughts seems to have stopped its slow shrinkage, and instead has spread to fill every corner of "
                             + "your skull with empty white.<p>Cassie leans forward, letting out a comfortable sigh. She rests herself on her crossed arms, pushing down on your "
                             + "sternum right below your breasts. Her breasts dangle down, almost touching yours, and her face hovers close above yours. Her eyes move back and "
                             + "forth, looking for something in your face. After a few seconds she seems satisfied and nods, beginning to rock her hips back and forth slowly once "
-                            + "more, pumping her dick in and out of your sensitive pussy. \"I like you, "+c.getOther(character)+", and I like making you feel good,\" Cassie says, "
+                            + "more, pumping her dick in and out of your sensitive pussy. \"I like you, "+c.getOther(character).name+", and I like making you feel good,\" Cassie says, "
                             + "\"but as I've interacted with you I've come to suspect something, and I think you've just confirmed it.\" She nods decisively and proclaims \"You, "
                             + c.getOther(character).name+", have a fetish for being mind controlled and used as a sex toy.\"<p>\"Now, I know this may be hard for you to admit, "
                             + "even to yourself, but it's ok- I won't judge, so you don't have to hide it from me or pretend it's not true.\" She pauses for a minute, tapping a "
@@ -280,7 +284,7 @@ public class Cassie extends BasePersonality {
                             + "things. It does seems like that would be kind of hard to distinguish from genuinely not liking those things, but happily I have a way around that!\" "
                             + "Cassie sits up and put her hands on her hips, puffing out her chest proudly. \"With you completely under my control, I can have you spill your "
                             + "darkest desires and kinks to me! It is kind of invasive, but I have probable cause to believe that you wouldn't tell me otherwise, and this is for "
-                            + "your own, good, so it's justifiable! So, "+c.getOther(character)+", do you have a fetish for being mind controlled?\"<p><p>When Cassie started "
+                            + "your own, good, so it's justifiable! So, "+c.getOther(character).name+", do you have a fetish for being mind controlled?\"<p><p>When Cassie started "
                             + "talking, you were paying close attention to her, but as she continued to pump into your sensitized pussy you were brought to two more quiet orgasms, "
                             + "and the pulses of mind-controlling magic from her enchanted dick continued to ripple through your head. Each wave seemed to spread the white through "
                             + "your head a little more, until it seemed like every cranny of your brain was stuffed with magical white Cassie-fluid, and without any room to form "
@@ -293,7 +297,7 @@ public class Cassie extends BasePersonality {
                             + "things you want done to you that you don't want to admit. Hmm... How about... being treated like a sex toy?\"<p>You realize that Cassie is asking "
                             + "you a question again, and quickly nod to make her happy.<p>She smiles and mutters, \"Right again.\" After thinking for a bit, she throws out several "
                             + "questions in quick succession, and you nod happily for each one. \"Do you like... taking it up the ass? Getting filled in multiple holes at once? "
-                            + "Getting gangbanged by multiple girls at once? Having someone inflate your breasts or lips and twisting your body to fit their desires?\" Cassie "
+                            + "Getting gangbanged by multiple girls? Having someone inflate your breasts or lips and twisting your body to fit their desires?\" Cassie "
                             + "seems to be getting aroused by the situation, thrusting into you faster and faster. \"Being restrained? Being force-fed breast milk? Being force-fed "
                             + "your own breast milk? Being turned into a massive-breasted cow-slut? Becoming my property? Suffering permanent sluttifying consequences from losing?\""
                             + "<p>As Cassie pounds into you faster and faster, you nod more and more frantically. After a few more thrusts she comes, spewing more of that wonderful "
@@ -315,11 +319,11 @@ public class Cassie extends BasePersonality {
                             + "concious mind and repressions are stripped away.\" With a thought, Cassie manipulates the magic controlling your body, and you rise to a kneeling "
                             + "position. The pool of white in your head and the magic filling your brain have replaced all your basic drives with a desire for Cassie's dick and "
                             + "a desire to see Cassie happy, and your eyes immediately fixate on the thick cock between Cassie's legs, which is quickly returing to full errectness. Cassie "
-                            + "smiles, and your body moves with her whims, your mouth opening as you eagerly deepthroat her cock, and start licking everything you can reach with "
+                            + "smiles, and your body moves on its own, your mouth opening as you eagerly deepthroat her cock, and start licking everything you can reach with "
                             + "your tongue.<p>Cassie smiles, patting your head a few times, and you happily push your head against her hand. \"I guess if you have a fetish for "
                             + "body modification, this should be a good thing to try.\"<p>Cassie mutters some arcane words, and reaches down and grabs your tongue the next time "
                             + "it reaches out of your mouth to lick her cock. You look up at her and whine, wondering why she won't let you try to get more wonderful Cassie-juice, "
-                            + "and she finishes chanting, smiles indulgently, and starts pullin on your tongue. The magic permeating it throbs in time wih your heartbeat, and you "
+                            + "and she finishes chanting, smiles indulgently, and starts pulling on your tongue. The magic permeating it throbs in time wih your heartbeat, and you "
                             + "feel the odd sensation of having your tongue stretch and stretch until it reaches nearly two feet out of your mouth. Cassie then lifts the mammoth "
                             + "muscle above her dick and lets go, letting it fall in a coiled heap. Your new tongue isn't strong enough to support its own weight at that length, "
                             + "but it's entirely capable of wrapping around the wonderful rod in your mouth in a spiral, and then reaching over and up into her pussy with the end. "
@@ -327,10 +331,10 @@ public class Cassie extends BasePersonality {
                             + "her so tightly though that all she succeeds in doing is pulling you forwards onto your hands, your mouth still sucking on her delicious penis.<p>"
                             + "She laughs and leans back, letting you work on bringing her as much pleasure as you can. \"I was worried that satisfying your deepest, most secret "
                             + "and deviant desires would mean a change in our relationship to something I would be less happy with, but with what you told me I don't think it's going to "
-                            + "be any hardship.\" You think you're finally getting the hang of this extra-long tongue, and you ripple it in an inchworm-like motion that causes the "
+                            + "be any hardship.\" You're not paying any attention to what she's saying anymore, but you think you're finally getting the hang of this extra-long tongue, and you ripple it in an inchworm-like motion that causes the "
                             + "spiral grasping her cock to tighten, freeing up slack at the end and letting the tip dive even deeper into her pussy. Cassie gasps, clenching both "
                             + "of her hands in your hair, before smiling widely. \"No, I don't think it will be any hardship whatsoever.\"<p>Suddenly, she frowns. \"This is pretty uncharacteristic "
-                            + "behavior for your conscious self- I suspect you'll be very embarrassed about this when you're no longer like this- I know I would be- and I hope"
+                            + "behavior for your conscious self- I suspect you'll be very embarrassed about this when you're no longer like this- I know I would be- and I hope "
                             + "you don't decide to avoid me because of it, though I know saying that is kind of hypocritical. I... if what you really want is to recieve what you "
                             + "want without admitting that it is what you want, then you would probably be much happier if you hadn't admitted that to me. I... I guess I could "
                             + "erase your memory. The benefactor and Aisha both told me not to do that, but I think in this case I could justify it to them if I made it clear that "
@@ -338,10 +342,10 @@ public class Cassie extends BasePersonality {
                             + "the end of your tongue, and Cassie squeaks and topples over backwards, your tongue's grip pulling your head with her.<p>Cassie laughs, sitting back "
                             + "up. \"I guess we can wait until you're done with that blowjob if you want.\"<p>Less than a minute later, your inexpert but full-genital stimulation "
                             + "brings Cassie to orgasm, and more stupefying liquid inundates your body as the arcane emanations from her cock continue to reduce you to an obedient, "
-                            + "empty-headed vessel. The milky injection only reinvigorates you, and you attack her cock and pussy with renewed vigor.<p>\"Eek! No! Enough! Honestly, "+c.getOther(character)+",\" Cassie "
+                            + "empty-headed vessel. The milky injection only reinvigorates you, and you attack her cock and pussy with renewed vigor.<p>\"Eek! No! Enough! Honestly, "+c.getOther(character).name+",\" Cassie "
                             + "yelps, futily trying to pry your head away from her crotch with her hands, before she remembers her magic and you suddenly freeze.<p>Cassie sighs, "
                             + "shaking her head and smiling fondly at you, before a look of careful concentration takes over her face. \"Alright, I think erasing your memory back "
-                            + "up to the second-to-last time I came in your pussy should be best.\" Cassie sets her hands over your temples and starts muttering, and then everything "
+                            + " to the second-to-last time I came in your pussy should be best.\" Cassie sets her hands over your temples and starts muttering, and then everything "
                             + "suddenly goes black.<p><p><p><p>You come to with a pounding headache, and groan as you clutch your head in your hands. You can't believe you fainted "
                             + "when Cassie unloaded into your pussy- maybe there was a bad interaction between two spells or a spell on her cum on something- at that point you'd "
                             + "already lost, so the Benefactor's restriction on what Cassie was allowed to do were a bit lighter, but you still don't think she would have used an "

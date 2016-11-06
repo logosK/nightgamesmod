@@ -57,9 +57,8 @@ public class Mara extends BasePersonality {
     @Override
     public void setGrowth() {
         growth.stamina = 2;
-        growth.arousal = 2;
+        growth.arousal = 4;
         growth.mojo = 3;
-        growth.willpower = 1.0f;
         growth.bonusStamina = 1;
         growth.bonusArousal = 2;
         growth.bonusMojo = 2;

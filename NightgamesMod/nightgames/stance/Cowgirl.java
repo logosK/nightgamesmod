@@ -3,6 +3,7 @@ package nightgames.stance;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
+import nightgames.global.Flag;
 import nightgames.global.Global;
 
 public class Cowgirl extends FemdomSexStance {
@@ -25,6 +26,7 @@ public class Cowgirl extends FemdomSexStance {
 
     @Override
     public String image() {
+        if(Global.checkFlag(Flag.isFuta) && bottom.hasBreasts()) return "futa_cowgirl.jpg";
         return "cowgirl.jpg";
     }
 

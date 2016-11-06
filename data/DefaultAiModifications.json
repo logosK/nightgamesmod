@@ -283,7 +283,7 @@
 			},{
 				"type" : "skill",
 				"value" : "nightgames.skills.Shove",
-				"weight" : 1.0
+				"weight" : 4.0
 			},{
 				"type" : "skill",
 				"value" : "nightgames.skills.Strapon",

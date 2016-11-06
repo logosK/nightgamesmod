@@ -132,7 +132,7 @@ public class AnalProne extends AnalSexStance {
 
     @Override
     public String image() {
-        if (bottom.hasPussy()) {
+        if (!top.hasPussy()) {
             return "analf.jpg";
         } else {
             return "pegging.jpg";

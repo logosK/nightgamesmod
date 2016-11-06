@@ -41,7 +41,9 @@
 			"growth": {
 				"arousal": 2,
 				"stamina": 2,
-				"mojo": 3
+				"mojo": 3,
+				"willpower":2.0,
+				"bonusWillpower":0.5
 			},
 			"body":{
 				"genitals": {
@@ -126,7 +128,8 @@
 				"arousal": 4,
 				"stamina": 2,
 				"mojo": 3,
-				"willpower": 1
+				"willpower": 0.7,
+				"bonusMojo":2
 			},
 			"body": {
 				"archetype":"WITCH",
@@ -145,6 +148,7 @@
 				"romantic",
 				"imagination",
 				"hypnoticsemen",
+				"enthrallingjuices",
 				"lactating",
 				"magicmilk"
 			],
@@ -215,10 +219,11 @@
 				"Ki": 31
 			},
 			"growth": {
-				"arousal": 3,
+				"arousal": 5,
 				"stamina": 3,
-				"mojo": 3,
-				"willpower": 1
+				"mojo": 1,
+				"willpower": 1,
+				"bonusWillpower":0.2
 			},
 			"body": {
 				"archetype":"REGULAR",
@@ -271,7 +276,8 @@
 				"arousal": 3,
 				"stamina": 3,
 				"mojo": 3,
-				"willpower": 1
+				"willpower": 1,
+				"bonusWillpower":0.2
 			},
 			"traits": [
 				"dexterous",
@@ -303,7 +309,8 @@
 				"Science": 31
 			},
 			"growth": {
-				"willpower": 1
+				"willpower": 1,
+				"bonusWillpower":0.2
 			},
 			"body": {
 				"archetype":"CYBORG",
@@ -345,6 +352,11 @@
 				"Cunning": 27,
 				"Dark": 35
 			},
+			"growth": {
+				"arousal":4,
+				"mojo":4,
+				"willpower": 1
+			},
 			"body": {
 				"archetype":"DEMON",
 				"genitals": {
@@ -380,5 +392,5 @@
 		}
 	],
 	"all_npcs":{},
-	"flags":[]
+	"flags":["isFuta"]
 }

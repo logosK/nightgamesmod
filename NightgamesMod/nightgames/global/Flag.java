@@ -77,6 +77,7 @@ public enum Flag {
     Yui, 
     YuiUnlocking,
     FemalePronounsOnly,
+    isFuta,
     ;
     
     public static boolean exists(String flag) {
