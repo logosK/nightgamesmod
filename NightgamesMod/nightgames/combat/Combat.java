@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Observable;
 import java.util.Optional;
+import java.util.Set;
 
 import nightgames.areas.Area;
 import nightgames.characters.Attribute;
@@ -83,15 +85,20 @@ public class Combat extends Observable implements Cloneable {
         p2p1Results.set(reverseresult, 1+p2p1Results.get(reverseresult));
         if(Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {System.out.println("The combat record for "+p1.name()+" against "+p2.name()+" is: "+p1p2Results.get(1)+" wins, "+p1p2Results.get(2)+" losses, and "+p1p2Results.get(3)+" draws.");}
     }
-    /*
-    private static void printResultsTracker() {
+    
+    public static void printResultsTracker() {
+        Set<String> all = new HashSet<String>();
+        for(String row:resultTracker.keySet()) {all.addAll(resultTracker.get(row).keySet());}
+        System.out.println("\t"+String.join(",\t", all));
         for (String key:resultTracker.keySet()) {
             System.out.print(key);
-            for(String key2:resultTracker.get(key)) {
-                
+            for(String key2:all) {
+                if(resultTracker.get(key).keySet().contains(key2)) System.out.print("\t"+resultTracker.get(key).get(key2).get(1));
+                else System.out.print("\t0");
             }
+            System.out.println();;
         }
-    }*/
+    }
     public static HashMap<String, HashMap<String, List<Integer>>> getResultTracker() {
         return resultTracker;
     }
@@ -115,6 +122,8 @@ public class Combat extends Observable implements Cloneable {
             log = new CombatLog(this);
         }
     }
+    
+
 
     public Combat(Character p1, Character p2, Area loc, Position starting) {
         this(p1, p2, loc);

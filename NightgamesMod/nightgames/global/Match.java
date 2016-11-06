@@ -226,7 +226,7 @@ public class Match {
                 character.add(Trait.masterheels);
             }
         }
-        if(Global.isDebugOn(DebugFlags.DEBUG_SCENE)) System.out.println("Win/loss tracker: "+Combat.getResultTracker());
+        if(Global.isDebugOn(DebugFlags.DEBUG_SCENE)) /*System.out.println("Win/loss tracker: "+Combat.getResultTracker());*/Combat.printResultsTracker();
         Global.getPlayer().getAddictions().forEach(Addiction::endNight);
         new Postmatch(Global.getPlayer(), combatants);
     }
