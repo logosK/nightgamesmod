@@ -93,6 +93,7 @@ import nightgames.combat.Combat;
 import nightgames.daytime.Daytime;
 import nightgames.ftc.FTCMatch;
 import nightgames.gui.GUI;
+import nightgames.gui.HeadlessGui;
 import nightgames.items.Item;
 import nightgames.items.clothing.Clothing;
 import nightgames.json.JsonUtils;
@@ -161,7 +162,7 @@ public class Global {
 
     public static final Path COMBAT_LOG_DIR = new File("combatlogs").toPath();
 
-    public Global() {
+    public Global(boolean headless) {
         rng = new Random();
         flags = new HashSet<>();
         players = new HashSet<>();
@@ -207,11 +208,11 @@ public class Global {
         buildSkillPool(noneCharacter);
         buildModifierPool();
         flag(Flag.AiriEnabled);
-        gui = makeGUI();
+        gui = makeGUI(headless);
     }
 
-    protected GUI makeGUI() {
-        return new GUI();
+    protected GUI makeGUI(boolean headless) {
+        return headless ? new HeadlessGui() : new GUI();
     }
 
     public static boolean meetsRequirements(Character c, Trait t) {
@@ -243,7 +244,7 @@ public class Global {
         Set<Character> lineup = pickCharacters(players, Collections.singleton(human), LINEUP_SIZE);
         match = new Match(lineup, new NoModifier());
         time = Time.NIGHT;
-        saveWithDialog();
+        //saveWithDialog();
     }
 
     public static int random(int start, int end) {
@@ -337,6 +338,7 @@ public class Global {
         getSkillPool().add(new UseCrop(ch));
         getSkillPool().add(new Carry(ch));
         getSkillPool().add(new Tighten(ch));
+        getSkillPool().add(new ViceGrip(ch));
         getSkillPool().add(new HipThrow(ch));
         getSkillPool().add(new SpiralThrust(ch));
         getSkillPool().add(new Bravado(ch));
@@ -358,6 +360,7 @@ public class Global {
         getSkillPool().add(new FlashStep(ch));
         getSkillPool().add(new FlyCatcher(ch));
         getSkillPool().add(new Illusions(ch));
+        getSkillPool().add(new Glamour(ch));
         getSkillPool().add(new LustAura(ch));
         getSkillPool().add(new MagicMissile(ch));
         getSkillPool().add(new Masochism(ch));
@@ -405,6 +408,7 @@ public class Global {
         getSkillPool().add(new EyesOfTemptation(ch));
         getSkillPool().add(new TailJob(ch));
         getSkillPool().add(new FaceSit(ch));
+        getSkillPool().add(new Smother(ch));
         getSkillPool().add(new Purr(ch));
         getSkillPool().add(new MutualUndress(ch));
         getSkillPool().add(new Surrender(ch));
@@ -733,16 +737,9 @@ public class Global {
         // Disable characters flagged as disabled
         for (Character c : players) {
             // Disabling the player wouldn't make much sense, and there's no PlayerDisabled flag.
-            Flag disabledFlag = null;
             String flagName = c.getType() + "Disabled";
-            if (!c.getType().equals("Player") && Flag.exists(flagName)) {
-                disabledFlag = Flag.valueOf(flagName);
-            }
-            if (disabledFlag == null || !Global.checkFlag(disabledFlag)) {
-                // TODO: DEBUG
-               // if (c.getName().contains("Reyka") || c.human()) {
-                    participants.add(c);
-              //}
+            if (c.getType().equals("Player") || !checkFlag(flagName)) {
+                participants.add(c);
             }
         }
         if (matchmod.name().equals("maya")) {
@@ -1146,7 +1143,6 @@ public class Global {
         characterPool.put(maya.getCharacter().getType(), maya.getCharacter());
         characterPool.put(yui.getCharacter().getType(), yui.getCharacter());
 
-
         debugChars.add(jewel.getCharacter());
     }
 
@@ -1256,7 +1252,7 @@ public class Global {
                 // pass
             }
         }
-        new Global();
+        new Global(false);
     }
 
     public static String getIntro() {
@@ -1548,5 +1544,9 @@ public class Global {
 
     public static long randomlong() {
         return rng.nextLong();
+    }
+
+    public static Character getCharacterByName(String name) {
+        return players.stream().filter(c -> c.getName().equals(name)).findAny().get();
     }
 }

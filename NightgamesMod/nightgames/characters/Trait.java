@@ -151,6 +151,8 @@ public enum Trait {
         }
     }),
 
+    defthands("Deft hands", "They know where to go"), // hands damage upgrade
+    nimbletoes("Nimble toes", "Good both in the street and in the bed."), // feet damage upgrade
     polecontrol("Pole Control", "Always hit the right spots"), // Dick damage upgrade
     hypnoticsemen("Hypnotic Semen", "Cum drains willpower"), // Semen willpower damage trait
     heatedsemen("Heated Semen", "Cum drains stamina"), // Jewel stamina draining semen trait
@@ -168,7 +170,8 @@ public enum Trait {
     breeder("Breeder", "Particularly inviting"),
     mindcontroller("Mind Controller", "Can take control of others' minds. Inventive, yes?"),
     darkpromises("Dark Promises", "Can enthrall with the right words"), // whisper upgrade, can enthrall
-
+    dominatrix("Dominatrix", "Relishes in hurting and humiliating partners."),
+    
     energydrain("Energy Drain", "Drains energy during intercourse"),
     objectOfWorship("Object Of Worship", "Opponents is periodically forced to worship your body.",
                     (b, c, t) -> b.append("A divine aura surrounds " + c.nameDirectObject() + ".")),
@@ -215,10 +218,12 @@ public enum Trait {
     autonomousPussy("Autonomous Pussy", "Her pussy instinctively forces anything inside of it to cum."),
     // AI traits
     submissive("Submissive", "Enjoys being the sub."),
+    naturalTop("Natural Top", "Being the dom comes easy."),
     obsequiousAppeal("Obsequious Appeal", "So tempting when on the bottom."),
     catstongue("Cat's Tongue", "Rough but sensual."),
     opportunist("Opportunist", "Always ready to stuff someone's backside."),
     carnalvirtuoso("Carnal Virtuoso", "Opponents cums twice"),
+    toymaster("Toymaster", "Expert at using toys."),
     // Weaknesses
     ticklish("Ticklish", "Can be easily tickled into submission"), // more weaken damage and arousal from tickle
     insatiable("Insatiable", "One orgasm is never enough"), // arousal doesn't completely clear at end of match
@@ -230,6 +235,7 @@ public enum Trait {
     immobile("Immobile", "Unable to move"), // Cannot move
     lethargic("Lethargic", "Very low mojo gain from normal methods.", new Lethargic(null, 999, .75)), // 25% mojo gain
     hairtrigger("Hair Trigger", "Very quick to shoot. Not for beginners."),
+    obedient("Obedient", "Easy to order around."),
     cursed("Cursed", "Restricts some skills. The name is probably a plot point. The suspense is killing me."),
 
     // Restrictions
@@ -256,13 +262,15 @@ public enum Trait {
     slime("Slime", "An accident in the biology labs made the body a bit more... malleable."),
     dryad("Dryad", "Part girl, part tree."),
     temptress("Temptress", "Well versed in the carnal arts."),
+    ninja("Ninja", "A shadowy servant."),
 
     // Class subtrait
     divinity("Divinity", "Has aspects of divinity."),
     leveldrainer("Level Drainer", "Natrually adept at draining levels."),
 
     // Strength
-    dexterous("Dexterous", "Limbs and fingers. Underwear is not an obstacle."), // digital
+    dexterous("Dexterous", "Dexterous limbs and fingers. Underwear is not an obstacle."),
+                                                                                // digital
                                                                                 // stimulation
                                                                                 // through
                                                                                 // underwear
@@ -280,8 +288,6 @@ public enum Trait {
                                                                                    // from the
                                                                                    // opponent
     brassballs("Brass Balls", "Can take a kick"),
-    bramaster("Bra Master", "Better at undoing bras."),
-    pantymaster("Panty Master", "Better at removing panties"),
 
     Clingy("Clingy", "Harder to escape"),
     fakeout("Fakeout", "Easier to counter"),
