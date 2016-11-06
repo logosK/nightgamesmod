@@ -13,7 +13,7 @@ public class Behind extends AbstractBehindStance {
         if (top.human()) {
             return "You are holding " + bottom.name() + " from behind.";
         } else {
-            return top.name() + " is holding you from behind.";
+            return String.format("%s is holding %s from behind.", top.subject(), bottom.nameDirectObject());
         }
     }
 
@@ -35,7 +35,7 @@ public class Behind extends AbstractBehindStance {
 
     @Override
     public boolean kiss(Character c) {
-        return c == top;
+        return false;
     }
 
     @Override

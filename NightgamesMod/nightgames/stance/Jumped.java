@@ -4,6 +4,7 @@ import nightgames.characters.Character;
 import nightgames.characters.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Global;
+import nightgames.skills.damage.DamageType;
 
 public class Jumped extends FemdomSexStance {
     public Jumped(Character top, Character bottom) {
@@ -16,8 +17,11 @@ public class Jumped extends FemdomSexStance {
             return "You are clinging to " + bottom.nameOrPossessivePronoun()
                             + " arms while her dick is buried deep in your pussy";
         } else {
-            return top.name()
-                            + " is clinging to your shoulders and gripping your waist with her thighs while she uses the leverage to ride you.";
+            return String.format("%s clinging to %s shoulders and gripping %s waist "
+                            + "with %s thighs while %s uses the leverage to ride %s.",
+                            top.subjectAction("are", "is"), bottom.nameOrPossessivePronoun(),
+                            bottom.possessivePronoun(), top.possessivePronoun(),
+                            top.pronoun(), bottom.directObject());
         }
     }
 
@@ -84,7 +88,7 @@ public class Jumped extends FemdomSexStance {
     @Override
     public void decay(Combat c) {
         time++;
-        top.weaken(null, 2);
+        top.weaken(c, (int) bottom.modifyDamage(DamageType.stance, top, 2));
     }
 
     @Override

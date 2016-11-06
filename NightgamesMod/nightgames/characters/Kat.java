@@ -13,6 +13,8 @@ import nightgames.combat.Result;
 import nightgames.global.Global;
 import nightgames.items.Item;
 import nightgames.items.clothing.Clothing;
+import nightgames.skills.damage.DamageType;
+import nightgames.skills.strategy.FacesitStrategy;
 import nightgames.start.NpcConfiguration;
 import nightgames.status.Feral;
 import nightgames.status.Horny;
@@ -47,9 +49,11 @@ public class Kat extends BasePersonality {
         character.set(Attribute.Cunning, 8);
         character.set(Attribute.Speed, 8);
         character.set(Attribute.Seduction, 7);
-        character.getStamina().setMax(150);
-        character.getArousal().setMax(90);
+        character.getStamina().setMax(100 + character.getLevel() * getGrowth().stamina);
+        character.getArousal().setMax(50 + character.getLevel() * getGrowth().arousal);
         character.getMojo().setMax(60);
+        getCharacter().addPersonalStrategy(new FacesitStrategy());
+
         character.add(Trait.dexterous);
         character.add(Trait.pheromones);
         character.add(Trait.shy);
@@ -121,23 +125,13 @@ public class Kat extends BasePersonality {
         }
         Decider.visit(character);
         int r;
+
         for (int i = 0; i < time; i++) {
-            r = Global.random(4);
+            r = Global.random(8);
             if (r == 1) {
-                if (character.has(Trait.fitnessNut)) {
-                    character.getStamina().gain(2);
-                }
-                character.getStamina().gain(2);
-            } else if (r == 3) {
-                if (character.has(Trait.expertGoogler)) {
-                    character.getArousal().gain(3);
-                }
-                character.getArousal().gain(3);
-            } else if (r == 2) {
-                if (character.has(Trait.mojoMaster)) {
-                    character.getMojo().gain(1);
-                }
-                character.getMojo().gain(1);
+                Global.getDay().visit("Exercise", this.character, 0);
+            } else if (r == 0) {
+                Global.getDay().visit("Browse Porn Sites", this.character, 0);
             }
         }
     }
@@ -173,15 +167,10 @@ public class Kat extends BasePersonality {
 
     @Override
     public String victory(Combat c, Result flag) {
-        Character opponent;
-        if (c.p1 == character) {
-            opponent = c.p2;
-        } else {
-            opponent = c.p1;
-        }
+        Character opponent = c.getOther(character);
         character.arousal.empty();
         if (c.getStance().vaginallyPenetrated(character)) {
-            opponent.add(c, new Horny(opponent, 5, 10, character.nameOrPossessivePronoun() + " pheromones"));
+            opponent.add(c, Horny.getWithBiologicalType(character, opponent, 5, 10, character.nameOrPossessivePronoun() + " pheromones"));
             return "She pounces at you, pushing you onto your back and holds you down with the weight of her body. A cute mew of a smile crosses her face, and her tongue sticks "
                             + "out slightly from between her lips. She is riding your cock in a regular rhythm now, not worried as she knows you are much closer to your climax than her.<p>"
                             + "As you gasp and wriggle, trying to escape from a loss she reaches out and gently scratching and tickling your nipples.<p>"
@@ -210,9 +199,9 @@ public class Kat extends BasePersonality {
                             + "<i>\"Wow\"</i> she remarks, easing her grip around your back as you slowly withdraw your fingers. Her tail tickles your side as it curls back around. She "
                             + "stands up and puts her clothes back on before rushing away down the corridor, <i>\"See you around!\"</i>";
         } else {
-            opponent.add(c, new Horny(opponent, 5, 10, character.nameOrPossessivePronoun() + " pheromones"));
-            opponent.add(c, new Horny(opponent, 20, 5, character.nameOrPossessivePronoun() + " feral musk"));
-            opponent.arousal.restore(opponent.arousal.max() * 1 / 3);
+            opponent.add(c, Horny.getWithBiologicalType(character, opponent, 5, 10, character.nameOrPossessivePronoun() + " pheromones"));
+            opponent.add(c, Horny.getWithBiologicalType(character, opponent, 20, 5, character.nameOrPossessivePronoun() + " feral musk"));
+            opponent.arousal.restore(opponent.arousal.max() / 3);
             return "As Kat pleasures you, you're quickly reaching the limit of your control. You try to put some distance between you and her to catch your breath. The familiar "
                             + "tightness in your groin warns you that any stimulation will probably set you off right now. Eager to finish you off, Kat pounces on you and grabs your "
                             + "dick with both hands. <i>\"Nyaha! I got you!\"</i> The last of your endurance is blown away as she jerks you off excitedly. You shoot your load into the air, "
@@ -236,9 +225,9 @@ public class Kat extends BasePersonality {
 
     @Override
     public String defeat(Combat c, Result flag) {
-        Character opponent = c.p1 == character ? c.p2 : c.p1;
+        Character opponent = c.getOther(character);
         if (c.getStance().vaginallyPenetrated(character)) {
-            opponent.add(c, new Horny(opponent, 5, 10, character.nameOrPossessivePronoun() + " pheromones"));
+            opponent.add(c, Horny.getWithBiologicalType(character, opponent, 5, 10, character.nameOrPossessivePronoun() + " pheromones"));
             return "Kat squeaks as you pump your cock inside her over and over, penetrating her deeper with each thrust. She seems to be particularly vulnerable to being fucked"
                             + " doggy style; perhaps it makes her g-spot easier to hit each time you thrust into her.<p>"
                             + "<i>\"Ah ahhhh eeeepppp!\"</i><p>"
@@ -255,8 +244,8 @@ public class Kat extends BasePersonality {
                             + "This seems to satisfy her as much, if not more than her first orgasm. Perhaps some primal instinct to breed? Sliding off your cock she plants a quick kiss "
                             + "on your forehead and scurries out of the room, leaving you gasping and pulling yourself back to your feet.";
         } else {
-            opponent.add(c, new Horny(opponent, 5, 10, character.nameOrPossessivePronoun() + " pheromones"));
-            opponent.add(c, new Horny(opponent, 20, 5, character.nameOrPossessivePronoun() + " feral musk"));
+            opponent.add(c, Horny.getWithBiologicalType(character, opponent, 5, 10, character.nameOrPossessivePronoun() + " pheromones"));
+            opponent.add(c, Horny.getWithBiologicalType(character, opponent, 20, 5, character.nameOrPossessivePronoun() + " feral musk"));
             return "Kat whimpers in pleasure and drops limp to the floor, either too aroused to resist or simply realizing it's futile. Your hand busily works between her "
                             + "open thighs as she moans and squirms erotically. Her pert, round breasts jiggle with her movements and you can't resist covering them in wet kisses. You "
                             + "part her lower lips with your fingers and gently tickle her sensitive love button. Her back arches and she lets out a loud meow as she climaxes."
@@ -286,9 +275,9 @@ public class Kat extends BasePersonality {
 
     @Override
     public String draw(Combat c, Result flag) {
-        Character opponent = c.p1 == character ? c.p2 : c.p1;
+        Character opponent = c.getOther(character);
         if (flag == Result.intercourse) {
-            opponent.add(c, new Horny(opponent, 5, 10, character.nameOrPossessivePronoun() + " pheromones"));
+            opponent.add(c, Horny.getWithBiologicalType(character, opponent, 5, 10, character.nameOrPossessivePronoun() + " pheromones"));
             return "Kat lets out a near-constant mewing of pleasure as you thrust repeatedly into her tight pussy. You feel yourself rapidly approaching orgasm and judging by "
                             + "how she's desperately clinging to you and thrashing her tail, she's probably in a similar state. As you feel the pressure building up in your abdomen, you "
                             + "suck on her neck hard enough to give her a hickey. Your cock spurts inside her and she yowls as she hits her climax. <p>You enjoy your afterglow, holding her "
@@ -302,14 +291,14 @@ public class Kat extends BasePersonality {
                             + "signalling her second climax, you press your lips firmly against hers. <i>\"Thanks,\"</i> She whispers shyly after she recovers. <i>\"You're really sweet. I still can't "
                             + "let you win without a fight, but if we met during the day....\"</i> She blushes deeply and quickly excuses herself.";
         } else {
-            opponent.add(c, new Horny(opponent, 5, 10, character.nameOrPossessivePronoun() + " pheromones"));
-            opponent.add(c, new Horny(opponent, 20, 5, character.nameOrPossessivePronoun() + " feral musk"));
+            opponent.add(c, Horny.getWithBiologicalType(character, opponent, 5, 10, character.nameOrPossessivePronoun() + " pheromones"));
+            opponent.add(c, Horny.getWithBiologicalType(character, opponent, 20, 5, character.nameOrPossessivePronoun() + " feral musk"));
             return "Kat has you backed up against a wall, your lips locked in a passionate kiss. Her nimble fingers are wrapped around your stiff cock, pumping on your member as "
                             + "quickly as she can. The feeling of her tongue dancing in your mouth, is driving you to the brink of an orgasm. You're almost certain you're not going to make it.<p>"
-                            + "You reach down, fumbling desperately between her thighs, trying to find her clitoris and make a comeback. Its difficult to concentrate though, as she starts "
+                            + "You reach down, fumbling desperately between her thighs, trying to find her clitoris and make a comeback. It's difficult to concentrate though, as she starts "
                             + "gently rolling your balls in between her skilled fingers.<p>"
                             + "Suddenly you locate her clitoris with your thumb, rubbing it quickly as you plunge two fingers up into her dripping pussy.<p>"
-                            + "\"Nyyaaaa!\" she meows in ecstasy, breaking the kiss. Her fingers return to your shaft and resume pumping it furiously.You seize the opportunity to regain "
+                            + "<i>\"Nyyaaaa!\"</i> she meows in ecstasy, breaking the kiss. Her fingers return to your shaft and resume pumping it furiously. You seize the opportunity to regain "
                             + "lost ground and teasingly nibble on her ultra-sensitive ear, letting your tongue dance over the edge of it. Suddenly your gut clenches as you feel the first "
                             + "waves of an orgasm begin to build at the base of your cock. You're going to cum, you're going to-<p>"
                             + "<i>\"NYYAAAAAAAAAAAAAA!\"</i><br>"
@@ -371,7 +360,7 @@ public class Kat extends BasePersonality {
             return "Your fight with " + target.name()
                             + " goes back and forth for several minutes, leaving you both naked and aroused, but without a clear winner. You back off "
                             + "a couple steps to catch your breath, when you notice a blur of motion out of the corner of your eye. Distracted as you are, you aren't paying attention to "
-                            + "you footing and stumble backwards. " + target.name()
+                            + "your footing and stumble backwards. " + target.name()
                             + " advances to take advantage of your mistake, but she soon realizes you aren't looking at her, but "
                             + "behind her. She turns around just in time to get pounced on by an exuberant catgirl. Kat starts to playfully tickle her prey, incapacitating the poor, "
                             + "naked girl with uncontrollable fits of laughter. You stand up, brush off your butt, and leisurely walk towards your helpless opponent to finish her off.";
@@ -396,7 +385,7 @@ public class Kat extends BasePersonality {
                         + "pretty obvious. You pretend you didn't see anything and continue toward your dorm. So, a stray Kat is following you home tonight. It would make more sense for her "
                         + "to just come out so you can walk together, but you know how shy she can be about things like this. On the other hand, she is following you back to your room at night "
                         + "with obvious implications, so... does that count as being forward? <p>You reach the door to your dorm building and look back to see Kat clumsily attempting to hide behind a "
-                        + "tree. Oh good grief. How long is planning to stay hidden? The door to the building locks automatically, so if you go inside she'll be stuck out here. Besides, the closer "
+                        + "tree. Oh good grief. How long is she planning to stay hidden? The door to the building locks automatically, so if you go inside she'll be stuck out here. Besides, the closer "
                         + "you get to your room, the harder it's going to be for her to work up to courage to approach you. You walk over to where she's hiding and she freezes in panic. Before she "
                         + "can run off, you catch her and gently pat her on the head. It's starting to get chilly out here. She should just come inside with you. Kat blushes furiously, but looks "
                         + "delighted as you lead her to your room.";

@@ -256,7 +256,7 @@ public class Informant extends Activity {
                                       + "you to hand over an unreasonable amount of money for Aesop's information. <i>\"You once asked me about an address and a password for the black market. I "
                                       + "gave you the address. Now I think you're ready for the password. The black market stocks some rare and unusual items for their prefered customers. Tell "
                                       + "them Callisto sent you and they'll make them available for you. I do feel compelled to warn you that some of the shit they sell there is pretty dangerous. "
-                                      + "I don't mean your life is at risk, nothing that serious, but be careful not to lose your humanity. Sometimes power really can change a person.\"/<i>");
+                                      + "I don't mean your life is at risk, nothing that serious, but be careful not to lose your humanity. Sometimes power really can change a person.\"</i>");
                 Global.flag(Flag.blackMarketPlus);
                 player.money -= 2500;
                 Global.gui()
@@ -345,6 +345,42 @@ public class Informant extends Activity {
                 Global.gui()
                       .message("You don't have enough money<p>");
             }
+        }
+        final String REMOVE_PREFIX = "Remove: ";
+        final String RETURN_PREFIX = "Bring Back: ";
+        if (choice.equals("Select Competitors")) {
+            Global.gui()
+            .message("Haha, feeling the heat? That's okay, I can talk to the organizers about redirecting some of the competitors to other sessions. Just let me know who is becoming too much for you.");
+            Global.everyone().stream()
+                  .filter(c -> !c.human())
+                  .filter(c -> !Global.checkFlag(String.format("%sDisabled", c.getType())))
+                  .forEach(character -> Global.gui().choose(this, String.format(REMOVE_PREFIX + "%s", character.getName())));
+            Global.everyone().stream()
+                  .filter(c -> !c.human())
+                  .filter(c -> Global.checkFlag(String.format("%sDisabled", c.getType())))
+                  .forEach(character -> Global.gui().choose(this, String.format(RETURN_PREFIX + "%s", character.getName())));
+            Global.gui().choose(this, "Back");
+            return;
+        }
+        if (choice.startsWith(REMOVE_PREFIX)) {
+            String name = choice.substring(REMOVE_PREFIX.length());
+            String type = Global.getCharacterByName(name).getType();
+            Global.gui()
+                  .message("Got it, I'll see about sending " + name+ " to another session.");
+            Global.flag(String.format("%sDisabled", type));
+            Global.gui()
+                  .choose(this, "Back");
+            return;
+        }
+        if (choice.startsWith(RETURN_PREFIX)) {
+            String name = choice.substring(RETURN_PREFIX.length());
+            String type = Global.getCharacterByName(name).getType();
+            Global.gui()
+                  .message("Missing " + name+ " already? I'll see what I can do.");
+            Global.unflag(String.format("%sDisabled", type));
+            Global.gui()
+                  .choose(this, "Back");
+            return;
         }
         if (choice.equals("More Competitors")) {
             if (!Global.checkFlag(Flag.Reyka) && Global.checkFlag(Flag.blackMarketPlus)) {
@@ -559,6 +595,8 @@ public class Informant extends Activity {
                 Global.gui()
                       .choose(this, "More Competitors");
             }
+            Global.gui()
+                  .choose(this, "Select Competitors");
         }
         if (Global.checkFlag(Flag.girlAdvice)) {
             Global.gui()

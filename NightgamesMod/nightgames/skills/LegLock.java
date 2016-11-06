@@ -6,12 +6,17 @@ import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
+import nightgames.nskills.tags.SkillTag;
+import nightgames.skills.damage.DamageType;
 import nightgames.status.Abuff;
 
 public class LegLock extends Skill {
 
     public LegLock(Character self) {
         super("Leg Lock", self);
+        addTag(SkillTag.positioning);
+        addTag(SkillTag.hurt);
+        addTag(SkillTag.staminaDamage);
     }
 
     @Override
@@ -23,20 +28,12 @@ public class LegLock extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         if (target.roll(this, c, accuracy(c))) {
-            if (getSelf().human()) {
-                c.write(getSelf(), deal(c, 0, Result.normal, target));
-            } else if (target.human()) {
-                c.write(getSelf(), receive(c, 0, Result.normal, target));
-            }
+            writeOutput(c, Result.normal, target);
             target.add(c, new Abuff(target, Attribute.Speed, -2, 5));
-            target.pain(c, Global.random(10) + 7);
+            target.pain(c, (int) getSelf().modifyDamage(DamageType.physical, target, Global.random(10, 16)));
             target.emote(Emotion.angry, 15);
         } else {
-            if (getSelf().human()) {
-                c.write(getSelf(), deal(c, 0, Result.miss, target));
-            } else if (target.human()) {
-                c.write(getSelf(), receive(c, 0, Result.miss, target));
-            }
+            writeOutput(c, Result.miss, target);
             return false;
         }
         return true;
@@ -74,9 +71,12 @@ public class LegLock extends Skill {
     @Override
     public String receive(Combat c, int damage, Result modifier, Character target) {
         if (modifier == Result.miss) {
-            return getSelf().name() + " tries to put you in a leglock, but you slip away.";
+            return String.format("%s tries to put %s in a leglock, but %s %s away.",
+                            getSelf().subject(), target.nameDirectObject(),
+                            target.pronoun(), target.action("slip"));
         } else {
-            return getSelf().name() + " pulls your leg across her body in a painful submission hold.";
+            return String.format("%s pulls %s leg across %s body in a painful submission hold.",
+                            getSelf().subject(), target.nameOrPossessivePronoun(), getSelf().possessivePronoun());
         }
     }
 

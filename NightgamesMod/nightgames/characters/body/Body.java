@@ -31,6 +31,7 @@ import nightgames.status.Abuff;
 import nightgames.status.BodyFetish;
 import nightgames.status.Status;
 import nightgames.status.Stsflag;
+import nightgames.status.addiction.AddictionType;
 
 public class Body implements Cloneable {
     static class PartReplacement {
@@ -391,7 +392,10 @@ public class Body implements Cloneable {
                       .getHotness();
         int seductionDiff = Math.max(0, self.get(Attribute.Seduction) - opponent.get(Attribute.Seduction));
         retval += seductionDiff / 10.0;
-        retval *= self.getExposure();
+        retval *= (.5 + self.getExposure());
+        if (self.is(Stsflag.glamour)) {
+            retval += 2.0;
+        }
         if (self.is(Stsflag.alluring)) {
             retval *= 1.5;
         }
@@ -453,6 +457,11 @@ public class Body implements Cloneable {
 
     public CockPart getRandomCock() {
         return (CockPart) getRandom("cock");
+    }
+    
+    public List<BodyPart> getAllGenitals() {
+        List<String> partTypes = Arrays.asList("cock", "pussy", "strapon", "ass");
+        return getCurrentPartsThatMatch(part -> partTypes.contains(part.getType()));
     }
 
     public BodyPart getRandomInsertable() {
@@ -519,7 +528,7 @@ public class Body implements Cloneable {
         }
         double perceptionBonus = 1.0;
         if (opponent != null) {
-            perceptionBonus *= getCharismaBonus(opponent);
+            perceptionBonus *= opponent.body.getCharismaBonus(character);
         }
         double bonusDamage = bonus;
         if (opponent != null) {
@@ -553,11 +562,25 @@ public class Body implements Cloneable {
         bonusDamage = Math.max(0, bonusDamage);
         double base = (magnitude + bonusDamage);
         double multiplier = Math.max(0, 1 + ((sensitivity - 1) + (pleasure - 1) + (perceptionBonus - 1)));
-
+        double staleness = 1.0;
+        double stageMultiplier = 1.0;
         if (skill != null) {
-            multiplier = Math.max(0, multiplier + skill.multiplierForStage(character));
+            if (opponent != null && c.getCombatantData(opponent) != null) {
+                staleness = c.getCombatantData(opponent).getMoveModifier(skill);
+            }
+            stageMultiplier = skill.getStage().multiplierFor(character);
         }
+        multiplier = Math.max(0, multiplier + stageMultiplier) * staleness;
 
+        double dominance = 0.0;
+        if (character.human() && Global.getPlayer().checkAddiction(AddictionType.DOMINANCE, opponent)
+                       && c.getStance().dom(opponent)) {
+            float mag = Global.getPlayer().getAddiction(AddictionType.DOMINANCE).get().getMagnitude();
+            float dom = c.getDominanceOfStance(opponent);
+            dominance = mag * (dom / 5.0);
+        }
+        multiplier += dominance;
+        
         double damage = base * multiplier;
         double perceptionlessDamage = base * (multiplier - (perceptionBonus - 1));
 
@@ -579,12 +602,15 @@ public class Body implements Cloneable {
                             ? String.format(" + <font color='rgb(255,100,50)'>%.1f<font color='white'>", bonusDamage)
                             : "";
             String stageString = skill == null ? "" : String.format(" + stage:%.2f", skill.multiplierForStage(character));
+            String dominanceString = dominance < 0.01 ? "" : String.format(" + dominance:%.2f", dominance);
+            String staleString = staleness < .99 ? String.format(" x staleness: %.2f", staleness) : "";
             String battleString = String.format(
                             "%s%s %s<font color='white'> was pleasured by %s%s<font color='white'> for <font color='rgb(255,50,200)'>%d<font color='white'> "
-                                            + "base:%.1f (%.1f%s) x multiplier: %.2f (1 + sen:%.1f + ple:%.1f + per:%.1f %s)\n",
+                                            + "base:%.1f (%.1f%s) x multiplier: %.2f (1 + sen:%.1f + ple:%.1f + per:%.1f %s %s)%s\n",
                             firstColor, Global.capitalizeFirstLetter(character.nameOrPossessivePronoun()),
                             target.describe(character), secondColor, pleasuredBy, result, base, magnitude, bonusString,
-                            multiplier, sensitivity - 1, pleasure - 1, perceptionBonus - 1, stageString);
+                            multiplier, sensitivity - 1, pleasure - 1, perceptionBonus - 1, stageString, dominanceString, 
+                            staleString);
             if (c != null) {
                 c.writeSystemMessage(battleString);
             }
@@ -624,15 +650,21 @@ public class Body implements Cloneable {
         return result;
     }
 
+    /**
+     * Gets how much your opponent views this body. 
+     */
     public double getCharismaBonus(Character opponent) {
         // you don't get turned on by yourself
         if (opponent == character) {
             return 1.0;
         } else {
-            double perceptionBonus = Math.sqrt(opponent.body.getHotness(opponent, character)
-                            * (1.0 + (Math.max(0, character.get(Attribute.Perception)) - 5) / 10.0));
-            if (character.is(Stsflag.lovestruck)) {
+            double perceptionBonus = Math.sqrt(getHotness(character, opponent)
+                            * (1.0 + (Math.max(0, opponent.get(Attribute.Perception)) - 5) / 10.0));
+            if (opponent.is(Stsflag.lovestruck)) {
                 perceptionBonus += 1;
+            }
+            if (character.has(Trait.romantic)) {
+                perceptionBonus += Math.max(0, opponent.getArousal().percent() - 70) / 100.0;
             }
             return perceptionBonus;
         }
@@ -832,7 +864,11 @@ public class Body implements Cloneable {
                 }
                 sb.append(added.get(added.size() - 1)
                                .fullDescribe(character));
-                sb.append(" turned back into ");
+                if (removed.size() == 1 && removed.get(0) == null) {
+                    sb.append(" disappeared");
+                } else {
+                    sb.append(" turned back into ");
+                }
                 for (BodyPart p : removed.subList(0, removed.size() - 1)) {
                     sb.append(Global.prependPrefix(p.prefix(), p.fullDescribe(character)))
                       .append(", ");
@@ -890,7 +926,7 @@ public class Body implements Cloneable {
             part = character.body.getRandom("skin");
         }
         if (character.has(Trait.spiritphage)) {
-            c.write(Global.capitalizeFirstLetter("<br><b>" + character.subjectAction("glow", "glows")
+            c.write("<br><b>" + Global.capitalizeFirstLetter(character.subjectAction("glow", "glows")
                             + " with power as the cum is absorbed by " + character.possessivePronoun() + " "
                             + part.describe(character) + ".</b>"));
             character.add(c, new Abuff(character, Attribute.Power, 5, 10));
@@ -978,7 +1014,7 @@ public class Body implements Cloneable {
             parts.add(cock);
         }
         Collections.shuffle(parts);
-        if (parts.size() > 1) {
+        if (parts.size() >= 1) {
             return parts.get(0);
         } else {
             return getRandomBreasts();

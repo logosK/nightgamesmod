@@ -7,6 +7,8 @@ import nightgames.characters.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
+import nightgames.nskills.tags.SkillTag;
+import nightgames.skills.damage.DamageType;
 import nightgames.stance.Behind;
 import nightgames.stance.Position;
 import nightgames.status.Primed;
@@ -15,6 +17,9 @@ public class CheapShot extends Skill {
 
     public CheapShot(Character self) {
         super("Cheap Shot", self);
+        addTag(SkillTag.hurt);
+        addTag(SkillTag.staminaDamage);
+        addTag(SkillTag.positioning);
     }
 
     @Override
@@ -38,21 +43,12 @@ public class CheapShot extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         getSelf().add(new Primed(getSelf(), -3));
-        if (getSelf().human()) {
-            c.write(getSelf(), deal(c, 0, Result.normal, target));
-        } else if (target.human()) {
-            c.write(getSelf(), receive(c, 0, Result.normal, target));
-            if (Global.random(5) >= 3) {
-                c.write(getSelf(), getSelf().bbLiner(c));
-            }
+        writeOutput(c, Result.normal, target);
+        if (target.human() && Global.random(5) >= 3) {
+            c.write(getSelf(), getSelf().bbLiner(c));
         }
         c.setStance(new Behind(getSelf(), target));
-        target.pain(c, 8 + Global.random(16) + getSelf().get(Attribute.Power));
-        if (getSelf().has(Trait.wrassler)) {
-            target.calm(c, Global.random(6));
-        } else {
-            target.calm(c, Global.random(10));
-        }
+        target.pain(c, (int) getSelf().modifyDamage(DamageType.physical, target, Global.random(8, 20)));
         getSelf().buildMojo(c, 10);
 
         getSelf().emote(Emotion.confident, 15);
@@ -101,14 +97,16 @@ public class CheapShot extends Skill {
     public String receive(Combat c, int damage, Result modifier, Character target) {
         if (target.mostlyNude()) {
             return String.format(
-                            "%s suddenly vanishes right in front of your eyes. That wasn't just fast, %s completely disappeared. Before "
-                                            + "you can react, you're hit from behind with a devastating punch to your unprotected balls.",
-                            getSelf().name(), getSelf().pronoun());
+                            "%s suddenly vanishes right in front of %s eyes. That wasn't just fast, %s completely disappeared! Before "
+                                            + "%s can react, %s %s hit from behind with a devastating punch to %s unprotected balls.",
+                            getSelf().name(), target.nameOrPossessivePronoun(), getSelf().pronoun(),
+                            target.subject(), target.pronoun(), target.subjectAction("are", "is"), target.possessivePronoun());
         } else {
             return String.format(
-                            "%s suddenly vanishes right in front of your eyes. That wasn't just fast, %s completely disappeared. You hear something "
-                                            + "that sounds like 'Za Warudo' before you suffer a painful groin hit from behind.",
-                            getSelf().name(), getSelf().pronoun());
+                            "%s suddenly vanishes right in front of %s eyes. That wasn't just fast, %s completely disappeared! %s something "
+                                            + "that sounds like 'Za Warudo' before %s suffer a painful groin hit from behind.",
+                            getSelf().name(), target.nameOrPossessivePronoun(), getSelf().pronoun(),
+                            Global.capitalizeFirstLetter(target.subjectAction("hear")), target.pronoun());
         }
     }
 

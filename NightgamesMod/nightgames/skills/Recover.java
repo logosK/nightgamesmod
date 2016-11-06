@@ -4,6 +4,7 @@ import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
+import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.Neutral;
 import nightgames.status.Stsflag;
 
@@ -11,6 +12,8 @@ public class Recover extends Skill {
 
     public Recover(Character self) {
         super("Recover", self);
+        addTag(SkillTag.positioning);
+        addTag(SkillTag.escaping);
     }
 
     @Override
@@ -26,7 +29,7 @@ public class Recover extends Skill {
     public boolean resolve(Combat c, Character target) {
         if (getSelf().human()) {
             c.write(getSelf(), deal(c, 0, Result.normal, target));
-        } else if (target.human()) {
+        } else if (c.shouldPrintReceive(target)) {
             if (target.is(Stsflag.blinded))
                 printBlinded(c);
             else
@@ -64,7 +67,7 @@ public class Recover extends Skill {
 
     @Override
     public String receive(Combat c, int damage, Result modifier, Character target) {
-        return getSelf().name() + " scrambles back to her feet.";
+        return getSelf().name() + " scrambles back to "+getSelf().possessivePronoun()+" feet.";
     }
 
     @Override

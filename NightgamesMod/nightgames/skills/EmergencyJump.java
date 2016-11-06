@@ -5,6 +5,7 @@ import nightgames.characters.Character;
 import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
+import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.Behind;
 import nightgames.status.Primed;
 
@@ -12,6 +13,8 @@ public class EmergencyJump extends Skill {
 
     public EmergencyJump(Character self) {
         super("Emergency Jump", self);
+        addTag(SkillTag.positioning);
+        addTag(SkillTag.escaping);
     }
 
     @Override
@@ -74,8 +77,9 @@ public class EmergencyJump extends Skill {
     @Override
     public String receive(Combat c, int damage, Result modifier, Character target) {
         return String.format(
-                        "You thought you had %s right where you want %s, but %s seems to vanish completely and escape.",
-                        getSelf().name(), getSelf().directObject(), getSelf().pronoun());
+                        "%s thought %s had %s right where %s wanted %s, but %s seems to vanish completely and escape.",
+                        target.subject(), target.pronoun(), getSelf().name(), 
+                        target.pronoun(), getSelf().directObject(), getSelf().pronoun());
     }
 
 }

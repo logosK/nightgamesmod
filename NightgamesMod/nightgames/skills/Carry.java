@@ -6,6 +6,7 @@ import nightgames.characters.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
+import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.Standing;
 import nightgames.status.Falling;
 
@@ -13,6 +14,10 @@ public class Carry extends Fuck {
 
     public Carry(String name, Character self) {
         super(name, self, 5);
+        addTag(SkillTag.pleasure);
+        addTag(SkillTag.pleasureSelf);
+        addTag(SkillTag.fucking);
+        addTag(SkillTag.positioning);
     }
 
     public Carry(Character self) {
@@ -43,7 +48,7 @@ public class Carry extends Fuck {
             if (getSelf().human()) {
                 c.write(getSelf(), Global.capitalizeFirstLetter(
                                 premessage + deal(c, premessage.length(), Result.normal, target)));
-            } else if (target.human()) {
+            } else if (c.shouldPrintReceive(target)) {
                 c.write(getSelf(), premessage + receive(c, premessage.length(), Result.normal, getSelf()));
             }
             int m = 5 + Global.random(5);
@@ -58,7 +63,7 @@ public class Carry extends Fuck {
             if (getSelf().human()) {
                 c.write(getSelf(), Global
                                 .capitalizeFirstLetter(premessage + deal(c, premessage.length(), Result.miss, target)));
-            } else if (target.human()) {
+            } else if (c.shouldPrintReceive(target)) {
                 c.write(getSelf(), premessage + receive(c, premessage.length(), Result.miss, target));
             }
             getSelf().add(c, new Falling(getSelf()));
@@ -98,12 +103,16 @@ public class Carry extends Fuck {
         if (modifier == Result.miss) {
             return Global.format(
                             (damage > 0 ? "" : "{self:subject} ")
-                                            + "picks you up, but you scramble out of {self:posessive} grip before {self:pronoun} can do anything. Moreover, you manage to trip her while she's distracted.",
+                                            + "picks {other:subject} up, but {other:pronoun-action:manage|manages} out of"
+                                            + " {self:posessive} grip before {self:pronoun} can do anything. Moreover, "
+                                            + "{other:pronoun-action:scramble|scrambles} to trip {self:direct-object} "
+                                            + "while she's distracted.",
                             getSelf(), target);
         } else {
             return Global.format(
                             (damage > 0 ? "" : "{self:subject} ")
-                                            + "scoops you up in {self:possessive} powerful arms and simultaneously thrusts {self:posessive} {self:body-part:cock} into your {other:body-part:pussy}.",
+                                            + "scoops {other:subject} up in {self:possessive} powerful arms and simultaneously thrusts"
+                                            + " {self:posessive} {self:body-part:cock} into {other:possessive} {other:body-part:pussy}.",
                             getSelf(), target);
         }
     }

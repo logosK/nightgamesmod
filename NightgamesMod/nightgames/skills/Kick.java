@@ -9,11 +9,16 @@ import nightgames.combat.Result;
 import nightgames.global.Global;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.items.clothing.ClothingTrait;
+import nightgames.nskills.tags.SkillTag;
+import nightgames.skills.damage.DamageType;
 
 public class Kick extends Skill {
 
     public Kick(Character self) {
         super("Kick", self);
+        addTag(SkillTag.hurt);
+        addTag(SkillTag.staminaDamage);
+        addTag(SkillTag.positioning);
     }
 
     @Override
@@ -36,30 +41,26 @@ public class Kick extends Skill {
     public boolean resolve(Combat c, Character target) {
         if (!target.getOutfit().slotUnshreddable(ClothingSlot.bottom) && getSelf().get(Attribute.Ki) >= 14
                         && Global.random(3) == 2) {
-            if (getSelf().human()) {
-                c.write(getSelf(), deal(c, 0, Result.special, target));
-            } else if (target.human()) {
-                c.write(getSelf(), receive(c, 0, Result.special, target));
-            }
+            writeOutput(c, Result.special, target);
             target.shred(ClothingSlot.bottom);
         } else
         if (target.roll(this, c, accuracy(c))) {
-            int m = Global.random(12) + Math.min(getSelf().get(Attribute.Power), 100);
+            double m = Global.random(16, 21);
             if (target.has(Trait.brassballs)) {
                 m *= .8;
             }
             if (getSelf().human()) {
                 if (c.getStance().prone(getSelf())) {
-                    c.write(getSelf(), deal(c, m, Result.strong, target));
+                    c.write(getSelf(), deal(c, 0, Result.strong, target));
                 } else {
-                    c.write(getSelf(), deal(c, m, Result.normal, target));
+                    c.write(getSelf(), deal(c, 0, Result.normal, target));
 
                 }
-            } else if (target.human()) {
+            } else if (c.shouldPrintReceive(target)) {
                 if (c.getStance().prone(getSelf())) {
-                    c.write(getSelf(), receive(c, m, Result.strong, target));
+                    c.write(getSelf(), receive(c, 0, Result.strong, target));
                 } else {
-                    c.write(getSelf(), receive(c, m, Result.normal, target));
+                    c.write(getSelf(), receive(c, 0, Result.normal, target));
                 }
             }
             if (target.has(Trait.achilles) && !target.has(ClothingTrait.armored)) {
@@ -68,14 +69,10 @@ public class Kick extends Skill {
             if (target.has(ClothingTrait.armored)) {
                 m = m / 2;
             }
-            target.pain(c, m);
+            target.pain(c, (int) getSelf().modifyDamage(DamageType.physical, target, m));
             target.emote(Emotion.angry, 20);
         } else {
-            if (getSelf().human()) {
-                c.write(getSelf(), deal(c, 0, Result.miss, target));
-            } else if (target.human()) {
-                c.write(getSelf(), receive(c, 0, Result.miss, target));
-            }
+            writeOutput(c, Result.miss, target);
             return false;
         }
         return true;
@@ -132,18 +129,28 @@ public class Kick extends Skill {
             return getSelf().name() + "'s kick hits nothing but air.";
         }
         if (modifier == Result.special) {
-            return getSelf().name()
-                            + " launches a powerful kick straight at your groin, but pulls it back just before impact. You feel a chill run down your spine and your testicles "
-                            + "are grateful for the last second reprieve. Your "
-                            + target.getOutfit().getTopOfSlot(ClothingSlot.bottom).getName()
-                            + " crumble off your body, practically disintegrating.... Still somewhat grateful.";
+            return String.format("%s launches a powerful kick straight at %s groin, but pulls it back "
+                            + "just before impact. %s a chill run down %s spine and %s testicles "
+                            + "are grateful for the last second reprieve. %s %s crumble off %s body,"
+                            + " practically disintegrating.... Still somewhat grateful.",
+                            getSelf().subject(), target.nameOrPossessivePronoun(),
+                            Global.capitalizeFirstLetter(target.subjectAction("feel")),
+                            target.possessivePronoun(), target.possessivePronoun(),
+                            Global.capitalizeFirstLetter(target.possessivePronoun()),
+                            target.getOutfit().getTopOfSlot(ClothingSlot.bottom).getName(),
+                            target.possessivePronoun());
         }
         if (modifier == Result.strong) {
-            return "With " + getSelf().name()
-                            + " flat on her back, you quickly move in to press your advantage. Faster than you can react, her foot shoots up between "
-                            + "your legs, dealing a critical hit on your unprotected balls.";
+            return String.format("With %s flat on %s back, %s quickly %s in to press %s advantage. "
+                            + "Faster than %s can react, %s foot shoots up between "
+                            + "%s legs, dealing a critical hit on %s unprotected balls.",
+                            getSelf().subject(), getSelf().possessivePronoun(), target.subject(),
+                            target.action("move"), target.possessivePronoun(), target.pronoun(),
+                            getSelf().nameOrPossessivePronoun(), target.nameOrPossessivePronoun(),
+                            target.possessivePronoun());
         } else {
-            return getSelf().name() + "'s foot lashes out into your delicate testicles with devastating force. ";
+            return String.format("%s foot lashes out into %s delicate testicles with devastating force.",
+                            getSelf().nameOrPossessivePronoun(), target.nameOrPossessivePronoun());
         }
     }
 

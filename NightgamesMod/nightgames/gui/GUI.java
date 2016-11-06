@@ -68,6 +68,7 @@ import nightgames.characters.Meter;
 import nightgames.characters.Player;
 import nightgames.characters.Trait;
 import nightgames.combat.Combat;
+import nightgames.combat.CombatSceneChoice;
 import nightgames.combat.IEncounter;
 import nightgames.daytime.Activity;
 import nightgames.daytime.Store;
@@ -313,6 +314,16 @@ public class GUI extends JFrame implements Observer {
         optionsPanel.add(fontSizeLabel);
         optionsPanel.add(rdfntnorm);
         optionsPanel.add(rdnfntlrg);
+        
+        JLabel pronounLabel = new JLabel("Pronoun Usage");
+        ButtonGroup pronoun = new ButtonGroup();
+        JRadioButton rdPronounBody = new JRadioButton("Based on Anatomy");
+        JRadioButton rdPronounFemale = new JRadioButton("Always Female");
+        pronoun.add(rdPronounBody);
+        pronoun.add(rdPronounFemale);
+        optionsPanel.add(pronounLabel);
+        optionsPanel.add(rdPronounBody);
+        optionsPanel.add(rdPronounFemale);
 
         // m/f preference (no (other) males in the games yet... good for
         // modders?)
@@ -342,8 +353,7 @@ public class GUI extends JFrame implements Observer {
         malePrefSlider.addChangeListener(e -> Global.setCounter(Flag.malePref, malePrefSlider.getValue()));
 
         // malePrefPanel - options submenu - visible
-        // temporarily remove the maleprefslider, as NPCs no longer really use it for anything useful.
-        // optionsPanel.add(malePrefSlider);
+        optionsPanel.add(malePrefSlider);
         mntmOptions.addActionListener(arg0 -> {
             if (Global.checkFlag(Flag.systemMessages)) {
                 rdMsgOn.setSelected(true);
@@ -382,35 +392,22 @@ public class GUI extends JFrame implements Observer {
             } else {
                 rdfntnorm.setSelected(true);
             }
+            if (Global.checkFlag(Flag.FemalePronounsOnly)) {
+                rdPronounFemale.setSelected(true);
+            } else {
+                rdPronounBody.setSelected(true);
+            }
             malePrefSlider.setValue(Math.round(Global.getValue(Flag.malePref)));
             int result = JOptionPane.showConfirmDialog(GUI.this, optionsPanel, "Options", JOptionPane.OK_CANCEL_OPTION,
                             JOptionPane.INFORMATION_MESSAGE);
             if (result == JOptionPane.OK_OPTION) {
-                if (rdMsgOn.isSelected()) {
-                    Global.flag(Flag.systemMessages);
-                } else {
-                    Global.unflag(Flag.systemMessages);
-                }
-                if (rdnormal.isSelected()) {
-                    Global.unflag(Flag.dumbmode);
-                } else {
-                    Global.flag(Flag.dumbmode);
-                }
-                if (rdhard.isSelected()) {
-                    Global.flag(Flag.hardmode);
-                } else {
-                    Global.unflag(Flag.hardmode);
-                }
-                if (rdautosaveoff.isSelected()) {
-                    Global.unflag(Flag.autosave);
-                } else {
-                    Global.flag(Flag.autosave);
-                }
-                if (rdporon.isSelected()) {
-                    Global.unflag(Flag.noportraits);
-                } else {
-                    Global.flag(Flag.noportraits);
-                    // TODO I know this removes the map, but I don't want to bother checking for it right now.
+                Global.setFlag(Flag.systemMessages, rdMsgOn.isSelected());
+                Global.setFlag(Flag.dumbmode, !rdnormal.isSelected());
+                Global.setFlag(Flag.hardmode, rdhard.isSelected());
+                Global.setFlag(Flag.autosave, rdautosaveon.isSelected());
+                Global.setFlag(Flag.noportraits, rdporoff.isSelected());
+                Global.setFlag(Flag.FemalePronounsOnly, rdPronounFemale.isSelected());
+                if (!rdporon.isSelected()) {
                     showNone();
                 }
                 if (rdimgon.isSelected()) {
@@ -1062,6 +1059,11 @@ public class GUI extends JFrame implements Observer {
         commandPanel.revalidate();
     }
 
+    public void choose(Combat c, Character npc, String message, CombatSceneChoice choice) {
+        commandPanel.add(new CombatSceneButton(message, c, npc, choice));
+        commandPanel.revalidate();
+    }
+
     public void choose(String choice) {
         commandPanel.add(new SceneButton(choice));
         commandPanel.revalidate();
@@ -1132,6 +1134,7 @@ public class GUI extends JFrame implements Observer {
         clearCommand();
         commandPanel.add(new InterveneButton(enc, p1));
         commandPanel.add(new InterveneButton(enc, p2));
+        commandPanel.add(new WatchButton(enc));
         Global.getMatch().pause();
         commandPanel.revalidate();
     }
@@ -1213,6 +1216,7 @@ public class GUI extends JFrame implements Observer {
         clearCommand();
         showNone();
         mntmQuitMatch.setEnabled(false);
+        Global.endNightForSave();
         commandPanel.add(new SleepButton());
         commandPanel.add(new SaveButton());
         commandPanel.revalidate();
@@ -1239,7 +1243,8 @@ public class GUI extends JFrame implements Observer {
         if (map != null) {
             map.repaint();
         }
-        if (Global.getTime() == Time.NIGHT) {
+        // We may be in between setting NIGHT and building the Match object
+        if (Global.getTime() == Time.NIGHT && Global.getMatch() != null) {
             // yup... silverbard pls :D
             if (Global.getMatch().getHour() == 12 || Global.getMatch().getHour() < 10) {
                 timeLabel.setText(Global.getMatch().getTime() + " am");
@@ -1252,7 +1257,7 @@ public class GUI extends JFrame implements Observer {
             timeLabel.setText(Global.getDay().getTime() + " pm");
             timeLabel.setForeground(new Color(253, 184, 19));
         } else {
-            throw new RuntimeException("Unknown time of day: " + Global.getTime());
+            System.err.println("Unknown time of day: " + Global.getTime());
         }
         displayStatus();
     }
@@ -1400,7 +1405,7 @@ public class GUI extends JFrame implements Observer {
                     GUI.NextButton.this.combat.turn();
                 } else if (GUI.NextButton.this.combat.phase == 2) {
                     clearCommand();
-                    if (!GUI.NextButton.this.combat.end()) {
+                    if (GUI.NextButton.this.combat.end()) {
                         endCombat();
                     }
                 }
@@ -1527,6 +1532,19 @@ public class GUI extends JFrame implements Observer {
                             .intrude(Global.human, GUI.InterveneButton.this.assist));
         }
     }
+    
+    private class WatchButton extends JButton {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 7410615523557227147L;
+        public WatchButton(IEncounter enc) {
+            super();
+            setFont(new Font("Baskerville Old Face", 0, 18));
+            setText("Watch them fight");
+            addActionListener(arg0 -> enc.watch());
+        }
+    }
 
     private class ActivityButton extends JButton {
         /**
@@ -1574,7 +1592,7 @@ public class GUI extends JFrame implements Observer {
             addActionListener(arg0 -> Global.setUpMatch(new NoModifier()));
         }
     }
-
+    
     private class LocatorButton extends JButton {
 
         /**
@@ -1630,4 +1648,5 @@ public class GUI extends JFrame implements Observer {
             message(string);
         }
     }
+
 }

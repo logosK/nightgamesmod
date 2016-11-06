@@ -7,11 +7,16 @@ import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
 import nightgames.items.Item;
+import nightgames.nskills.tags.SkillTag;
+import nightgames.skills.damage.DamageType;
 
 public class Nurple extends Skill {
 
     public Nurple(Character self) {
         super("Twist Nipples", self);
+        addTag(SkillTag.hurt);
+        addTag(SkillTag.staminaDamage);
+        addTag(SkillTag.positioning);
     }
 
     @Override
@@ -31,30 +36,22 @@ public class Nurple extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
+        double m = Global.random(4, 7);
+        DamageType damageType = DamageType.physical;
         if (target.roll(this, c, accuracy(c))) {
             if (getSelf().has(Item.ShockGlove) && getSelf().has(Item.Battery, 2)) {
-                if (getSelf().human()) {
-                    c.write(getSelf(), deal(c, 0, Result.special, target));
-                } else if (target.human()) {
-                    c.write(getSelf(), receive(c, 0, Result.special, target));
-                }
-                target.pain(c, Global.random(9) + target.get(Attribute.Perception));
+                writeOutput(c, Result.special, target);
+                getSelf().consume(Item.Battery, 2);
+                damageType = DamageType.gadgets;
+                m += Global.random(16, 30);
             } else {
-                if (getSelf().human()) {
-                    c.write(getSelf(), deal(c, 0, Result.normal, target));
-                } else if (target.human()) {
-                    c.write(getSelf(), receive(c, 0, Result.normal, target));
-                }
-                target.pain(c, Global.random(9) + target.get(Attribute.Perception) / 2);
+                writeOutput(c, Result.normal, target);
             }
-            target.loseMojo(c, 5);
+            target.pain(c, (int) getSelf().modifyDamage(damageType, target, m));
+            target.loseMojo(c, (int) getSelf().modifyDamage(DamageType.technique, target, 5));
             target.emote(Emotion.angry, 15);
         } else {
-            if (getSelf().human()) {
-                c.write(getSelf(), deal(c, 0, Result.miss, target));
-            } else if (target.human()) {
-                c.write(getSelf(), receive(c, 0, Result.miss, target));
-            }
+            writeOutput(c, Result.miss, target);
             return false;
         }
         return true;
@@ -98,11 +95,15 @@ public class Nurple extends Skill {
     @Override
     public String receive(Combat c, int damage, Result modifier, Character target) {
         if (modifier == Result.miss) {
-            return getSelf().name() + " tries to grab your nipples, but misses.";
+            return String.format("%s tries to grab %s nipples, but misses.",
+                            getSelf().subject(), target.nameOrPossessivePronoun());
         } else if (modifier == Result.special) {
-            return getSelf().name() + " touches your nipple with her glove and a jolt of electricity hits you.";
+            return String.format("%s touches %s nipple with %s glove and a jolt of electricity hits %s.",
+                            getSelf().subject(), target.nameOrPossessivePronoun(),
+                            getSelf().possessivePronoun(), target.directObject());
         } else {
-            return getSelf().name() + " twists your sensitive nipples, giving you a jolt of pain.";
+            return String.format("%s twists %s sensitive nipples, giving %s a jolt of pain.",
+                            getSelf().subject(), target.nameOrPossessivePronoun(), target.directObject());
         }
     }
 

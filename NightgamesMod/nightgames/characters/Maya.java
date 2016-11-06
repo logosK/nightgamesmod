@@ -44,8 +44,8 @@ public class Maya extends BasePersonality {
         character.set(Attribute.Speed, 17);
         character.set(Attribute.Power, 36);
         character.set(Attribute.Hypnosis, 8);
-        character.getStamina().setMax(250);
-        character.getArousal().setMax(600);
+        character.getStamina().setMax(90 + character.getLevel() * getGrowth().stamina);
+        character.getArousal().setMax(150 + character.getLevel() * getGrowth().arousal);
         character.getMojo().setMax(350);
         character.getWillpower().setMax(100);
         character.add(Trait.darkpromises);
@@ -270,8 +270,8 @@ public class Maya extends BasePersonality {
                         + "exhausted. You hear a lovely giggle, almost melodic, coming from Maya. Her"
                         + " giggles turn into unrestrained laughter as she rolls onto her back."
                         + " <i>\"A draw!\"</i> Her mature air of dignity is gone as she shakes with"
-                        + " mirth. <i>\"Barely a draw! I had to struggle to acheive a mutual orgasm!"
-                        + " Against a rookie, no less! God, I haven't felt this human in years!.\""
+                        + " mirth. <i>\"Barely a draw! I had to struggle to achieve a mutual orgasm!"
+                        + " Against a rookie, no less! God, I haven't felt this human in years!\""
                         + "</i> She sits up, more breathless from her laughter than the sex.<p><i>"
                         + "\"Sorry. It probably sounds like I'm disparaging you, but I thought there"
                         + " was only one man who could do that to me anymore.\"</i> She wears a "

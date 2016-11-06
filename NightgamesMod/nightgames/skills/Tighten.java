@@ -7,12 +7,14 @@ import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
+import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.Stance;
 import nightgames.status.BodyFetish;
 
 public class Tighten extends Thrust {
     public Tighten(Character self) {
         super("Tighten", self);
+        removeTag(SkillTag.pleasureSelf);
     }
 
     @Override
@@ -50,11 +52,7 @@ public class Tighten extends Thrust {
             result = Result.normal;
         }
 
-        if (getSelf().human()) {
-            c.write(getSelf(), deal(c, 0, result, target));
-        } else if (target.human()) {
-            c.write(getSelf(), receive(c, 0, result, target));
-        }
+        writeOutput(c, result, target);
 
         int[] m = getDamage(c, target);
         assert (m.length >= 2);

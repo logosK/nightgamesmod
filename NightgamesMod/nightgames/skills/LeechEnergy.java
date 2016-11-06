@@ -10,6 +10,7 @@ import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
+import nightgames.nskills.tags.SkillTag;
 
 public class LeechEnergy extends Skill {
     String lastPart;
@@ -17,6 +18,9 @@ public class LeechEnergy extends Skill {
     public LeechEnergy(Character self) {
         super("Leech Energy", self, 2);
         lastPart = "none";
+        addTag(SkillTag.drain);
+        addTag(SkillTag.staminaDamage);
+        addTag(SkillTag.positioning);
     }
 
     @Override
@@ -107,11 +111,7 @@ public class LeechEnergy extends Skill {
             target.drainStaminaAsMojo(c, getSelf(), 10 + Global.random(20), 1.5f);
             target.body.pleasure(getSelf(), selfPart, part, 10 + Global.random(20), c, this);
         } else {
-            if (getSelf().human()) {
-                c.write(getSelf(), deal(c, 0, Result.miss, target));
-            } else if (target.human()) {
-                c.write(getSelf(), receive(c, 0, Result.miss, target));
-            }
+            writeOutput(c, Result.miss, target);
             return false;
         }
         return true;
@@ -156,7 +156,7 @@ public class LeechEnergy extends Skill {
         if (modifier == Result.miss) {
             BodyPart selfPart = getSelf().body.getRandom("tentacles");
             return "You try to drain energy with your " + selfPart.describe(getSelf()) + ", but " + target.name()
-                            + " dodges out of the way";
+                            + " dodges out of the way.";
         }
         return "";
     }
@@ -166,8 +166,9 @@ public class LeechEnergy extends Skill {
         BodyPart selfPart = getSelf().body.getRandom("tentacles");
 
         if (modifier == Result.miss) {
-            return getSelf().name() + " tries to drain energy with her " + selfPart.describe(getSelf())
-                            + ", but you dodge out of the way";
+            return String.format("%s tries to drain energy with %s %s, but %s out of the way.",
+                            getSelf().subject(), getSelf().possessivePronoun(),
+                            selfPart.describe(getSelf()), target.subjectAction("dodge"));
         }
         return "";
     }

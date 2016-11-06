@@ -10,6 +10,7 @@ import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Global;
+import nightgames.skills.damage.DamageType;
 
 public class Engulfed extends Position {
 
@@ -24,10 +25,12 @@ public class Engulfed extends Position {
     public String describe() {
         if (top.human()) {
             return "You have engulfed " + bottom.name() + " inside your slime body, with only "
-                            + bottom.possessivePronoun() + " face outside of you";
+                            + bottom.possessivePronoun() + " face outside of you.";
         } else {
-            return top.name() + " is holding your entire body inside " + top.possessivePronoun()
-                            + " slime body, with only your face outside.";
+            return String.format("%s is holding %s entire body inside "
+                            + "%s slime body, with only %s face outside.",
+                            top.nameOrPossessivePronoun(), bottom.nameOrPossessivePronoun(),
+                            top.possessivePronoun(), bottom.possessivePronoun());
         }
     }
 
@@ -128,7 +131,7 @@ public class Engulfed extends Position {
     @Override
     public void decay(Combat c) {
         time++;
-        bottom.weaken(c, 5);
+        bottom.weaken(c, (int) top.modifyDamage(DamageType.stance, bottom, 5));
         top.emote(Emotion.dominant, 10);
     }
 

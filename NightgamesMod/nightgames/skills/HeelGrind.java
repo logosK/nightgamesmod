@@ -6,6 +6,7 @@ import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
+import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.BehindFootjob;
 import nightgames.stance.Stance;
 import nightgames.status.BodyFetish;
@@ -13,6 +14,9 @@ import nightgames.status.BodyFetish;
 public class HeelGrind extends Skill {
     public HeelGrind(Character self) {
         super("Heel Grind", self);
+        addTag(SkillTag.usesFeet);
+        addTag(SkillTag.pleasure);
+        addTag(SkillTag.dominant);
     }
 
     @Override
@@ -47,11 +51,7 @@ public class HeelGrind extends Skill {
     public boolean resolve(Combat c, Character target) {
         int m = 12 + Global.random(6);
         int m2 = m / 2;
-        if (getSelf().human()) {
-            c.write(getSelf(), deal(c, m, Result.normal, target));
-        } else if (target.human()) {
-            c.write(getSelf(), receive(c, m, Result.normal, target));
-        }
+        writeOutput(c, Result.normal, target);
         target.body.pleasure(getSelf(), getSelf().body.getRandom("feet"), target.body.getRandom("pussy"), m, c, this);
         target.body.pleasure(getSelf(), getSelf().body.getRandom("hands"), target.body.getRandom("breasts"), m2, c, this);
         if (c.getStance().en != Stance.behindfootjob) {
@@ -88,7 +88,14 @@ public class HeelGrind extends Skill {
     @Override
     public String receive(Combat c, int damage, Result modifier, Character target) {
         return Global.format(
-                        "{self:subject} wraps {self:possessive} legs around your waist and presses {self:possessive} soft heel against your pussy eliciting a gasp. {self:PRONOUN} grins at your reaction while locking {self:possessive} feet on top of each other to keep you from escaping {self:possessive} assault. At the same time, you feel {self:possessive} start to gently tweak and pinch your nipples. Flushed and dripping with arousal, you feel your body helplessly grinding {self:possessive} soaked heel, which starts to sink into your cunt bit by bit.",
+                        "{self:subject} wraps {self:possessive} legs around {other:name-possessive} waist and "
+                        + "presses {self:possessive} soft heel against {other:possessive} pussy, eliciting a gasp. "
+                        + "{self:SUBJECT} grins at {other:name-possessive} reaction while locking {self:possessive} feet "
+                        + "on top of each other to keep {other:direct-object} from escaping {self:possessive} assault. "
+                        + "At the same time, {other:subject-action:feel|feels} {self:name-possessive} start to gently "
+                        + "tweak and pinch {other:possessive} nipples. Flushed and dripping with arousal, "
+                        + "{other:subject-action:feel|feels} {other:possessive} body helplessly "
+                        + "grinding {self:possessive} soaked heel, which starts to sink into {other:possessive} cunt bit by bit.",
                         getSelf(), target);
     }
 

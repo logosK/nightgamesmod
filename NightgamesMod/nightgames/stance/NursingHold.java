@@ -14,6 +14,7 @@ import nightgames.skills.Skill;
 import nightgames.skills.Struggle;
 import nightgames.skills.Suckle;
 import nightgames.skills.Wait;
+import nightgames.skills.damage.DamageType;
 
 public class NursingHold extends AbstractFacingStance {
     public NursingHold(Character top, Character bottom) {
@@ -26,8 +27,10 @@ public class NursingHold extends AbstractFacingStance {
             return "You are cradling " + bottom.nameOrPossessivePronoun()
                             + " head in your lap with your breasts dangling in front of " + bottom.directObject();
         } else {
-            return top.name()
-                            + " is holding your head in her lap, with her enticing breasts right in front of your mouth.";
+            return String.format("%s is holding %s head in %s lap, with %s enticing "
+                            + "breasts right in front of %s mouth.", top.subject(),
+                            bottom.nameOrPossessivePronoun(), top.possessivePronoun(),
+                            top.possessivePronoun(), bottom.possessivePronoun());
         }
     }
 
@@ -94,7 +97,7 @@ public class NursingHold extends AbstractFacingStance {
     @Override
     public void decay(Combat c) {
         time++;
-        bottom.weaken(null, 5);
+        bottom.weaken(c, (int) top.modifyDamage(DamageType.temptation, bottom, 3));
         top.emote(Emotion.dominant, 10);
     }
 

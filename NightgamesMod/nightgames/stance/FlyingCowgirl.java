@@ -3,6 +3,7 @@ package nightgames.stance;
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.global.Global;
+import nightgames.skills.damage.DamageType;
 
 public class FlyingCowgirl extends FemdomSexStance {
 
@@ -17,11 +18,18 @@ public class FlyingCowgirl extends FemdomSexStance {
     @Override
     public String describe() {
         return String.format(
-                        "You are flying some twenty feet up in the air,"
-                                        + " joined to your partner by your hips. %s on top of %s and %s %s is strangling %s %s.",
+                        "%s are flying some twenty feet up in the air,"
+                                        + " joined to %s by %s hips. %s on top of %s and %s %s is strangling %s %s.",
+                                        spectated() ? String.format("%s and %s", top.subject(), bottom.subject()) : "You",
+                                                        spectated() ? "eachother" : "your partner",
+                                                        spectated() ? "their" : "your",
                         top.subjectAction("are", "is"), bottom.subject(), top.possessivePronoun(),
                         top.body.getRandomPussy().describe(top), bottom.possessivePronoun(),
                         bottom.body.getRandomInsertable().describe(bottom));
+    }
+    
+    private boolean spectated() {
+        return !(top.human() || bottom.human());
     }
 
     @Override
@@ -86,7 +94,7 @@ public class FlyingCowgirl extends FemdomSexStance {
     @Override
     public void decay(Combat c) {
         time++;
-        top.weaken(null, 3);
+        top.weaken(c, (int) bottom.modifyDamage(DamageType.stance, top, 3));
     }
 
     @Override
@@ -99,7 +107,7 @@ public class FlyingCowgirl extends FemdomSexStance {
                 c.write(top.name()
                                 + " falls to the ground and so do you. Fortunately, her body cushions your fall, but you're not sure she appreciates that as much as you do.");
             }
-            top.pain(c, 50);
+            top.pain(c, (int) bottom.modifyDamage(DamageType.physical, top, Global.random(50, 75)));
             c.setStance(new Mount(bottom, top));
         } else {
             super.checkOngoing(c);
@@ -121,7 +129,7 @@ public class FlyingCowgirl extends FemdomSexStance {
         } else {
             c.write("Weakened by {self:possessive} squirming, {other:SUBJECT-ACTION:fall|falls} to the ground and so {self:action:do|does} {self:name-do}. Fortunately, {other:possessive} body cushions {self:possessive} fall, but you're not sure {self:action:if she appreciates that as much as you do|if you appreciate that as much as she does}. "
                             + "While {other:subject-action:are|is} dazed, {self:subject-action:mount|mounts} {other:direct-object} and {self:action:start|starts} fucking {other:direct-object} in a missionary position.");
-            top.pain(c, 50);
+            top.pain(c, (int) bottom.modifyDamage(DamageType.physical, top, Global.random(50, 75)));
             return new Missionary(bottom, top);
         }
     }

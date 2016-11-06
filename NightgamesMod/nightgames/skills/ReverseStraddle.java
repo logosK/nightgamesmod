@@ -3,13 +3,14 @@ package nightgames.skills;
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
+import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.ReverseMount;
 
 public class ReverseStraddle extends Skill {
 
     public ReverseStraddle(Character self) {
         super("Mount(Reverse)", self);
-
+        addTag(SkillTag.positioning);
     }
 
     @Override
@@ -20,11 +21,7 @@ public class ReverseStraddle extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        if (getSelf().human()) {
-            c.write(getSelf(), deal(c, 0, Result.normal, target));
-        } else if (target.human()) {
-            c.write(getSelf(), receive(c, 0, Result.normal, target));
-        }
+        writeOutput(c, Result.normal, target);
         c.setStance(new ReverseMount(getSelf(), target));
         return true;
     }
@@ -56,7 +53,9 @@ public class ReverseStraddle extends Skill {
 
     @Override
     public String receive(Combat c, int damage, Result modifier, Character target) {
-        return getSelf().name() + " sits on your chest, facing your crotch.";
+        return String.format("%s sits on %s chest, facing %s crotch.",
+                        getSelf().subject(), target.nameOrPossessivePronoun(),
+                        target.possessivePronoun());
     }
 
     @Override
