@@ -22,7 +22,10 @@
 			"dickhandler",
 			"limbTraining1",
 			"tongueTraining1",
-			"nymphomania"
+			"nymphomania",
+			"alwaysready",
+			"strongwilled",
+			"fastLearner"
 		]
 	},
 	"npcs": [
@@ -392,5 +395,5 @@
 		}
 	],
 	"all_npcs":{},
-	"flags":["isFuta"]
+	"flags":["isFuta", "hardmode"]
 }

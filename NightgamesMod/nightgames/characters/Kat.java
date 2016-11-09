@@ -10,6 +10,7 @@ import nightgames.characters.body.PussyPart;
 import nightgames.characters.body.TailPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
+import nightgames.global.Flag;
 import nightgames.global.Global;
 import nightgames.items.Item;
 import nightgames.items.clothing.Clothing;
@@ -54,7 +55,7 @@ public class Kat extends BasePersonality {
         character.getMojo().setMax(60);
         getCharacter().addPersonalStrategy(new FacesitStrategy());
 
-        character.add(Trait.dexterous);
+        //character.add(Trait.dexterous);
         character.add(Trait.pheromones);
         character.add(Trait.shy);
         character.add(Trait.petite);
@@ -79,8 +80,10 @@ public class Kat extends BasePersonality {
         growth.bonusMojo = 2;
         preferredAttributes.add(c -> Optional.of(Attribute.Animism));
 
+        growth.addTrait(3, Trait.dexterous);
+        growth.addTrait(6, Trait.pussyTraining1);if(Global.checkFlag(Flag.isFuta)) {growth.addTrait(13, Trait.cockTraining1);}
         growth.addTrait(10, Trait.sympathetic);
-        growth.addTrait(13, Trait.analTraining1);
+        growth.addTrait(13, Trait.pussyTraining2);if(Global.checkFlag(Flag.isFuta)) {growth.addTrait(13, Trait.cockTraining2);}
         growth.addTrait(16, Trait.powerfulhips);
         growth.addTrait(19, Trait.alwaysready);
         growth.addTrait(20, Trait.breeder);
@@ -94,7 +97,7 @@ public class Kat extends BasePersonality {
         growth.addTrait(43, Trait.tongueTraining2);
         growth.addTrait(46, Trait.strongwilled);
         growth.addTrait(49, Trait.holecontrol);
-        growth.addTrait(52, Trait.analTraining3);
+        growth.addTrait(52, Trait.pussyTraining3);if(Global.checkFlag(Flag.isFuta)) {growth.addTrait(13, Trait.cockTraining3);}
     }
 
     @Override

@@ -15,6 +15,8 @@ import nightgames.status.Status;
 import nightgames.status.Stsflag;
 
 public class Breeder extends Addiction {
+    
+    private boolean isSub=false;
 
     public Breeder(Character cause, float magnitude) {
         super("Breeder", cause, magnitude);

@@ -315,7 +315,7 @@ public enum Trait {
     strongwilled("Strong Willed", "Lowers willpower loss from orgasms"),
     nymphomania("Nymphomania", "Restores willpower upon orgasm"),
     alwaysready("Always Ready", "Always ready for penetration", (b, c, t) -> {
-        if (!c.hasDick() && c.crotchAvailable()) {
+        if (c.hasPussy() && c.crotchAvailable()) {
             b.append("Juices constainly drool from ");
             if (c.human()) {
                 b.append("your slobbering pussy.");

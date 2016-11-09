@@ -2463,6 +2463,12 @@ public abstract class Character extends Observable implements Cloneable {
         if (has(ClothingTrait.higherheels) && !has(Trait.proheels)) {
             dc -= 10;
         }
+        if (bound()) {
+            dc/=2;
+        }
+        if (stunned()) {
+            dc/=4;
+        }
         return dc;
     }
 

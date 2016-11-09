@@ -24,6 +24,9 @@ public class Angel extends BasePersonality {
      *
      */
     private static final long serialVersionUID = -8169646189131720872L;
+    
+    private int dominance=0;
+    private int mindominance=0;
 
     public Angel() {
         this(Optional.empty(), Optional.empty());
@@ -197,6 +200,7 @@ public class Angel extends BasePersonality {
         Character opponent = character.equals(c.p1) ? c.p2 : c.p1;
         String message = "";
         if (c.getStance().anallyPenetrated(opponent)) {
+            dominance+=1;
             message = "Angel leans over you as she grinds her hips against yours. <i>\"You're going to come for me, aren't you?\"</i> she purrs into your ear. You shake your head; "
                             + "no way could you live it down if you came while you had something in your ass. Angel frowns and gives your ass a firm slap. <i>\"No reach around for you "
                             + "then,\"</i> she snaps. <i>\"We'll just do this the old fashioned way.\"</i> She renews her assault on your poor ass and you feel your will slipping. Another solid slap "
@@ -211,7 +215,8 @@ public class Angel extends BasePersonality {
                             + "she could have been disappointed with that performance.  You can only gape as you look up to see Angel is gone along with your clothes. You sigh as you "
                             + "stand and ready yourself to move on. You wouldn't put past Angel to tell her girlfriends regardless of how well you performed, you just hope that's as "
                             + "far as that information goes.";
-        } else if (c.getStance().inserted(character)) {
+        } else if (c.getStance().inserted(character) && character.getWillpower().percent()<0.5) {
+            dominance+=1;
             message = "Angel stares you in the eye, while expertly thrusting in and out of your slobbering pussy. Your needy cunt quivers as she leans close and gives you a long steamy kiss, "
                             + "tongue and all. You try to get away from her, but she holds you down and merciless pounds away at your overused pussy. You can tell she is turned on as well, but "
                             + "it'll do you no good, as you're already feeling yourself slip over the edge. "
@@ -221,6 +226,56 @@ public class Angel extends BasePersonality {
                             + "in long leisurely strokes. <i>\"Hmm in fact, why don't I practice with you a bit? You know what they say, practice makes perfect!\"</i> "
                             + "You groan in frustration as your oversensitive cunt receives her cock again. "
                             + "<br><br>This could be a long night.";
+        } else if (c.getStance().inserted(character) && character.getWillpower().percent()>=0.5 && dominance>=10) {
+            dominance+=1;
+            mindominance=10;
+            message = "Angel holds you in place with her hands on your breasts, rubbing the sides and pinching and flicking your nipples.  She's no longer holding you down and "
+                            + "pounding your pussy mercilessly- she stopped doing that when you started moaning and grinding your hips back against her. Now she's lazily rocking "
+                            + "back and forth, watching your response as she thrusts from different angles and with different speeds. She's clearly no longer rushing to make you "
+                            + "cum before she does- at this point it's obvious that that's guaranteed to happen.<p>It seems that Angel's decided she's found the best way to fuck "
+                            + "your pussy- As she calmly pounds you along this new angle, you cum on the second stroke- and she just keeps thrusting. By the time she finally "
+                            + "brings herself to her first orgasm, you've cum three more times and your cunt is so sensitive that you're convinced you can feel every vein on her "
+                            + "cock. Angel reaches up and grabs your flushed, panting head and turns it so you're looking right at her grinning face.<p>Angel gives an obviously "
+                            + "fake sigh, and shakes her head in mock dissapointment. \"Honestly, "+opponent.name()+", after all those times I helped you train, giving you "
+                            + "practice pleasing my cock with your pussy, you don't manage to make me cum until you've cum so many times I've lost count?\"<br>Shaking her head "
+                            + "again, Angel pulls out of you, eliciting a fresh groan from your lips. She riffles through her things, pulling out two dildos and several lengths "
+                            + "of some kind of fabric. \"It seems that you're too much of a slut for my nice, easy training to work properly, so we're going to have to do some "
+                            + "more involved work to turn you into a proper cock-milker.\" Normally when you're beaten, you go along with whatever the victor decides to do with "
+                            + "you out of a combination of arousal, a sense of fair play, and exhaustion, but this seems like a bit more than you're confortable with. You open "
+                            + "your mouth to protest, but Angel takes it as an invitation to shove one of the dildos she's holding in.<p> The dildo has a musky taste that at this "
+                            + "point you're familiar wih as belonging to Angel's pussy juices. The faux-cock is not overly thick and fits easily into your mouth- it's around the "
+                            + "girth of Angel's futanari dick- but it's alarmingly long, with the part outside of your lips being nearly fifteen inches long. Thankfully, Angel "
+                            + "only shoved perhaps four inches of it into your mouth, but you start feeling a lot less thankful as you notice that one of the bands Angel was holding "
+                            + "was actually attached to this dildo, and Angel wraps it around your head, fastening it somehow in back. The band is quite tight, though not to the "
+                            + "point of being painful, and is very inelastic. When you inhale, you hear a faint whistling noice, and notice that you can breathe through the "
+                            + "dildo- it must have holes running through it to make it easier to deepthroat. That would be somewhat reassuring if it didn't imply that Angel "
+                            + "intends to have you deepthroat it.<p>While you're preoccupied with this oral invader, Angel quickly wraps bands around your elbows and knees, forcing "
+                            + "you into a helpless, impossible-to-escape-from position. She finishes up by clipping a rod between the wraps on your knees, forcing you to keep your "
+                            + "legs spread in a way that opens your pussy up to anyone who might wish to use it to get off in. She rolls you over until you're resting on your knees "
+                            + "and elbows, ass in the air, horribly exposed.<p>Angel pats you on the ass and says \"Alright, this is how your training in pleasuring my cock is "
+                            + "going to go.\" She drapes herself over your back, her breasts over your shoulders and her cock rubbing across the dripping entrance to your cunt. "
+                            + "\"When I rub anything against the opening to your cunt like I'm doing now, you're going to push back into it.\"<br>You don't move- you have no "
+                            + "intention of acting like the slut she seems to want to make you. \"Oh, I forgot to mention something,\" Angel says, and you can almost hear the "
+                            + "devilish smile in her voice. Angel reaches up to where the dildo invading your mouth meets the band that holds it in place, and flips some switch "
+                            + "you can't see. Immediately, the dildo in your mouth begins slowly pumping in and out of the orfice, moving perhaps two inches between the ends of "
+                            + "its motion. At its deepest point, it's not pushing uncomfortably against the back of your throat, and if it were pushing any further you'd have to "
+                            + "start deepthroating it. You quickly realize that the motor and the band are too strong for you to make much progress trying to resist the facefuck, "
+                            + "and resign yourself to just letting it happen. Angel indulgently pats your cheek and continues, \"Every time you don't do something you're supposed "
+                            + "to, you get some spankings, and I press this button over here,\" Angel caresses something near the switch that started the device pumping into your "
+                            + "mouth, \"which makes it move a quarter inch deeper.\" That doesn't sound like much, but your eyes widen as you realize that the massive length of "
+                            + "the dildo means that it could probably hit your vocal cords, and the nearly fifty deepenings that would be required to get it all the way in says "
+                            + "alarming things about how long she intends to keep you here.<p>\"We'll keep doing this until you manage to make me cum without making a mistake, so "
+                            + "we could be here quite a while if you don't put everything you have into making sure you do all the slutty cock-pleasing things you're supposed to.\""
+                            + "<br>Angel rubs her cock's shaft over your entrance again. \"Now, what were you supposed to do, cock slut?\"<p>Angel seems to have done a lot to "
+                            + "prepare for this, and you suspect she intends to do exactly as she says. There's no way you're getting out of this without her letting you out, so "
+                            + "you decide to go along with her demands as best you can.<br>You push back against her dick, trying to rub your pussy against it. Angel pats you on "
+                            + "the ass again and says\"Good, just like that cock slut. Now, let me tell you what a good cock slut is supposed to do. Make sure you listen closely, "
+                            + "I'm not going to repeat this.\"<br>\"First, a clock slut grinds back against anything touching its pussy. Second, a cock slut deepthroats and licks "
+                            + "anything put in its mouth, and always sucks out and swallows any liquids it can get. The cock slut should make sure to lick the cock in its mouth right now, it's a special dildo and "
+                            + "I'll know whether you do.\"<p>You decide discretion is the better part of valour- or in this case, submission is the better part of getting out of "
+                            + "bondage- and immediately start licking the dildo fucking your face.<p>Angel pats you on the ass again- either able to tell you started licking, or "
+                            + "predicting it- and continues \"Good cock slut. Now third, whenever a cock slut has a cock in its cock hole, it clenches to try to keep the cock "
+                            + "inside on every thrust, and unclenches whenever anything tries to get inside.\"<p>INCOMPLETE";
         } else if (c.getStance().inserted(opponent)) {
             message = "Angel rides your cock passionately, pushing you inevitably closer to ejaculation. Her hot pussy is wrapped around your shaft like... well, exactly "
                             + "what it is. More importantly, she's a master with her hip movements and you've held out against her as long as you can. You can only hope her own orgasm is equally "
@@ -259,6 +314,7 @@ public class Angel extends BasePersonality {
     public String defeat(Combat c, Result flag) {
         Character opponent = c.getOther(character);
         if (c.getStance().vaginallyPenetrated(character)) {
+            dominance=Math.min(dominance-1, mindominance);
             return "You thrust your cock continously into Angel's dripping pussy. Her hot insides feel amazing, but you're sure you have enough of an advantage to risk "
                             + "it. She lets out breathy moans in time to your thrusts and her arms are trembling too much to hold herself up. She's clearly about to cum, you just "
                             + "need to push her over the edge. You maul her soft, heavy boobs and suck on her neck. Angel closes her eyes tightly and whimpers in pleasure. <p>You keep "

@@ -26,6 +26,9 @@ public class Cassie extends BasePersonality {
      *
      */
     private static final long serialVersionUID = 8601852023164119671L;
+    
+    private int dominance=0;
+    private int minDominance=0;
 
     public Cassie() {
         this(Optional.empty(), Optional.empty());
@@ -204,12 +207,14 @@ public class Cassie extends BasePersonality {
 
     @Override
     public String victory(Combat c, Result flag) {
+        if (c.getOther(character).getLastOrgasmPart() instanceof BreastsPart || c.getStance().vaginallyPenetrated(c.getOther(character))) dominance +=1;
         if (c.getOther(character).getLastOrgasmPart() instanceof BreastsPart && c.getOther(character).body.getLargestBreasts().getSensitivity(null)>5 && false) {
             character.arousal.empty();
             return "incomplete, should be a series of scenes including one where Cassie makes the player lactate magicmilk that only affects themself and prevents breast size reduction"
                             + "and one where Cassie gives the player a bra that reduces breast sensitivity to reasonable levels while worn, but also makes them moo on orgasm, and vibrates while fighting Cassie";
         } else if (c.getStance().anallyPenetrated(c.getOther(character))) {
             character.arousal.empty();
+            dominance+=1;
             return "Cassie bucks her hips against your ass wildly causing the strapon to rub hard against your prostate. Your arms and legs feel like jelly as she thrusts in again and again. "
                             + "You're almost shocked as you feel yourself on the edge of orgasm and you're certain you wouldn't be able to stop yourself if Cassie keeps this pace up. Above you Cassie moans "
                             + "loudly clearly in a world of her own. You don't think she even notices as the pleasure from your prostate overcomes you and you shoot your white flag of surrender on the "
@@ -252,7 +257,8 @@ public class Cassie extends BasePersonality {
                             + " to you. <i>\"Can you touch my nipples more? I really like that.\"</i> You reach up and play with "
                             + "her breasts as she continues to grind against you. She stops your pillow talk by kissing you desperately just before you feel her body tense up in orgasm. She collapses on top of you and kisses "
                             + "your cheek contently. <i>\"I'll keep practicing and make you feel even better next time, \"</i> she tells you happily. <i>\"I promise.\"</i> ";
-        } else if (c.getStance().vaginallyPenetrated(c.getOther(character)) && character.has(Trait.hypnoticsemen) && character.has(Trait.enthrallingjuices) && character.body.getLargestCock().getMod(character).countsAs(character, CockMod.runic)) {
+        } else if (dominance >= 10 && minDominance==0 && c.getStance().vaginallyPenetrated(c.getOther(character)) && character.has(Trait.hypnoticsemen) && character.has(Trait.enthrallingjuices) && character.body.getLargestCock().getMod(character).countsAs(character, CockMod.runic)) {
+            minDominance=10;
             return "Cassie pumps her dick into your vagina faster and faster as she nears climax, but at this point it's clear you've lost. Your back arches as you orgasm, your "
                             + "vagina clenching around her magical meat. As you collapse limply to the ground, Cassie thrusts into your cunt as deep as she can go, and then "
                             + "cums with a cute gasp, duming a load of her will-destroying fluid directly into your womb. It feels almost as though her cum doesn't stop there, "
@@ -369,6 +375,7 @@ public class Cassie extends BasePersonality {
 
     @Override
     public String defeat(Combat c, Result flag) {
+        if (c.getStance().vaginallyPenetrated(c.getOther(character))) dominance=Math.min(dominance-1,minDominance);
         Character opponent = c.getOther(character);
         if (character.has(Trait.witch) && Global.random(3) == 0) {
             opponent.add(c, new Energized(opponent, 10));
