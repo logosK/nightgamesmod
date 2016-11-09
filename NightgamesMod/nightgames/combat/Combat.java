@@ -452,10 +452,9 @@ public class Combat extends Observable implements Cloneable {
         } else if (p2act == null) {
             p2.act(this);
         } else {
-            clear();
+            //clear();
             if (!shouldAutoresolve()) {
-                Global.gui()
-                      .clearText();
+                //Global.gui().clearText();
             }
             p1act = checkWorship(p1, p2, p1act);
             p2act = checkWorship(p2, p1, p2act);

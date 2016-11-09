@@ -275,6 +275,34 @@ public class NPC extends Character {
 
     @Override
     public void act(Combat c) {
+        oldact(c);
+    }
+    
+    public void oldact(Combat c) {
+        HashSet<Skill> available = new HashSet<>();
+        Character target;
+        if (c.p1 == this) {
+            target = c.p2;
+        } else {
+            target = c.p1;
+        }
+        if (target.human() && Global.isDebugOn(DebugFlags.DEBUG_SKILL_CHOICES)) {
+            pickSkillsWithGUI(c, target);
+        } else {
+            for (Skill act : getSkills()) {
+                if (Skill.skillIsUsable(c, act, target) && cooldownAvailable(act)) {
+                    available.add(act);
+                }
+            }
+            Skill.filterAllowedSkills(c, available, this, target);
+            if (available.size() == 0) {
+                available.add(new Nothing(this));
+            }
+            c.act(this, ai.act(available, c), "");
+        }
+    }
+    
+    public void newact(Combat c) {
         Character target;
         if (c.p1 == this) {
             target = c.p2;

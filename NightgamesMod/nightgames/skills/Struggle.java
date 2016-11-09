@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.CockMod;
 import nightgames.combat.Combat;
@@ -83,6 +84,7 @@ public class Struggle extends Skill {
                 if (knotted) {difficulty+=50;}
                 if (target.is(Stsflag.enthralled) || target.is(Stsflag.trance) || target.is(Stsflag.lovestruck)) {difficulty-=target.get(Attribute.Power);}
                 if (getSelf().is(Stsflag.bondage) || getSelf().is(Stsflag.charmed) || getSelf().is(Stsflag.lovestruck)) {difficulty+=target.get(Attribute.Power)/2;}
+                if (getSelf().has(Trait.nymphomania)) {difficulty+=getSelf().get(Attribute.Nymphomania)/4;}
                 if (getSelf().check(Attribute.Power, difficulty)) {
                     if (getSelf().human()) {
                         if (knotted) {
@@ -143,6 +145,7 @@ public class Struggle extends Skill {
                 if (knotted) {difficulty+=50;}
                 if (target.is(Stsflag.enthralled) || target.is(Stsflag.trance) || target.is(Stsflag.lovestruck)) {difficulty-=target.get(Attribute.Power);}
                 if (getSelf().is(Stsflag.bondage) || getSelf().is(Stsflag.charmed) || target.is(Stsflag.lovestruck)) {difficulty+=target.get(Attribute.Power)/2;}
+                if (getSelf().has(Trait.nymphomania)) {difficulty+=getSelf().get(Attribute.Nymphomania)/4;}
                 if (getSelf().check(Attribute.Power, difficulty)) {
                     if (getSelf().hasStatus(Stsflag.cockbound)) {
                         CockBound s = (CockBound) getSelf().getStatus(Stsflag.cockbound);

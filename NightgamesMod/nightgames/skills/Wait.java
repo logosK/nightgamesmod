@@ -6,12 +6,14 @@ import nightgames.characters.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
+import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.damage.DamageType;
 
 public class Wait extends Skill {
 
     public Wait(Character self) {
         super("Wait", self);
+        addTag(SkillTag.mojoBuilding);
     }
 
     @Override

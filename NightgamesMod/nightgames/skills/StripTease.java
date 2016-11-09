@@ -15,6 +15,7 @@ public class StripTease extends Skill {
     public StripTease(Character self) {
         super("Strip Tease", self);
         addTag(SkillTag.undressing);
+        addTag(SkillTag.mojoBuilding);
     }
 
     public StripTease(String string, Character self) {

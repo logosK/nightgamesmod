@@ -5,6 +5,7 @@ import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
 import nightgames.items.Item;
+import nightgames.items.clothing.Clothing;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.damage.DamageType;
 import nightgames.stance.Stance;
@@ -23,7 +24,7 @@ public class UseDildo extends Skill {
 
     @Override
     public boolean usable(Combat c, Character target) {
-        return (getSelf().has(Item.Dildo) || getSelf().has(Item.Dildo2)) && getSelf().canAct() && target.hasPussy()
+        return (getSelf().has(Item.Dildo) || getSelf().has(Item.Dildo2) || getSelf().has(Item.Dildo3)) && getSelf().canAct() && target.hasPussy()
                         && c.getStance().reachBottom(getSelf()) && target.crotchAvailable()
                         && !c.getStance().vaginallyPenetrated(target);
     }
@@ -37,7 +38,11 @@ public class UseDildo extends Skill {
     public boolean resolve(Combat c, Character target) {
         if (target.roll(this, c, accuracy(c))) {
             int m;
-            if (getSelf().has(Item.Dildo2)) {
+            if (getSelf().has(Item.Dildo3)) {
+                writeOutput(c, Result.strapon, target);
+                m = Global.random(10, 11);
+                target.getOutfit().equip(Clothing.getByID("insertedDildo3"));
+            } else if (getSelf().has(Item.Dildo2)) {
                 writeOutput(c, Result.upgrade, target);
                 m = Global.random(10, 20);
             } else {
@@ -74,6 +79,11 @@ public class UseDildo extends Skill {
                             + "'s love button and she jumps as if shocked. Before she can defend herself, you "
                             + "slip it into her " + target.body.getRandomPussy().describe(target)
                             + ". She starts moaning in pleasure immediately.";
+        } else if (modifier == Result.strapon) {
+            return "You touch the imperceptibly vibrating dildo to " + target.name()
+            + "'s love button and she jumps as if shocked. Before she can defend herself, you "
+            + "slip it into her " + target.body.getRandomPussy().describe(target)
+            + ". She starts moaning in pleasure immediately, and you take the opportunity to push it in as far as it will go. You let go of it, and it clings in place, continuing to vibrate.";
         } else {
             return "You rub the dildo against " + target.name()
                             + "'s lower lips to lubricate it before you thrust it inside her. She can't help moaning a little as you "
@@ -93,6 +103,12 @@ public class UseDildo extends Skill {
             return Global.format(
                             "{self:SUBJECT-ACTION:touch|touches} the imperceptibly vibrating dildo to {other:possessive} love button and {other:subject-action:jump|jumps} as if shocked. Before {other:subject} can defend {other:reflective}, {self:subject} "
                                             + "slips it into {other:possessive} {other:body-part:pussy}. {other:SUBJECT-ACTION:start|starts} moaning in pleasure immediately.",
+                            getSelf(), target);
+        } else if (modifier == Result.strapon) {
+            return Global.format(
+                            "{self:SUBJECT-ACTION:touch|touches} the imperceptibly vibrating dildo to {other:possessive} love button and {other:subject-action:jump|jumps} as if shocked. Before {other:subject} can defend {other:reflective}, {self:subject} "
+                                            + "slips it into {other:possessive} {other:body-part:pussy}. {other:SUBJECT-ACTION:start|starts} moaning in pleasure immediately and {other:subject} {other:SUBJECT-ACTION:take|takes} the opportunity to "
+                                            + "push it in as far as it will go. {other:subject} {other:SUBJECT-ACTION:let|lets} go of it and it clings in place, continuing to vibrate.",
                             getSelf(), target);
         } else {
             return Global.format(

@@ -5,11 +5,13 @@ import nightgames.characters.Character;
 import nightgames.characters.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
+import nightgames.nskills.tags.SkillTag;
 
 public class Focus extends Skill {
 
     public Focus(Character self) {
         super("Focus", self, 2);
+        addTag(SkillTag.mojoBuilding);
     }
 
     @Override

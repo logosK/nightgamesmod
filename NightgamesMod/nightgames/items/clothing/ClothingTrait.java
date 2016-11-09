@@ -23,6 +23,7 @@ public enum ClothingTrait {
     ninja("Ninja Garb", "Bonus cunning and speed"),
     dexterous("Dextrous", "Bonus cunning"),
     lame("Lame", "Small mojo penalty"),
+    vibrating("Vibrating", "Inflicts lust damage each turn"),
     none("", "");
 
     private String name;

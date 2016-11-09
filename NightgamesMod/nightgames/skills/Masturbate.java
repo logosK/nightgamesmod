@@ -18,6 +18,7 @@ public class Masturbate extends Skill {
     public Masturbate(Character self) {
         super("Masturbate", self);
         addTag(SkillTag.pleasureSelf);
+        addTag(SkillTag.mojoBuilding);
     }
 
     @Override

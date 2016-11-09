@@ -6,7 +6,14 @@ import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.nskills.tags.SkillTag;
+import nightgames.stance.Anal;
+import nightgames.stance.AnalCowgirl;
+import nightgames.stance.Cowgirl;
+import nightgames.stance.Doggy;
+import nightgames.stance.Missionary;
 import nightgames.stance.Pin;
+import nightgames.stance.ReverseCowgirl;
+import nightgames.stance.Stance;
 
 public class Reversal extends Skill {
 
@@ -30,8 +37,17 @@ public class Reversal extends Skill {
     public boolean resolve(Combat c, Character target) {
         if (target.roll(this, c, accuracy(c))) {
             writeOutput(c, Result.normal, target);
+/*
+            if (c.getStance().en==Stance.behind) {c.setStance(new Pin(getSelf(), target));}
+            if (c.getStance().en==Stance.missionary) {c.setStance(new Cowgirl(getSelf(), target));}
+            if (c.getStance().en==Stance.cowgirl) {c.setStance(new Missionary(getSelf(), target));}
+            if (c.getStance().en==Stance.anal && c.getStance().anallyPenetrated(getSelf())) {c.setStance(new AnalCowgirl(getSelf(), target));}
+            if (c.getStance().en==Stance.anal && c.getStance().anallyPenetrated(target)) {c.setStance(new Anal(getSelf(), target));}
+            if (c.getStance().en==Stance.reversecowgirl) {c.setStance(new Doggy(getSelf(), target));}
+            if (c.getStance().en==Stance.doggy) {c.setStance(new ReverseCowgirl(getSelf(), target));}
+*/
+            c.setStance(c.getStance().reverse(c));
 
-            c.setStance(new Pin(getSelf(), target));
             target.emote(Emotion.nervous, 10);
             getSelf().emote(Emotion.dominant, 10);
         } else {

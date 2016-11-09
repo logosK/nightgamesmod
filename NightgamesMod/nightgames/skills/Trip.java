@@ -27,7 +27,15 @@ public class Trip extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        if (target.roll(this, c, accuracy(c)) && getSelf().check(Attribute.Cunning, target.knockdownDC())) {
+        if (getSelf().get(Attribute.Arcane)>=10) {
+            if(target.roll(this, c, accuracy(c)) && getSelf().check(Attribute.Arcane, target.knockdownDC()-getSelf().get(Attribute.Cunning)/4)) {
+                writeOutput(c, Result.divine, target);
+                target.add(c, new Falling(target));
+            } else {
+                writeOutput(c, Result.item, target);
+            }
+        }
+        else if (target.roll(this, c, accuracy(c)) && getSelf().check(Attribute.Cunning, target.knockdownDC())) {
             if (isSlime()) {
                 writeOutput(c, Result.special, target);
             } else {
@@ -52,7 +60,7 @@ public class Trip extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Cunning) >= 16;
+        return user.get(Attribute.Cunning) >= 16 || user.get(Attribute.Arcane) >= 10;
     }
 
     @Override
@@ -94,6 +102,16 @@ public class Trip extends Skill {
                             "You reshape your hands into a sheet of slime and slide it towards %s."
                                             + " In the nick of time, %s jumps clear, landing safely back on %s feet.",
                             target.name(), target.pronoun(), target.possessivePronoun());
+        } else if (modifier == Result.item) {
+            return String.format(
+                            "%s %s a glowing bar hovering behind %s knees, and %s it towards %s. The bar pushes against %s knees, but %s %s to keep %s balance.",
+                            getSelf().name(), target.action("conjure"), target.nameOrPossessivePronoun(), target.action("sweep"), getSelf().reflectivePronoun(), target.nameOrPossessivePronoun(), 
+                            target.pronoun(), target.action("manage"), target.possessivePronoun());
+        } else if (modifier == Result.divine) {
+            return String.format(
+                            "%s %s a glowing bar hovering behind %s knees, and %s it towards %s. The bar pushes against %s knees, and %s %s to keep %s balance, and %s to the ground.",
+                            getSelf().name(), target.action("conjure"), target.nameOrPossessivePronoun(), target.action("sweep"), getSelf().reflectivePronoun(), target.nameOrPossessivePronoun(), 
+                            target.pronoun(), target.action("fail"), target.possessivePronoun(), target.action("topple"));
         } else {
             return "You catch " + target.name() + " off balance and trip " + target.directObject() + ".";
         }
@@ -118,10 +136,31 @@ public class Trip extends Skill {
                             getSelf().name(), getSelf().possessivePronoun(), target.nameOrPossessivePronoun(), 
                             Global.capitalizeFirstLetter(target.pronoun()), target.action("jump"),
                             getSelf().pronoun());
+        } else if (modifier == Result.item) {
+            return String.format(
+                            "%s %s a glowing bar hovering behind %s knees, and"
+                                            + " %s it towards %s. The bar pushes against %s knees, but %s %s to keep %s balance.",
+                            getSelf().name(), target.action("conjure"), target.nameOrPossessivePronoun(), target.action("sweep"), getSelf().reflectivePronoun(), target.nameOrPossessivePronoun(), 
+                            target.pronoun(), target.action("manage"), target.possessivePronoun());
+        } else if (modifier == Result.divine) {
+            return String.format(
+                            "%s %s a glowing bar hovering behind %s knees, and"
+                                            + " %s it towards %s. The bar pushes against %s knees, and %s %s to keep %s balance, and %s to the ground.",
+                            getSelf().name(), target.action("conjure"), target.nameOrPossessivePronoun(), target.action("sweep"), getSelf().reflectivePronoun(), target.nameOrPossessivePronoun(), 
+                            target.pronoun(), target.action("fail"), target.possessivePronoun(), target.action("topple"));
         } else {
             return String.format("%s takes %s feet out from under %s and sends %s sprawling to the floor.",
                             getSelf().subject(), target.nameOrPossessivePronoun(), target.directObject(),
                             target.directObject());
+        }
+    }
+    
+    @Override
+    public String getLabel(Combat c) {
+        if (getSelf().get(Attribute.Arcane) >= 10) {
+            return "Tripping Construct";
+        } else {
+            return getName(c);
         }
     }
 
