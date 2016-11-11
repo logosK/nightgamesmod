@@ -71,7 +71,7 @@ public class Match {
             player.getStamina().fill();
             player.getArousal().empty();
             //player.getMojo().empty();
-            player.getMojo().gain(player.getMojo().max()/2);
+            player.getMojo().restore(player.getMojo().max()/2);
             player.getWillpower().fill();
             if (player.getPure(Attribute.Science) > 0) {
                 player.chargeBattery();

@@ -33,8 +33,7 @@ public class FondleBreasts extends Skill {
             if (target.breastsAvailable()) {
                 m += 4;
                 result = Result.strong;
-            } else if (getSelf().getName()=="Cassie" && target.body.getLargestBreasts().getSensitivity(null) > 4) {c.write(getSelf(),receive(c,m,Result.special,target));}
-                else if (getSelf().human()) {
+            } else if (getSelf().getName()=="Cassie" && target.body.getLargestBreasts().getSensitivity(null) > 4) {
                     c.write(getSelf(), deal(c, m, Result.critical, target));
             } else if (target.outfit.getTopOfSlot(ClothingSlot.top).getLayer() <= 1 && getSelf().has(Trait.dexterous)) {
                 m += 4;

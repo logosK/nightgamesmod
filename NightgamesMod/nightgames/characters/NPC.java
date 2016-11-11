@@ -948,7 +948,7 @@ public class NPC extends Character {
             Class<? extends Skill> clazz=wskill.skill.getClass();
             wskill.weight += ai.getAiModifiers().modAttack(clazz);
             if (clazz==FondleBreasts.class || clazz==LickNipples.class || clazz==Suckle.class) {wskill.weight*=(1+other.body.getRandomBreasts().getSensitivity(null))/2.;}
-            if (clazz==Frottage.class || clazz==Handjob.class || clazz==Blowjob.class || clazz==FootPump.class || clazz==Footjob.class || clazz==TailJob.class) {
+            if (other.hasDick() && (clazz==Frottage.class || clazz==Handjob.class || clazz==Blowjob.class || clazz==FootPump.class || clazz==Footjob.class || clazz==TailJob.class)) {
                 wskill.weight*=(1+other.body.getRandomCock().getSensitivity(null))/2.;
                 }
 
