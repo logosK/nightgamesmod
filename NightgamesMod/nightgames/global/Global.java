@@ -163,6 +163,9 @@ public class Global {
     public static final Path COMBAT_LOG_DIR = new File("combatlogs").toPath();
 
     public Global(boolean headless) {
+        debug[DebugFlags.DEBUG_SCENE.ordinal()] = true;
+        debug[DebugFlags.DEBUG_PET.ordinal()] = true;
+        debug[DebugFlags.DEBUG_STRATEGIES.ordinal()] = true;
         rng = new Random();
         flags = new HashSet<>();
         players = new HashSet<>();
@@ -188,17 +191,7 @@ public class Global {
         System.out.println("Night games");
         System.out.println(new Timestamp(jdate.getTime()));
 
-        // debug[DebugFlags.DEBUG_SCENE.ordinal()] = true;
-        // debug[DebugFlags.DEBUG_LOADING.ordinal()] = true;
-        // debug[DebugFlags.DEBUG_FTC.ordinal()] = true;
-        // debug[DebugFlags.DEBUG_DAMAGE.ordinal()] = true;
-        // debug[DebugFlags.DEBUG_SKILLS.ordinal()] = true;
-        // debug[DebugFlags.DEBUG_SKILLS_RATING.ordinal()] = true;
-        // debug[DebugFlags.DEBUG_PLANNING.ordinal()] = true;
-        // debug[DebugFlags.DEBUG_SKILL_CHOICES.ordinal()] = true;
-        // debug[DebugFlags.DEBUG_ADDICTION.ordinal()] = true;
-        // debug[DebugFlags.DEBUG_SPECTATE.ordinal()] = true;
-        traitRequirements = new TraitTree(ResourceLoader.getFileResourceAsStream("data/TraitRequirements.xml"));
+        setTraitRequirements(new TraitTree(ResourceLoader.getFileResourceAsStream("data/TraitRequirements.xml")));
         current = null;
         factory = new ContextFactory();
         cx = factory.enterContext();
@@ -216,7 +209,7 @@ public class Global {
     }
 
     public static boolean meetsRequirements(Character c, Trait t) {
-        return traitRequirements.meetsRequirements(c, t);
+        return getTraitRequirements().meetsRequirements(c, t);
     }
 
     public static boolean isDebugOn(DebugFlags flag) {
@@ -241,26 +234,12 @@ public class Global {
         if (!cfgFlags.isEmpty()) {
             flags = cfgFlags.stream().map(Flag::name).collect(Collectors.toSet());
         }
-        
-        if (config.isPresent() && config.get().getFlags().contains(Flag.isFuta)) {
-            System.out.println("This is a futanari mode game");
-            System.out.println(config.get().getName());
-            System.out.println(config.get().getFlags());
-            System.out.println(config.get().toString());
-            Global.setFlag(Flag.systemMessages, true);
-            Global.setFlag(Flag.hardmode, true);
-            debug[DebugFlags.DEBUG_SCENE.ordinal()] = true;
-            debug[DebugFlags.DEBUG_DAMAGE.ordinal()] = true;
-            debug[DebugFlags.DEBUG_SKILLS.ordinal()] = true;
-            debug[DebugFlags.DEBUG_ADDICTION.ordinal()] = true;
-
-        }
-        
-        
-        Set<Character> lineup = pickCharacters(players, Collections.singleton(human), LINEUP_SIZE);
-        match = new Match(lineup, new NoModifier());
+        Map<String, Boolean> configurationFlags = JsonUtils.mapFromJson(JsonUtils.rootJson(new InputStreamReader(ResourceLoader.getFileResourceAsStream("data/globalflags.json"))).getAsJsonObject(), String.class, Boolean.class);
+        configurationFlags.forEach((flag, val) -> Global.setFlag(flag, val));
         time = Time.NIGHT;
-        //saveWithDialog();
+        setCharacterDisabledFlag(getNPCByType("Yui"));
+        setFlag(Flag.systemMessages, true);
+        setUpMatch(new NoModifier());
     }
 
     public static int random(int start, int end) {
@@ -374,7 +353,6 @@ public class Global {
         getSkillPool().add(new DarkTendrils(ch));
         getSkillPool().add(new Dominate(ch));
         getSkillPool().add(new FlashStep(ch));
-        getSkillPool().add(new FlyCatcher(ch));
         getSkillPool().add(new Illusions(ch));
         getSkillPool().add(new Glamour(ch));
         getSkillPool().add(new LustAura(ch));
@@ -525,7 +503,15 @@ public class Global {
         getSkillPool().add(new Rewind(ch));
         getSkillPool().add(new Unstrip(ch));
         getSkillPool().add(new WindUp(ch));
-
+        getSkillPool().add(new ThrowSlime(ch));
+        getSkillPool().add(new Edge(ch));
+        getSkillPool().add(new SummonYui(ch));
+        getSkillPool().add(new Simulacrum(ch));
+        getSkillPool().add(new PetThreesome(ch));
+        getSkillPool().add(new PetInitiatedThreesome(ch));
+        getSkillPool().add(new FlyCatcher(ch));
+        getSkillPool().add(new Honeypot(ch));
+        getSkillPool().add(new TakeOffShoes(ch));
 
         if (Global.isDebugOn(DebugFlags.DEBUG_SKILLS)) {
             getSkillPool().add(new SelfStun(ch));
@@ -625,7 +611,7 @@ public class Global {
     }
 
     public static List<Trait> getFeats(Character c) {
-        List<Trait> a = traitRequirements.availTraits(c);
+        List<Trait> a = getTraitRequirements().availTraits(c);
         a.sort((first, second) -> first.toString().compareTo(second.toString()));
         return a;
     }
@@ -705,7 +691,7 @@ public class Global {
         Global.gui().endMatch();
     }
     
-    private static Set<Character> pickCharacters(Set<Character> avail, Set<Character> added, int size) {
+    private static Set<Character> pickCharacters(Collection<Character> avail, Collection<Character> added, int size) {
         List<Character> randomizer = avail.stream()
                         .filter(c -> !c.human())
                         .filter(c -> !c.has(Trait.event))
@@ -744,7 +730,7 @@ public class Global {
             if (player.getPure(Attribute.Science) > 0) {
                 player.chargeBattery();
             }
-            if (human.getAffection(player) > maxaffection && !player.has(Trait.event)) {
+            if (human.getAffection(player) > maxaffection && !player.has(Trait.event) && !checkCharacterDisabledFlag(player)) {
                 maxaffection = human.getAffection(player);
                 lover = player;
             }
@@ -753,11 +739,14 @@ public class Global {
         // Disable characters flagged as disabled
         for (Character c : players) {
             // Disabling the player wouldn't make much sense, and there's no PlayerDisabled flag.
-            String flagName = c.getType() + "Disabled";
-            if (c.getType().equals("Player") || !checkFlag(flagName)) {
+            if (c.getType().equals("Player") || !checkCharacterDisabledFlag(c)) {
                 participants.add(c);
             }
         }
+        if (lover != null) {
+            lineup.add(lover);
+        }
+        lineup.add(human);
         if (matchmod.name().equals("maya")) {
             ArrayList<Character> randomizer = new ArrayList<>();
             if (lover != null) {
@@ -781,6 +770,7 @@ public class Global {
             NPC maya = Optional.ofNullable(getNPC("Maya")).orElseThrow(() -> new IllegalStateException(
                             "Maya data unavailable when attempting to add her to lineup."));
             lineup.add(maya);
+            lineup = pickCharacters(participants, lineup, LINEUP_SIZE);
             resting = new HashSet<>(players);
             resting.removeAll(lineup);
             maya.gain(Item.Aphrodisiac, 10);
@@ -800,19 +790,15 @@ public class Global {
             match = new Match(lineup, matchmod);
         } else if (matchmod.name().equals("ftc")) {
             Character prey = ((FTCModifier) matchmod).getPrey();
-            lineup.add(prey);
-            if (!prey.human())
-                lineup.add(human);
-            lineup = pickCharacters(players, lineup, LINEUP_SIZE);
+            if (!prey.human()) {
+                lineup.add(prey);
+            }
+            lineup = pickCharacters(participants, lineup, 5);
             resting = new HashSet<>(players);
             resting.removeAll(lineup);
             match = buildMatch(lineup, matchmod);
-        } else if (participants.size() > 5) {
-            if (lover != null) {
-                lineup.add(lover);
-            }
-            lineup.add(human);
-            lineup = pickCharacters(players, lineup, LINEUP_SIZE);
+        } else if (participants.size() > LINEUP_SIZE) {
+            lineup = pickCharacters(participants, lineup, LINEUP_SIZE);
             resting = new HashSet<>(players);
             resting.removeAll(lineup);
             match = buildMatch(lineup, matchmod);
@@ -1037,7 +1023,15 @@ public class Global {
     public static void unflag(Flag f) {
         flags.remove(f.name());
     }
-    
+
+    public static void setFlag(String f, boolean value) {
+        if (value) { 
+            flag(f);
+        } else {
+            unflag(f);
+        }
+    }
+
     public static void setFlag(Flag f, boolean value) {
         if (value) { 
             flags.add(f.name()); 
@@ -1161,7 +1155,7 @@ public class Global {
 
         debugChars.add(jewel.getCharacter());
     }
-
+    
     public static void loadWithDialog() {
         JFileChooser dialog = new JFileChooser("./");
         FileFilter savesFilter = new FileNameExtensionFilter("Nightgame Saves", "ngs");
@@ -1226,6 +1220,8 @@ public class Global {
      */
     protected static void loadData(SaveData data) {
         players.addAll(data.players);
+        players.stream().filter(c -> c instanceof NPC).forEach(
+                        c -> characterPool.put(c.getType(), (NPC) c));
         flags.addAll(data.flags);
         counters.putAll(data.counters);
         date = data.date;
@@ -1443,6 +1439,18 @@ public class Global {
             }
             return "";
         });
+
+        matchActions.put("master", (self, first, second, third) -> {
+            if (self.useFemalePronouns()) {
+                return "mistress";
+            } else {
+                return "master";
+            }
+        });
+
+        matchActions.put("girl", (self, first, second, third) -> {
+                return self.guyOrGirl();
+        });
     }
 
     public static String format(String format, Character self, Character target, Object... strings) {
@@ -1498,6 +1506,10 @@ public class Global {
         return rng.nextDouble();
     }
 
+    public static double randomdouble(double to) {
+        return rng.nextDouble() * to;
+    }
+
     public static String prependPrefix(String prefix, String fullDescribe) {
         if (prefix.equals("a ") && "aeiou".contains(fullDescribe.substring(0, 1).toLowerCase())) {
             return "an " + fullDescribe;
@@ -1530,15 +1542,23 @@ public class Global {
     }
 
     public static MatchType decideMatchType() {
+        return MatchType.NORMAL;
+        /*
+         * TODO Lots of FTC bugs right now, will disable it for the time being.
+         * Enable again once some of the bugs are sorted out.
         if (human.getLevel() < 15)
             return MatchType.NORMAL;
         if (!checkFlag(Flag.didFTC))
             return MatchType.FTC;
         return isDebugOn(DebugFlags.DEBUG_FTC) || Global.random(10) == 0 ? MatchType.FTC : MatchType.NORMAL;
+        */
     }
 
     private static Match buildMatch(Collection<Character> combatants, Modifier mod) {
         if (mod.name().equals("ftc")) {
+            if (combatants.size() < 5) {
+                return new Match(combatants, new NoModifier());
+            }
             flag(Flag.FTC);
             return new FTCMatch(combatants, ((FTCModifier) mod).getPrey());
         } else {
@@ -1565,4 +1585,25 @@ public class Global {
     public static Character getCharacterByName(String name) {
         return players.stream().filter(c -> c.getName().equals(name)).findAny().get();
     }
+
+    private static String DISABLED_FORMAT = "%sDisabled";
+    public static boolean checkCharacterDisabledFlag(Character self) {
+        return checkFlag(String.format(DISABLED_FORMAT, self.getName()));
+    }
+
+    public static void setCharacterDisabledFlag(Character self) {
+        flag(String.format(DISABLED_FORMAT, self.getName()));
+    }    
+
+    public static void unsetCharacterDisabledFlag(Character self) {
+        unflag(String.format(DISABLED_FORMAT, self.getName()));
+    }
+
+    public static TraitTree getTraitRequirements() {
+        return traitRequirements;
+    }
+
+    public static void setTraitRequirements(TraitTree traitRequirements) {
+        Global.traitRequirements = traitRequirements;
+    }    
 }

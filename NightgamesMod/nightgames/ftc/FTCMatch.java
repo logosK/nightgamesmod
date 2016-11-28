@@ -69,7 +69,7 @@ public class FTCMatch extends Match {
         //System.out.println(bases);
         //System.out.println(combatants);
         //System.out.println(ch);
-        return bases.get(ch).equals(loc);
+        return loc != null && loc.equals(getBase(ch));
     }
 
     public boolean inGracePeriod() {

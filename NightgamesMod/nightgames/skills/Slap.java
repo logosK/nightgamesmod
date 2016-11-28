@@ -16,15 +16,15 @@ public class Slap extends Skill {
 
     public Slap(Character self) {
         super("Slap", self);
-        addTag(SkillTag.staminaDamage);
-        addTag(SkillTag.positioning);
+        addTag(SkillTag.mean);
         addTag(SkillTag.hurt);
+        addTag(SkillTag.positioning);
+        addTag(SkillTag.staminaDamage);
     }
 
     @Override
     public boolean usable(Combat c, Character target) {
-        return c.getStance().reachTop(getSelf()) && getSelf().canAct() && !getSelf().has(Trait.softheart)
-                        && c.getStance().front(getSelf());
+        return c.getStance().reachTop(getSelf()) && getSelf().canAct() && c.getStance().front(getSelf());
     }
 
     @Override
@@ -33,13 +33,18 @@ public class Slap extends Skill {
     }
 
     @Override
+    public int accuracy(Combat c, Character target) {
+        return 90;
+    }
+
+    @Override
     public boolean resolve(Combat c, Character target) {
-        if (target.roll(this, c, accuracy(c))) {
+        if (target.roll(getSelf(), c, accuracy(c, target))) {
             if (isSlime()) {
                 writeOutput(c, Result.critical, target);
                 target.pain(c, getSelf(), Global.random(10) + getSelf().get(Attribute.Slime) + getSelf().get(Attribute.Power) / 2);
                 if (c.getStance().en == Stance.neutral && Global.random(5) == 0) {
-                    c.setStance(new StandingOver(getSelf(), target));
+                    c.setStance(new StandingOver(getSelf(), target), getSelf(), true);
                     c.write(getSelf(),
                                     Global.format("{self:SUBJECT-ACTION:slap|slaps} {other:direct-object} hard"
                                                     + " enough to throw {other:pronoun} to the ground.", getSelf(),
@@ -80,7 +85,7 @@ public class Slap extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return !user.has(Trait.softheart) && user.get(Attribute.Power) >= 5;
+        return user.get(Attribute.Power) >= 5;
     }
 
     @Override

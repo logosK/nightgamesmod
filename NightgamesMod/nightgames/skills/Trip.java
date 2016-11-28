@@ -20,22 +20,18 @@ public class Trip extends Skill {
         return !target.wary() && c.getStance().mobile(getSelf()) && !c.getStance().prone(target)
                         && c.getStance().front(getSelf()) && getSelf().canAct();
     }
-    
+
     private boolean isSlime() {
         return getSelf().get(Attribute.Slime) > 11;
     }
 
+    private boolean isArcane() {
+	return getSelf().get(Attribute.Arcane) >= 10;
+    }
+
     @Override
     public boolean resolve(Combat c, Character target) {
-        if (getSelf().get(Attribute.Arcane)>=10) {
-            if(target.roll(this, c, accuracy(c)) && getSelf().check(Attribute.Arcane, target.knockdownDC()-getSelf().get(Attribute.Cunning)/4)) {
-                writeOutput(c, Result.divine, target);
-                target.add(c, new Falling(target));
-            } else {
-                writeOutput(c, Result.item, target);
-            }
-        }
-        else if (target.roll(this, c, accuracy(c)) && getSelf().check(Attribute.Cunning, target.knockdownDC())) {
+        if (target.roll(getSelf(), c, accuracy(c, target)) && getSelf().check(Attribute.Cunning, target.knockdownDC())) {
             if (isSlime()) {
                 writeOutput(c, Result.special, target);
             } else {
@@ -74,13 +70,17 @@ public class Trip extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c) {
-        return Math.round(Math.max(
-                        Math.min(150, 2.5f
-                                        * (getSelf().get(Attribute.Cunning)
-                                                        - c.getOpponent(getSelf()).get(Attribute.Cunning))
-                                        + (isSlime() ? 100 : 75)),
-                        isSlime() ? 70 : 40));
+    public int accuracy(Combat c, Character target) {
+        double cunningDifference = getSelf().get(Attribute.Cunning) - c.getOpponent(getSelf()).get(Attribute.Cunning);
+        double accuracy = 2.5f * cunningDifference + 75 - target.knockdownDC();
+        if (isSlime()) {
+            accuracy += 25;
+        }
+	if (isArcane()) {
+	    accuracy/=2;
+	    accuracy+=getSelf().get(Attribute.Arcane)*5;
+	}
+        return (int) Math.round(Global.clamp(accuracy, isSlime() ? 50 : 25, 150));
     }
 
     @Override

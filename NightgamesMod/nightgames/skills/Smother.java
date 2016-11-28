@@ -36,7 +36,7 @@ public class Smother extends Skill {
     @Override
     public boolean usable(Combat c, Character target) {
         return getSelf().crotchAvailable() && getSelf().canAct() && c.getStance().dom(getSelf())
-                        && (c.getStance().enumerate() == Stance.facesitting || c.getStance().enumerate() == Stance.smothering)
+                        && (c.getStance().isBeingFaceSatBy(c, target, getSelf()))
                         && !getSelf().has(Trait.shy);
     }
 
@@ -69,7 +69,7 @@ public class Smother extends Skill {
         target.loseWillpower(c, Math.max(10, target.getWillpower().max() * 10 / 100 ));
         target.add(c, new Shamed(target));
         if (c.getStance().enumerate() != Stance.smothering) {
-            c.setStance(new Smothering(getSelf(), target));
+            c.setStance(new Smothering(getSelf(), target), getSelf(), true);
         }
         if (Global.random(100) < 25 + 2 * getSelf().get(Attribute.Fetish)) {
             target.add(c, new BodyFetish(target, getSelf(), "ass", .35));

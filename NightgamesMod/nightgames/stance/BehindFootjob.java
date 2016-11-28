@@ -19,7 +19,7 @@ public class BehindFootjob extends AbstractBehindStance {
     private boolean analPenetration;
 
     @Override
-    public String describe() {
+    public String describe(Combat c) {
         return Global.format(
                         "{self:SUBJECT-ACTION:are|is} holding {other:name-do} from behind with {self:possessive} legs wrapped around {other:direct-object}",
                         top, bottom)+(analPenetration?" "+top.name()+" is also fucking "+bottom+" in the ass.":"");
@@ -32,7 +32,7 @@ public class BehindFootjob extends AbstractBehindStance {
 
     @Override
     public boolean mobile(Character c) {
-        return c == top;
+        return c != bottom;
     }
 
     @Override
@@ -45,8 +45,8 @@ public class BehindFootjob extends AbstractBehindStance {
     }
 
     @Override
-    public boolean kiss(Character c) {
-        return false;
+    public boolean kiss(Character c, Character target) {
+        return c != top && c != bottom;
     }
 
     @Override
@@ -61,12 +61,12 @@ public class BehindFootjob extends AbstractBehindStance {
 
     @Override
     public boolean reachTop(Character c) {
-        return c == top;
+        return c != bottom;
     }
 
     @Override
     public boolean reachBottom(Character c) {
-        return false;
+        return c != top && c != bottom;
     }
 
     @Override
@@ -75,13 +75,13 @@ public class BehindFootjob extends AbstractBehindStance {
     }
 
     @Override
-    public boolean feet(Character c) {
-        return c == top;
+    public boolean feet(Character c, Character target) {
+        return target == bottom;
     }
 
     @Override
-    public boolean oral(Character c) {
-        return false;
+    public boolean oral(Character c, Character target) {
+        return target == bottom && c != top;
     }
 
     @Override
@@ -100,10 +100,12 @@ public class BehindFootjob extends AbstractBehindStance {
     }
 
     @Override
-    public Position reverse(Combat c) {
-        c.write(bottom, Global.format(
-                        "{self:SUBJECT-ACTION:summon what little willpower you have left and grab|grabs} {other:name-possessive} feet and pull them off {self:name-possessive} crotch. Taking advantage of the momentum, {self:subject} push {other:direct-object} back with {self:name-possessive} body and hold {other:direct-object} down while sitting on top of {other:direct-object}.",
-                        bottom, top));
+    public Position reverse(Combat c, boolean writeMessage) {
+        if (writeMessage) {
+            c.write(bottom, Global.format(
+                            "{self:SUBJECT-ACTION:summon what little willpower you have left and grab|grabs} {other:name-possessive} feet and pull them off {self:name-possessive} crotch. Taking advantage of the momentum, {self:subject} push {other:direct-object} back with {self:name-possessive} body and hold {other:direct-object} down while sitting on top of {other:direct-object}.",
+                            bottom, top));
+        }
         return new ReverseMount(bottom, top);
     }
 

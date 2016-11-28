@@ -1,6 +1,7 @@
 package nightgames.skills;
 
 import nightgames.characters.Character;
+import nightgames.characters.body.Body;
 import nightgames.characters.body.CockMod;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -53,8 +54,8 @@ public class ToggleKnot extends Skill {
             if (getSelf().human()) {
                 c.write(getSelf(),
                                 "Deciding she's had enough for now, you let your cock return to its regular shape, once again permitting movement.");
-            } else if (c.shouldPrintReceive(target)) {
-                String part = c.getStance().insertedPartFor(target).describe(target);
+            } else if (c.shouldPrintReceive(target, c)) {
+                String part = Global.pickRandom(c.getStance().partsFor(c, target)).orElse(Body.nonePart).describe(target);
                 c.write(getSelf(), String.format("%s the intense pressure in %s %s "
                                 + "recede as %s allows %s knot to deflate.", target.subjectAction("feel"),
                                 target.possessivePronoun(), part, getSelf().subject(),
@@ -65,10 +66,10 @@ public class ToggleKnot extends Skill {
             if (getSelf().human()) {
                 c.write(getSelf(),
                                 "You'd like to stay inside " + target.name() + " for a bit, so you "
-                                                + (c.getStance().canthrust(getSelf()) ? "thrust" : "buck up")
+                                                + (c.getStance().canthrust(c, getSelf()) ? "thrust" : "buck up")
                                                 + " as deep inside of her as you can and send a mental command to the base of your cock, where your"
                                                 + " knot soon swells up, locking you inside,");
-            } else if (c.shouldPrintReceive(target)) {
+            } else if (c.shouldPrintReceive(target, c)) {
                 String firstPart;
                 if (c.getStance().dom(getSelf())) {
                     firstPart = String.format("%s bottoms out inside of %s, and something quickly feels off%s.",
@@ -89,7 +90,7 @@ public class ToggleKnot extends Skill {
                                                 Global.capitalizeFirstLetter(target.subjectAction("are", "is")),
                                                 target.reflectivePronoun()));
             }
-            target.add(c, new Knotted(target, getSelf(), c.getStance().anallyPenetrated(target)));
+            target.add(c, new Knotted(target, getSelf(), c.getStance().anallyPenetrated(c, target)));
         }
         return true;
     }

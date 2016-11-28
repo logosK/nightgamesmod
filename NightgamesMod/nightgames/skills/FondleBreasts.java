@@ -27,9 +27,9 @@ public class FondleBreasts extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        int m = 4 + Global.random(4);
+        int m = 6 + Global.random(4);
         Result result = Result.normal;
-        if (target.roll(this, c, accuracy(c))) {
+        if (target.roll(getSelf(), c, accuracy(c, target))) {
             if (getSelf().getName()=="Cassie" && target.body.getLargestBreasts().getSensitivity(null) > 4) {
                 result=Result.critical;
                 //c.write(getSelf(), deal(c, m, Result.critical, target));
@@ -45,9 +45,9 @@ public class FondleBreasts extends Skill {
             return false;
         }
 
+        writeOutput(c, result, target);
         target.body.pleasure(getSelf(), getSelf().body.getRandom("hands"), target.body.getRandom("breasts"), m,
                         c, this);
-        writeOutput(c, result, target);
 
         return true;
     }
@@ -68,7 +68,7 @@ public class FondleBreasts extends Skill {
     }
 
     @Override
-    public int accuracy(Combat c) {
+    public int accuracy(Combat c, Character target) {
         return c.getStance().en == Stance.neutral ? 70 : 100;
     }
 
@@ -80,7 +80,7 @@ public class FondleBreasts extends Skill {
     @Override
     public String deal(Combat c, int damage, Result modifier, Character target) {
         if (modifier == Result.miss) {
-            return "You grope at " + target.name() + "'s breasts, but miss.";
+            return "You grope at " + target.name() + "'s breasts, but miss. (Maybe you should get closer?)";
         } else if (modifier == Result.strong) {
             return "You massage " + target.name()
             + "'s soft breasts and pinch her nipples, causing her to moan with desire.";

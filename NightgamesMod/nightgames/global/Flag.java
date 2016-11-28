@@ -75,11 +75,15 @@ public enum Flag {
     YuiLoyalty, 
     YuiAvailable, 
     Yui,
+    YuiWalletReturned,
     YuiUnlocking,
     FemalePronounsOnly,
     skipMM,
     skipFF,
     isFuta,
+    hermHasBalls,
+    shemaleNoBalls,
+    femaleTGIntoHerm,
     ;
     
     public static boolean exists(String flag) {

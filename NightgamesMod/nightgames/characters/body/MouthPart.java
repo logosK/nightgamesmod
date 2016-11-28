@@ -56,7 +56,9 @@ public class MouthPart extends GenericBodyPart {
         if (!fluid.isEmpty() && target.getFluidAddictiveness(opponent) > 0 && !self.is(Stsflag.tolerance)) {
             self.add(c, new FluidAddiction(self, opponent, target.getFluidAddictiveness(opponent), 5));
             FluidAddiction st = (FluidAddiction) self.getStatus(Stsflag.fluidaddiction);
-            if (st.activated()) {
+            if (st == null) {
+                // pass (addiction was resisted)
+            } else if (st.activated()) {
                 if (self.human()) {
                     c.write(self, Global.capitalizeFirstLetter(Global.format(
                                     "As {other:name-possessive} " + fluid
@@ -111,10 +113,10 @@ public class MouthPart extends GenericBodyPart {
         if (self.has(Trait.corrupting)) {
             opponent.add(c, new PartiallyCorrupted(self));
         }
-        if (self.has(Trait.soulsucker)) {
+        if (self.has(Trait.soulsucker) && target.isGenital()) {
             if (!self.human()) {
                 c.write(opponent,
-                                "<br>You feel faint as her lips touch your body, as if your will to fight is being sucked out through your "
+                                "<br>You feel faint as her lips touch you, as if your will to fight is being sucked out through your "
                                                 + target.describe(opponent) + " into her mouth.");
             } else {
                 c.write(opponent,
@@ -123,8 +125,7 @@ public class MouthPart extends GenericBodyPart {
                                                 + target.describe(opponent) + " into your mouth.");
             }
             bonus += Global.random(3) + 2;
-            opponent.loseWillpower(c, Global.random(5) + 2);
-            self.buildMojo(c, 15);
+            opponent.drainWillpowerAsMojo(c, self, (int) self.modifyDamage(DamageType.drain, opponent, 2), 2);
         }
         return bonus;
     }

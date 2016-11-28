@@ -1,6 +1,7 @@
 package nightgames.stance;
 
 import nightgames.characters.Character;
+import nightgames.combat.Combat;
 
 public class Mount extends AbstractFacingStance {
 
@@ -9,7 +10,7 @@ public class Mount extends AbstractFacingStance {
     }
 
     @Override
-    public String describe() {
+    public String describe(Combat c) {
         if (top.human()) {
             return "You're on top of " + bottom.name() + ".";
         } else {
@@ -28,11 +29,11 @@ public class Mount extends AbstractFacingStance {
 
     @Override
     public boolean mobile(Character c) {
-        return c == top;
+        return c != bottom;
     }
 
     @Override
-    public boolean kiss(Character c) {
+    public boolean kiss(Character c, Character target) {
         return true;
     }
 
@@ -53,7 +54,7 @@ public class Mount extends AbstractFacingStance {
 
     @Override
     public boolean reachBottom(Character c) {
-        return c == top;
+        return c != bottom;
     }
 
     @Override
@@ -62,13 +63,13 @@ public class Mount extends AbstractFacingStance {
     }
 
     @Override
-    public boolean feet(Character c) {
-        return false;
+    public boolean feet(Character c, Character target) {
+        return target == bottom && c != top && c != bottom;
     }
 
     @Override
-    public boolean oral(Character c) {
-        return false;
+    public boolean oral(Character c, Character target) {
+        return target == bottom && c != top && c != bottom;
     }
 
     @Override

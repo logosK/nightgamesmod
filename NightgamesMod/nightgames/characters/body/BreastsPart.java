@@ -22,8 +22,8 @@ public enum BreastsPart implements BodyPart {
     dd("DD Cup", "large", 5),
     e("E Cup", "huge", 6),
     f("F Cup", "glorious", 7),
-    g("F Cup", "massive", 8),
-    h("F Cup", "colossal", 9);
+    g("G Cup", "massive", 8),
+    h("H Cup", "colossal", 9);
 
     public String desc;
     public String name;
@@ -45,6 +45,11 @@ public enum BreastsPart implements BodyPart {
             b.append(Global.capitalizeFirstLetter(describe(c, true)));
             b.append(" adorn " + c.nameOrPossessivePronoun() + " chest.");
         }
+    }
+
+    @Override
+    public String canonicalDescription() {
+        return name;
     }
 
     @Override
@@ -302,7 +307,7 @@ public enum BreastsPart implements BodyPart {
     public int mod(Attribute a, int total) {
         switch (a) {
             case Speed:
-                return -Math.max(size - 3, 0);
+                return -Math.max(size - 3, 0) / 2;
             case Seduction:
                 return Math.max(size - 3, 0);
             default:
