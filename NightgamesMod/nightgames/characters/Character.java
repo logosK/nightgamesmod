@@ -1774,12 +1774,12 @@ public abstract class Character extends Observable implements Cloneable {
                 c.write(this, "Experiencing so much pleasure from " + opponent.nameOrPossessivePronoun() + " cock inside you reinforces" + " your faith.");
                 p.addict(AddictionType.ZEAL, opponent, Addiction.MED_INCREASE);
             }
-            if (p.checkAddiction(AddictionType.BREEDER)) {
+            if (p.checkAddiction(AddictionType.BREEDER, opponent)) {
                 // Clear combat addiction
                 p.unaddictCombat(AddictionType.BREEDER, opponent, 1.f, c);
             }
-            if (p.checkAddiction(AddictionType.DOMINANCE) && c.getStance().dom(opponent)) {
-                c.write(this, "Getting dominated by "+opponent+" seems to exceite you even more.");
+            if (p.checkAddiction(AddictionType.DOMINANCE, opponent) && c.getStance().dom(opponent)) {
+                c.write(this, "Getting dominated by "+opponent+" seems to excite you even more.");
                 p.addict(AddictionType.DOMINANCE, opponent, Addiction.LOW_INCREASE);
             }
         }
