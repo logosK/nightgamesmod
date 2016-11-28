@@ -69,7 +69,7 @@ public class PullOut extends Skill {
         } else {
             if (getSelf().hasStatus(Stsflag.leglocked) || getSelf().hasStatus(Stsflag.armlocked)
                             || target.has(Trait.tight) && c.getStance().inserted(getSelf())) {
-                int difficulty = 10 - getSelf().escape(c) + target.get(Attribute.Power);
+                int difficulty = 10 - getSelf().escape(c,target) + target.get(Attribute.Power);
                 if (target.is(Stsflag.enthralled) || target.is(Stsflag.trance) || target.is(Stsflag.lovestruck)) {difficulty-=target.get(Attribute.Power)/2;}
                 if (getSelf().is(Stsflag.bondage) || getSelf().is(Stsflag.charmed) || target.is(Stsflag.lovestruck)) {difficulty+=target.get(Attribute.Power)/4;}          
                 boolean escaped = getSelf().check(Attribute.Power,difficulty);

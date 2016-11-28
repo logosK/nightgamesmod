@@ -2,16 +2,21 @@ package nightgames.tests;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.json.simple.parser.ParseException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.gson.JsonParseException;
+
 import nightgames.actions.Movement;
 import nightgames.areas.Area;
 import nightgames.characters.Character;
+import nightgames.characters.CharacterSex;
 import nightgames.characters.NPC;
 import nightgames.characters.Personality;
 import nightgames.characters.Player;
@@ -55,11 +60,12 @@ public class SkillsTest {
 	List<Personality> npcs2;
 	List<Position> stances;
 	Area area;
-/*
+
 	@Before
-	public void prepare() throws ParseException, IOException {
+	public void prepare() throws JsonParseException, IOException {
 		new Global(true);
-		Global.newGame("Dummy");
+		Global.newGame("Dummy", Optional.empty(), Collections.emptyList(),
+	                    CharacterSex.male, Collections.emptyMap());
 		npcs1 = new ArrayList<Personality>();
 		npcs2 = new ArrayList<Personality>();
 		try {
@@ -73,7 +79,7 @@ public class SkillsTest {
 			npcs2.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("femaletestnpc.js"))));
 			npcs2.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("maletestnpc.js"))));
 			npcs2.add(new CustomNPC(JsonSourceNPCDataLoader.load(SkillsTest.class.getResourceAsStream("asextestnpc.js"))));
-		} catch (ParseException e) {
+		} catch (JsonParseException e) {
 			e.printStackTrace();
 			Assert.fail();
 		}
@@ -108,7 +114,7 @@ public class SkillsTest {
 		stances.add(new UpsideDownFemdom(npcs1.get(0).getCharacter(), npcs1.get(1).getCharacter()));
 		stances.add(new UpsideDownMaledom(npcs1.get(0).getCharacter(), npcs1.get(1).getCharacter()));
 	}
-*/
+
 	public void testSkill(Character npc1, Character npc2, Position pos) throws CloneNotSupportedException {
 		Combat c = new Combat(npc1, npc2, area, pos);
 		pos.checkOngoing(c);

@@ -30,11 +30,12 @@ public class FondleBreasts extends Skill {
         int m = 4 + Global.random(4);
         Result result = Result.normal;
         if (target.roll(this, c, accuracy(c))) {
-            if (target.breastsAvailable()) {
+            if (getSelf().getName()=="Cassie" && target.body.getLargestBreasts().getSensitivity(null) > 4) {
+                result=Result.critical;
+                //c.write(getSelf(), deal(c, m, Result.critical, target));
+            } else if (target.breastsAvailable()) {
                 m += 4;
                 result = Result.strong;
-            } else if (getSelf().getName()=="Cassie" && target.body.getLargestBreasts().getSensitivity(null) > 4) {
-                    c.write(getSelf(), deal(c, m, Result.critical, target));
             } else if (target.outfit.getTopOfSlot(ClothingSlot.top).getLayer() <= 1 && getSelf().has(Trait.dexterous)) {
                 m += 4;
                 result = Result.special;
@@ -129,7 +130,7 @@ public class FondleBreasts extends Skill {
 
     @Override
     public String getLabel(Combat c) {
-        return c.getOther(getSelf()).body.getBreastsAbove(BreastsPart.flat.size) != null ? "Fondle Breasts"
+        return c.getOpponent(getSelf()).body.getBreastsAbove(BreastsPart.flat.size) != null ? "Fondle Breasts"
                         : "Tease Chest";
     }
 

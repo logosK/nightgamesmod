@@ -285,12 +285,12 @@ public class Cassie extends BasePersonality {
 
     @Override
     public String victory(Combat c, Result flag) {
-        if (c.getOther(character).getLastOrgasmPart() instanceof BreastsPart || c.getStance().vaginallyPenetrated(c.getOther(character))) dominance +=1;
-        if (c.getOther(character).getLastOrgasmPart() instanceof BreastsPart && c.getOther(character).body.getLargestBreasts().getSensitivity(null)>5 && false) {
+        if (c.getOpponent(character).getLastOrgasmPart() instanceof BreastsPart || c.getStance().vaginallyPenetrated(c.getOpponent(character))) dominance +=1;
+        if (c.getOpponent(character).getLastOrgasmPart() instanceof BreastsPart && c.getOpponent(character).body.getLargestBreasts().getSensitivity(null)>5 && false) {
             character.arousal.empty();
             return "incomplete, should be a series of scenes including one where Cassie makes the player lactate magicmilk that only affects themself and prevents breast size reduction"
                             + "and one where Cassie gives the player a bra that reduces breast sensitivity to reasonable levels while worn, but also makes them moo on orgasm, and vibrates while fighting Cassie";
-        } else if (c.getStance().anallyPenetrated(c.getOther(character))) {
+        } else if (c.getStance().anallyPenetrated(c.getOpponent(character))) {
             character.arousal.empty();
             dominance+=1;
             return "Cassie bucks her hips against your ass wildly causing the strapon to rub hard against your prostate. Your arms and legs feel like jelly as she thrusts in again and again. "
@@ -335,7 +335,7 @@ public class Cassie extends BasePersonality {
                             + " to you. <i>\"Can you touch my nipples more? I really like that.\"</i> You reach up and play with "
                             + "her breasts as she continues to grind against you. She stops your pillow talk by kissing you desperately just before you feel her body tense up in orgasm. She collapses on top of you and kisses "
                             + "your cheek contently. <i>\"I'll keep practicing and make you feel even better next time, \"</i> she tells you happily. <i>\"I promise.\"</i> ";
-        } else if (dominance >= 10 && minDominance==0 && c.getStance().vaginallyPenetrated(c.getOther(character)) && character.has(Trait.hypnoticsemen) && character.has(Trait.enthrallingjuices) && character.body.getLargestCock().getMod(character).countsAs(character, CockMod.runic)) {
+        } else if (dominance >= 10 && minDominance==0 && c.getStance().vaginallyPenetrated(c.getOpponent(character)) && character.has(Trait.hypnoticsemen) && character.has(Trait.enthrallingjuices) && character.body.getLargestCock().getMod(character).countsAs(character, CockMod.runic)) {
             minDominance=10;
             return "Cassie pumps her dick into your vagina faster and faster as she nears climax, but at this point it's clear you've lost. Your back arches as you orgasm, your "
                             + "vagina clenching around her magical meat. As you collapse limply to the ground, Cassie thrusts into your cunt as deep as she can go, and then "
@@ -351,9 +351,9 @@ public class Cassie extends BasePersonality {
                             + "your skull with empty white.<p>Cassie leans forward, letting out a comfortable sigh. She rests herself on her crossed arms, pushing down on your "
                             + "sternum right below your breasts. Her breasts dangle down, almost touching yours, and her face hovers close above yours. Her eyes move back and "
                             + "forth, looking for something in your face. After a few seconds she seems satisfied and nods, beginning to rock her hips back and forth slowly once "
-                            + "more, pumping her dick in and out of your sensitive pussy. \"I like you, "+c.getOther(character).name+", and I like making you feel good,\" Cassie says, "
+                            + "more, pumping her dick in and out of your sensitive pussy. \"I like you, "+c.getOpponent(character).name+", and I like making you feel good,\" Cassie says, "
                             + "\"but as I've interacted with you I've come to suspect something, and I think you've just confirmed it.\" She nods decisively and proclaims \"You, "
-                            + c.getOther(character).name+", have a fetish for being mind controlled and used as a sex toy.\"<p>\"Now, I know this may be hard for you to admit, "
+                            + c.getOpponent(character).name+", have a fetish for being mind controlled and used as a sex toy.\"<p>\"Now, I know this may be hard for you to admit, "
                             + "even to yourself, but it's ok- I won't judge, so you don't have to hide it from me or pretend it's not true.\" She pauses for a minute, tapping a "
                             + "finger against her lips as she thinks. \"Actually, my research about submissives who like to be controlled indicated that one very common sentiment "
                             + "driving such submissive behavior was that you wanted weird and kinky things done to you but didn't want to feel like a pervert, so you wanted those "
@@ -361,7 +361,7 @@ public class Cassie extends BasePersonality {
                             + "things. It does seems like that would be kind of hard to distinguish from genuinely not liking those things, but happily I have a way around that!\" "
                             + "Cassie sits up and put her hands on her hips, puffing out her chest proudly. \"With you completely under my control, I can have you spill your "
                             + "darkest desires and kinks to me! It is kind of invasive, but I have probable cause to believe that you wouldn't tell me otherwise, and this is for "
-                            + "your own, good, so it's justifiable! So, "+c.getOther(character).name+", do you have a fetish for being mind controlled?\"<p><p>When Cassie started "
+                            + "your own, good, so it's justifiable! So, "+c.getOpponent(character).name+", do you have a fetish for being mind controlled?\"<p><p>When Cassie started "
                             + "talking, you were paying close attention to her, but as she continued to pump into your sensitized pussy you were brought to two more quiet orgasms, "
                             + "and the pulses of mind-controlling magic from her enchanted dick continued to ripple through your head. Each wave seemed to spread the white through "
                             + "your head a little more, until it seemed like every cranny of your brain was stuffed with magical white Cassie-fluid, and without any room to form "
@@ -419,7 +419,7 @@ public class Cassie extends BasePersonality {
                             + "the end of your tongue, and Cassie squeaks and topples over backwards, your tongue's grip pulling your head with her.<p>Cassie laughs, sitting back "
                             + "up. \"I guess we can wait until you're done with that blowjob if you want.\"<p>Less than a minute later, your inexpert but full-genital stimulation "
                             + "brings Cassie to orgasm, and more stupefying liquid inundates your body as the arcane emanations from her cock continue to reduce you to an obedient, "
-                            + "empty-headed vessel. The milky injection only reinvigorates you, and you attack her cock and pussy with renewed vigor.<p>\"Eek! No! Enough! Honestly, "+c.getOther(character).name+",\" Cassie "
+                            + "empty-headed vessel. The milky injection only reinvigorates you, and you attack her cock and pussy with renewed vigor.<p>\"Eek! No! Enough! Honestly, "+c.getOpponent(character).name+",\" Cassie "
                             + "yelps, futily trying to pry your head away from her crotch with her hands, before she remembers her magic and you suddenly freeze.<p>Cassie sighs, "
                             + "shaking her head and smiling fondly at you, before a look of careful concentration takes over her face. \"Alright, I think erasing your memory back "
                             + " to the second-to-last time I came in your pussy should be best.\" Cassie sets her hands over your temples and starts muttering, and then everything "
@@ -453,8 +453,8 @@ public class Cassie extends BasePersonality {
 
     @Override
     public String defeat(Combat c, Result flag) {
-        if (c.getStance().vaginallyPenetrated(c.getOther(character))) dominance=Math.min(dominance-1,minDominance);
-        Character opponent = c.getOther(character);
+        if (c.getStance().vaginallyPenetrated(c.getOpponent(character))) dominance=Math.min(dominance-1,minDominance);
+        Character opponent = c.getOpponent(character);
         if (character.has(Trait.witch) && Global.random(3) == 0) {
             opponent.add(c, new Energized(opponent, 10));
             return "You capture Cassie's lips and slip your hand between her legs to facilitate her imminent orgasm. You rub her soaked pussy lips and she moans against your lips. Her body "
@@ -512,7 +512,7 @@ public class Cassie extends BasePersonality {
 
     @Override
     public String draw(Combat c, Result flag) {
-        Character opponent=c.getOther(character);
+        Character opponent=c.getOpponent(character);
         if (flag == Result.intercourse) {
             if (character.has(Trait.witch) && opponent.getPure(Attribute.Arcane) >= 4 && character.getAffection(opponent) >= 12 && Global.random(2) == 0) {
                 return "You thrust your hips in time with Cassie's, pushing you both closer to orgasm. At this rate, it seems a draw is pretty much certain. If you pulled out, "

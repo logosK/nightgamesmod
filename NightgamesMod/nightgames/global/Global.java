@@ -241,6 +241,22 @@ public class Global {
         if (!cfgFlags.isEmpty()) {
             flags = cfgFlags.stream().map(Flag::name).collect(Collectors.toSet());
         }
+        
+        if (config.isPresent() && config.get().getFlags().contains(Flag.isFuta)) {
+            System.out.println("This is a futanari mode game");
+            System.out.println(config.get().getName());
+            System.out.println(config.get().getFlags());
+            System.out.println(config.get().toString());
+            Global.setFlag(Flag.systemMessages, true);
+            Global.setFlag(Flag.hardmode, true);
+            debug[DebugFlags.DEBUG_SCENE.ordinal()] = true;
+            debug[DebugFlags.DEBUG_DAMAGE.ordinal()] = true;
+            debug[DebugFlags.DEBUG_SKILLS.ordinal()] = true;
+            debug[DebugFlags.DEBUG_ADDICTION.ordinal()] = true;
+
+        }
+        
+        
         Set<Character> lineup = pickCharacters(players, Collections.singleton(human), LINEUP_SIZE);
         match = new Match(lineup, new NoModifier());
         time = Time.NIGHT;

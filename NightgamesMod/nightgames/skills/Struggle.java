@@ -41,7 +41,7 @@ public class Struggle extends Skill {
     public boolean resolve(Combat c, Character target) {
         if (getSelf().bound()) {
             Bound status = (Bound) target.getStatus(Stsflag.bound);
-            if (getSelf().check(Attribute.Power, -getSelf().escape(c))) {
+            if (getSelf().check(Attribute.Power, -getSelf().escape(c, target))) {
                 if (getSelf().human()) {
                     if (status != null) {
                         c.write(getSelf(), "You manage to break free from the " + status + ".");
@@ -78,7 +78,7 @@ public class Struggle extends Skill {
             boolean knotted = getSelf().hasStatus(Stsflag.knotted);
             if (c.getStance().enumerate() == Stance.anal) {
                 int difficulty = target.getStamina().get() / 2 - getSelf().getStamina().get() / 2
-                                + target.get(Attribute.Power) - getSelf().get(Attribute.Power) - getSelf().escape(c);
+                                + target.get(Attribute.Power) - getSelf().get(Attribute.Power) - getSelf().escape(c,target);
                 if (c.getStance().insertedPartFor(target).moddedPartCountsAs(target, CockMod.enlightened)) {difficulty+=15;}
                 if (c.getStance().insertedPartFor(getSelf()).moddedPartCountsAs(getSelf(), CockMod.enlightened)) {difficulty-=15;}
                 if (knotted) {difficulty+=50;}
@@ -92,7 +92,7 @@ public class Struggle extends Skill {
                                             + target.possessivePronoun()
                                             + " knot through your asshole, and the rest of her dick soon follows.");
                             getSelf().removeStatus(Stsflag.knotted);
-                            target.pain(c, (int) getSelf().modifyDamage(DamageType.physical, target, 10));
+                            target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target, 10));
                         } else {
                             c.write(getSelf(), "You manage to break away from " + target.name() + ".");
                         }
@@ -103,7 +103,7 @@ public class Struggle extends Skill {
                                             target.nameDirectObject(), target.possessivePronoun(),
                                             getSelf().possessivePronoun()));
                             getSelf().removeStatus(Stsflag.knotted);
-                            target.pain(c, (int) getSelf().modifyDamage(DamageType.physical, target, 10));
+                            target.pain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.physical, target, 10));
                         } else {
                             c.write(getSelf(), String.format("%s pulls away from %s and"
                                             + " %s dick slides out of %s butt.",
@@ -139,7 +139,7 @@ public class Struggle extends Skill {
                 }
             } else {
                 int difficulty = target.getStamina().get() / 2 - getSelf().getStamina().get() / 2
-                                + target.get(Attribute.Power) - getSelf().get(Attribute.Power) - getSelf().escape(c);
+                                + target.get(Attribute.Power) - getSelf().get(Attribute.Power) - getSelf().escape(c,target);
                 if (c.getStance().insertedPartFor(target).moddedPartCountsAs(target, CockMod.enlightened)) {difficulty+=15;}
                 if (c.getStance().insertedPartFor(getSelf()).moddedPartCountsAs(getSelf(), CockMod.enlightened)) {difficulty-=15;}
                 if (knotted) {difficulty+=50;}
@@ -164,7 +164,7 @@ public class Struggle extends Skill {
                                         Global.format("{self:subject} somehow {self:SUBJECT-ACTION:manage|manages} to force {other:possessive} knot through {self:possessive} tight opening, stretching it painfully in the process.",
                                                         getSelf(), target));
                         getSelf().removeStatus(Stsflag.knotted);
-                        getSelf().pain(c, 10);
+                        getSelf().pain(c, getSelf(), 10);
                     }
                     boolean reverseStrapped = BodyPart.hasOnlyType(c.getStance().partsFor(target), "strapon");
                     boolean reversedStance = false;
@@ -226,7 +226,7 @@ public class Struggle extends Skill {
             }
         } else {
             int difficulty = target.getStamina().get() / 2 - getSelf().getStamina().get() / 2
-                            + target.get(Attribute.Power) - getSelf().get(Attribute.Power) - getSelf().escape(c);
+                            + target.get(Attribute.Power) - getSelf().get(Attribute.Power) - getSelf().escape(c,target);
             if (target.is(Stsflag.enthralled) || target.is(Stsflag.trance) || target.is(Stsflag.lovestruck)) {difficulty-=target.get(Attribute.Power);}
             if (getSelf().is(Stsflag.bondage) || getSelf().is(Stsflag.charmed) || target.is(Stsflag.lovestruck)) {difficulty+=target.get(Attribute.Power)/2;}
             if (getSelf().check(Attribute.Power, difficulty)) {

@@ -27,8 +27,8 @@ public class Alluring extends DurationStatus {
     public String describe(Combat c) {
         if (!affected.human()) {
             return String.format("%s looks impossibly beautiful to %s eyes, %s can't bear to hurt %s.",
-                            affected.nameOrPossessivePronoun(), c.getOther(affected).subject(),
-                            c.getOther(affected).directObject(), affected.subject());
+                            affected.nameOrPossessivePronoun(), c.getOpponent(affected).subject(),
+                            c.getOpponent(affected).directObject(), affected.subject());
         }
         return "";
     }

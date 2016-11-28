@@ -13,9 +13,10 @@ import nightgames.global.Global;
 public class BehindFootjob extends AbstractBehindStance {
     public BehindFootjob(Character top, Character bottom, boolean analPenetration) {
         super(top, bottom, Stance.behindfootjob);
+        this.analPenetration=analPenetration;
     }
     
-    private boolean analPenetration=false;
+    private boolean analPenetration;
 
     @Override
     public String describe() {

@@ -34,7 +34,7 @@ public class BreastGrowthSuper extends Skill {
 
     @Override
     public int getMojoCost(Combat c) {
-        return 100;
+        return 30;
     }
 
     @Override

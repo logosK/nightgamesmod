@@ -191,12 +191,6 @@ public class NPC extends Character {
         }
         gainXP(getVictoryXP(target));
         target.gainXP(getDefeatXP(this));
-        if (c.getStance().inserted() && c.getStance().dom(this)) {
-            getMojo().gain(1);
-            if (has(Trait.mojoMaster)) {
-                getMojo().gain(1);
-            }
-        }
         target.arousal.empty();
         if (target.has(Trait.insatiable)) {
             target.arousal.restore((int) (arousal.max() * .2));
@@ -664,7 +658,7 @@ public class NPC extends Character {
         switch (type) {
             case damage:
                 c.write(this, name() + " avoids your clumsy attack and swings her fist into your nuts.");
-                target.pain(c, 4 + Math.min(Global.random(get(Attribute.Power)), 20));
+                target.pain(c, target, 4 + Math.min(Global.random(get(Attribute.Power)), 20));
                 break;
             case pleasure:
                 if (target.hasDick()) {
@@ -715,7 +709,7 @@ public class NPC extends Character {
                 } else {
                     c.write(this, name()
                                     + " manages to dodge your groping hands and gives a retaliating slap in return.");
-                    target.pain(c, 4 + Math.min(Global.random(get(Attribute.Power)), 20));
+                    target.pain(c, target, 4 + Math.min(Global.random(get(Attribute.Power)), 20));
                 }
                 break;
             case positioning:
@@ -729,7 +723,7 @@ public class NPC extends Character {
                 break;
             default:
                 c.write(this, name() + " manages to dodge your attack and gives a retaliating slap in return.");
-                target.pain(c, 4 + Math.min(Global.random(get(Attribute.Power)), 20));
+                target.pain(c, target, 4 + Math.min(Global.random(get(Attribute.Power)), 20));
         }
     }
 
@@ -801,11 +795,6 @@ public class NPC extends Character {
     public void eot(Combat c, Character opponent, Skill last) {
         super.eot(c, opponent, last);
         ai.eot(c, opponent, last);
-        if (opponent.pet != null && canAct() && c.getStance().mobile(this) && !c.getStance().prone(this)) {
-            if (get(Attribute.Speed) > opponent.pet.ac() * Global.random(20)) {
-                opponent.pet.caught(c, this);
-            }
-        }
         if (opponent.has(Trait.pheromones) && opponent.getArousal().percent() >= 20 && opponent.rollPheromones(c)) {
             c.write(opponent, "<br>You see " + name()
                             + " swoon slightly as she gets close to you. Seems like she's starting to feel the effects of your musk.");
@@ -925,7 +914,7 @@ public class NPC extends Character {
         final double RATING_FACTOR = 0.02f;
 
         // Starting fitness
-        Character other = c.getOther(this);
+        Character other = c.getOpponent(this);
         double selfFit = getFitness(c);
         double otherFit = getOtherFitness(c, other);
 
@@ -1009,7 +998,7 @@ public class NPC extends Character {
     }
 
     public Optional<String> getComment(Combat c) {
-        Set<CommentSituation> applicable = CommentSituation.getApplicableComments(c, this, c.getOther(this));
+        Set<CommentSituation> applicable = CommentSituation.getApplicableComments(c, this, c.getOpponent(this));
         Set<CommentSituation> forbidden = EnumSet.allOf(CommentSituation.class);
         forbidden.removeAll(applicable);
         Map<CommentSituation, String> comments = ai.getComments(c);

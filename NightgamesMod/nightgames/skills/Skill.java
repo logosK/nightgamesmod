@@ -183,7 +183,7 @@ public abstract class Skill {
         return false;
     }
 
-    public static void resolve(Skill skill, Combat c, Character target) {
+    public static boolean resolve(Skill skill, Combat c, Character target) {
         skill.user().addCooldown(skill);
         // save the mojo built of the skill before resolving it (or the status
         // may change)
@@ -214,6 +214,7 @@ public abstract class Skill {
         if (c.getCombatantData(skill.user()) != null) { 
             c.getCombatantData(skill.user()).setLastUsedSkillName(skill.getName());
         }
+        return success;
     }
 
     public int getCooldown() {
@@ -229,7 +230,7 @@ public abstract class Skill {
     }
     
     protected void printBlinded(Combat c) {
-        c.write("<i>You're sure something is happening, but you can't figure out what it is.</i>");
+        c.write(getSelf(), "<i>You're sure something is happening, but you can't figure out what it is.</i>");
     }
     
     public Stage getStage() {
