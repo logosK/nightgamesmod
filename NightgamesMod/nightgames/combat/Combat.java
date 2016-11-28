@@ -541,7 +541,7 @@ public class Combat extends Observable implements Cloneable {
             next();
             return;
         }
-        if ((p1.orgasmed || p2.orgasmed) && SKIPPABLE_PHASES.contains(phase)) {
+        if ((p1.orgasmed || p2.orgasmed) && phase != CombatPhase.RESULTS_SCENE && SKIPPABLE_PHASES.contains(phase)) {
             phase = CombatPhase.UPKEEP;
         }
         if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {
@@ -1001,7 +1001,7 @@ public class Combat extends Observable implements Cloneable {
 
     private void next() {
         if (phase != CombatPhase.FINISHED) {
-            if (shouldAutoresolve()) {
+            if (shouldAutoresolve() || (Global.checkFlag(Flag.isFuta) && phase != CombatPhase.SKILL_SELECTION && phase != CombatPhase.UPKEEP && phase != CombatPhase.RESULTS_SCENE)) {
                 turn();
             } else {
                 Global.gui().next(this);

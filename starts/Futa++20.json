@@ -17,6 +17,7 @@
 		"level":20,
 		"money": 35000,
 		"gender":"herm",
+		"name":"Alexis",
 		"traits": [
 			"pussyhandler",
 			"dickhandler",
@@ -393,5 +394,5 @@
 		}
 	],
 	"all_npcs":{},
-	"flags":["isFuta", "hardmode"]
+	"flags":["isFuta", "hardmode","SuperTraitMode"]
 }
