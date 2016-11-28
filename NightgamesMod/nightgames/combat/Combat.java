@@ -221,10 +221,10 @@ public class Combat extends Observable implements Cloneable {
         }
         applyCombatStatuses(p1, p2);
         applyCombatStatuses(p2, p1);
-
+/*
         if (shouldAutoresolve()) {
             automate();
-        }
+        }*/
         updateMessage();
         if (doExtendedLog()) {
             log.logHeader("\n");
@@ -750,9 +750,7 @@ public class Combat extends Observable implements Cloneable {
                     }
                 }
             }
-            updateMessage();
-        }
-    }
+
 
             List<PetCharacter> actingPets = new ArrayList<>(otherCombatants);
             actingPets.stream().filter(pet -> !alreadyBattled.contains(pet)).forEach(pet -> {

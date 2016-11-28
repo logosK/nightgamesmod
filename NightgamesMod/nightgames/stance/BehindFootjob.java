@@ -118,8 +118,7 @@ public class BehindFootjob extends AbstractBehindStance {
     public int dominance() {
         return analPenetration?6:4;
     }
-    
-    @Override
+    //@Override
     public List<BodyPart> topParts() {
         if(!analPenetration) return Collections.emptyList();
         return Arrays.asList(top.body.getRandomInsertable()).stream().filter(part -> part != null && part.present())

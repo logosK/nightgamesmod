@@ -117,6 +117,6 @@ public class Growth implements Cloneable {
     }
     
     @Override public String toString() {
-        return "Growth with stamina "+stamina+" arousal "+arousal+" mojo "+mojo+" bonusStamina "+bonusStamina+" bonusArousal "+bonusArousal+" bonusMojo "+bonusMojo+" bonusAttributes "+bonusAttributes+" willpower "+willpower+" bonusWillpower "+bonusWillpower+" attributes "+attributes+" traits "+traits+" actions "+actions;
+        return "Growth with stamina "+stamina+" arousal "+arousal+" mojo "+mojo+" bonusStamina "+bonusStamina+" bonusArousal "+bonusArousal+" bonusMojo "+bonusMojo+" bonusAttributes "+bonusAttributes+" willpower "+willpower+" bonusWillpower "+bonusWillpower+" attributes "+attributes+" traits "+traits;
     }
 }

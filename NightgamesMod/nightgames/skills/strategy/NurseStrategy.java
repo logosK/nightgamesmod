@@ -33,7 +33,7 @@ public class NurseStrategy extends KnockdownThenActionStrategy {
         }
         return weight;
     }
-    
+    /*
     @Override
     protected Set<Skill> filterSkills(Combat c, Character self, Set<Skill> allowedSkills) {
         Character other = c.getOpponent(self);
@@ -56,7 +56,7 @@ public class NurseStrategy extends KnockdownThenActionStrategy {
             return positioningSkills;
         }
         return getPreferredAfterKnockdownSkills(c, self, allowedSkills).orElse(Collections.emptySet());
-    }
+    }*/
 
     @Override
     protected Optional<Set<Skill>> getPreferredSkills(Combat c, Character self, Set<Skill> allowedSkills) {

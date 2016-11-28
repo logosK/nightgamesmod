@@ -45,7 +45,7 @@ public class BreastGrowthSuper extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         Result res;
-        if (target.roll(this, c, accuracy(c))) {
+        if (target.roll(getSelf(), c, accuracy(c,target))) {
             if (target.body.getRandomBreasts() == BreastsPart.flat) {
                 res = Result.special;
             } else {
@@ -55,7 +55,7 @@ public class BreastGrowthSuper extends Skill {
             res = Result.miss;
         }
         int additionalSizes = getSelf().get(Attribute.Arcane)/15;
-        boolean permanent = (getSelf().human() || c.shouldPrintReceive(target)) && !target.has(Trait.stableform) 
+        boolean permanent = (getSelf().human() || c.shouldPrintReceive(target,c)) && !target.has(Trait.stableform) 
                         && (Global.randomdouble()*20. - getSelf().get(Attribute.Arcane)/5. < 0 );
         writeOutput(c, permanent ? 1 : 0, res, target);
         if (res != Result.miss) {

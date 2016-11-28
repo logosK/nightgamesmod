@@ -30,7 +30,7 @@ public class Reversal extends Skill {
     public boolean resolve(Combat c, Character target) {
         if (target.roll(getSelf(), c, accuracy(c, target))) {
             writeOutput(c, Result.normal, target);
-            c.setStance(c.getStance().reverse(c), true);
+            c.setStance(c.getStance().reverse(c,true));
 
             target.emote(Emotion.nervous, 10);
             getSelf().emote(Emotion.dominant, 10);

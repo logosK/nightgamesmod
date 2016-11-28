@@ -49,7 +49,7 @@ public class FootPump extends Skill {
         target.body.pleasure(getSelf(), target.body.getRandom("feet"), getSelf().body.getRandom("cock"), m, c, this);
         target.body.pleasure(getSelf(), target.body.getRandom("hands"), getSelf().body.getRandom("breasts"), m2, c, this);
         if (c.getStance().en != Stance.behindfootjob) {
-            c.setStance(new BehindFootjob(getSelf(), target, c.getStance().anallyPenetrated(target)), true);
+            c.setStance(new BehindFootjob(getSelf(), target, c.getStance().anallyPenetrated(c,target)));
         }
         if (Global.random(100) < 15 + 2 * getSelf().get(Attribute.Fetish)) {
             target.add(c, new BodyFetish(target, getSelf(), "feet", .25));

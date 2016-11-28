@@ -226,7 +226,7 @@ public class Mara extends BasePersonality {
                             + "know how to give as well as take.\"</i> She jokes as she begins to work up a steady rhythm. Not to be outdone you quickly shift yourself and begin to thrust into her "
                             + "earnestly, intent on showing just how well you can 'give'. Soon Mara is collapsed on top of you breathing hard and her eyes unfocused. You stand and take your leave. You may have lost the battle but the war is far from over.";
         }
-        if (character.has(Trait.madscientist) && c.getStance().vaginallyPenetrated(target)) {
+        if (character.has(Trait.madscientist) && c.getStance().vaginallyPenetrated(c,target)) {
             Global.getPlayer().addict(AddictionType.MIND_CONTROL, character, Addiction.HIGH_INCREASE);
             return "You raise your hands and try to cover your eyes. At this point you know you've lost- you're seconds from orgams and Mara is still pounding away wantonly "
                             + "at your cunt- and you just want to evade Mara's hypnotic eyes. Mara responds by grabbing your hips and thrusting her bionic cock as deep as it "

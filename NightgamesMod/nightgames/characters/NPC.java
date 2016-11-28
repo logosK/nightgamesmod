@@ -297,12 +297,6 @@ public class NPC extends Character {
     }
     
     public void newact(Combat c, Character target) {
-        Character target;
-        if (c.p1 == this) {
-            target = c.p2;
-        } else {
-            target = c.p1;
-        }
         if (target.human() && Global.isDebugOn(DebugFlags.DEBUG_SKILL_CHOICES)) {
             pickSkillsWithGUI(c, target);
         } else {
@@ -481,10 +475,6 @@ public class NPC extends Character {
     @Override
     public String temptLiner(Combat c, Character target) {
         return ai.temptLiner(c, target);
-    }
-
-    @Override public Growth getGrowth() {
-        return ai.getGrowth();
     }
 
     @Override

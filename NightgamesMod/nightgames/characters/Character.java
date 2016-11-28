@@ -356,18 +356,6 @@ public abstract class Character extends Observable implements Cloneable {
         return total;
     }
 
-    public void mod(Attribute a, int i) {
-        if (a.equals(Attribute.Willpower)) {
-            getWillpower().gain(i * 2);
-            return;
-        }
-        if (att.containsKey(a)) {
-            att.put(a, att.get(a) + i);
-        } else {
-            set(a, i);
-        }
-    }
-
     public void set(Attribute a, int i) {
         att.put(a, i);
     }
@@ -1747,7 +1735,7 @@ public abstract class Character extends Observable implements Cloneable {
                                 "After {self:subject} comes down from {self:possessive} orgasmic high, {self:pronoun} doesn't look satisfied at all. There's a mad glint in {self:possessive} eye that seems to be endlessly asking for more.",
                                 this, opponent));
             } //Nymphomania buffed, but doesn't work for orgasms with a dick unless penetrated, and makes it harder to struggle out of penetration. 
-            if(2.5*get(Attribute.Nymphomania) > get(Attribute.Animism) && !(lastOrgasmPart instanceof CockPart && !c.getStance().penetrated(this)) ) {restoreWillpower(c,5+get(Attribute.Nymphomania)/2);}
+            if(2.5*get(Attribute.Nymphomania) > get(Attribute.Animism) && !(lastOrgasmPart instanceof CockPart && !c.getStance().penetrated(c,this)) ) {restoreWillpower(c,5+get(Attribute.Nymphomania)/2);}
             else {restoreWillpower(c, 5 + Math.min((get(Attribute.Animism) + get(Attribute.Nymphomania)) / 5, 15));}
         }
         if (times == totalTimes) {

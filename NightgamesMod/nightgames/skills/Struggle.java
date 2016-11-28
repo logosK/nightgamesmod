@@ -97,7 +97,7 @@ public class Struggle extends Skill {
             diffMod += 15;
                 if (target.is(Stsflag.enthralled) || target.is(Stsflag.trance) || target.is(Stsflag.lovestruck)) {diffMod-=target.get(Attribute.Power);}
                 if (getSelf().is(Stsflag.bondage) || getSelf().is(Stsflag.charmed) || target.is(Stsflag.lovestruck)) {diffMod+=target.get(Attribute.Power)/2;}
-                if (getSelf().has(Trait.nymphomania)) {difficulty+=getSelf().get(Attribute.Nymphomania)/4;}
+                if (getSelf().has(Trait.nymphomania)) {diffMod+=getSelf().get(Attribute.Nymphomania)/4;}
         if (getSelf().check(Attribute.Power,
                         target.getStamina().get() / 2 - getSelf().getStamina().get() / 2
                                         + target.get(Attribute.Power) - getSelf().get(Attribute.Power)
