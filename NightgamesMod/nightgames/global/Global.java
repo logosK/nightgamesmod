@@ -164,12 +164,12 @@ public class Global {
     public static final Path COMBAT_LOG_DIR = new File("combatlogs").toPath();
 
     public Global(boolean headless) {
-        debug[DebugFlags.DEBUG_SCENE.ordinal()] = true;
+        /*debug[DebugFlags.DEBUG_SCENE.ordinal()] = true;
         debug[DebugFlags.DEBUG_STRATEGIES.ordinal()] = true;
         debug[DebugFlags.DEBUG_DAMAGE.ordinal()] = true;
         debug[DebugFlags.DEBUG_PET.ordinal()] = true;
         debug[DebugFlags.DEBUG_ADDICTION.ordinal()] = true;
-
+*/
         //debug[DebugFlags.DEBUG_SKILL_CHOICES.ordinal()] = true;
         rng = new Random();
         flags = new HashSet<>();
@@ -225,6 +225,8 @@ public class Global {
                     CharacterSex pickedGender, Map<Attribute, Integer> selectedAttributes) {
         Optional<PlayerConfiguration> playerConfig = config.map(c -> c.player);
         Collection<Flag> cfgFlags = config.map(StartConfiguration::getFlags).orElse(new ArrayList<>());
+        Collection<DebugFlags> debugFlags = config.map(StartConfiguration::getDebug).orElse(new ArrayList<>());
+
         human = new Player(playerName, pickedGender, playerConfig, pickedTraits, selectedAttributes);
         players.add(human);
         if (gui != null) {
@@ -237,13 +239,17 @@ public class Global {
         // Add starting characters to players
         players.addAll(characterPool.values().stream().filter(npc -> npc.isStartCharacter).collect(Collectors.toList()));
         if (!cfgFlags.isEmpty()) {
+            System.out.println(cfgFlags);
             flags = cfgFlags.stream().map(Flag::name).collect(Collectors.toSet());
+        }
+        for (DebugFlags debugFlag:debugFlags) {
+            debug[debugFlag.ordinal()]=true;
         }
         Map<String, Boolean> configurationFlags = JsonUtils.mapFromJson(JsonUtils.rootJson(new InputStreamReader(ResourceLoader.getFileResourceAsStream("data/globalflags.json"))).getAsJsonObject(), String.class, Boolean.class);
         configurationFlags.forEach((flag, val) -> Global.setFlag(flag, val));
         time = Time.NIGHT;
         setCharacterDisabledFlag(getNPCByType("Yui"));
-        setFlag(Flag.systemMessages, true);
+        //setFlag(Flag.systemMessages, true);
         setUpMatch(new NoModifier());
     }
 

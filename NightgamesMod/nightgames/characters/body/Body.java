@@ -171,6 +171,49 @@ public class Body implements Cloneable {
         }
         return true;
     }
+     
+    public BreastsPart getRealBreasts() {
+        updateCurrentParts();
+        System.out.println("finding real breasts");
+        Set<BreastsPart> guesses = new HashSet<BreastsPart>();
+        guesses.add(getLargestBreasts());
+        for (PartReplacement r : replacements) {
+            guesses.addAll(r.removed.stream().filter(p -> (p instanceof BreastsPart)).map(p -> (BreastsPart)p).collect(Collectors.toSet()));
+        }
+        System.out.println("found all these breasts: "+guesses);
+        for (PartReplacement r : replacements) {
+            guesses.removeAll(r.added);
+        }
+        assert guesses.size()==1;
+        BreastsPart realBreasts = guesses.iterator().next();
+        System.out.println("this one was found to be real: "+realBreasts);
+        return realBreasts;
+    }
+    
+    public void addReplaceRealBreasts(BreastsPart newPart) {
+        BreastsPart realPart = getRealBreasts();
+        for (PartReplacement r : replacements) {
+            if (r.removed.contains(realPart)) {
+                r.removed.remove(realPart);
+                r.removed.add(newPart);
+                updateCurrentParts();
+                if (character != null) {
+                    updateCharacter();
+                }
+                return;
+            }
+        }
+        updateCurrentParts();
+        assert get("breasts").size()==1;
+        if (currentParts.contains(realPart)) {
+            currentParts.remove(realPart);
+            currentParts.add(newPart);
+        }
+        updateCurrentParts();
+        if (character != null) {
+            updateCharacter();
+        }
+    }
 
     public void describe(StringBuilder b, Character c, String delimiter) {
         describe(b, c, delimiter, true);

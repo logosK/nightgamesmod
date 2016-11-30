@@ -17,6 +17,7 @@ import com.google.gson.JsonParseException;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.CharacterSex;
+import nightgames.global.DebugFlags;
 import nightgames.global.Flag;
 import nightgames.items.clothing.Clothing;
 import nightgames.json.JsonUtils;
@@ -29,6 +30,7 @@ public class StartConfiguration {
     private Collection<NpcConfiguration> npcs;
     public NpcConfiguration npcCommon;
     private Collection<Flag> flags;
+    private Collection<DebugFlags> debugFlags;
 
     private StartConfiguration() {
     }
@@ -39,6 +41,10 @@ public class StartConfiguration {
 
     public String getSummary() {
         return summary;
+    }
+    
+    public Collection<DebugFlags> getDebug() {
+        return debugFlags;
     }
 
     public boolean isEnabled() {
@@ -95,12 +101,13 @@ public class StartConfiguration {
         JsonArray flags = root.getAsJsonArray("flags");
         cfg.flags = JsonUtils.collectionFromJson(flags, Flag.class);
         
-        //debugging:
-        if (cfg.name=="Futa++ Accelerated" || true) {
-            System.out.println(cfg.name);
-            System.out.println(cfg.npcs);
-            System.out.println(cfg.flags);
-        }
+        //cfg.debugFlags = new ArrayList<DebugFlags>();
+        //Collection<String> debugFlagNames = JsonUtils.collectionFromJson(root.getAsJsonArray("debugFlags"),String.class);
+        //for (String flagname:debugFlagNames) debugFlags.add(DebugFlags.valueOf(flagname));
+        JsonArray debugFlags = root.getAsJsonArray("debugFlags");
+        cfg.debugFlags = JsonUtils.collectionFromJson(debugFlags, DebugFlags.class);
+        
+        System.out.println(cfg.debugFlags);
         
         return cfg;
     }

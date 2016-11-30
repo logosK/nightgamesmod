@@ -103,11 +103,11 @@ public class Match {
                 if (combatants.get(index).state != State.quit) {
                     combatants.get(index).upkeep();
                     manageConditions(combatants.get(index));
-                    combatants.get(index).move();
                     if ((Global.isDebugOn(DebugFlags.DEBUG_SCENE) || Global.isDebugOn(DebugFlags.DEBUG_LOCATIONS)) && index < combatants.size()) {
-                        System.out.println(combatants.get(index).name() + " is in "
-                                        + combatants.get(index).location().name);
+                        System.out.println(combatants.get(index).name() + "\t is in "
+                                        + combatants.get(index).location().name + "\t\t and moving with state "+combatants.get(index).state);
                     }
+                    combatants.get(index).move();
                 }
                 index++;
                 if (pause) {

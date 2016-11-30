@@ -394,5 +394,6 @@
 		}
 	],
 	"all_npcs":{},
-	"flags":["isFuta", "hardmode","SuperTraitMode"]
+	"flags":["isFuta","hardmode","systemMessages","metBroker","rank1","basicStores","girlAdvice","meditation","blackMarket","CassieKnown","AngelKnown","MaraKnown","JewelKnown","Reyka","Kat","Airi","Eve","KatDisabled","ReykaDisabled","EveDisabled","AiriEnabled"],
+	"debugFlags":["DEBUG_SCENE","DEBUG_DAMAGE","DEBUG_PET","DEBUG_ADDICTION"]
 }

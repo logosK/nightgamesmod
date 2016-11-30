@@ -6,6 +6,7 @@ import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Trait;
 import nightgames.combat.Combat;
+import nightgames.global.DebugFlags;
 import nightgames.global.Global;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.status.Abuff;
@@ -29,12 +30,13 @@ public enum BreastsPart implements BodyPart {
     public String name;
     public int size;
     
-    private double bonusSensitivity=0;
+    private double bonusSensitivity;
 
     BreastsPart(String name, String desc, int size) {
         this.desc = desc;
         this.name = name;
         this.size = size;
+        this.bonusSensitivity=0;
     }
 
     public static String synonyms[] = {"breasts", "tits", "boobs",};
@@ -98,7 +100,7 @@ public enum BreastsPart implements BodyPart {
 
     @Override
     public String toString() {
-        return desc + ' ' + name;
+        return desc + ' ' + name+" bnsS: "+bonusSensitivity;
     }
 
     @Override
@@ -123,6 +125,7 @@ public enum BreastsPart implements BodyPart {
 
     @Override
     public double getSensitivity(BodyPart target) {
+        if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) System.out.println("checking sensitivity of breasts: "+name+" bonusSens: "+bonusSensitivity);
         return .75 + size * .2 + bonusSensitivity;
     }
 
@@ -139,7 +142,9 @@ public enum BreastsPart implements BodyPart {
     public BodyPart upgrade(int sizes, double bonusSens) {
         BreastsPart values[] = BreastsPart.values();
         BreastsPart temp = values[Math.min(ordinal()+sizes, values.length - 1)];
-        temp.bonusSensitivity += bonusSens;
+        temp.bonusSensitivity = this.bonusSensitivity+ bonusSens;
+        if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) System.out.println("upgrading breasts: currently: "+name+" current bonusSens: "+bonusSensitivity+" upgrade by sizes "+sizes+" and bonusSens " + bonusSens + " for new size "+temp.size+" and new bonusSens "+temp.bonusSensitivity);
+
         return temp;
     }
 
@@ -238,7 +243,7 @@ public enum BreastsPart implements BodyPart {
                 } else if (addictionLevel < Addiction.HIGH_THRESHOLD) {
                     // dependent
                     c.write(opponent,
-                                    Global.format("{other:NAME} desperately {other:action:suck|sucks} at {self:name-possessive} milky teats as soon as they're available. {other:POSSESSIVE} burning need to imbibe {self:possessive} sweet milk is overpowering any other thoughts. "
+                                    Global.format(Global.capitalizeFirstLetter(opponent.nameOrPossessivePronoun()) + " desperately {other:action:suck|sucks} at {self:name-possessive} milky teats as soon as they're available. {other:POSSESSIVE} burning need to imbibe {self:possessive} sweet milk is overpowering any other thoughts. "
                                                     + "{self:SUBJECT} smiles at {other:direct-object} and gently cradles {other:possessive} head, rocking {other:direct-object} back and forth while {other:subject} drink. "
                                                     + "The warm milk settles in {other:possessive} belly, slowly setting {other:possessive} body on fire with arousal.",
                                     self, opponent));

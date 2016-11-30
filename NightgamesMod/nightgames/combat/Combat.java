@@ -548,7 +548,7 @@ public class Combat extends Observable implements Cloneable {
         if ((p1.orgasmed || p2.orgasmed) && phase != CombatPhase.RESULTS_SCENE && SKIPPABLE_PHASES.contains(phase)) {
             phase = CombatPhase.UPKEEP;
         }
-        if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {
+        if (Global.isDebugOn(DebugFlags.DEBUG_PHASES)) {
             System.out.println("Current phase = " + phase);
         }
         wroteMessage = false;

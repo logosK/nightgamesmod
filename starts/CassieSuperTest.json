@@ -382,5 +382,6 @@
 		}
 	],
 	"all_npcs":{},
-	"flags":[]
+	"flags":["isFuta","hardmode","systemMessages"],
+	"debugFlags":["DEBUG_SCENE","DEBUG_DAMAGE","DEBUG_PET","DEBUG_ADDICTION"]
 }

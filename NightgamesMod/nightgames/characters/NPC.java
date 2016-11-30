@@ -483,9 +483,10 @@ public class NPC extends Character {
 
     @Override
     public void move() {
-        if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {
+        //this print was getting annoying, so I concatenated it with the one in match
+        /*if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {       
             System.out.println(getName() + " is moving with state " + state);
-        }
+        }*/
         if (state == State.combat) {
             if (location != null && location.fight != null) {
                 if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {

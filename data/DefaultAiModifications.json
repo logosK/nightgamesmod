@@ -210,7 +210,7 @@
 			},{
 				"type" : "position",
 				"value" : "nursing",
-				"weight" : 4.0
+				"weight" : 6.0
 			},{
 				"type" : "position",
 				"value" : "oralpin",
@@ -219,6 +219,10 @@
 				"type" : "position",
 				"value" : "cowgirl",
 				"weight" : -2.0
+			},{
+				"type" : "position",
+				"value" : "behind",
+				"weight" : 4.0
 			},{
 				"type" : "opponent-status",
 				"value" : "charmed",

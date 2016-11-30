@@ -723,6 +723,13 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public void tempt(Combat c, Character tempter, BodyPart with, int i) {
+        
+        if(tempter == this) {
+            // Not sure about balance here. Really only an issue when someone is a futa- e.g. someone with a cock ends up with a cock fetish, and is tempted from masturbating
+            if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) System.out.println("can't tempt yourself??");
+            return;
+        }
+        
         String extraMsg = "";
         boolean oblivious = false;
         if (has(Trait.oblivious)) {
@@ -1708,8 +1715,8 @@ public abstract class Character extends Observable implements Cloneable {
             arousal.restore(arousal.max() / 2);
         }
         float extra = 25.0f * overflow / (arousal.max() / 2.0f);
-
-        loseWillpower(c, getOrgasmWillpowerLoss(), Math.round(extra), true, "");
+        int willloss = getOrgasmWillpowerLoss();
+        loseWillpower(c, willloss, Math.round(extra), true, "");
         if (has(Trait.sexualDynamo)) {
             c.write(this, Global.format("{self:NAME-POSSESSIVE} climax makes {self:direct-object} positively gleam with erotic splendor; "
                             + "{self:possessive} every move seems more seductive than ever.", this, opponent));
@@ -1728,8 +1735,8 @@ public abstract class Character extends Observable implements Cloneable {
         if (this != opponent && times == totalTimes) {
             c.write(this, orgasmLiner);
             c.write(opponent, opponentOrgasmLiner);
-        }
-        if (has(Trait.nymphomania) && (is(Stsflag.feral) || Global.random(100) < Math.sqrt(get(Attribute.Nymphomania)) * 10) && !getWillpower().isEmpty() && times == totalTimes) {
+        }               //doing some balance testing for nymphomania. My fork has nymphomania making it harder to resist penetration, as well as some other downsides
+        if (has(Trait.nymphomania) && (is(Stsflag.feral) || Global.random(100) < Math.sqrt(get(Attribute.Nymphomania)) * 10) && !getWillpower().isEmpty() /*&& times == totalTimes*/) {
             if (human()) {
                 c.write("Cumming actually made you feel kind of refreshed, albeit with a burning desire for more.");
             } else {
@@ -1738,7 +1745,7 @@ public abstract class Character extends Observable implements Cloneable {
                                 this, opponent));
             } //Nymphomania buffed, but doesn't work for orgasms with a dick unless penetrated, and makes it harder to struggle out of penetration. 
             if(2.5*get(Attribute.Nymphomania) > get(Attribute.Animism) && !(lastOrgasmPart instanceof CockPart && !c.getStance().penetrated(c,this)) ) {restoreWillpower(c,5+get(Attribute.Nymphomania)/2);}
-            else {restoreWillpower(c, 5 + Math.min((get(Attribute.Animism) + get(Attribute.Nymphomania)) / 5, 15));}
+            else {restoreWillpower(c, 5 + Math.min((get(Attribute.Animism) + get(Attribute.Nymphomania)) / 5, (int)(0.7*(willloss+extra))));}
         }
         if (times == totalTimes) {
             List<Status> purgedStatuses = getStatuses().stream().filter(status -> status.mindgames() && status.flags().contains(Stsflag.purgable)).collect(Collectors.toList());
@@ -1964,7 +1971,7 @@ public abstract class Character extends Observable implements Cloneable {
                                             + "%s.", subject(), amt, source));
         }
         if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {
-            System.out.printf("willpower for "+subject()+" reduced"+reduced+" from %d to %d\n with %d base and %d extra by"+source+".\n", old, willpower.get(),i,extra);
+            System.out.printf("willpower for "+subject()+" reduced"+reduced+" from %d to %d with %d base and %d extra by"+source+".\n", old, willpower.get(),i,extra);
         }
     }
 
@@ -1973,7 +1980,7 @@ public abstract class Character extends Observable implements Cloneable {
         c.writeSystemMessage(String.format(
                         "%s regained <font color='rgb(181,230,30)'>%d<font color='white'> willpower.", subject(), i));
         if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {
-            System.out.printf("willpower for "+subject()+" restored by %d",i);
+            System.out.printf("willpower for "+subject()+" restored by %d\n",i);
         }
     }
 
@@ -2596,10 +2603,10 @@ public abstract class Character extends Observable implements Cloneable {
             Thread.dumpStack();
             return 0;
         }
-
-        if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {
+        // I don't think calling getAffection() means any affection was gained. Also keeps getting called by Locate(), which is annoying
+        /*if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {
             System.out.printf("%s gained affection for %s\n", name(), other.name());
-        }
+        }*/
         if (affections.containsKey(other.getType())) {
             return affections.get(other.getType());
         } else {

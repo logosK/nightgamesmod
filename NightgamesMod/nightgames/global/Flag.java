@@ -57,6 +57,7 @@ public enum Flag {
     ReykaDisabled,
     KatDisabled,
     JewelDisabled,
+    EveDisabled,
     AiriEnabled,
     systemMessages,
     malePref,
@@ -84,7 +85,6 @@ public enum Flag {
     hermHasBalls,
     shemaleNoBalls,
     femaleTGIntoHerm, 
-    SuperTraitMode,
     ;
     
     public static boolean exists(String flag) {

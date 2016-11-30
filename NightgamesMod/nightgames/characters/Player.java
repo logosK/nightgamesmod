@@ -816,6 +816,7 @@ public class Player extends Character {
     }
 
     public void addict(AddictionType type, Character cause, float mag) {
+        if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) System.out.println("adding an addiction. Current addictions: "+addictions+", new addiction: "+type+" with mag "+mag);
         boolean dbg = Global.isDebugOn(DebugFlags.DEBUG_ADDICTION);
         Optional<Addiction> addiction = getAddiction(type);
         if (addiction.isPresent()) {

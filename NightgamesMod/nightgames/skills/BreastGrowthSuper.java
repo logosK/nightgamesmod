@@ -18,7 +18,7 @@ public class BreastGrowthSuper extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Arcane) >= 30 && user.getName()=="Cassie" ;
+        return user.get(Attribute.Arcane) >= 30 && user.getName()=="Cassie";
     }
 
     @Override
@@ -44,6 +44,7 @@ public class BreastGrowthSuper extends Skill {
 
     @Override
     public boolean resolve(Combat c, Character target) {
+        System.out.println("starting to resolve SuperBreastGrowth");
         Result res;
         if (target.roll(getSelf(), c, accuracy(c,target))) {
             if (target.body.getRandomBreasts() == BreastsPart.flat) {
@@ -63,7 +64,9 @@ public class BreastGrowthSuper extends Skill {
             BreastsPart part = target.body.getRandomBreasts();
             if (permanent) {
                 if (part != null) {
-                    target.body.addReplace(part.upgrade(1,.5), 1);additionalSizes-=1;
+                    BreastsPart realPart = target.body.getRealBreasts();
+                    System.out.println("found real breasts; they are: " + realPart);
+                    target.body.addReplaceRealBreasts((BreastsPart)(realPart.upgrade(1,.5)));additionalSizes-=1;
                     if(Global.isDebugOn(DebugFlags.DEBUG_SCENE)) System.out.println("New breast sensitivity for "+target.getName()+" is "+target.body.getRandomBreasts().getSensitivity(null)+".");
                 }
             }
