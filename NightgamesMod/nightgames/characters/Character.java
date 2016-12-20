@@ -1337,7 +1337,8 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public int getPheromonePower() {
-        return (int) (2 + Math.sqrt(get(Attribute.Animism) + get(Attribute.Bio)) / 2);
+        //return (int) (2 + Math.sqrt(get(Attribute.Animism) + get(Attribute.Bio)) / 2);
+    	return 5;
     }
 
     public void inflictControl(DurationStatus status, String name, int strength) {
