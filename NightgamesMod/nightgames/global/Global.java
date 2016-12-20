@@ -164,13 +164,9 @@ public class Global {
     public static final Path COMBAT_LOG_DIR = new File("combatlogs").toPath();
 
     public Global(boolean headless) {
-        /*debug[DebugFlags.DEBUG_SCENE.ordinal()] = true;
-        debug[DebugFlags.DEBUG_STRATEGIES.ordinal()] = true;
-        debug[DebugFlags.DEBUG_DAMAGE.ordinal()] = true;
+        debug[DebugFlags.DEBUG_SCENE.ordinal()] = true;
+        debug[DebugFlags.DEBUG_SKILL_CHOICES.ordinal()] = true;
         debug[DebugFlags.DEBUG_PET.ordinal()] = true;
-        debug[DebugFlags.DEBUG_ADDICTION.ordinal()] = true;
-*/
-        //debug[DebugFlags.DEBUG_SKILL_CHOICES.ordinal()] = true;
         rng = new Random();
         flags = new HashSet<>();
         players = new HashSet<>();
@@ -205,7 +201,6 @@ public class Global {
         buildFeatPool();
         buildSkillPool(noneCharacter);
         buildModifierPool();
-        flag(Flag.AiriEnabled);
         gui = makeGUI(headless);
     }
 
@@ -228,6 +223,9 @@ public class Global {
         Collection<DebugFlags> debugFlags = config.map(StartConfiguration::getDebug).orElse(new ArrayList<>());
 
         human = new Player(playerName, pickedGender, playerConfig, pickedTraits, selectedAttributes);
+        if(human.has(Trait.largereserves)) {
+            human.getWillpower().gain(20);
+        }
         players.add(human);
         if (gui != null) {
             gui.populatePlayer(human);
@@ -282,6 +280,11 @@ public class Global {
         return gui;
     }
 
+    /**
+     * WARNING DO NOT USE THIS IN ANY COMBAT RELATED CODE.
+     * IT DOES NOT TAKE INTO ACCOUNT THAT THE PLAYER GETS CLONED. WARNING. WARNING.
+     * @return
+     */
     public static Player getPlayer() {
         return human;
     }
@@ -323,6 +326,7 @@ public class Global {
         getSkillPool().add(new Whisper(ch));
         getSkillPool().add(new Kick(ch));
         getSkillPool().add(new PinAndBlow(ch));
+        getSkillPool().add(new PinningPaizuri(ch));
         getSkillPool().add(new Footjob(ch));
         getSkillPool().add(new FootPump(ch));
         getSkillPool().add(new HeelGrind(ch));
@@ -414,6 +418,7 @@ public class Global {
         getSkillPool().add(new TailJob(ch));
         getSkillPool().add(new FaceSit(ch));
         getSkillPool().add(new Smother(ch));
+        getSkillPool().add(new BreastSmother(ch));
         getSkillPool().add(new Purr(ch));
         getSkillPool().add(new MutualUndress(ch));
         getSkillPool().add(new Surrender(ch));
@@ -765,21 +770,6 @@ public class Global {
         }
         lineup.add(human);
         if (matchmod.name().equals("maya")) {
-            ArrayList<Character> randomizer = new ArrayList<>();
-            if (lover != null) {
-                lineup.add(lover);
-            }
-            lineup.add(human);
-            randomizer.addAll(players);
-            Collections.shuffle(randomizer);
-            for (Character player : randomizer) {
-                if (!lineup.contains(player) && !player.human() && lineup.size() < LINEUP_SIZE && !player.has(Trait.event)) {
-                    lineup.add(player);
-                } else if (lineup.size() >= LINEUP_SIZE || player.has(Trait.event)) {
-                    resting.add(player);
-                }
-            }
-            lineup = pickCharacters(players, lineup, LINEUP_SIZE);
             if (!checkFlag(Flag.Maya)) {
                 newChallenger(new Maya(human.getLevel()));
                 flag(Flag.Maya);
@@ -828,7 +818,7 @@ public class Global {
     public static void startMatch() {
         Global.getPlayer().getAddictions().forEach(a -> {
             Optional<Status> withEffect = a.startNight();
-            withEffect.ifPresent(s -> Global.getPlayer().add(s));
+            withEffect.ifPresent(s -> Global.getPlayer().addNonCombat(s));
         });
         Global.gui().startMatch();
         match.round();
@@ -865,7 +855,6 @@ public class Global {
         }
         return original.substring(0, 1).toUpperCase() + original.substring(1);
     }
-
 
     public static NPC getNPCByType(String type) {
         NPC results = characterPool.get(type);
@@ -1317,6 +1306,7 @@ public class Global {
         match = null;
         human = new Player("Dummy");
         gui.purgePlayer();
+        xpRate = 1.0;
         gui.createCharacter();
     }
 
@@ -1466,6 +1456,12 @@ public class Global {
 
         matchActions.put("girl", (self, first, second, third) -> {
                 return self.guyOrGirl();
+        });
+        matchActions.put("guy", (self, first, second, third) -> {
+            return self.guyOrGirl();
+        });
+        matchActions.put("boy", (self, first, second, third) -> {
+            return self.boyOrGirl();
         });
     }
 
