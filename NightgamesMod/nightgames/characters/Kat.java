@@ -347,8 +347,8 @@ public class Kat extends BasePersonality {
         Character opponent = c.getOpponent(character);
         character.arousal.empty();
         if (c.getStance().vaginallyPenetrated(c,opponent) && opponent instanceof Player && ((Player) opponent).checkAddiction(AddictionType.BREEDER)) {
-            opponent.add(c, Horny.getWithBiologicalType(character, opponent, 5, 10, character.nameOrPossessivePronoun() + " pheromones"));
-            opponent.add(c, Horny.getWithBiologicalType(character, opponent, 15, 12, character.nameOrPossessivePronoun() + " primal passion"));
+            opponent.add(c, Pheromones.getWith(character, opponent, 5, 10));
+            opponent.add(c, Pheromones.getWith(character, opponent, 20, 5, " feral musk"));
             return "As Kat desperately pounds into you, you mindlessly grind back against her, trying to force her cock as deep into your vagina as it will go. You tried to fight "
                             + "her, and you lost, and now you're her bitch and she's breeding you, and that's the way it's supposed to be. The pleasure radiating from the cock "
                             + "pounding your cunt has driven all rational thought out of your mind, and your instincts now are driving you to lay back and offer your pussy and "
