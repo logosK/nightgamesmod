@@ -47,7 +47,7 @@ public class Growl extends Skill {
             if (damage < 10) {
                 damage = 0;
             }
-            target.tempt(c, getSelf(), damage);
+            target.temptNoSource(c, getSelf(), damage, this);
             if (getSelf().hasDick() && target.hasPussy() && Global.random(3)<2) {c.setStance(new Behind(getSelf(), target));writeOutput(c, damage, Result.reverse, target);}
             else {c.setStance(new StandingOver(getSelf(), target));writeOutput(c, damage, Result.normal, target);}
         } else {

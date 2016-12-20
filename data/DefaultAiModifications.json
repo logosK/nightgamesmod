@@ -262,10 +262,6 @@
 				"weight" : 1.0
 			},{
 				"type" : "skill",
-				"value" : "nightgames.skills.FlashStep",
-				"weight" : 1.0
-			},{
-				"type" : "skill",
 				"value" : "nightgames.skills.FootPump",
 				"weight" : 1.0
 			},{
@@ -393,10 +389,6 @@
 				"type" : "skill",
 				"value" : "nightgames.skills.PinAndBlow",
 				"weight" : 2.0
-			},{
-				"type" : "skill",
-				"value" : "nightgames.skills.Purr",
-				"weight" : 1.0
 			},{
 				"type" : "skill",
 				"value" : "nightgames.skills.Reversal",
