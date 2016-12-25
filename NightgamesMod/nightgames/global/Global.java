@@ -164,9 +164,9 @@ public class Global {
     public static final Path COMBAT_LOG_DIR = new File("combatlogs").toPath();
 
     public Global(boolean headless) {
-        debug[DebugFlags.DEBUG_SCENE.ordinal()] = true;
-        debug[DebugFlags.DEBUG_SKILL_CHOICES.ordinal()] = true;
-        debug[DebugFlags.DEBUG_PET.ordinal()] = true;
+        //debug[DebugFlags.DEBUG_SCENE.ordinal()] = true;
+        //debug[DebugFlags.DEBUG_SKILL_CHOICES.ordinal()] = true;
+        //debug[DebugFlags.DEBUG_PET.ordinal()] = true;
         rng = new Random();
         flags = new HashSet<>();
         players = new HashSet<>();
@@ -238,7 +238,8 @@ public class Global {
         players.addAll(characterPool.values().stream().filter(npc -> npc.isStartCharacter).collect(Collectors.toList()));
         if (!cfgFlags.isEmpty()) {
             System.out.println(cfgFlags);
-            flags = cfgFlags.stream().map(Flag::name).collect(Collectors.toSet());
+            //flags = cfgFlags.stream().map(Flag::name).collect(Collectors.toSet());
+            for(Flag f:cfgFlags) flag(f.toString());
         }
         for (DebugFlags debugFlag:debugFlags) {
             debug[debugFlag.ordinal()]=true;

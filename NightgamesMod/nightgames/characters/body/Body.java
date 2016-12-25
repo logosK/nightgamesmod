@@ -1224,7 +1224,7 @@ public class Body implements Cloneable {
             c.write(Global.format(
                             "<br><b>{other:NAME-POSSESSIVE} boiling semen takes its toll on {self:name-possessive} stamina, rendering {self:direct-object} limp and compliant.</b>",
                             character, opponent));
-            character.pain(c, opponent, character.getStamina().max()/3+20);
+            character.weaken(c, character.getStamina().max()/3+20);
         }
     }
 

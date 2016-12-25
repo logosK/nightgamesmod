@@ -90,7 +90,7 @@ public abstract class CharacterConfiguration {
         name.ifPresent(n -> base.name = n);
         base.att.putAll(attributes);
         money.ifPresent(m -> base.money = m);
-        Growth bg=base.getGrowth();
+/*        Growth bg=base.getGrowth();
         for (String key : growth.keySet()) {
             if (GROWTH_FIELDS_NAMES.contains(key)) {
                 try {GROWTH_FIELDS[GROWTH_FIELDS_NAMES.indexOf(key)].set(bg,growth.get(key));}
@@ -103,7 +103,7 @@ public abstract class CharacterConfiguration {
 //            if (key=="mojo") bg.mojo=growth.get("mojo");
 //            if (key=="willpower") bg.willpower=growth.get("willpower");
 
-        }
+        }*/
         level.ifPresent(l -> {
             base.level = l;
             modMeters(base, l * 2); // multiplication to compensate for missed daytime gains

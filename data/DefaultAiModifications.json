@@ -59,6 +59,10 @@
 				"value" : "nightgames.skills.Trip",
 				"weight" : 1.0
 			},{
+				"type" : "skill",
+				"value" : "nightgames.skills.AssFuck",
+				"weight" : 10.0
+			},{
 				"type" : "position",
 				"value" : "cowgirl",
 				"weight" : 5.0

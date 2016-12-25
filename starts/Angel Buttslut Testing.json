@@ -1,6 +1,6 @@
 {
-	"name":"Futa++ Lvl20",
-	"summary":"All futanari, all characters unlocked, level 20. Bonus stats and traits.",
+	"name":"Angel Buttslut Testing",
+	"summary":"Only the base characters + eve, all futa, like futa++20",
 	"enabled":true,
 	"player": {
 		"attributes": {
@@ -394,6 +394,6 @@
 		}
 	],
 	"all_npcs":{},
-	"flags":["isFuta","hardmode","systemMessages","metBroker","rank1","basicStores","girlAdvice","meditation","blackMarket","CassieKnown","AngelKnown","MaraKnown","JewelKnown","Reyka","Kat","Airi","Eve","AutoNext","Buttslutification"],
+	"flags":["isFuta","hardmode","systemMessages","metBroker","rank1","basicStores","girlAdvice","meditation","blackMarket","CassieKnown","AngelKnown","MaraKnown","JewelKnown","Reyka","Kat","Airi","Eve","AutoNext","Buttslutification","KatDisabled","ReykaDisabled","AiriDisabled"],
 	"debugFlags":["DEBUG_SCENE","DEBUG_DAMAGE","DEBUG_PET","DEBUG_ADDICTION"]
 }

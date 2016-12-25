@@ -39,10 +39,7 @@ public class Struggle extends Skill {
         if (getSelf().hasStatus(Stsflag.cockbound) || getSelf().hasStatus(Stsflag.knotted)) {
             return true;
         }
-        return (!c.getStance().mobile(getSelf()) && !c.getStance().dom(getSelf()) || getSelf().bound()
-                        || getSelf().is(Stsflag.maglocked))
-                        || hasSingleGrabber(c, target)
-                        && getSelf().canRespond();
+        return ((((!c.getStance().mobile(getSelf()) && !(c.getStance().dom(getSelf()))) || getSelf().bound()) || getSelf().is(Stsflag.maglocked)) || hasSingleGrabber(c, target)) && getSelf().canRespond();
     }
 
     @Override
@@ -263,7 +260,7 @@ public class Struggle extends Skill {
             } else if (getSelf().human()) {
                 if (c.getStance().inserted(getSelf())) {
                     c.write(getSelf(), "You try to tip " + target.name()
-                                    + " off balance, but she drops her hips firmly, pushing your cock deep inside her and pinning you to the floor.");
+                                    + " off balance, but she drops her hips firmly, pushing your cock deep inside her and pinning you to the floor.");//THIS IS WRONG
                 } else {
                     if (knotted) {
                         c.write(getSelf(), "You struggle fruitlessly against the lump of "
