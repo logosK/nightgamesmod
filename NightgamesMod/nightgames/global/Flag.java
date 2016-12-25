@@ -64,6 +64,14 @@ public enum Flag {
     didFTC, 
     AddictionAdvice,
     AiriDisabled,
+    KatDisabled,
+    ReykaDisabled,
+    CassieDisabled,
+    RoseaDisabled,
+    EveDisabled,
+    MaraDisabled,
+    JewelDisabled,
+    AngelDisabled,
     extendedLogs, 
     YuiLoyalty, 
     YuiAvailable, 
@@ -79,6 +87,7 @@ public enum Flag {
     femaleTGIntoHerm, 
     SuperTraitMode,
     AutoNext,
+    Buttslutification,
     ;
     
     public static boolean exists(String flag) {

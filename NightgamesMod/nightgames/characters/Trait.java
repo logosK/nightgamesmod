@@ -433,7 +433,10 @@ public enum Trait {
 
     event("event", "special character"),
     mindcontrolresistance("", "temporary resistance to mind games - hidden"),
-    none("", "");
+    none("", ""),
+    
+    //From the training miniquests
+    trainedslut("Trained Slut", "Has been trained to be a slut. Reinforcing that training causes increased submissiveness");
     
     private String desc;
     private TraitDescription longDesc;

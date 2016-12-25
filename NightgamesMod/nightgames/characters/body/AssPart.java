@@ -5,6 +5,7 @@ import nightgames.characters.Character;
 import nightgames.characters.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Global;
+import nightgames.pet.PetCharacter;
 import nightgames.status.Abuff;
 import nightgames.status.Stsflag;
 import nightgames.status.Trance;
@@ -131,6 +132,32 @@ public class AssPart extends GenericBodyPart {
             c.write(opponent, Global.format(
                             "The foreign object rummaging around inside {self:name-possessive} ass feels so <i>right</i>. {self:SUBJECT} can't help moaning in time with the swelling pleasure.",
                                             self, opponent));
+            if(self.has(Trait.trainedslut) && self.hasStatus(Stsflag.buttsluttraining)) {
+                int strength = 3 + self.get(Attribute.Submissive)/10;
+                Attribute stolen = null;
+                switch (opponent.name()) {
+                    case "Angel":
+                        stolen = Attribute.Seduction;break;
+                    case "Mara":
+                        stolen = Attribute.Cunning;break;
+                    case "Jewel":
+                        stolen = Attribute.Power;break;
+                    case "Cassie":
+                        stolen = Attribute.Willpower;break;    
+                    default:
+                        //System.out.println("Illegal character name for pounding a buttslut");
+                }
+                if (stolen != null && self.get(stolen) > 0) {
+                    int stolenStrength = Math.min(strength, opponent.get(stolen));
+                    self.add(c, new Abuff(opponent, stolen, -stolenStrength, 20));
+                    self.add(c, new Abuff(self, Attribute.Submissive, stolenStrength, 20));
+                    if (self.isPet()) {
+                        Character master = ((PetCharacter) self).getSelf().owner();
+                        master.add(c, new Abuff(master, stolen, stolenStrength, 20));
+                    }
+                    c.write(opponent, Global.format("The feeling makes you remember your buttslut training, and {self:subject} suddenly feel much more submissive.", self, opponent));
+                }
+            }
         }
         return bonus;
     }

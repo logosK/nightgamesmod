@@ -72,6 +72,7 @@ import nightgames.status.Winded;
 import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.Addiction.Severity;
 import nightgames.status.addiction.AddictionType;
+import nightgames.status.EnemyButtslutTrainingStatus;
 
 public class Combat extends Observable implements Cloneable {
     
@@ -496,7 +497,7 @@ public class Combat extends Observable implements Cloneable {
 
         Character mainOpponent = getOpponent(character);
         String buttslutCompletedFlag = Trait.buttslut.name() + "Completed";
-        if (character.has(Trait.buttslut) && ((mainOpponent.hasDick() && mainOpponent.crotchAvailable() && mainOpponent.getArousal().percent() > 20) || mainOpponent.has(Trait.strapped)) && !getCombatantData(character).getBooleanFlag(buttslutCompletedFlag)) {
+        if (((mainOpponent.hasDick() && mainOpponent.crotchAvailable() && mainOpponent.getArousal().percent() > 20) || mainOpponent.has(Trait.strapped)) && ((character.has(Trait.buttslut) && !getCombatantData(character).getBooleanFlag(buttslutCompletedFlag)) || character.getStatus(Stsflag.buttslutificationReady) != null)) {
             write(character, Global.format("Seeing the thick phallus in front of {self:reflective}, {self:subject} can't "
                             + "but help offer up {self:possessive} ass in hopes that {other:subject} will fill {self:possessive} rear door.", character, mainOpponent));
             for (int i = 0; i < 5; i++) {
@@ -507,7 +508,8 @@ public class Combat extends Observable implements Cloneable {
                     write(character, Global.format("{self:SUBJECT-ACTION:strip|strips} off {self:possessive} %s", character, mainOpponent, article.getName()));
                 }
             }
-            getCombatantData(character).setBooleanFlag(buttslutCompletedFlag, true);
+            if (character.has(Trait.buttslut)) getCombatantData(character).setBooleanFlag(buttslutCompletedFlag, true);
+            else {((EnemyButtslutTrainingStatus)character.getStatus(Stsflag.buttslutificationReady)).activate();}
             setStance(new Behind(mainOpponent, character));
         }
 

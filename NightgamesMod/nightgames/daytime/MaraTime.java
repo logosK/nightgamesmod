@@ -17,6 +17,7 @@ import nightgames.items.Item;
 import nightgames.requirements.BodyPartRequirement;
 import nightgames.requirements.NotRequirement;
 import nightgames.requirements.RequirementShortcuts;
+import nightgames.status.Stsflag;
 import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
@@ -208,7 +209,7 @@ public class MaraTime extends BaseNPCTime {
                 Global.gui().message("Mara has some fun making you do embarassing things in public, and then takes"
                                 + " you home so you can put on a good show of jacking off for her. At the end, "
                                 + "she reinforces her control over you. This is a placeholder.");
-            } else {
+            } else if (!player.hasStatus(Stsflag.buttsluttraining)) {
                 Global.gui()
                       .message("<i>\"Haha, yes! Great isn't it? Hands up!\"</i> You try to resist, "
                                       + "but this close and this direct it's no use. You let her know you're not happy about all this. <i>\"He, "
@@ -268,11 +269,37 @@ public class MaraTime extends BaseNPCTime {
                                       + "around you, and you continue hugging and making out for a while before you finally leave. Your "
                                       + "muscles feel a little sluggish, and it's only going to get worse with time and distance, but maybe"
                                       + " it's worth it?");
+            } else {
+                //another option to leave- it might not be the best idea to give carte blance to do "SCIENCE!!!" to you to a mad scientist with mind control tech, but you trust that 
+                //whatever Mara will do will be, if not in your best interest, then certainly not too much a bad thing
+                
+                //I'm testing building reflexes- and the one I've decided to test is seeing if I can program your ass to relax whenever something phallic touches it.
+                //If that works, then I can move on to seeing if I can program you to have increased sensitivity for some nerves, and see if I can turn touching sensations
+                //into pleasure for of things on the inside of your ass, but only after the anal wink reflex is triggered from the outside. 
+                
+                //calm down -> all of a sudden you can't seem to feel anything about this
+                //she keeps saying "don't worry- this is for science"
+                
+                //at the end- you come back to yourself, and she says "unfortunately, I had to skip over phase 2 animal testing, so I'm going to make sure my phase 3 human testing is very rigorous"
+                //SHe starts with automated testing- a dildo pumps in and out of your ass, and she makes sensitivity and force required measurements
+                //then she moves on to human-on-human testing- which means just what you'd expect
+                
+                //this affects the EnemyButtslutTrainingStatus by adding anal sensitivity (actually base damage) (up to the 10 standard for buttslut).
+                
+                //Cassie: the entrancing cock part
+                //she's testing resettable traps, which are partially completed spells that activate when a trigger condition is met. She's testing putting the trap somewhere nonobvious with an entrancing
+                //trap. She casts it on you, and you can't feel anything. Then she holds up a dildo and you get entranced by it. When you ask her about that, she blushes and says it was the first thing to
+                //hand. You start to protest and she keeps using it on you, adding more features like making you suck it.
+                
+                //Jewel: ???
+                Global.gui().message("\"Hey, "+player.name()+", would you mind helping me with some <b>science</b>? I think I've figured out some new applications of the mind control technology that "
+                                + "will not only be able to make you feel amazing, they'll have impressive therapeutic applications too.\"");
             }
             Global.gui().choose(this, "Leave");
             Global.getPlayer().addict(AddictionType.MIND_CONTROL, npc, Addiction.MED_INCREASE);
             Global.getPlayer().getAddiction(AddictionType.MIND_CONTROL).ifPresent(Addiction::flagDaytime);
         }
+        
         if (choice.equals("Sex")) {
             if (npc.getAffection(player) >= 8 && (!player.has(Trait.ticklemonster) || Global.random(2) == 1)) {
                 Global.gui()
