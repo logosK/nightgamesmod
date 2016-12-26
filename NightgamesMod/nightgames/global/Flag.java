@@ -89,6 +89,7 @@ public enum Flag {
     AutoNext,
     Buttslutification,
     CanResupplyAnywhere,
+    NoFTC,
     ;
     
     public static boolean exists(String flag) {
