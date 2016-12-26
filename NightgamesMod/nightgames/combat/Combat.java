@@ -955,7 +955,7 @@ public class Combat extends Observable implements Cloneable {
                                 + " in a pin.", self, other));
             }
         }
-        
+        /*
         if (self.is(Stsflag.collared) && Global.random(10) < 3 && new Reversal(other).usable(this, self)) {
             self.pain(this, null, Global.random(20, 50));
             Position nw = stance.reverse(this, false);
@@ -973,7 +973,7 @@ public class Combat extends Observable implements Cloneable {
                                 + " {other:subject-action:put|puts} {self:direct-object}"
                                 + " in a pin.", self, other));
             }
-        }
+        }*/
         
         if (getStance().facing(self, other) && other.breastsAvailable() && !self.has(Trait.temptingtits) && other.has(Trait.temptingtits)) {
             write(self, Global.format("{self:SUBJECT-ACTION:can't avert|can't avert} {self:possessive} eyes from {other:NAME-POSSESSIVE} perfectly shaped tits sitting in front of {self:possessive} eyes.",
@@ -1060,7 +1060,7 @@ public class Combat extends Observable implements Cloneable {
                                     skill.user(), target));
                     skill.user().pain(this, null, Global.random(10, 40));
                 }
-            }
+            }/*
             if (skill.type(this) == Tactics.damage && skill.user().is(Stsflag.collared)) {
                 Collared stat = (Collared) skill.user().getStatus(Stsflag.collared);
                 stat.spendCharges(this, 1);
@@ -1069,7 +1069,7 @@ public class Combat extends Observable implements Cloneable {
                                 + " a powerful shock down {self:possessive} spine.", 
                                 skill.user(), target));
                 skill.user().pain(this, null, Global.random(10, 40));
-            }
+            }*/
             checkStamina(target);
             checkStamina(skill.user());
             orgasmed = checkOrgasm(skill.user(), target, skill);

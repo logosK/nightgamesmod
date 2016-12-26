@@ -224,6 +224,9 @@ public class CassieTime extends BaseNPCTime {
             if (npc.has(Trait.magicmilk) && Global.getPlayer().getAddictionSeverity(AddictionType.MAGIC_MILK) != Severity.NONE) {
                 Global.gui().choose(this, "Ask for milk");
             }
+            if (player.get(Attribute.Arcane) > 10 && npc.get(Attribute.Arcane) >= 2*player.get(Attribute.Arcane)) {
+                Global.gui().choose(this, "Magic");
+            }
         }
         Global.gui().choose(this, "Leave");
     }
@@ -561,6 +564,47 @@ public class CassieTime extends BaseNPCTime {
             Daytime.train(player, npc, Attribute.Power);
             npc.gainAffection(player, 1);
             player.gainAffection(npc, 1);
+        } else if (choice.equals("Magic")) {
+            player.mod(Attribute.Arcane, 1);
+            Global.gui().message("Cassie is definitely more knowledgable about magic than you are- and she's willing to give you a few pointers.");
+            if (!(Global.checkFlag("CassieEnchantressFocus") && npc.hasDick())) return;//This may become part of a miniquest in future and depend on those flags. Someone else might want to write a fem version
+            player.mod(Attribute.Arcane, 1);
+            player.mod(Attribute.Submissive, 1);
+            Boolean mf = player.getSex().considersItselfFeminine();
+            Global.gui().message("\"You know, "+player.name()+", I think some of this would be easier to explain if I could demonstrate it. Would you mind my using you as an object for some of the human-"
+                            + "targeting spells?\"<br/><br/>The slight smile on her face doesn't seem that foreboding (though it certainly indicates she hopes you'll say yes), you've learned a lot so far "
+                            + "today and you agree that demonstrations <i>would</i> make some things easier to understand, and anything she could do to you now she could do anytime in the games... you "
+                            + "cheerfully volunteer yourself as an object of demonstration.<br/><br/>Cassie explains for a bit (with demonstrations) about medical spells, both healing and fleshcrafting. "
+                            + "Her explanations are excellent, and though you had to strain to understand some of it, you got the impression that she was dumbing a lot of it down for you. Eventually, she "
+                            + "moves on to another topic- mental magic.<br/></br>\"This is actually one of my major areas of study at the moment- as you've udoubtably noticed- but mental magic is much more "
+                            + "than just varying degrees of enthrallment. For example, right now I'm researching attention affecting spell- like the memetic \"Somebody Else's Problem field\" that you "
+                            + "hear a lot about in fiction. I'm pretty sure that a really sophisticated one is set up tied to the games- and I suspect that when I graduate I'll be glad if I can create some "
+                            + "partial imitation of that field. Attention directing magic can actually be a lot more sublte than that though. For instance-\" Cassie holds up a white sphere on a stick that "
+                            + "looks kind of like a lollypop-\"I bought this, and I'm trying to reverse engineer it. I used it on you a while ago, and it's kept you from noticing that you've been sucking "
+                            + "my dick for the past half hour.\"<br/><br/>You look up at her, furrowing your brows- she's not making sense. What is she talking about? Seeming to notice your confusion, she "
+                            + "smiles warmly and pats the side of your head condescendingly. \"See, this kind of attention deflecting spell has an amazing synergy with simple compulsions- the kind that "
+                            + "anyone could resist in a heartbeat- if they could just notice them to resist.\"<br/><br/>Cassie pauses suddenly, putting her hand on top of your head and groaning slightly. "
+                            + "Your mouth feels kind of full of saliva, so you swallow a few times. You furrow your brows at Cassie, wondering why she stopped talking.<br/><br/>Finally, Cassie relaxes "
+                            + "agains the back of her chair and sighs. \"Unfortunately, I'm nowhere near good enough to be able to cast that kind of spell myself, and this thing is too powerful for me to "
+                            + "be allowed to bring it into the games. Pity. Still, you coming to me on your own time and volunteering makes it ok right now- and if that means that you don't notice "
+                            + "other spells that <i>are</i> legal for the games being used on you- that you would be able to resist or remove if you knew about them- well, that's on you.\"<br/><br/>You "
+                            + "wonder if there's something wrong with your hearing, or if Cassie is just talking too quietly- you seem to have somehow missed most of her last sentence. Cassie seems to "
+                            + "decide to do something else- she stands up and has you stand a kneel in a few different positions. She's presumably trying to teach you more about magic, but to your "
+                            + "embaressment you find yourself having trouble paying attention to her. Eventually she seems satisfied.<br/><br/>\"Alright, let's do a final test,\" Cassie exclaims, standing "
+                            + "in front of you. She looks you in the eye, and then lifts up her skirt. You're not sure what that's supposed to accomplish- it doesn't seem like an arcane guesture you're "
+                            + "aware of, but Cassie is both better than you and learning magic primarily for the purposes of sex games- it's probably a thing. And it seems to have worked, too, judging "
+                            + "by the way Cassie is laughing triumphantly, though you're not sure what it was supposed to have done.<br/><br/>\"Excellent!\" Cassie exclaims triumphantly, \"I was right, and "
+                            + "the threshold for reflex formation is far far lower when the conscious mind can't fight against it! This is probably publishable psychological research- or it would be if "
+                            + "magic was common knowledge- but more importantly, it means that all I have to do is show you my cock and you start sucking it- and you have no idea!\"<br/><br/>Cassie seems "
+                            + "very excited by whatever she just did- you bet you would have liked to hear it to. You're not normally anywhere near this bad at paying attention, particularly to cute girls- "
+                            + "maybe you need to sleep more?<br/><br/>Cassie answers a few questions you ask about the part of her explanation you were paying attention for, and you feel like you definitely "
+                            + "learned even more magic after she started using you as an example- and you would probably have learned even more if you'd been able to pay attention the whole time. You resolve "
+                            + "to do that, and mention how much you learned to Cassie, and that you'd like to do this again. She seems excited by the idea. As you leave, she mutters to herself "
+                            + "unintelligibily, probably thinking about what to cover next time \"Hmmm... you know, I find the idea of giving "+(mf?"her":"him")+" massive E-cup boobs that "+(mf?"he":"she")+"'s unable to notice for a "
+                            + "night incredibly amusing- or maybe I should do the same thing with a chastity cage, and see how "+(mf?"she":"he")+" rationalizes it. That one might be kind of mean though- I'll have to find "
+                            + "some way to make this up to "+(mf?"her":"him")+"... if I figure out how to make it harder to notice someone else's teasing or attractiveness, that would probably help "
+                            + (mf?"her":"him")+" in the games... I'll have to work on figuring out if I can do that with my level of skill.\"");
+            //this should interact somehow with an oral cockslut thing that works like buttslut.
         } else if (choice.equals("Leave")) {
             Global.modCounter(Flag.CassieLoneliness, -2);
             done(true);

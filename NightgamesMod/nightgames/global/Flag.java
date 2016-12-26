@@ -88,6 +88,7 @@ public enum Flag {
     SuperTraitMode,
     AutoNext,
     Buttslutification,
+    CanResupplyAnywhere,
     ;
     
     public static boolean exists(String flag) {

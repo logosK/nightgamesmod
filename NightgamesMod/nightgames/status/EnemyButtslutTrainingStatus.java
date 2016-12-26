@@ -40,7 +40,7 @@ public class EnemyButtslutTrainingStatus extends Status {
     public void activate() {
         pendingActivation = false;
         trainingLevel += 1;
-        if (trainingLevel <= 5) affected.att.put(Attribute.Submissive, affected.get(Attribute.Submissive) + 1);
+        if (trainingLevel <= 5) affected.mod(Attribute.Submissive, 1);
         unflag(Stsflag.buttslutificationReady);
         if (trainingLevel > 5) {
             //affected.removelist.add(this);
