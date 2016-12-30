@@ -162,7 +162,6 @@ public class NPC extends Character {
             }
             if (willpower.percent() <= 50) {
                 visible = visible + "She seems a bit distracted and unable to look you in the eye.<br/>";
-
             }
         }
         if (per >= 4 && per < 6) {
@@ -567,11 +566,11 @@ public class NPC extends Character {
     }
     
     private void pickAndDoAction(Collection<Action> available, Collection<Action> moves, Collection<Movement> radar) {
+        available.removeIf(a -> a == null || !a.usable(this));
         if (available.isEmpty()) {
             available.addAll(Global.getActions());
             available.addAll(moves);
         }
-        available.removeIf(a -> a == null || !a.usable(this));
         if (location.humanPresent()) {
             Global.gui().message("You notice " + name() + ai.move(available, radar).execute(this).describe());
         } else {

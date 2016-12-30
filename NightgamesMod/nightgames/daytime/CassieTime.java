@@ -570,7 +570,7 @@ public class CassieTime extends BaseNPCTime {
             if (!(Global.checkFlag("CassieEnchantressFocus") && npc.hasDick())) return;//This may become part of a miniquest in future and depend on those flags. Someone else might want to write a fem version
             player.mod(Attribute.Arcane, 1);
             player.mod(Attribute.Submissive, 1);
-            Boolean mf = player.getSex().considersItselfFeminine();
+            Boolean mf = player.body.guessCharacterSex().considersItselfFeminine();
             Global.gui().message("\"You know, "+player.name()+", I think some of this would be easier to explain if I could demonstrate it. Would you mind my using you as an object for some of the human-"
                             + "targeting spells?\"<br/><br/>The slight smile on her face doesn't seem that foreboding (though it certainly indicates she hopes you'll say yes), you've learned a lot so far "
                             + "today and you agree that demonstrations <i>would</i> make some things easier to understand, and anything she could do to you now she could do anytime in the games... you "

@@ -29,7 +29,7 @@ public class StartConfiguration {
     public PlayerConfiguration player;
     private Collection<NpcConfiguration> npcs;
     public NpcConfiguration npcCommon;
-    private Collection<Flag> flags;
+    private Collection<String> flags;
     private Collection<DebugFlags> debugFlags;
 
     private StartConfiguration() {
@@ -51,7 +51,7 @@ public class StartConfiguration {
         return enabled;
     }
 
-    public Collection<Flag> getFlags() {
+    public Collection<String> getFlags() {
         return flags;
     }
 
@@ -99,16 +99,7 @@ public class StartConfiguration {
             }
         });
         JsonArray flags = root.getAsJsonArray("flags");
-        cfg.flags = JsonUtils.collectionFromJson(flags, Flag.class);
-        
-        //cfg.debugFlags = new ArrayList<DebugFlags>();
-        //Collection<String> debugFlagNames = JsonUtils.collectionFromJson(root.getAsJsonArray("debugFlags"),String.class);
-        //for (String flagname:debugFlagNames) debugFlags.add(DebugFlags.valueOf(flagname));
-        JsonArray debugFlags = root.getAsJsonArray("debugFlags");
-        cfg.debugFlags = JsonUtils.collectionFromJson(debugFlags, DebugFlags.class);
-        
-        System.out.println(cfg.debugFlags);
-        
+        cfg.flags = JsonUtils.collectionFromJson(flags, String.class);
         return cfg;
     }
 

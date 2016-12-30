@@ -93,7 +93,7 @@ public class HeldOral extends AbstractFacingStance {
 
     @Override
     public float priorityMod(Character self) {
-        float bonus = 2;
+        float bonus = getSubDomBonus(self, 2);
         bonus += self.body.getRandom("mouth").priority(self);
         return bonus;
     }
