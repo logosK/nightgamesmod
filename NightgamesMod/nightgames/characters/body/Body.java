@@ -173,6 +173,7 @@ public class Body implements Cloneable {
     }
      
     public BreastsPart getRealBreasts() {
+        /*
         updateCurrentParts();
         System.out.println("finding real breasts");
         Set<BreastsPart> guesses = new HashSet<BreastsPart>();
@@ -188,8 +189,12 @@ public class Body implements Cloneable {
         BreastsPart realBreasts = guesses.iterator().next();
         System.out.println("this one was found to be real: "+realBreasts);
         return realBreasts;
+    }*/
+        Collection<BreastsPart> allBreasts = bodyParts.stream().filter(p -> (p instanceof BreastsPart)).map(p -> (BreastsPart)p).collect(Collectors.toSet());
+        assert allBreasts.size()==1;
+        return allBreasts.iterator().next();
     }
-    
+    /*
     public void addReplaceRealBreasts(BreastsPart newPart) {
         BreastsPart realPart = getRealBreasts();
         for (PartReplacement r : replacements) {
@@ -213,7 +218,7 @@ public class Body implements Cloneable {
         if (character != null) {
             updateCharacter();
         }
-    }
+    }*/
 
     public void describe(StringBuilder b, Character c, String delimiter) {
         describe(b, c, delimiter, true);

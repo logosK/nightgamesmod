@@ -66,12 +66,14 @@ public class BreastGrowthSuper extends Skill {
                 if (part != null) {
                     BreastsPart realPart = target.body.getRealBreasts();
                     System.out.println("found real breasts; they are: " + realPart);
-                    target.body.addReplaceRealBreasts((BreastsPart)(realPart.upgrade(1,.5)));additionalSizes-=1;
-                    if(Global.isDebugOn(DebugFlags.DEBUG_SCENE)) System.out.println("New breast sensitivity for "+target.getName()+" is "+target.body.getRandomBreasts().getSensitivity(null)+".");
+                    //if (!target.body.getLargestBreasts().equals(realPart)) target.body.getLargestBreasts().bonusSensitivity +=1;
+                    target.body.addReplace((BreastsPart)(realPart.upgrade(1,.5)), 1);additionalSizes-=1;
+                    if(Global.isDebugOn(DebugFlags.DEBUG_SCENE)) System.out.println("New real breast sensitivity for "+target.getName()+" is "+target.body.getRealBreasts().getSensitivity(null)+".");
                 }
             }
            if (part != null) {
                 target.body.temporaryAddOrReplacePartWithType(part.upgrade(additionalSizes, getSelf().get(Attribute.Arcane)/20.), 10);
+                if(Global.isDebugOn(DebugFlags.DEBUG_SCENE)) System.out.println("New breast sensitivity for "+target.getName()+" is "+target.body.getLargestBreasts().getSensitivity(null)+".");
             }
         }
         return res != Result.miss;
