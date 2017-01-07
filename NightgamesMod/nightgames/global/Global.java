@@ -1715,4 +1715,11 @@ public class Global {
 			c.write(self, format(string, self, other, args));
 		}
 	}
+	
+	public static String getFlagStartingWith(Collection<String> collection, String start) {
+	    for (String f:collection) {
+	        if (f.startsWith(start)) return f;
+	    }
+	    return "";
+	}
 }

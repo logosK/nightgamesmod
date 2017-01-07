@@ -51,6 +51,7 @@ public abstract class CharacterConfiguration {
         traits = Optional.empty();
         body = Optional.empty();
         clothing = Optional.empty();
+        growth = new HashMap<>();
     }
 
     /**

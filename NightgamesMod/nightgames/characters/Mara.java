@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.FacePart;
-import nightgames.characters.body.GenericBodyPart;
 import nightgames.characters.body.PussyPart;
 import nightgames.characters.custom.CharacterLine;
 import nightgames.combat.Combat;

@@ -73,6 +73,7 @@ public class CreationGUI extends JPanel {
     private JSeparator separator_2;
     private JLabel lblWeakness;
     protected JComboBox<Trait> WeaknessBox;
+    protected JComboBox<String> ExpBox;
     private JTextPane WeaknessDescription;
     private JPanel panel_1;
     private JPanel panel_4;
@@ -347,7 +348,7 @@ public class CreationGUI extends JPanel {
         lblStrength.setBackground(new Color(0, 10, 30));
         lblStrength.setForeground(new Color(240, 240, 255));
         verticalBox.add(lblStrength);
-
+        
         StrengthBox = new JComboBox<>();
         StrengthBox.setBackground(new Color(0, 10, 30));
         StrengthBox.setForeground(new Color(0, 200, 0));
@@ -372,7 +373,7 @@ public class CreationGUI extends JPanel {
         StrengthDescription.setForeground(new Color(240, 240, 255));
         StrengthDescription.setText(((Trait) StrengthBox.getSelectedItem()).getDesc());
         verticalBox.add(StrengthDescription);
-
+        
         separator_2 = new JSeparator();
         verticalBox.add(separator_2);
 
@@ -410,13 +411,13 @@ public class CreationGUI extends JPanel {
         WeaknessDescription.setEditable(false);
         WeaknessDescription.setText(((Trait) WeaknessBox.getSelectedItem()).getDesc());
         verticalBox.add(WeaknessDescription);
-
+        
         JLabel expLbl = new JLabel("Exp Rate");
         expLbl.setBackground(new Color(0, 10, 30));
         expLbl.setForeground(new Color(240, 240, 255));
 
-        verticalBox.add(new JLabel("Exp Rate"));
-        JComboBox<String> ExpBox = new JComboBox<>();
+        verticalBox.add(expLbl);
+        ExpBox = new JComboBox<>();
         ExpBox.setBackground(new Color(0, 10, 30));
         ExpBox.setForeground(new Color(200, 200, 0));
         ExpBox.addItem("Slow");
@@ -449,6 +450,7 @@ public class CreationGUI extends JPanel {
                 Global.xpRate = 3;
             }
         });
+
         verticalBox.add(ExpDescription);
         separator_1 = new JSeparator();
         verticalBox.add(separator_1);
@@ -547,6 +549,23 @@ public class CreationGUI extends JPanel {
         seduction = cfgAttributes.getOrDefault(Attribute.Seduction, 3);
         cunning = cfgAttributes.getOrDefault(Attribute.Cunning, 3);
         remaining = points;
+        
+        String defaultExp = "normal";
+        if(Global.getFlagStartingWith(cfg.getFlags(), "defaultExp") != "") {
+            defaultExp = Global.getFlagStartingWith(cfg.getFlags(), "defaultExp").substring(10);
+        }
+        ExpBox.setSelectedItem(defaultExp);
+        Trait defaultStrength = Trait.romantic;
+        if(Global.getFlagStartingWith(cfg.getFlags(), "defaultStrength") != "") {
+            defaultStrength = Trait.valueOf(Global.getFlagStartingWith(cfg.getFlags(), "defaultStrength").substring(15));
+        }
+        StrengthBox.setSelectedItem(defaultStrength);
+        Trait defaultWeakness = Trait.insatiable;
+        if(Global.getFlagStartingWith(cfg.getFlags(), "defaultWeakness") != "") {
+            defaultWeakness = Trait.valueOf(Global.getFlagStartingWith(cfg.getFlags(), "defaultWeakness").substring(15));
+        }
+        WeaknessBox.setSelectedItem(defaultWeakness);
+        
         refresh();
     }
 
