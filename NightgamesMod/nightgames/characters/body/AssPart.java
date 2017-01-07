@@ -135,7 +135,7 @@ public class AssPart extends GenericBodyPart {
             if(self.has(Trait.trainedslut) && self.hasStatus(Stsflag.buttsluttraining)) {
                 int strength = 3 + self.get(Attribute.Submissive)/10;
                 Attribute stolen = null;
-                switch (opponent.name()) {
+                switch (opponent.getName()) {
                     case "Angel":
                         stolen = Attribute.Seduction;break;
                     case "Mara":

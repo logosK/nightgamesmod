@@ -23,7 +23,7 @@ public class MimicDryad extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Slime) >= 10;
+        return user.human() && user.get(Attribute.Slime) >= 10;
     }
 
     @Override
@@ -49,6 +49,8 @@ public class MimicDryad extends Skill {
         getSelf().addTemporaryTrait(Trait.dryad, 10);
         getSelf().addTemporaryTrait(Trait.magicEyeFrenzy, 10);
         getSelf().addTemporaryTrait(Trait.frenzyingjuices, 10);
+        getSelf().addTemporaryTrait(Trait.RawSexuality, 10);
+        getSelf().addTemporaryTrait(Trait.temptingtits, 10);
         getSelf().body.temporaryAddOrReplacePartWithType(EarPart.pointed, 10);
         getSelf().body.temporaryAddOrReplacePartWithType(new TentaclePart("vines", "back", "nectar", 0.1, 1.2, 0), 10);
         BreastsPart part = getSelf().body.getBreastsBelow(BreastsPart.h.size);

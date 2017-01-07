@@ -155,7 +155,7 @@ public class BreastGrowthSuper extends Skill {
                             "%s moving and begins chanting. %s %s chest grow hot, and small, perky breasts start to form!"
                                             + " %s to hold them back with %s hands, but the growth continues untill they are a full A-cup."
                                             + " The new sensations from %s new breasts make %s tremble.",
-                            getSelf().name(), Global.capitalizeFirstLetter(target.subjectAction("feel")),
+                            getSelf().getName(), Global.capitalizeFirstLetter(target.subjectAction("feel")),
                             target.possessivePronoun(), Global.capitalizeFirstLetter(target.pronoun()),
                             target.action("try", "tries"), target.possessivePronoun(), target.directObject());
         } else {

@@ -5,7 +5,13 @@ nightgames_log.txt
 *.iml
 .idea
 out
+bin
+build
+.classpath
+.project
+.settings
 CombatStats*
 NightgamesMod/.settings
 combatlogs
-/bin/
+**/Thumbs.db
+**/.DS_Store

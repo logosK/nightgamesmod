@@ -70,11 +70,11 @@ public class Growl extends Skill {
     @Override
     public String deal(Combat c, int damage, Result modifier, Character target) {
         if (modifier == Result.miss) {
-            return "You let out a soft purr and give " + target.name()
+            return "You let out a soft purr and give " + target.getName()
                             + " your best puppy dog eyes. She smiles, but then aims a quick punch at your groin, which you barely avoid. "
                             + "Maybe you shouldn't have mixed your animal metaphors.";
         } else {
-            String message = "You give " + target.name()
+            String message = "You give " + target.getName()
                             + " an affectionate purr and your most disarming smile. Her battle aura melts away and she pats your head, completely taken with your "
                             + "endearing behavior.";
             if (damage > 0) {
@@ -88,7 +88,7 @@ public class Growl extends Skill {
     public String receive(Combat c, int damage, Result modifier, Character target) {
         if (modifier == Result.miss) {
             return String.format("%s growls assertively and thrusts out %s hips, eyes fixed on %s crotch, clearly demanding that %s %s for breeding. Thankfully, %s"
-                            + " instincts and arounsal aren't strong enough to lead %s to submit.", getSelf().name(), getSelf().possessivePronoun(), target.possessivePronoun(),
+                            + " instincts and arounsal aren't strong enough to lead %s to submit.", getSelf().getName(), getSelf().possessivePronoun(), target.possessivePronoun(),
                             getSelf().subject(), getSelf().action("submit"), getSelf().possessivePronoun(), getSelf().pronoun());
         } else if (modifier == Result.normal) {
             return String.format("Kat growls assertively and thrusts out her hips, eyes fixed on your crotch, clearly demanding that you submit for breeding. You try to resist "

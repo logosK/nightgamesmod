@@ -33,6 +33,7 @@ import nightgames.items.clothing.ClothingSlot;
 import nightgames.json.JsonUtils;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.pet.PetCharacter;
+import nightgames.skills.Divide;
 import nightgames.skills.Skill;
 import nightgames.status.Abuff;
 import nightgames.status.BodyFetish;
@@ -665,10 +666,14 @@ public class Body implements Cloneable {
 
         boolean unsatisfied = false;
         if (character.has(Trait.Unsatisfied)
-                        && (character.getArousal().percent() >= 50 || character.getWillpower().percent() < 25)
+                        && (character.getArousal().percent() >= 50)
                         && (skill == null || !skill.getTags(c).contains(SkillTag.fucking))
                         && !(with.isGenital() && target.isGenital() && c.getStance().havingSex(c))) {
-            pleasure -= 4;
+            if (c != null && c.getOpponent(character).human()) {
+                pleasure -= 4;
+            } else {
+                pleasure -= .8;
+            }
             unsatisfied = true;
         }
 
@@ -830,6 +835,10 @@ public class Body implements Cloneable {
             }
             if (character.has(Trait.romantic)) {
                 perceptionBonus += Math.max(0, opponent.getArousal().percent() - 70) / 100.0;
+            }
+
+            if (character.has(Trait.MindlessClone)) {
+                perceptionBonus /= 3;
             }
             return perceptionBonus;
         }
@@ -1108,6 +1117,7 @@ public class Body implements Cloneable {
                 expired.add(r);
             }
         }
+        Collections.reverse(expired);
         for (PartReplacement r : expired) {
             replacements.remove(r);
             updateCurrentParts();
@@ -1166,12 +1176,7 @@ public class Body implements Cloneable {
                 sb.append(Global.prependPrefix(last.prefix(), last.fullDescribe(character)));
                 sb.append('.');
             }
-            if (c != null) {
-                c.writeSystemMessage(character, sb.toString());
-            } else if (character.human()) {
-                Global.gui()
-                      .message(sb.toString());
-            }
+            Global.writeIfCombat(c, character, sb.toString());
         }
     }
 
@@ -1212,7 +1217,7 @@ public class Body implements Cloneable {
         }
         if (character.has(Trait.spiritphage)) {
             c.write(character, "<br/><b>" + Global.capitalizeFirstLetter(character.subjectAction("glow", "glows")
-                            + " with power as the cum is absorbed by " + character.possessivePronoun() + " "
+                            + " with power as the cum is absorbed by " + character.possessiveAdjective() + " "
                             + part.describe(character) + ".</b>"));
             character.add(c, new Abuff(character, Attribute.Power, 5, 10));
             character.add(c, new Abuff(character, Attribute.Seduction, 10, 10));
@@ -1224,6 +1229,23 @@ public class Body implements Cloneable {
                             "<br/><b>{other:NAME-POSSESSIVE} hypnotic semen takes its toll on {self:name-possessive} willpower, rendering {self:direct-object} doe-eyed and compliant.</b>",
                             character, opponent));
             character.loseWillpower(c, 10 + Global.random(10));
+        }
+        if (part.getType().equals("ass") || part.getType().equals("pussy")) {
+            if (character.has(Trait.RapidMeiosis) && character.has(Trait.slime)) {
+                c.write(opponent, Global.format("{self:NAME-POSSESSIVE} hungry %s seems to vacuum {other:name-possessive} sperm into itself as {other:pronoun-action:cum|cums}. "
+                                + "As {other:pronoun-action:lay|lays} there heaving in exertion, {self:possessive} belly rapidly bloats up "
+                                + "as if going through 9 months of pregancy within seconds. With a groan, {self:pronoun-action:expel|expels} a massive quantity of slime onto the floor. "
+                                + "The slime seems to quiver for a second before reforming itself into an exact copy of {self:name-do}!", character, opponent, part.describe(character)));
+                c.addPet(character, Divide.makeClone(c, character).getSelf());
+            }
+            if (opponent.has(Trait.RapidMeiosis) && opponent.has(Trait.slime)) {
+                c.write(opponent, Global.format("After {other:name-possessive} gooey cum fills {self:name-possessive} %s, "
+                                + "{self:pronoun-action:feel|feels} {self:possessive} belly suddenly churn and inflate. "
+                                + "The faux-semen seems to be multiplying inside {self:direct-object}! "
+                                + "Without warning, the sticky liquid makes a quick exit out of {self:possessive} orfice "
+                                + "and reforms itself into a copy of {other:name-do}!", character, opponent, part.describe(character)));
+                c.addPet(opponent, Divide.makeClone(c, opponent).getSelf());
+            }
         }
         if (opponent.has(Trait.heatedsemen)) {
             c.write(Global.format(

@@ -58,6 +58,7 @@ import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.SoftBevelBorder;
@@ -164,7 +165,7 @@ public class GUI extends JFrame implements Observer {
 
         // frame title
         setTitle("NightGames Mod");
-
+        setBackground(GUIColors.bgDark);
         // closing operation
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -849,7 +850,13 @@ public class GUI extends JFrame implements Observer {
         willpower.setForeground(new Color(68, 170, 85));
         willpower.setToolTipText("Willpower is a representation of your will to fight. When this reaches 0, you lose.");
         meter.add(willpower);
-
+        try {
+            // on macs, the aqua look and feel does not have colored progress bars.
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+                        | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
         staminaBar = new JProgressBar();
         staminaBar.setBorder(new SoftBevelBorder(1, null, null, null, null));
         staminaBar.setForeground(new Color(164, 8, 2));
@@ -881,13 +888,18 @@ public class GUI extends JFrame implements Observer {
         meter.add(willpowerBar);
         willpowerBar.setMaximum(player.getWillpower().max());
         willpowerBar.setValue(player.getWillpower().get());
-
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+                        | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
         JPanel bio = new JPanel();
         topPanel.add(bio);
         bio.setLayout(new GridLayout(2, 0, 0, 0));
         bio.setBackground(GUIColors.bgDark);
 
-        JLabel name = new JLabel(player.name());
+        JLabel name = new JLabel(player.getTrueName());
         name.setHorizontalAlignment(SwingConstants.LEFT);
         name.setFont(new Font("Sylfaen", 1, 15));
         name.setForeground(GUIColors.textColorLight);
@@ -1130,7 +1142,7 @@ public class GUI extends JFrame implements Observer {
 
     public void promptAmbush(IEncounter enc, Character target) {
         clearCommand();
-        commandPanel.add(encounterButton("Attack " + target.name(), enc, target, Encs.ambush));
+        commandPanel.add(encounterButton("Attack " + target.getName(), enc, target, Encs.ambush));
         commandPanel.add(encounterButton("Wait", enc, target, Encs.wait));
         Global.getMatch().pause();
         commandPanel.refresh();
@@ -1138,7 +1150,7 @@ public class GUI extends JFrame implements Observer {
 
     public void promptOpportunity(IEncounter enc, Character target, Trap trap) {
         clearCommand();
-        commandPanel.add(encounterButton("Attack " + target.name(), enc, target, Encs.capitalize, trap));
+        commandPanel.add(encounterButton("Attack " + target.getName(), enc, target, Encs.capitalize, trap));
         commandPanel.add(encounterButton("Wait", enc, target, Encs.wait));
         Global.getMatch().pause();
         commandPanel.refresh();

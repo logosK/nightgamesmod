@@ -5,7 +5,6 @@ import java.util.List;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
-import nightgames.pet.PetCharacter;
 import nightgames.pet.arms.skills.ArmSkill;
 
 public abstract class RoboArm {
@@ -42,6 +41,6 @@ public abstract class RoboArm {
     abstract List<ArmSkill> getSkills(Combat c, Character owner, Character target);
     
     int attackOdds(Combat c, Character owner, Character target) {
-        return Math.min(60, owner.get(Attribute.Science));
+        return (int) Math.min(40, owner.get(Attribute.Science) * .67);
     }
 }

@@ -22,7 +22,7 @@ public class BehindFootjob extends AbstractBehindStance {
     public String describe(Combat c) {
         return Global.format(
                         "{self:SUBJECT-ACTION:are|is} holding {other:name-do} from behind with {self:possessive} legs wrapped around {other:direct-object}",
-                        top, bottom)+(analPenetration?" "+top.name()+" is also fucking "+bottom+" in the ass.":"");
+                        top, bottom)+(analPenetration?" "+top.getName()+" is also fucking "+bottom+" in the ass.":"");
     }
 
     @Override

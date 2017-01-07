@@ -12,6 +12,7 @@ import java.util.Set;
 import nightgames.characters.body.BodyPart;
 import nightgames.global.Flag;
 import nightgames.global.Global;
+import nightgames.items.clothing.Clothing;
 
 public class Growth implements Cloneable {
     public float arousal;
@@ -23,11 +24,10 @@ public class Growth implements Cloneable {
     public int extraAttributes;
     public float willpower;
     public float bonusWillpower;
-    public float mojo;
-    public float bonusMojo;
     private Map<Integer, List<Trait>> traits;
     private Map<Integer, Integer> traitPoints;
     public Map<Integer, List<BodyPart>> bodyParts;
+    private Map<Integer, Clothing> clothing;
 
     public Growth() {
         stamina = 2;
@@ -44,6 +44,7 @@ public class Growth implements Cloneable {
         traits = new HashMap<>();
         bodyParts = new HashMap<>();
         traitPoints = new HashMap<>();
+        clothing = new HashMap<>();
     }
 
     public void addTrait(int level, Trait trait) {
@@ -73,6 +74,10 @@ public class Growth implements Cloneable {
         bodyParts.get(level).add(part);
     }
 
+    public void addClothing(int level, Clothing c) {
+        clothing.putIfAbsent(level, c);
+    }
+    
     public void addOrRemoveTraits(Character character) {
         traits.keySet().stream().filter(i -> i > character.level).forEach(i -> {
             traits.get(i).forEach(character::remove);
@@ -92,6 +97,13 @@ public class Growth implements Cloneable {
                     }
                 }
             });
+        });
+        clothing.forEach((level, c) -> {
+           if (character.getLevel() >= level) {
+               character.outfitPlan.add(c);
+           } else {
+               character.outfitPlan.remove(c);
+           }
         });
     }
 
@@ -133,10 +145,11 @@ public class Growth implements Cloneable {
         Growth clone = (Growth) super.clone();
         clone.traits = Collections.unmodifiableMap(clone.traits);
         clone.bodyParts = Collections.unmodifiableMap(clone.bodyParts);
+        clone.clothing = Collections.unmodifiableMap(clone.clothing);
         return clone;
     }
     
     @Override public String toString() {
-        return "Growth with stamina "+stamina+" arousal "+arousal+" mojo "+mojo+" bonusStamina "+bonusStamina+" bonusArousal "+bonusArousal+" bonusMojo "+bonusMojo+" bonusAttributes "+bonusAttributes+" willpower "+willpower+" bonusWillpower "+bonusWillpower+" attributes "+attributes+" traits "+traits;
+        return "Growth with stamina "+stamina+" arousal "+arousal+" bonusStamina "+bonusStamina+" bonusArousal "+bonusArousal+" bonusAttributes "+bonusAttributes+" willpower "+willpower+" bonusWillpower "+bonusWillpower+" attributes "+attributes+" traits "+traits;
     }
 }

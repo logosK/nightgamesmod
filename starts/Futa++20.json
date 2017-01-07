@@ -367,7 +367,6 @@
 						"length":"average"
 					},
 					"pussy": "succubus"
-
 				}
 			},
 			"growth": {
@@ -394,6 +393,6 @@
 		}
 	],
 	"all_npcs":{},
-	"flags":["isFuta","hardmode","systemMessages","metBroker","rank1","basicStores","girlAdvice","meditation","blackMarket","CassieKnown","AngelKnown","MaraKnown","JewelKnown","Reyka","Kat","Airi","Eve","AutoNext","Buttslutification"],
+	"flags":["isFuta","hardmode","systemMessages","metBroker","rank1","basicStores","girlAdvice","meditation","blackMarket","CassieKnown","AngelKnown","MaraKnown","JewelKnown","Reyka","Kat","Airi","Eve","AutoNext","Buttslutification","FutaTime"],
 	"debugFlags":["DEBUG_SCENE","DEBUG_DAMAGE","DEBUG_PET","DEBUG_ADDICTION"]
 }

@@ -16,6 +16,7 @@ import nightgames.characters.State;
 import nightgames.characters.Trait;
 import nightgames.combat.Combat;
 import nightgames.modifier.Modifier;
+import nightgames.status.Stsflag;
 import nightgames.status.addiction.Addiction;
 
 public class Match {
@@ -69,7 +70,7 @@ public class Match {
         for (Character player : combatants) {
             player.getStamina().fill();
             player.getArousal().empty();
-            //player.getMojo().empty();
+            player.getMojo().empty();
             player.getMojo().restore(player.getMojo().max()/2);
             player.getWillpower().fill();
             if (player.getPure(Attribute.Science) > 0) {
@@ -101,13 +102,14 @@ public class Match {
             while (index < combatants.size()) {
                 Global.gui().refresh();
                 if (combatants.get(index).state != State.quit) {
-                    combatants.get(index).upkeep();
-                    manageConditions(combatants.get(index));
-                    if ((Global.isDebugOn(DebugFlags.DEBUG_SCENE) || Global.isDebugOn(DebugFlags.DEBUG_LOCATIONS)) && index < combatants.size()) {
-                        System.out.println(combatants.get(index).name() + "\t is in "
-                                        + combatants.get(index).location().name + "\t\t and moving with state "+combatants.get(index).state);
+                    Character self = combatants.get(index);
+                    self.upkeep();
+                    manageConditions(self);
+                    self.move();
+                    if (Global.isDebugOn(DebugFlags.DEBUG_SCENE) && index < combatants.size()) {
+                        System.out.println(self.getTrueName() + (self.is(Stsflag.disguised) ? "(Disguised)" : "") + " is in "
+                                        + self.location().name);
                     }
-                    combatants.get(index).move();
                 }
                 index++;
                 if (pause) {
@@ -138,7 +140,7 @@ public class Match {
         Character player = null;
         Character winner = null;
         for (Character combatant : score.keySet()) {
-            Global.gui().message(combatant.name() + " scored " + score.get(combatant) + " victories.");
+            Global.gui().message(combatant.getTrueName() + " scored " + score.get(combatant) + " victories.");
             combatant.modMoney(score.get(combatant) * combatant.prize());
             if (winner == null || score.get(combatant) >= score.get(winner)) {
                 winner = combatant;

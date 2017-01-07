@@ -1,5 +1,6 @@
 package nightgames.start;
 
+import static nightgames.start.ConfigurationUtils.mergeCollections;
 import static nightgames.start.ConfigurationUtils.mergeOptionals;
 
 import java.lang.reflect.Field;
@@ -38,7 +39,7 @@ public abstract class CharacterConfiguration {
     protected Optional<Collection<Trait>> traits;
     protected Optional<BodyConfiguration> body;
     protected Optional<Collection<String>> clothing;
-    protected Map<String,Float> growth;
+    protected Map<String, Float> growth;
 
     public CharacterConfiguration() {
         name = Optional.empty();
@@ -50,7 +51,6 @@ public abstract class CharacterConfiguration {
         traits = Optional.empty();
         body = Optional.empty();
         clothing = Optional.empty();
-        growth = new HashMap<>();
     }
 
     /**
@@ -69,9 +69,9 @@ public abstract class CharacterConfiguration {
         level = mergeOptionals(primaryConfig.level, secondaryConfig.level);
         xp = mergeOptionals(primaryConfig.xp, secondaryConfig.xp);
         clothing = mergeOptionals(primaryConfig.clothing, secondaryConfig.clothing);
-        traits = mergeOptionals(primaryConfig.traits, secondaryConfig.traits);
-        growth.putAll(secondaryConfig.growth);
+        traits = mergeCollections(primaryConfig.traits, secondaryConfig.traits);
         growth.putAll(primaryConfig.growth);
+        growth.putAll(secondaryConfig.growth);
         if (primaryConfig.body.isPresent()) {
             if (secondaryConfig.body.isPresent()) {
                 body = Optional.of(new BodyConfiguration(primaryConfig.body.get(), secondaryConfig.body.get()));
@@ -87,10 +87,14 @@ public abstract class CharacterConfiguration {
     private static final List<String> GROWTH_FIELDS_NAMES=Stream.of(GROWTH_FIELDS).map(Field::getName).collect(Collectors.toList());
     
     protected final void apply(Character base) {
-        name.ifPresent(n -> base.name = n);
+        name.ifPresent(n -> base.setName(n));
         base.att.putAll(attributes);
         money.ifPresent(m -> base.money = m);
-/*        Growth bg=base.getGrowth();
+        Map<Attribute, Integer> deltaAtts = new HashMap<>();
+        for (Attribute att : attributes.keySet()) {
+            deltaAtts.put(att, attributes.get(att) - base.getPure(att));
+        }
+        Growth bg=base.getGrowth();
         for (String key : growth.keySet()) {
             if (GROWTH_FIELDS_NAMES.contains(key)) {
                 try {GROWTH_FIELDS[GROWTH_FIELDS_NAMES.indexOf(key)].set(bg,growth.get(key));}
@@ -103,13 +107,29 @@ public abstract class CharacterConfiguration {
 //            if (key=="mojo") bg.mojo=growth.get("mojo");
 //            if (key=="willpower") bg.willpower=growth.get("willpower");
 
-        }*/
+        }
         level.ifPresent(l -> {
             base.level = l;
             modMeters(base, l * 2); // multiplication to compensate for missed daytime gains
         });
         xp.ifPresent(x -> base.gainXP(x));
         traits.ifPresent(t -> base.traits = new CopyOnWriteArrayList<>(t));
+        level.ifPresent(desiredLevel -> {
+            while (base.level < desiredLevel) {
+                base.level += 1;
+                modMeters(base, 1); // multiplication to compensate for missed daytime gains
+                deltaAtts.forEach((a, val) -> {
+                    int current = base.level * val / desiredLevel;
+                    int delta = current - base.getPure(a);
+                    if (delta > 0) {
+                        base.mod(a, delta);
+                    }
+                });
+                base.getGrowth().addOrRemoveTraits(base);
+            }
+        });
+        base.att.putAll(attributes);
+        xp.ifPresent(x -> base.gainXPPure(x));
         if (clothing.isPresent()) {
             List<Clothing> clothes = clothing.get().stream().map(Clothing::getByID).collect(Collectors.toList());
             base.outfitPlan = new ArrayList<>(clothes);

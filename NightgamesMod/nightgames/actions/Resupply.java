@@ -21,7 +21,6 @@ public class Resupply extends Action {
 
     @Override
     public boolean usable(Character user) {
-        
         return !user.bound() && (user.location().resupply() || Global.checkFlag(Flag.CanResupplyAnywhere) || user.has(Trait.immobile)
                         || (Global.checkFlag(Flag.FTC) && ((FTCMatch) Global.getMatch()).isBase(user, user.location())));
     }

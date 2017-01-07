@@ -237,7 +237,7 @@ public abstract class Skill {
         return cooldown;
     }
 
-    public Collection<String> subChoices() {
+    public Collection<String> subChoices(Combat c) {
         return Collections.emptySet();
     }
 
