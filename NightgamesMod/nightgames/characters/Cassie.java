@@ -333,7 +333,7 @@ public class Cassie extends BasePersonality {
                             + "you actually came while she was pegging you. <i>\"You came?\"</i> she gasps. <i>\"I mean the shopkeeper said it would work but....\"</i> she trails off.  She smiles, and stands. <i>\"I never knew "
                             + "I'd enjoy that so much.\"</i> Her grin widens in a way that makes you nervous. <i>\"I might need to try that again in the future.\"</i> Your decide to bid a hasty retreat leaving your "
                             + "clothes behind to the victor.";
-        } else if (character.has(Trait.witch) && character.has(Trait.silvertongue) && Global.random(3) == 0) {
+        } else if (character.has(Trait.witch) && character.has(Trait.silvertongue) && Global.random(3) == 0 && c.getOpponent(character).hasDick() && !c.getOpponent(character).hasPussy()) {
             character.arousal.empty();
             return "Cassie's efforts to pleasure you finally break your resistance and you find yourself completely unable to stop her. She slips between your legs and takes your straining "
                             + "dick into her mouth. She eagerly sucks on your cock, while glancing up to meet your eyes. Her talented oral technique blows away your endurance and you spill your seed "
@@ -462,7 +462,7 @@ public class Cassie extends BasePersonality {
                             + "Like Cassie's mind control spells not interacting the way she expected, causing you to inadventantly consent to and admit to craving for her doing "
                             + "horribly deviant things to you? No, you can't remember anything like that.<p><p>You stand up, bracing yourself against a wall at a sudden spike of "
                             + "dizziness. Tonight hasn't been going too well, but there's still time to salvage it if you can beat a few more people.";
-        /*} else if (c.getStance().vaginallyPenetrated(c, character)) {
+        } else if (c.getStance().vaginallyPenetrated(c, c.getOpponent(character))) {
             return "You feel yourself rapidly nearing the point of no return as Cassie thrusts her hardon into your wet snatch. You fondle and tease her sensitive nipples to increase her pleasure, but it's a losing battle. You're "
                             + "going to cum first. She smiles gently and kisses you as your pussy spasms wrapped around her cock when you cum. She shivers slightly, but you know she hasn't climaxed yet. When she breaks the kiss, her flushed "
                             + "face lights up in a broad smile. <i>\"It feels like you came pretty hard. Did you feel good?\"</i> You groan and slump flat on the ground in defeat. She gives you a light kiss on the tip of your nose "
@@ -473,7 +473,7 @@ public class Cassie extends BasePersonality {
                             + " to you. <i>\"Can you touch my nipples more? I really like that.\"</i> You reach up and play with "
                             + "her breasts as she continues to grind against you. She stops your pillow talk by kissing you desperately just before you feel her body tense up in orgasm and splurt our her white soup on your stomach. "
                             + "She collapses on top of you and kisses your cheek contently. <i>\"I'll keep practicing and make you feel even better next time, \"</i> she tells you happily. <i>\"I promise.\"</i> ";
- */       } else if (character.arousal.percent() > 50) {
+        } else if (character.arousal.percent() > 50) {
             character.arousal.empty();
             return "Despite your best efforts, you realize you've lost to Cassie's diligant manipulation of your penis. It takes so much focus to hold back your ejaculation "
                             + "that you can't even attempt to retaliate. She pumps your twitching dick eagerly as the last of your endurance gives way. The pleasure building up in the base "
