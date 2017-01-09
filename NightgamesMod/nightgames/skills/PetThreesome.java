@@ -35,7 +35,7 @@ public class PetThreesome extends Skill {
     }
 
     public BodyPart getSelfOrgan(Character fucker, Combat c) {
-        BodyPart res = fucker.body.getRandomCock();
+        BodyPart res = fucker.body.getRandomInsertable();
         return res;
     }
 
@@ -96,7 +96,7 @@ public class PetThreesome extends Skill {
         }
         if (targetO.isReady(target)) {
             Result result = Global.random(3) == 0 ? Result.critical : Result.normal;
-            if (selfO.isType("pussy") && targetO.isType("cock") && target.hasPussy() && master.hasDick()) {
+            if (selfO.isType("pussy") && targetO.isType("cock") && target.hasPussy() && master.hasInsertable() && Global.random(2)==0) {
                 c.write(getSelf(), Global.format("While {self:subject} is holding {other:name-do} down, "
                                 + "{master:subject-action:move|moves} behind {other:direct-object} and {master:action:pierce|pierces} "
                                 + "{other:direct-object} with {master:possessive} cock. "
@@ -116,7 +116,7 @@ public class PetThreesome extends Skill {
                 target.body.pleasure(master, master.body.getRandomCock(), target.body.getRandomPussy(), otherm, 0, c, false, this);
                 master.body.pleasure(target, target.body.getRandomPussy(), master.body.getRandomCock(), m, 0, c, false, this);
             } else if (selfO.isType("pussy")) {
-                if (result == Result.critical && master.useFemalePronouns()) {
+                if ((result == Result.critical || (master.hasInsertable() && target.hasPussy())) && master.useFemalePronouns()) {
                     c.write(getSelf(), Global.format("While %s holding {other:name-do} down with %s ass, "
                                     + "{self:subject} mounts {other:direct-object} and pierces "
                                     + "{self:reflective} with {other:possessive} cock.", fucker, 
@@ -129,7 +129,7 @@ public class PetThreesome extends Skill {
                                     target, master.subjectAction("are", "is")));
                     c.setStance(new FFMCowgirlThreesome(fucker, master, target), getSelf(), true);
                 }
-            } else if (selfO.isType("cock") && master.hasPussy() && target.hasDick()) {
+            } else if (selfO.isType("cock") && master.hasPussy() && target.hasDick() && Global.random(2)==0) {
                 c.write(getSelf(), Global.format("While %s holding {other:name-do} down, "
                                 + "{self:subject} moves behind {other:direct-object} and pierces "
                                 + "{other:direct-object} with {self:possessive} cock. "
@@ -140,14 +140,14 @@ public class PetThreesome extends Skill {
                 c.setStance(new XHFDaisyChainThreesome(fucker, master, target), getSelf(), true);
                 target.body.pleasure(master, master.body.getRandomPussy(), target.body.getRandomCock(), otherm, 0, c, false, this);
                 master.body.pleasure(target, target.body.getRandomCock(), master.body.getRandomPussy(), m, 0, c, false, this);
-            } else if (selfO.isType("cock") && !master.hasDick()) {
+            } else if (selfO.isType("cock") && !master.hasInsertable()) {
                 c.write(getSelf(), Global.format("While %s holding {other:name-do} down, "
                                 + "{self:subject} mounts {other:direct-object} and pierces "
                                 + "{other:direct-object} with {self:possessive} cock in the missionary position.", fucker, 
                                 target, master.subjectAction("are", "is")));
                 c.setStance(new MFFMissionaryThreesome(fucker, master, target), getSelf(), true);
             } else if (selfO.isType("cock")) {
-                if (result == Result.critical) {
+                if (result == Result.critical || (Global.random(2)==0 && master.hasPussy() && target.hasDick())) {
                     c.write(getSelf(), Global.format("While %s holding {other:name-do} from behind, "
                                     + "{self:subject} mounts {other:direct-object} and pierces "
                                     + "{other:direct-object} with {self:possessive} cock in the missionary position. "

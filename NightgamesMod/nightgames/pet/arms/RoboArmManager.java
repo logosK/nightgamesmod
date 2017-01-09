@@ -117,11 +117,15 @@ public class RoboArmManager {
     }
 
     private void doArmAction(RoboArm arm, Combat c, Character target) {
+        System.out.println(arm);
+        System.out.println(arm.getSkills(c, owner, target));
         if (arm.attackOdds(c, owner, target) > Global.random(100)) {
-            ArmSkill skill = Global.pickRandom(arm.getSkills(c, owner, target)
+            Optional<ArmSkill> optSkill = Global.pickRandom(arm.getSkills(c, owner, target)
                                                   .stream()
                                                   .filter(s -> s.usable(c, arm, owner, target))
-                                                  .toArray(ArmSkill[]::new)).get();
+                                                  .toArray(ArmSkill[]::new));
+            if (!optSkill.isPresent()) return;
+            ArmSkill skill = optSkill.get();
             if (skill != null) {
                 c.write(PetCharacter.DUMMY, String.format("<b>%s %s uses %s</b>", owner.nameOrPossessivePronoun(),
                                 arm.getName(), skill.getName()));

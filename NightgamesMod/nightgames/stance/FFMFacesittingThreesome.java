@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 
 import nightgames.characters.Character;
+import nightgames.characters.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Global;
 import nightgames.skills.Skill;
@@ -36,6 +37,11 @@ public class FFMFacesittingThreesome extends FFMCowgirlThreesome {
     @Override
     public String image() {
         return "ThreesomeFFMFacesitting.jpg";
+        /*if (!domSexCharacter.hasPussy()) {
+            return "ThreesomeFFMFacesitting.jpg";
+        } else if (domSexCharacter.has(Trait.strapped)) {
+            return "ThreesomeFFS"
+        }*/
     }
 
     @Override
