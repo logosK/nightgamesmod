@@ -181,4 +181,8 @@ public abstract class CharacterConfiguration {
     @Override public String toString() {
         return "CharacterConfiguration with name "+name+" gender "+gender+" attributes "+attributes+" money "+money+" level "+level+" traits "+traits+" XP "+xp+" body "+body+" clothing "+clothing+" growth "+growth;
     }
+    
+    public boolean nameIsSet() {
+        return name.isPresent();
+    }
 }

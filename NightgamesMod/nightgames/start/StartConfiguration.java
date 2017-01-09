@@ -53,6 +53,10 @@ public class StartConfiguration {
     public Collection<String> getFlags() {
         return flags;
     }
+    
+    public Collection<DebugFlags> getDebugFlags() {
+        return debugFlags;
+    }
 
     public boolean playerCanChooseGender() {
         return !player.gender.isPresent();
@@ -99,6 +103,8 @@ public class StartConfiguration {
         });
         JsonArray flags = root.getAsJsonArray("flags");
         cfg.flags = JsonUtils.collectionFromJson(flags, String.class);
+        JsonArray debugFlags = root.getAsJsonArray("debugFlags");
+        cfg.debugFlags = JsonUtils.collectionFromJson(debugFlags, DebugFlags.class);
         return cfg;
     }
 

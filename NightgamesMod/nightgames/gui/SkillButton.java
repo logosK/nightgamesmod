@@ -82,11 +82,11 @@ public class SkillButton extends KeyableButton {
     private static Font fontForStage(Stage stage) {
         switch (stage) {
             case FINISHER:
-                return new Font("Baskerville Old Face", Font.BOLD, 18);
+                return new Font("Baskerville Old Face", Font.BOLD, 3 * Global.getFontSize());
             case FOREPLAY:
-                return new Font("Baskerville Old Face", Font.ITALIC, 18);
+                return new Font("Baskerville Old Face", Font.ITALIC, 3 * Global.getFontSize());
             default:
-                return new Font("Baskerville Old Face", Font.PLAIN, 18);
+                return new Font("Baskerville Old Face", Font.PLAIN, 3 * Global.getFontSize());
             
         }
     }

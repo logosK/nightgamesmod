@@ -514,7 +514,7 @@ public class CreationGUI extends JPanel {
 
     protected void makeGame(Optional<StartConfiguration> startConfig) {
         if (!namefield.getText()
-                        .isEmpty()) {
+                        .isEmpty() || (startConfig.isPresent() && startConfig.get().player.nameIsSet())) {
             String name = namefield.getText();
             CharacterSex sex = (CharacterSex) sexBox.getSelectedItem();
             List<Trait> traits = Collections.emptyList();
@@ -550,7 +550,7 @@ public class CreationGUI extends JPanel {
         cunning = cfgAttributes.getOrDefault(Attribute.Cunning, 3);
         remaining = points;
         
-        String defaultExp = "normal";
+        String defaultExp = "Normal";
         if(Global.getFlagStartingWith(cfg.getFlags(), "defaultExp") != "") {
             defaultExp = Global.getFlagStartingWith(cfg.getFlags(), "defaultExp").substring(10);
         }

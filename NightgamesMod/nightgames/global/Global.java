@@ -236,6 +236,7 @@ public class Global {
                     CharacterSex pickedGender, Map<Attribute, Integer> selectedAttributes) {
         Optional<PlayerConfiguration> playerConfig = config.map(c -> c.player);
         Collection<String> cfgFlags = config.map(StartConfiguration::getFlags).orElse(new ArrayList<>());
+        Collection<DebugFlags> cfgDebugFlags = config.map(StartConfiguration::getDebugFlags).orElse(new ArrayList<>());
         human = new Player(playerName, pickedGender, playerConfig, pickedTraits, selectedAttributes);
         if(human.has(Trait.largereserves)) {
             human.getWillpower().gain(20);
@@ -252,9 +253,16 @@ public class Global {
         players.addAll(characterPool.values().stream().filter(npc -> npc.isStartCharacter).collect(Collectors.toList()));
         if (!cfgFlags.isEmpty()) {
             flags = cfgFlags.stream().collect(Collectors.toSet());
-        }
+        }      
         Map<String, Boolean> configurationFlags = JsonUtils.mapFromJson(JsonUtils.rootJson(new InputStreamReader(ResourceLoader.getFileResourceAsStream("data/globalflags.json"))).getAsJsonObject(), String.class, Boolean.class);
         configurationFlags.forEach((flag, val) -> Global.setFlag(flag, val));
+        
+        if (!cfgDebugFlags.isEmpty()) {
+            for (DebugFlags db:cfgDebugFlags.stream().collect(Collectors.toSet())) {
+                debug[db.ordinal()]=true;
+            }
+        }
+        
         time = Time.NIGHT;
         setCharacterDisabledFlag(getNPCByType("Yui"));
         //setFlag(Flag.systemMessages, true);
@@ -1721,5 +1729,15 @@ public class Global {
 	        if (f.startsWith(start)) return f;
 	    }
 	    return "";
+	}
+	
+	public static int getFontSize() {
+	    if (checkFlag(Flag.largefonts)) {
+	        return 6;
+	    } else if (checkFlag(Flag.smallfonts)) {
+	        return 4;
+	    } else {
+	        return 5;
+	    }
 	}
 }

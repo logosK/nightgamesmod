@@ -82,6 +82,7 @@ public enum Flag {
     Buttslutification,
     CanResupplyAnywhere,
     NoFTC,
+    smallfonts,
     ;
     
     public static boolean exists(String flag) {

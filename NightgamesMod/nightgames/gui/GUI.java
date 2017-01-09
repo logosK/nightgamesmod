@@ -143,8 +143,9 @@ public class GUI extends JFrame implements Observer {
     private JRadioButton rdporoff;
     private JRadioButton rdimgon;
     private JRadioButton rdimgoff;
+    private JRadioButton rdfntsmall;
     private JRadioButton rdfntnorm;
-    private JRadioButton rdnfntlrg;
+    private JRadioButton rdfntlrg;
     private JSlider malePrefSlider;
     private int width;
     private int height;
@@ -330,14 +331,20 @@ public class GUI extends JFrame implements Observer {
         // fontSizeLabel - options submenu - visible
         JLabel fontSizeLabel = new JLabel("Font Size");
         ButtonGroup size = new ButtonGroup();
+        
+        rdfntsmall = new JRadioButton("small");
         rdfntnorm = new JRadioButton("normal");
-        rdnfntlrg = new JRadioButton("large");
+        rdfntlrg = new JRadioButton("large");
+        size.add(rdfntsmall);
         size.add(rdfntnorm);
-        size.add(rdnfntlrg);
+        size.add(rdfntlrg);
 
         optionsPanel.add(fontSizeLabel);
+        //optionsPanel.add(rdfntsmall);
         optionsPanel.add(rdfntnorm);
-        optionsPanel.add(rdnfntlrg);
+        optionsPanel.add(rdfntlrg);
+        
+        rdfntnorm.setSelected(true);
         
         JLabel pronounLabel = new JLabel("Pronoun Usage");
         ButtonGroup pronoun = new ButtonGroup();
@@ -418,7 +425,9 @@ public class GUI extends JFrame implements Observer {
                 rdimgon.setSelected(true);
             }
             if (Global.checkFlag(Flag.largefonts)) {
-                rdnfntlrg.setSelected(true);
+                rdfntlrg.setSelected(true);
+            } else if (Global.checkFlag(Flag.smallfonts)){
+                rdfntsmall.setSelected(true);
             } else {
                 rdfntnorm.setSelected(true);
             }
@@ -450,12 +459,19 @@ public class GUI extends JFrame implements Observer {
                     }
                     imgPanel.repaint();
                 }
-                if (rdnfntlrg.isSelected()) {
+                if (rdfntlrg.isSelected()) {
+                    Global.unflag(Flag.smallfonts);
                     Global.flag(Flag.largefonts);
                     fontsize = 6;
+                } else if (rdfntsmall.isSelected()) {
+                    Global.flag(Flag.smallfonts);
+                    Global.unflag(Flag.largefonts);
+                    fontsize = 4;
                 } else {
+                    Global.unflag(Flag.smallfonts);
                     Global.unflag(Flag.largefonts);
                     fontsize = 5;
+
                 }
             }
         });
@@ -807,6 +823,8 @@ public class GUI extends JFrame implements Observer {
     public void populatePlayer(Player player) {
         if (Global.checkFlag(Flag.largefonts)) {
             fontsize = 6;
+        } else if (Global.checkFlag(Flag.smallfonts)){
+            fontsize = 4;
         } else {
             fontsize = 5;
         }
@@ -1344,7 +1362,7 @@ public class GUI extends JFrame implements Observer {
         statusPanel.removeAll();
         statusPanel.repaint();
         //statusPanel.setPreferredSize(new Dimension(400, mainPanel.getHeight()));
-        statusPanel.setPreferredSize(new Dimension(width/4, mainPanel.getHeight()));
+        statusPanel.setPreferredSize(new Dimension(width/8, mainPanel.getHeight()));
 
         
         if (width < 720) {
@@ -1357,7 +1375,7 @@ public class GUI extends JFrame implements Observer {
 
         statusPanel.add(statsPanel);
         //statsPanel.setPreferredSize(new Dimension(400, 200));
-        statsPanel.setPreferredSize(new Dimension(width/4, 200));
+        statsPanel.setPreferredSize(new Dimension(width/8, 200));
 
         JSeparator sep = new JSeparator();
         sep.setMaximumSize(new Dimension(statusPanel.getWidth(), 2));
@@ -1406,9 +1424,9 @@ public class GUI extends JFrame implements Observer {
 //        statusPanel.setPreferredSize(new Dimension(400, height));
 //        currentStatusPanel.setMaximumSize(new Dimension(400, 2000));
 //        currentStatusPanel.setPreferredSize(new Dimension(400, 2000));
-        statusPanel.setPreferredSize(new Dimension(width/4, height));
-        currentStatusPanel.setMaximumSize(new Dimension(width/4, 2000));
-        currentStatusPanel.setPreferredSize(new Dimension(width/4, 2000));
+        statusPanel.setPreferredSize(new Dimension(width/8, height));
+        currentStatusPanel.setMaximumSize(new Dimension(width/8, 2000));
+        currentStatusPanel.setPreferredSize(new Dimension(width/8, 2000));
         
         currentStatusPanel.setBackground(GUIColors.bgLight);
         statusPanel.add(currentStatusPanel);
