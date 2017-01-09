@@ -14,8 +14,8 @@ public class HealRay extends ArmSkill {
 
     @Override
     public boolean resolve(Combat c, RoboArm arm, Character owner, Character target) {
-        boolean stamina = Global.random(2) == 0;
-        boolean mojo = Global.random(2) == 0;
+        boolean stamina = Global.random(2) == 0 || target.getMojo().isFull();
+        boolean mojo = Global.random(2) == 0 || target.getStamina().isFull();
 
         String msg = "The %s at the end of {self:name-possessive} %s" + " starts glowing with a lime green light, ";
 

@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.Emotion;
 import nightgames.combat.Combat;
 import nightgames.global.Global;
 import nightgames.items.clothing.Clothing;
@@ -20,11 +21,12 @@ public class Strip extends ArmSkill {
 
     @Override
     public boolean usable(Combat c, RoboArm arm, Character owner, Character target) {
-        return super.usable(c, arm, owner, target) && !target.outfit.isNude();
+        return super.usable(c, arm, owner, target);
     }
     
     @Override
     public boolean resolve(Combat c, RoboArm arm, Character owner, Character target) {
+        if (target.outfit.isNude()) return resolveDefault(c, arm, owner, target);
         boolean sub = c.getStance().dom(owner);
         double accuracy = 10 + owner.get(Attribute.Science);
         boolean hasTop = !target.outfit.slotEmpty(ClothingSlot.top);
@@ -67,5 +69,26 @@ public class Strip extends ArmSkill {
         
         return false;
     }
+    
+    public boolean resolveDefault(Combat c, RoboArm arm, Character owner, Character target) {
+        boolean sub = c.getStance().dom(owner);
+        double accuracy = 10 + owner.get(Attribute.Science);
+        int m = Global.random(4, 7);
 
+        if (sub || Global.random(100) < accuracy) {
+            target.pain(c, owner, m);
+            target.loseMojo(c, 5);
+            target.emote(Emotion.angry, 15);
+            c.write(PetCharacter.DUMMY, Global.format("A steely blur flies at {other:name-do},"
+                            + " revealing itself to be a %s which has already latched on"
+                            + " to {other:possessive} nipples. The %s pulls and twists painfully before losing its grip."
+                            , owner, target, arm.getName(), arm.getName()));
+            return true;
+        } else {
+            c.write(PetCharacter.DUMMY, Global.format("{other:SUBJECT-ACTION:manage|manages} to dodge"
+                            + " {self:name-possessive} %s as it flies at {other:direct-object}.",
+                            owner, target, arm.getName()));
+        }
+        return false;
+    }
 }
