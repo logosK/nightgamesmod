@@ -753,7 +753,7 @@ public class Jewel extends BasePersonality {
         character.outfitPlan.add(Clothing.getByID("gi"));
         character.outfitPlan.add(Clothing.getByID("panties"));
         character.mod(Attribute.Ki, 1);
-        character.getGrowth().addOrRemoveTraits(character);
+        character.getGrowth().addOrRemoveTraits(character, true);
     }
 
     @Override
