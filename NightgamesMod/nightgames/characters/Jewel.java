@@ -5,12 +5,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 
-import nightgames.characters.body.AnalPussyPart;
+import nightgames.characters.body.AssPart;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.FacePart;
 import nightgames.characters.body.PussyPart;
+import nightgames.characters.body.mods.TrainedHoleMod;
 import nightgames.characters.custom.CharacterLine;
 import nightgames.combat.Combat;
 import nightgames.combat.CombatScene;
@@ -231,7 +232,6 @@ public class Jewel extends BasePersonality {
         // 37 - Choice 1, trait 3
         character.getStamina().setMax(100);
         character.getArousal().setMax(70);
-        growth.addBodyPart(40, new AnalPussyPart());
         // 39 - Choice 2, trait 2
 
         growth.addTrait(43, Trait.analTraining3);
@@ -249,6 +249,13 @@ public class Jewel extends BasePersonality {
             if (!character.has(Trait.fighter) && (Global.checkFlag(JEWEL_MARTIAL_FOCUS) || Global.checkFlag(JEWEL_ANAL_FOCUS))) {
                 advance();
             }
+        }
+        if (character.getLevel() >= 40 && Global.checkFlag(JEWEL_ANAL_FOCUS)) {
+            if (!character.body.getRandomAss().getMods(character).stream().anyMatch(mod -> mod.countsAs(character, new TrainedHoleMod()))) {
+                character.body.addReplace(character.body.getRandomAss().applyMod(new TrainedHoleMod()), 1);
+            }
+        } else if (character.body.getRandomAss().getMods(character).stream().anyMatch(mod -> mod.countsAs(character, new TrainedHoleMod()))) {
+            character.body.addReplace(AssPart.generateGeneric(), 1);
         }
         super.rest(time);
         if (!(character.has(Item.Crop) || character.has(Item.Crop2)) && character.money >= 200) {
@@ -396,7 +403,7 @@ public class Jewel extends BasePersonality {
         });
 
         character.addLine(CharacterLine.LEVEL_DRAIN_LINER, (c, self, other) -> {
-            String part = Global.pickRandom(c.getStance().partsFor(c, self)).map(bp -> bp.getType()).orElse("pussy");
+            String part = Global.pickRandom(c.getStance().getPartsFor(c, self, other)).map(bp -> bp.getType()).orElse("pussy");
             if (other.getLevel() < self.getLevel() - 5) {
                 return "Jewel smirks at you with a sadistic grin on her face as her " + self.body.getRandom(part).describe(self) 
                                 + " plunders your strength once again. <i>\"Poor {other:guy}, being dominated by someone who used to be so much weaker than you.\"</i> "
@@ -427,7 +434,7 @@ public class Jewel extends BasePersonality {
     @Override
     public String victory(Combat c, Result flag) {
         Character other = c.getOpponent(character);
-        Collection<BodyPart> otherOrgans = c.getStance().partsFor(c, other);
+        Collection<BodyPart> otherOrgans = c.getStance().getPartsFor(c, other, other);
         if (BodyPart.hasType(otherOrgans, "ass") && c.getStance().anallyPenetrated(c, other)) {
             BodyPart insertable = character.body.getRandomInsertable();
             String selfODesc = insertable == null ? "[none]" : insertable.describe(character);

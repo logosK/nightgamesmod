@@ -8,21 +8,20 @@ import nightgames.global.Global;
 import nightgames.items.clothing.Clothing;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.pet.PetCharacter;
-import nightgames.pet.arms.RoboArm;
+import nightgames.pet.arms.Arm;
 
 public class DefabRay extends ArmSkill {
-
     public DefabRay() {
         super("Defabrication Ray", 30);
     }
-    
+
     @Override
-    public boolean usable(Combat c, RoboArm arm, Character owner, Character target) {
-        return super.usable(c, arm, owner, target);
+    public boolean usable(Combat c, Arm arm, Character owner, Character target) {
+        return super.usable(c, arm, owner, target) && !target.outfit.isNude();
     }
 
     @Override
-    public boolean resolve(Combat c, RoboArm arm, Character owner, Character target) {
+    public boolean resolve(Combat c, Arm arm, Character owner, Character target) {
         if (target.outfit.isNude()) return resolveBackup(c, arm, owner, target);
         boolean sub = c.getStance().dom(owner);
         boolean success = sub || Global.random(100) < 10 + owner.get(Attribute.Science);
@@ -40,11 +39,10 @@ public class DefabRay extends ArmSkill {
                             , owner, target, arm.getName(), item.toString()));
             return true;
         }
-        
         return false;
     }
     
-    public boolean resolveBackup(Combat c, RoboArm arm, Character owner, Character target) {
+    public boolean resolveBackup(Combat c, Arm arm, Character owner, Character target) {
         boolean sub = c.getStance().dom(owner);
         boolean success = sub || Global.random(100) < 10 + owner.get(Attribute.Science);
         double damage = (sub?20:10) + owner.get(Attribute.Science);

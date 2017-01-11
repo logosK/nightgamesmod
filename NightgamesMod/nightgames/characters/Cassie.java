@@ -9,7 +9,6 @@ import nightgames.actions.Movement;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.FacePart;
-import nightgames.characters.body.MouthPussyPart;
 import nightgames.characters.body.PussyPart;
 import nightgames.characters.custom.CharacterLine;
 import nightgames.combat.Combat;
@@ -139,7 +138,7 @@ public class Cassie extends BasePersonality {
         });
 
         character.addLine(CharacterLine.LEVEL_DRAIN_LINER, (c, self, other) -> {
-            String part = Global.pickRandom(c.getStance().partsFor(c, self)).map(bp -> bp.getType()).orElse("pussy");
+            String part = Global.pickRandom(c.getStance().getPartsFor(c, self, other)).map(bp -> bp.getType()).orElse("pussy");
             if (other.getLevel() < self.getLevel() - 5) {
                 return "{self:SUBJECT} grins at you as your strength is once again sucked into {self:possessive} devilish " + part 
                                 + ", <i>\"{other:NAME}, I truly love you, you know that? But this... this is no longer a competition. "
@@ -204,7 +203,7 @@ public class Cassie extends BasePersonality {
         character.getGrowth().addTrait(11, Trait.experttongue);
         character.getGrowth().addTrait(25, Trait.tongueTraining2);
         character.getGrowth().addTrait(38, Trait.tongueTraining3);
-        character.getGrowth().addBodyPart(57, new MouthPussyPart());
+        character.getGrowth().addTrait(57, Trait.addictivefluids);
     }
     private void useEnchantressBonus() {
         Global.flag(CASSIE_ENCHANTRESS_FOCUS);
@@ -416,7 +415,7 @@ public class Cassie extends BasePersonality {
     @Override
     public String victory(Combat c, Result flag) {
         if (c.getOpponent(character).getLastOrgasmPart() instanceof BreastsPart || c.getStance().vaginallyPenetrated(c,c.getOpponent(character))) dominance +=1;
-        if (c.getOpponent(character).getLastOrgasmPart() instanceof BreastsPart && c.getOpponent(character).body.getLargestBreasts().getSensitivity(null)>5) {
+        if (c.getOpponent(character).getLastOrgasmPart() instanceof BreastsPart && c.getOpponent(character).body.getLargestBreasts().getSensitivity(null, character.body.getRandom("hands"))>5) {
             character.arousal.empty();
             return "incomplete, should be a series of scenes including one where Cassie makes the player lactate magicmilk that only affects themself and prevents breast size reduction"
                             + "and one where Cassie gives the player a bra that reduces breast sensitivity to reasonable levels while worn, but also makes them moo on orgasm, and vibrates while fighting Cassie";
@@ -465,7 +464,7 @@ public class Cassie extends BasePersonality {
                             + " to you. <i>\"Can you touch my nipples more? I really like that.\"</i> You reach up and play with "
                             + "her breasts as she continues to grind against you. She stops your pillow talk by kissing you desperately just before you feel her body tense up in orgasm. She collapses on top of you and kisses "
                             + "your cheek contently. <i>\"I'll keep practicing and make you feel even better next time, \"</i> she tells you happily. <i>\"I promise.\"</i> ";
-        } else if (dominance >= 10 && minDominance==0 && c.getStance().vaginallyPenetrated(c,c.getOpponent(character)) && character.has(Trait.hypnoticsemen) && character.has(Trait.enthrallingjuices) && character.body.getLargestCock().getMod(character).countsAs(character, CockMod.runic)) {
+        } else if (dominance >= 10 && minDominance==0 && c.getStance().vaginallyPenetrated(c,c.getOpponent(character)) && character.has(Trait.hypnoticsemen) && character.has(Trait.enthrallingjuices) && character.body.getLargestCock().getMods(character).contains(CockMod.runic)) {
             minDominance=10;
             return "Cassie pumps her dick into your vagina faster and faster as she nears climax, but at this point it's clear you've lost. Your back arches as you orgasm, your "
                             + "vagina clenching around her magical meat. As you collapse limply to the ground, Cassie thrusts into your cunt as deep as she can go, and then "

@@ -602,7 +602,7 @@ public class Body implements Cloneable {
             return 0;
         }
 
-        double sensitivity = target.getSensitivity(with);
+        double sensitivity = target.getSensitivity(opponent, with);
         if (character.has(Trait.desensitized)) {
             sensitivity -= .5;
         }

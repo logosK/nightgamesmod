@@ -24,11 +24,13 @@ public interface BodyPart {
 
     public String describe(Character c);
 
+    public String adjective();
+
     public double getHotness(Character self, Character opponent);
 
     public double getPleasure(Character self, BodyPart target);
 
-    public double getSensitivity(BodyPart target);
+    public double getSensitivity(Character self, BodyPart target);
 
     @Override
     public String toString();
@@ -59,10 +61,10 @@ public interface BodyPart {
     public boolean isNotable();
 
     public BodyPart upgrade();
+    public BodyPart downgrade();
 
     public int compare(BodyPart other);
 
-    public BodyPart downgrade();
 
     double applyReceiveBonuses(Character self, Character opponent, BodyPart target, double damage, Combat c);
 
@@ -134,10 +136,10 @@ public interface BodyPart {
 
     // whether the part is modded
     public default boolean isGeneric(Character self) {
-        return getMod(self).getModType().equals("none");
+        return getMods(self).isEmpty();
     }
 
-    public BodyPartMod getMod(Character self);
+    public Collection<? extends BodyPartMod> getMods(Character self);
 
     public static boolean hasType(Collection<BodyPart> parts, String type) {
         return parts.stream().anyMatch(part -> part.isType(type));
@@ -147,8 +149,8 @@ public interface BodyPart {
         return parts.stream().allMatch(part -> part.isType(type));
     }
 
-    public default boolean moddedPartCountsAs(Character self, BodyPartMod mod) {
-        return getMod(self).countsAs(self, mod);
+    public default boolean moddedPartCountsAs(Character self, BodyPartMod comparedMod) {
+        return getMods(self).stream().anyMatch(mod -> mod.countsAs(self, comparedMod));
     }
 
     static List<String> genitalTypes = Arrays.asList("pussy", "cock", "ass");

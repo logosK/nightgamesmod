@@ -1,5 +1,8 @@
 package nightgames.characters.body;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
@@ -130,7 +133,7 @@ public enum BreastsPart implements BodyPart {
     }
 
     @Override
-    public double getSensitivity(BodyPart target) {
+    public double getSensitivity(Character self, BodyPart target) {
         if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) System.out.println("checking sensitivity of breasts: "+name+" bonusSens: "+bonusSensitivity);
         return .75 + size * .2 + bonusSensitivity;
     }
@@ -249,7 +252,7 @@ public enum BreastsPart implements BodyPart {
                 } else if (addictionLevel < Addiction.HIGH_THRESHOLD) {
                     // dependent
                     c.write(opponent,
-                                    Global.format(Global.capitalizeFirstLetter(opponent.nameOrPossessivePronoun()) + " desperately {other:action:suck|sucks} at {self:name-possessive} milky teats as soon as they're available. {other:POSSESSIVE} burning need to imbibe {self:possessive} sweet milk is overpowering any other thoughts. "
+                                    Global.format("{other:NAME} desperately {other:action:suck|sucks} at {self:name-possessive} milky teats as soon as they're available. {other:POSSESSIVE} burning need to imbibe {self:possessive} sweet milk is overpowering any other thoughts. "
                                                     + "{self:SUBJECT} smiles at {other:direct-object} and gently cradles {other:possessive} head, rocking {other:direct-object} back and forth while {other:subject} drink. "
                                                     + "The warm milk settles in {other:possessive} belly, slowly setting {other:possessive} body on fire with arousal.",
                                     self, opponent));
@@ -337,7 +340,12 @@ public enum BreastsPart implements BodyPart {
     }
 
     @Override
-    public BodyPartMod getMod(Character self) {
-        return BodyPartMod.noMod;
+    public Collection<? extends BodyPartMod> getMods(Character self) {
+        return Collections.emptySet();
+    }
+
+    @Override
+    public String adjective() {
+        return "mammary";
     }
 }

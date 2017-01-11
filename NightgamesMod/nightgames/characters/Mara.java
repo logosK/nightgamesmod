@@ -44,7 +44,7 @@ public class Mara extends BasePersonality {
         super("Mara", charConfig, commonConfig, true);
         constructLines();
     }
-    
+
     private void constructLines () {
         character.addLine(CharacterLine.BB_LINER, (c, self, other) -> { 
             return "{self:SUBJECT} gives you a look of not quite genuine concern. <i>\"That must have really hurt. Sorry for scrambling your eggs. I feel really bad about that. Also for "
@@ -119,7 +119,7 @@ public class Mara extends BasePersonality {
          });
 
         character.addLine(CharacterLine.LEVEL_DRAIN_LINER, (c, self, other) -> {
-            String part = Global.pickRandom(c.getStance().partsFor(c, self)).map(bp -> bp.describe(self)).orElse("pussy");
+            String part = Global.pickRandom(c.getStance().getPartsFor(c, self, other)).map(bp -> bp.describe(self)).orElse("pussy");
             if (other.getLevel() < self.getLevel() - 5) {
                 return "\"<i>Annddd... here it comes!</i>\" {self:SUBJECT} happily squeals as the now familiar sensation of your strength entering {self:possessive} flows through the petite girl. "
                                 + "You try struggling out, but {self:subject} simply holds you down with a single hand. \"<i>Now now, don't get antsy! "
@@ -252,7 +252,7 @@ public class Mara extends BasePersonality {
                         }))));
 
         character.addCombatScene(new CombatScene(
-                        (c, self, other) -> self.getLevel() >= 10 && !Global.checkFlag(MARA_OCTO_FOCUS)
+                        (c, self, other) -> self.getLevel() >= 20 && !Global.checkFlag(MARA_OCTO_FOCUS)
                                         && !Global.checkFlag(MARA_MIND_CONTROL_FOCUS),
                         (c, self, other) -> Global.format(
                                         "You and {self:name} are both getting back up after your match,"

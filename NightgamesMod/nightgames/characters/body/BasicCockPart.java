@@ -1,6 +1,8 @@
 package nightgames.characters.body;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 
 import com.google.gson.JsonObject;
@@ -110,7 +112,7 @@ public enum BasicCockPart implements CockPart {
     }
 
     @Override
-    public double getSensitivity(BodyPart target) {
+    public double getSensitivity(Character self, BodyPart target) {
         return Math.log(size / 5 + 1) / Math.log(2);
     }
 
@@ -270,8 +272,8 @@ public enum BasicCockPart implements CockPart {
     }
 
     @Override
-    public BodyPartMod getMod(Character self) {
-        return BodyPartMod.noMod;
+    public Collection<? extends BodyPartMod> getMods(Character self) {
+        return Collections.emptySet();
     }
 
     @Override
@@ -280,5 +282,10 @@ public enum BasicCockPart implements CockPart {
             return this;
         }
         return new ModdedCockPart(this, mod);
+    }
+
+    @Override
+    public String adjective() {
+        return "phallic";
     }
 }

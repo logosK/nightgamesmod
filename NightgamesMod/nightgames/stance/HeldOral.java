@@ -1,6 +1,10 @@
 package nightgames.stance;
 
+import java.util.Collections;
+import java.util.List;
+
 import nightgames.characters.Character;
+import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Flag;
 import nightgames.global.Global;
@@ -25,6 +29,13 @@ public class HeldOral extends AbstractFacingStance {
     @Override
     public boolean getUp(Character c) {
         return c == top;
+    }
+    public List<BodyPart> topParts(Combat c) {
+        return Collections.singletonList(top.body.getRandom("mouth"));
+    }
+
+    public List<BodyPart> bottomParts() {
+        return Collections.singletonList(top.body.getRandom("cock"));
     }
 
     @Override
@@ -88,7 +99,7 @@ public class HeldOral extends AbstractFacingStance {
 
     @Override
     public boolean inserted(Character c) {
-        return false;
+        return c == bottom;
     }
 
     @Override

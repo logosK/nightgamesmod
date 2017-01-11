@@ -1,5 +1,8 @@
 package nightgames.characters.body;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Trait;
@@ -11,34 +14,57 @@ import nightgames.status.Stsflag;
 import nightgames.status.Trance;
 
 public class AssPart extends GenericBodyPart {
-    /**
-     *
-     */
-    public static AssPart generic = new AssPart("ass", 0, 1.2, 1);
-    public double size;
-    public static double SIZE_SMALL = 0;
-    public static double SIZE_NORMAL = 1;
-    public static double SIZE_BIG = 2;
-    public static double SIZE_HUGE = 3;
+    public static int SIZE_SMALL = 0;
+    public static int SIZE_NORMAL = 1;
+    public static int SIZE_BIG = 2;
+    public static int SIZE_HUGE = 3;
+    public static AssPart generic = new AssPart("ass", 0, 1.2, SIZE_NORMAL);
+    private int size;
+    private static final Map<Integer, String> SIZE_DESCRIPTIONS = new HashMap<>(); 
+    static {
+        SIZE_DESCRIPTIONS.put(SIZE_SMALL, "small ");
+        SIZE_DESCRIPTIONS.put(SIZE_NORMAL, "");
+        SIZE_DESCRIPTIONS.put(SIZE_BIG, "large ");
+        SIZE_DESCRIPTIONS.put(SIZE_HUGE, "huge ");
+    }
 
-    public AssPart(String desc, String longDesc, double hotness, double pleasure, double sensitivity, double size,
-                    boolean notable) {
-        super(desc, longDesc, hotness, pleasure, sensitivity, notable, "ass", "a ");
+    public static AssPart generateGeneric() {
+        return new AssPart("ass", 0, 1.2, 1);
+    }
+
+    public AssPart(String desc, String longDesc, double hotness, double pleasure, double sensitivity, int size) {
+        super(desc, longDesc, hotness, pleasure, sensitivity, false, "ass", "a ");
         this.size = size;
     }
 
     public AssPart(String desc, double hotness, double pleasure, double sensitivity) {
-        super(desc, "", hotness, pleasure, sensitivity, false, "ass", "a ");
-        this.size = SIZE_NORMAL;
+        this(desc, "", hotness, pleasure, sensitivity, SIZE_NORMAL);
     }
 
     public AssPart() {
-        super(generic);
+        this("ass", 0, 1.2, 1);
     }
 
     @Override
     public double getFemininity(Character c) {
         return size - SIZE_NORMAL;
+    }
+
+    @Override
+    public int mod(Attribute a, int total) { 
+        int bonus = super.mod(a, total);
+        if (size > SIZE_NORMAL & a == Attribute.Seduction) {
+            bonus += (size - SIZE_NORMAL) * 2;
+        }
+        if (size > SIZE_BIG & a == Attribute.Speed) {
+            bonus += (size - SIZE_BIG);
+        }
+        return bonus;
+    }
+
+    @Override
+    public String fullDescribe(Character c) {
+        return SIZE_DESCRIPTIONS.get(size) + describe(c);
     }
 
     @Override
@@ -52,7 +78,7 @@ public class AssPart extends GenericBodyPart {
 
     @Override
     public double applyBonuses(Character self, Character opponent, BodyPart target, double damage, Combat c) {
-        double bonus = 0;
+        double bonus = super.applyBonuses(self, opponent, target, damage, c);
         if (self.has(Trait.oiledass) && c.getStance().anallyPenetratedBy(c, self, opponent)) {
             c.write(self, Global.format(
                             "{self:NAME-POSSESSIVE} naturally oiled asshole swallows {other:name-possessive} cock with ease.",
@@ -97,6 +123,7 @@ public class AssPart extends GenericBodyPart {
 
     @Override
     public void tickHolding(Combat c, Character self, Character opponent, BodyPart otherOrgan) {
+        super.tickHolding(c, self, opponent, otherOrgan);
         if (self.has(Trait.autonomousAss)) {
             c.write(self, Global.format(
                             "{self:NAME-POSSESSIVE} " + fullDescribe(self)
@@ -109,7 +136,7 @@ public class AssPart extends GenericBodyPart {
 
     @Override
     public double applyReceiveBonuses(Character self, Character opponent, BodyPart target, double damage, Combat c) {
-        double bonus = 0;
+        double bonus = super.applyReceiveBonuses(self, opponent, target, damage, c);
         if (opponent.has(Trait.asshandler) || opponent.has(Trait.anatomyknowledge)) {
             c.write(opponent,
                             Global.format("{other:NAME-POSSESSIVE} expert handling of {self:name-possessive} ass causes {self:subject} to shudder uncontrollably.",
@@ -167,24 +194,38 @@ public class AssPart extends GenericBodyPart {
         return c.has(Trait.oiledass) || c.is(Stsflag.oiled);
     }
 
-    @Override
-    public String getFluids(Character c) {
+    public String getFluidsNoMods(Character c) {
         if (c.has(Trait.oiledass)) {
             return "oils";
-        } else {
-            return "";
         }
+        return "";
     }
 
     @Override
-    public boolean isErogenous() {
+    public boolean getDefaultErogenous() {
         return true;
     }
 
     @Override
     public double priority(Character c) {
-        return (c.has(Trait.tight) ? 1 : 0) + (c.has(Trait.holecontrol) ? 1 : 0) + (c.has(Trait.oiledass) ? 1 : 0)
-                        + (c.has(Trait.autonomousAss) ? 4 : 0);
+            return (c.has(Trait.tight) ? 1 : 0) + (c.has(Trait.holecontrol) ? 1 : 0) + (c.has(Trait.oiledass) ? 1 : 0)
+                            + (c.has(Trait.autonomousAss) ? 4 : 0);
     }
 
+    @Override
+    public String adjective() {
+        return "anal";
+    }
+
+    public BodyPart upgrade() {
+        AssPart newPart = (AssPart) instance();
+        newPart.size = Global.clamp(newPart.size + 1, SIZE_SMALL, SIZE_HUGE);
+        return newPart;
+    }
+
+    public BodyPart downgrade() {
+        AssPart newPart = (AssPart) instance();
+        newPart.size = Global.clamp(newPart.size - 1, SIZE_SMALL, SIZE_HUGE);
+        return newPart;
+    }
 }
