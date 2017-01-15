@@ -60,8 +60,8 @@ import nightgames.json.JsonUtils;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.pet.CharacterPet;
 import nightgames.pet.PetCharacter;
-import nightgames.pet.arms.ArmManager;
 import nightgames.pet.arms.ArmType;
+import nightgames.pet.arms.ArmManager;
 import nightgames.skills.Command;
 import nightgames.skills.AssFuck;
 import nightgames.skills.Nothing;
@@ -2025,16 +2025,16 @@ public abstract class Character extends Observable implements Cloneable {
                 if (!leveldrainLiner.isEmpty()) {
                     c.write(opponent, leveldrainLiner);
                 }
-                int xpStolen = getXP();
-                c.write(dong());
-                xp = Math.max(xp, getXPReqToNextLevel() - 1);
                 int gained;
                 if (Global.checkFlag(Flag.hardmode)) {
                     drain(c, opponent, 30 + Global.random(50));
-                    gained = opponent.getXPReqToNextLevel() + xpStolen;
+                    gained = opponent.getXPReqToNextLevel();
                 } else {
-                    gained = Math.max(opponent.getXPReqToNextLevel(), xpStolen);
+                    gained = opponent.getXPReqToNextLevel();
                 }
+                int xpStolen = getXP();
+                c.write(dong());
+                xp = Math.max(xp, Math.min(getXPReqToNextLevel() - 1, gained - xpStolen));
                 opponent.gainXPPure(gained);
             } else {
                 c.write(opponent, String.format("<b>%s %s pulses, but fails to"
@@ -2099,6 +2099,29 @@ public abstract class Character extends Observable implements Cloneable {
                     + "<i>\"See {other:name}, I'm not a greedy {self:girl}. I can share with my friends.\"</i>"
                     );
 
+    private void handleInserted(Combat c) {
+        List<Character> partners = c.getStance().getAllPartners(c, this);
+        partners.forEach(opponent -> {
+            Iterator<BodyPart> selfOrganIt;
+            Iterator<BodyPart> otherOrganIt;
+            selfOrganIt = c.getStance().getPartsFor(c, this, opponent).iterator();
+            otherOrganIt = c.getStance().getPartsFor(c, opponent, this).iterator();
+            if (selfOrganIt.hasNext() && otherOrganIt.hasNext()) {
+                BodyPart selfOrgan = selfOrganIt.next();
+                BodyPart otherOrgan = otherOrganIt.next();
+                if (has(Trait.energydrain) && selfOrgan != null && otherOrgan != null) {
+                    c.write(this, Global.format(
+                                    "{self:NAME-POSSESSIVE} body glows purple as {other:subject-action:feel|feels} {other:possessive} very spirit drained into {self:possessive} "
+                                                    + selfOrgan.describe(this) + " through your connection.",
+                                    this, opponent));
+                    int m = Global.random(5) + 5;
+                    opponent.drain(c, this, (int) this.modifyDamage(DamageType.drain, opponent, m));
+                }
+                body.tickHolding(c, opponent, selfOrgan, otherOrgan);
+            }
+        });
+    }
+
     public void eot(Combat c, Character opponent) {
         dropStatus(c, opponent);
         tick(c);
@@ -2113,22 +2136,7 @@ public abstract class Character extends Observable implements Cloneable {
         for (String s : removed) {
             cooldowns.remove(s);
         }
-        if (c.getStance().inserted()) {
-            BodyPart selfOrgan;
-            BodyPart otherOrgan;
-            selfOrgan = c.getStance().getPartsFor(c, this, opponent).iterator().next();
-            otherOrgan = c.getStance().getPartsFor(c, opponent, this).iterator().next();
-            if (has(Trait.energydrain) && selfOrgan != null && otherOrgan != null) {
-                c.write(this, Global.format(
-                                "{self:NAME-POSSESSIVE} body glows purple as {other:subject-action:feel|feels} {other:possessive} very spirit drained into {self:possessive} "
-                                                + selfOrgan.describe(this) + " through your connection.",
-                                this, opponent));
-                int m = Global.random(5) + 5;
-                opponent.drain(c, this, (int) this.modifyDamage(DamageType.drain, opponent, m));
-            }
-            // TODO this works weirdly when both have both organs.
-            body.tickHolding(c, opponent, selfOrgan, otherOrgan);
-        }
+        handleInserted(c);
         if (outfit.has(ClothingTrait.tentacleSuit)) {
             c.write(this, Global.format("The tentacle suit squirms against {self:name-possessive} body.", this,
                             opponent));
@@ -3122,7 +3130,7 @@ public abstract class Character extends Observable implements Cloneable {
         double bottomFitness = 6.0;
         // If I'm horny, I want the other guy's clothing off, so I put more
         // fitness in them
-        if (getMood() == Emotion.horny) {
+        if (getMood() == Emotion.horny || has(Trait.leveldrainer)) {
             topFitness += 6;
             bottomFitness += 8;
             // If I'm horny, I want to make the opponent cum asap, put more
@@ -3205,7 +3213,7 @@ public abstract class Character extends Observable implements Cloneable {
         double bottomFitness = 4.0;
         // If I'm horny, I don't care about my clothing, so I put more less
         // fitness in them
-        if (getMood() == Emotion.horny || is(Stsflag.feral)) {
+        if (getMood() == Emotion.horny || is(Stsflag.feral) | has(Trait.leveldrainer)) {
             topFitness = .5;
             bottomFitness = .5;
             // If I'm horny, I put less importance on my own arousal
@@ -3902,5 +3910,9 @@ public abstract class Character extends Observable implements Cloneable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean hasStatusVariant(String sourceString) {
+        return status.stream().anyMatch(s -> s.getVariant().equals(sourceString));
     }
 }

@@ -382,7 +382,7 @@ public class Body implements Cloneable {
         if (parts.size() == 0) {
             return null;
         }
-        CockPart largest = BasicCockPart.tiny;
+        CockPart largest = new GenericCockPart(GenericCockPart.SIZE_TINY);
         for (BodyPart part : parts) {
             CockPart cock = (CockPart) part;
             largest = cock.getSize() >= largest.getSize() ? cock : largest;
@@ -921,7 +921,7 @@ public class Body implements Cloneable {
         }
     }
 
-    private void replacePussyWithCock(BasicCockPart basicCock) {
+    private void replacePussyWithCock(CockPart basicCock) {
         PussyPart pussy = getRandomPussy();
         removeAll("pussy");
         add(pussy == null ? basicCock : basicCock.applyMod(pussy.getEquivalentCockMod()));
@@ -933,7 +933,7 @@ public class Body implements Cloneable {
         add(cock == null ? PussyPart.normal : cock.getEquivalentPussy());
     }
 
-    private void addEquivalentCockAndPussy(BasicCockPart basicCock) {
+    private void addEquivalentCockAndPussy(CockPart basicCock) {
         boolean hasPussy = getRandomPussy() != null;
         boolean hasCock = getRandomCock() != null;
         if (!hasPussy) {
@@ -1005,7 +1005,7 @@ public class Body implements Cloneable {
         switch (newSex) {
             case male:
                 femininity = Math.min(0, femininity);
-                replacePussyWithCock(BasicCockPart.average);
+                replacePussyWithCock(new GenericCockPart(GenericCockPart.SIZE_AVERAGE));
                 addBallsIfNeeded();
                 addReplace(BreastsPart.flat, 1);
                 break;
@@ -1016,18 +1016,18 @@ public class Body implements Cloneable {
                 break;
             case herm:
                 femininity = Math.max(1, femininity);
-                addEquivalentCockAndPussy(BasicCockPart.big);
+                addEquivalentCockAndPussy(new GenericCockPart(GenericCockPart.SIZE_BIG));
                 growBreastsUpTo(BreastsPart.b);
                 break;
             case shemale:
                 femininity = Math.max(1, femininity);
-                replacePussyWithCock(BasicCockPart.big);
+                replacePussyWithCock(new GenericCockPart(GenericCockPart.SIZE_BIG));
                 growBreastsUpTo(BreastsPart.d);
                 addBallsIfNeeded();
                 break;
             case trap:
                 femininity = Math.max(2, femininity);
-                replacePussyWithCock(BasicCockPart.small);
+                replacePussyWithCock(new GenericCockPart(GenericCockPart.SIZE_SMALL));
                 addReplace(BreastsPart.flat, 1);
                 addBallsIfNeeded();
                 break;
@@ -1054,7 +1054,7 @@ public class Body implements Cloneable {
         }
         if (sex.hasCock()) {
             if (!has("cock")) {
-                add(BasicCockPart.average);
+                add(new GenericCockPart(GenericCockPart.SIZE_AVERAGE));
             }
         }
         if (sex.hasBalls()) {
