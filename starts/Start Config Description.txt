@@ -48,4 +48,4 @@ genitals: (again, both are optional)
 	
 cock:
 	type			Defaults to basic, can also be slimy, runic, blessed, incubus, primal, bionic, enlightened
-	length			Defaults to average, can also be tiny, small, big, huge, massive	
+	length			Defaults to 6, can also be tiny, small, 8, huge, massive	

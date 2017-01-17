@@ -8,10 +8,10 @@
 			"Seduction":50,
 			"Cunning":25,
 			"Perception":9,
-			"Arcane":16,
-			"Dark":16,
-			"Submissive":31,
-			"Nymphomania":16
+			"Arcane":1,
+			"Dark":1,
+			"Submissive":16,
+			"Nymphomania":1
 		},
 		"attribute_points": 0,
 		"level":20,
@@ -39,10 +39,10 @@
 			"level":20,
 			"rank":1,
 			"attributes": {
-				"Power": 36,
-				"Seduction": 34,
-				"Cunning": 35,
-				"Slime": 65,
+				"Power": 5,
+				"Seduction": 5,
+				"Cunning": 5,
+				"Slime": 5,
 				"Speed": 4
 			},
 			"growth": {
@@ -55,10 +55,10 @@
 			"body":{
 				"genitals": {
 					"cock": {
-						"type":"basic",
-						"length":6
+						"type":"slimy",
+						"length":"6"
 					},
-					"pussy": "normal"
+					"pussy": "gooey"
 
 				}
 			},
@@ -82,10 +82,10 @@
 			"level":20,
 			"rank":1,
 			"attributes": {
-				"Power": 26,
-				"Seduction": 50,
-				"Cunning": 33,
-				"Divinity": 61
+				"Power": 5,
+				"Seduction": 5,
+				"Cunning": 5,
+				"Divinity": 5
 			},
 			"growth": {
 				"arousal": 2,
@@ -98,7 +98,7 @@
 				"genitals": {
 					"cock": {
 						"type":"blessed",
-						"length":6
+						"length":"6"
 					},
 					"pussy": "divine"
 
@@ -126,10 +126,10 @@
 			"level":20,
 			"rank":1,
 			"attributes": {
-				"Power": 33,
-				"Seduction": 43,
-				"Cunning": 33,
-				"Arcane": 61
+				"Power": 5,
+				"Seduction": 5,
+				"Cunning": 5,
+				"Arcane": 5
 			},
 			"growth": {
 				"arousal": 4,
@@ -143,7 +143,7 @@
 				"genitals": {
 					"cock": {
 						"type":"runic",
-						"length":6
+						"length":"6"
 					},
 					"pussy": "normal"
 
@@ -174,18 +174,18 @@
 			"level":20,
 			"rank":1,
 			"attributes": {
-				"Power": 42,
-				"Seduction": 33,
-				"Cunning": 30,
+				"Power": 5,
+				"Seduction": 5,
+				"Cunning": 5,
 				"Speed": 6,
-				"Fetish": 65
+				"Fetish": 5
 			},
 			"body": {
 				"gender":"herm",
 				"genitals": {
 					"cock": {
 						"type":"primal",
-						"length":8
+						"length":"8"
 					},
 					"pussy":"normal"
 				},
@@ -220,10 +220,10 @@
 			"level":20,
 			"rank":1,
 			"attributes": {
-				"Power": 50,
-				"Seduction": 29,
-				"Cunning": 30,
-				"Ki": 61
+				"Power": 5,
+				"Seduction": 5,
+				"Cunning": 5,
+				"Ki": 5
 			},
 			"growth": {
 				"arousal": 5,
@@ -238,7 +238,7 @@
 
 					"cock": {
 						"type":"enlightened",
-						"length":6
+						"length":"6"
 					},
 					"pussy":"fiery"
 				}
@@ -262,18 +262,18 @@
 			"level":20,
 			"rank":1,
 			"attributes": {
-				"Power": 50,
-				"Seduction": 27,
-				"Cunning": 28,
+				"Power": 5,
+				"Seduction": 5,
+				"Cunning": 5,
 				"Speed": 8,
-				"Animism": 62
+				"Animism": 5
 			},
 			"body": {
 				"archetype":"CAT",
 				"genitals": {
 					"cock": {
 						"type":"primal",
-						"length":6
+						"length":"6"
 					},
 					"pussy": "feral"
 
@@ -309,11 +309,11 @@
 			"level":20,
 			"rank":1,
 			"attributes": {
-				"Power": 30,
-				"Seduction": 30,
-				"Cunning": 50,
+				"Power": 5,
+				"Seduction": 5,
+				"Cunning": 5,
 				"Perception": 7,
-				"Science": 61
+				"Science": 5
 			},
 			"growth": {
 				"willpower": 1,
@@ -324,7 +324,7 @@
 				"genitals": {
 					"cock": {
 						"type":"bionic",
-						"length":6
+						"length":"6"
 					},
 					"pussy": "cybernetic"
 
@@ -354,17 +354,17 @@
 			"level":20,
 			"rank":1,
 			"attributes": {
-				"Power": 25,
-				"Seduction": 44,
-				"Cunning": 27,
-				"Dark": 65
+				"Power": 5,
+				"Seduction": 5,
+				"Cunning": 5,
+				"Dark": 5
 			},
 			"body": {
 				"archetype":"DEMON",
 				"genitals": {
 					"cock": {
 						"type":"incubus",
-						"length":6
+						"length":"6"
 					},
 					"pussy": "succubus"
 				}
