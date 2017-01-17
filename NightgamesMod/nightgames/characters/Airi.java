@@ -163,14 +163,23 @@ public class Airi extends BasePersonality {
                             && (Global.checkFlag(AIRI_SLIME_FOCUS) || Global.checkFlag(AIRI_MIMICRY_FOCUS));
         }, (c, self, player) -> "",
                 Arrays.asList(
-                        new CombatSceneChoice("Queen Slime", (c, self, other) -> {
+                        new CombatSceneChoice("[Placeholder] Picked slime", (c, self, other) -> {
                             c.write("");
                             useReplication();
                             return true;
                         }),
-                        new CombatSceneChoice("Slime Carrier", (c, self, other) -> {
+                        new CombatSceneChoice("[Placeholder] Picked slime", (c, self, other) -> {
                             c.write(Global.format("", self, other));
                             useTentacles();
+                            return true;
+                        }),
+                        new CombatSceneChoice("[Placeholder] Both? [Hard Mode]", (c, self, other) -> {
+                            c.write("[Placeholder] Picked both");
+                            useReplication();
+                            useTentacles();
+                            character.getGrowth().extraAttributes += 1;
+                            // some compensation for the added difficulty. She gets 6 traits and 2 attribute points/level, and you only get 2 traits, but you are fighting more people than just her.
+                            Global.getPlayer().getGrowth().addTraitPoints(new int[]{21,27},Global.getPlayer());
                             return true;
                         })
                     )

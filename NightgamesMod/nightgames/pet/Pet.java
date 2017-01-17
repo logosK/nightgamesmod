@@ -7,7 +7,7 @@ import nightgames.global.Global;
 public abstract class Pet implements Cloneable {
     private String name;
     private PetCharacter self;
-    private Ptype type;
+    protected Ptype type;
     protected Character owner;
     private int power;
     private int ac;

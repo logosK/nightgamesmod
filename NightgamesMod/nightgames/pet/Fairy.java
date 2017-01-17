@@ -22,6 +22,7 @@ public class Fairy extends Pet {
     public Fairy(Character owner, Ptype gender, int power, int ac) {
         super("faerie", owner, gender, power, ac);
         this.gender=gender;
+        System.out.println(gender);
     }
 
     @Override
@@ -115,7 +116,7 @@ public class Fairy extends Pet {
         c.removePet(getSelf());
     }
     
-    private CharacterSex getCharacterSex() {
+    private static CharacterSex getCharacterSex(Ptype gender) {
         switch (gender) {
             case fairyfem:
                 return CharacterSex.female;
@@ -133,9 +134,9 @@ public class Fairy extends Pet {
         Growth growth = new Growth();
         PetCharacter self = new PetCharacter(this, owner().nameOrPossessivePronoun() + " " + getName(), getName(), growth, getPower());
         // fairies are about 20 centimeters tall
-        self.body.setHeight(22 - (gender==Ptype.fairyfem?2:0));
-        self.body.makeGenitalOrgans(getCharacterSex());
-        self.body.finishBody(getCharacterSex());
+        self.body.setHeight(22 - (type==Ptype.fairyfem?2:0));
+        self.body.makeGenitalOrgans(getCharacterSex(type));
+        self.body.finishBody(getCharacterSex(type));
         self.learn(new FairyEnergize(self));
         self.learn(new FairyHeal(self));
         self.learn(new FairyTease(self));

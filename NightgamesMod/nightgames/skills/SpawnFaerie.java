@@ -45,25 +45,18 @@ public class SpawnFaerie extends Skill {
         int ac = 4 + getSelf().get(Attribute.Arcane) / 10;
         if (getSelf().human()) {
             c.write(getSelf(), deal(c, 0, Result.normal, target));
-            switch (gender) {
-                case fairyfem:
-                    c.addPet(getSelf(), new Fairy(getSelf(), Ptype.fairyfem, power, ac).getSelf());
-                case fairymale:
-                    c.addPet(getSelf(), new Fairy(getSelf(), Ptype.fairymale, power, ac).getSelf());
-                case fairyherm:
-                default:
-                    c.addPet(getSelf(), new Fairy(getSelf(), Ptype.fairyherm, power, ac).getSelf());
-
-            }
-        } else {
-            if (target.human()) {
-                c.write(getSelf(), receive(c, 0, Result.normal, target));
-            }
-            if (gender == Ptype.fairyfem) {
-                c.addPet(getSelf(), new FairyFem(getSelf(), power, ac).getSelf());
-            } else {
-                c.addPet(getSelf(), new FairyMale(getSelf(), power, ac).getSelf());
-            }
+        }
+        if (target.human()) {
+            c.write(getSelf(), receive(c, 0, Result.normal, target));
+        }
+        switch (gender) {
+            case fairyfem:
+                c.addPet(getSelf(), new Fairy(getSelf(), Ptype.fairyfem, power, ac).getSelf());
+            case fairymale:
+                c.addPet(getSelf(), new Fairy(getSelf(), Ptype.fairymale, power, ac).getSelf());
+            case fairyherm:
+            default:
+                c.addPet(getSelf(), new Fairy(getSelf(), Ptype.fairyherm, power, ac).getSelf());
         }
         return true;
     }
@@ -82,6 +75,8 @@ public class SpawnFaerie extends Skill {
     public String getLabel(Combat c) {
         if (gender == Ptype.fairyfem) {
             return "Faerie (female)";
+        } else if (gender == Ptype.fairyherm) {
+            return "Faerie (herm)";
         } else {
             return "Faerie (male)";
         }
