@@ -335,6 +335,11 @@ public abstract class Character extends Observable implements Cloneable {
                     total += 2;
                 }
                 break;
+            case Hypnosis:
+                if (has(Trait.Illusionist)) {
+                    total += getPure(Attribute.Arcane) / 2;
+                }
+                break;
             case Speed:
                 if (has(ClothingTrait.bulky)) {
                     total -= 1;
@@ -1820,7 +1825,9 @@ public abstract class Character extends Observable implements Cloneable {
         }
 
         if (times == totalTimes) {
-            List<Status> purgedStatuses = getStatuses().stream().filter(status -> status.mindgames() && status.flags().contains(Stsflag.purgable)).collect(Collectors.toList());
+            List<Status> purgedStatuses = getStatuses().stream()
+                            .filter(status -> (status.mindgames() && status.flags().contains(Stsflag.purgable)) || status.flags().contains(Stsflag.orgasmPurged))
+                            .collect(Collectors.toList());
             if (!purgedStatuses.isEmpty()){
                 if (human()) {
                     c.write(this, "Your mind clears up after your release.");
@@ -2219,25 +2226,27 @@ public abstract class Character extends Observable implements Cloneable {
         }
         
         if (opponent.has(Trait.temptingass) && !is(Stsflag.frenzied)) {
-            AssFuck fuck = new AssFuck(this);
-            if (fuck.requirements(c, opponent) && fuck.usable(c, opponent)) {
-                int chance = 20;
-                chance += Math.max(0, Math.min(15, opponent.get(Attribute.Seduction) - get(Attribute.Seduction)));
-                if (is(Stsflag.feral))
-                    chance += 10;
-                if (is(Stsflag.charmed) || opponent.is(Stsflag.alluring))
-                    chance += 5;
-                if (has(Trait.assmaster) || has(Trait.analFanatic))
-                    chance += 5;
-                Optional<BodyFetish> fetish = body.getFetish("ass");
-                if (fetish.isPresent() && opponent.has(Trait.bewitchingbottom)) {
-                    chance += 20 * fetish.get().magnitude;
-                }
-                if (chance >= Global.random(100)) {
-                    c.write(opponent, Global.format("<b>The look of {other:name-possessive} ass,"
-                                    + " so easily within {self:possessive} reach, causes"
-                                    + " {self:subject} to involuntarily switch to autopilot."
-                                    + " {self:SUBJECT} simply {self:action:NEED|NEEDS} that ass.</b>", this, opponent));
+            int chance = 20;
+            chance += Math.max(0, Math.min(15, opponent.get(Attribute.Seduction) - get(Attribute.Seduction)));
+            if (is(Stsflag.feral))
+                chance += 10;
+            if (is(Stsflag.charmed) || opponent.is(Stsflag.alluring))
+                chance += 5;
+            if (has(Trait.assmaster) || has(Trait.analFanatic))
+                chance += 5;
+            Optional<BodyFetish> fetish = body.getFetish("ass");
+            if (fetish.isPresent() && opponent.has(Trait.bewitchingbottom)) {
+                chance += 20 * fetish.get().magnitude;
+            }
+            if (chance >= Global.random(100)) {
+                AssFuck fuck = new AssFuck(this);
+                if (fuck.requirements(c, opponent) && fuck.usable(c, opponent)) {
+                    c.write(opponent,
+                                    Global.format("<b>The look of {other:name-possessive} ass,"
+                                                    + " so easily within {self:possessive} reach, causes"
+                                                    + " {self:subject} to involuntarily switch to autopilot."
+                                                    + " {self:SUBJECT} simply {self:action:NEED|NEEDS} that ass.</b>",
+                                    this, opponent));
                     add(c, new Frenzied(this, 1));
                 }
             }
@@ -2278,7 +2287,7 @@ public abstract class Character extends Observable implements Cloneable {
             c.getCombatantData(this).setIntegerFlag(APOSTLES_COUNT, c.getCombatantData(this).getIntegerFlag(APOSTLES_COUNT) + 1);
         }
 
-        if (has(Trait.Rut) && Global.random(100) < (getArousal().percent() - 50)) {
+        if (has(Trait.Rut) && Global.random(100) < (getArousal().percent() - 50) && !is(Stsflag.frenzied)) {
             c.write(this, Global.format("<b>{self:NAME-POSSESSIVE} eyes dilate and {self:possessive} body flushes as {self:pronoun-action:descend|descends} into a mating frenzy!</b>", this, opponent));
             add(c, new Frenzied(this, 3, true));
         }
@@ -2823,7 +2832,7 @@ public abstract class Character extends Observable implements Cloneable {
             dc += getStatus(Stsflag.braced).value();
         }
         if (has(Trait.stabilized)) {
-            dc += 10;
+            dc += 10 + 2 * Math.sqrt(get(Attribute.Science));
         }
         if (has(ClothingTrait.heels) && !has(Trait.proheels)) {
             dc -= 7;
@@ -3905,7 +3914,7 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public boolean isHypnotized() {
-        return is(Stsflag.drowsy) || is(Stsflag.enthralled) || is(Stsflag.charmed) || is(Stsflag.trance);
+        return is(Stsflag.drowsy) || is(Stsflag.enthralled) || is(Stsflag.charmed) || is(Stsflag.trance) || is(Stsflag.lovestruck);
     }
 
     public void setName(String name) {

@@ -63,12 +63,6 @@ public class PullOut extends Skill {
         }
         boolean isLocked = getSelf().hasStatus(Stsflag.leglocked) || getSelf().hasStatus(Stsflag.armlocked);
         int baseDifficulty = isLocked ? 17 : 10;
-        if (target.has(Trait.bewitchingbottom)) {
-            Optional<BodyFetish> fetish = getSelf().body.getFetish("ass");
-            if(fetish.isPresent()) {
-                baseDifficulty += 7 * fetish.get().magnitude;
-            }
-        }
         if (target.has(Trait.stronghold)) {
             baseDifficulty += 5;
         }
@@ -76,6 +70,12 @@ public class PullOut extends Skill {
         if (target.is(Stsflag.enthralled) || target.is(Stsflag.trance) || target.is(Stsflag.lovestruck)) {powerMod-=target.get(Attribute.Power)/2;}
         if (getSelf().is(Stsflag.bondage) || getSelf().is(Stsflag.charmed) || target.is(Stsflag.lovestruck)) {powerMod+=target.get(Attribute.Power)/4;}
 	if (c.getStance().en == Stance.anal) {
+            if (target.has(Trait.bewitchingbottom)) {
+                Optional<BodyFetish> fetish = getSelf().body.getFetish("ass");
+                if(fetish.isPresent()) {
+                    baseDifficulty += 7 * fetish.get().magnitude;
+                }
+            }
             if (!target.has(Trait.powerfulcheeks)) {
                 writeOutput(c, result, target);
                 c.setStance(c.getStance().insertRandom(c));

@@ -300,7 +300,9 @@ public class Struggle extends Skill {
 	if (target.is(Stsflag.enthralled) || target.is(Stsflag.trance) || target.is(Stsflag.lovestruck)) {diffMod-=target.get(Attribute.Power);}
 	if (getSelf().is(Stsflag.bondage) || getSelf().is(Stsflag.charmed) || target.is(Stsflag.lovestruck)) {diffMod+=target.get(Attribute.Power)/2;}
         if (getSelf().has(Trait.nymphomania)) {diffMod+=getSelf().get(Attribute.Nymphomania)/4;}
-	if ((getSelf().check(Attribute.Power, target.getStamina().get() / 2 - getSelf().getStamina().get() / 2
+	if (target.has(Trait.powerfulcheeks)) {diffMod += 5;}
+        if (target.has(Trait.bewitchingbottom)) {diffMod += 5;}
+        if ((getSelf().check(Attribute.Power, target.getStamina().get() / 2 - getSelf().getStamina().get() / 2
                         + target.get(Attribute.Power) - diffMod - getSelf().get(Attribute.Power) - getSelf().escape(c, target)))
                         && (!target.has(Trait.grappler) || Global.random(10) >= 2)) {
             if (getSelf().human()) {
@@ -322,7 +324,7 @@ public class Struggle extends Skill {
                                     target.possessiveAdjective(), getSelf().possessiveAdjective(),
                                     getSelf().directObject(), target.directObject()));
                 }
-                if (target.hasPussy()) {
+                if (target.hasPussy() && !target.has(Trait.temptingass)) {
                     new Cunnilingus(getSelf()).resolve(c, target);
                 } else {
                     new Anilingus(getSelf()).resolve(c, target);

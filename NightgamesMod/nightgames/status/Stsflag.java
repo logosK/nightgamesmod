@@ -76,4 +76,6 @@ public enum Stsflag {
     disguised,
     tentacleBound,
     atrophy,
+    pressurepoint,
+    orgasmPurged,
 }

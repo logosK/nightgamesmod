@@ -91,6 +91,9 @@ public abstract class CharacterConfiguration {
     protected final void apply(Character base) {
         name.ifPresent(n -> base.setName(n));
         money.ifPresent(m -> base.money = m);
+        traits.ifPresent(t -> { 
+            base.traits = new CopyOnWriteArrayList<>(t);
+            t.forEach(trait -> base.getGrowth().addTrait(0, trait));
         Growth bg=base.getGrowth();
         for (String key : growth.keySet()) {
             if (GROWTH_FIELDS_NAMES.contains(key)) {
@@ -110,7 +113,6 @@ public abstract class CharacterConfiguration {
             modMeters(base, l * 2); // multiplication to compensate for missed daytime gains
         });
         xp.ifPresent(x -> base.gainXP(x));
-        traits.ifPresent(t -> base.traits = new CopyOnWriteArrayList<>(t));
         Map<Attribute, Integer> start = new HashMap<>(base.att);
         Map<Attribute, Integer> deltaAtts = attributes.keySet()
                         .stream()
