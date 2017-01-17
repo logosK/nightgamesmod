@@ -650,10 +650,11 @@ public class Body implements Cloneable {
 
         Optional<BodyFetish> fetish = getFetish(with.getType());
         if (fetish.isPresent()) {
-            double fetishBonus = fetish.get().magnitude * 3;
+            double fetishBonus = fetish.get().magnitude * 3 * with.getFetishEffectiveness();
             if(with.getType()=="ass" && character.has(Trait.analFanatic)) fetishBonus/=4;
             perceptionBonus += fetishBonus;
-            character.add(c, new BodyFetish(character, opponent, with.getType(), .05));
+            // if a fetish is present, the chance of it intensifying is 4 times the chance of a new fetish occurring of that type with fetishtrainer
+            if(Global.random(100) > 4*100*with.getFetishChance()) {character.add(c, new BodyFetish(character, opponent, with.getType(), .05));}
         }
         double base = baseBonusDamage + magnitude;
 
@@ -780,8 +781,7 @@ public class Body implements Cloneable {
 
         if (opponent != null && Arrays.asList(fetishParts)
                                       .contains(with.getType())) {
-            if (opponent.has(Trait.fetishTrainer)
-                            && Global.random(100) < Math.min(opponent.get(Attribute.Fetish), 25)) {
+            if (opponent.has(Trait.fetishTrainer) && Global.random(100) < 4 * Math.min(opponent.get(Attribute.Fetish), 25) * with.getFetishChance()) {
                 c.write(character, character.subjectAction("now have", "now has") + " a new fetish, courtesy of "
                                 + opponent.directObject() + ".");
                 character.add(c, new BodyFetish(character, opponent, with.getType(), .25));
@@ -791,7 +791,7 @@ public class Body implements Cloneable {
         lastPleasured = target;
         return result;
     }
-
+    
     private static Map<Integer, Double> SEDUCTION_DIMISHING_RETURNS_CURVE = new HashMap<>();
     {
         SEDUCTION_DIMISHING_RETURNS_CURVE.put(0, .06); // 0.6

@@ -472,7 +472,8 @@ public enum Trait {
     none("", ""),
     
     //From the training miniquests
-    trainedslut("Trained Slut", "Has been trained to be a slut. Reinforcing that training causes increased submissiveness");
+    trainedslut("Trained Slut", "Has been trained to be a slut. Reinforcing that training causes increased submissiveness"),
+    buttsluttraining("not visible", "the duration of the attached status represents the level ()");
     
     private String desc;
     private TraitDescription longDesc;
@@ -620,5 +621,8 @@ public enum Trait {
         } else {
             return nullResistance;
         }
+    }
+    public boolean isVisible() {
+        return !(this==strapped || this==mindcontrolresistance || this==event || this==none || this==buttsluttraining);
     }
 }

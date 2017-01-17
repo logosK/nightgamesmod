@@ -391,4 +391,11 @@ public class GenericBodyPart implements BodyPart {
     public List<? extends BodyPartMod> getMods(Character npc) {
         return mods;
     }
+    
+    public double getFetishEffectiveness() {
+        return sensitivity==0?0.25:1.0;
+    }
+    public double getFetishChance() {
+        return sensitivity==0?0.1:0.25;
+    }
 }

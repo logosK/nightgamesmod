@@ -44,7 +44,7 @@ public class EnemyButtslutTrainingStatus extends Status {
         unflag(Stsflag.buttslutificationReady);
         if (trainingLevel > 5) {
             //affected.removelist.add(this);
-            affected.add(Trait.buttslut);
+            affected.add(trainingTrait);
             affected.add(Trait.trainedslut);
         }
     }

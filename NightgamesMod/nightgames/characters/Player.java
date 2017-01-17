@@ -136,7 +136,7 @@ public class Player extends Character {
             List<Trait> traits = new ArrayList<>(getTraits());
             traits.sort((first, second) -> first.toString()
                                                 .compareTo(second.toString()));
-            b.append(traits.stream()
+            b.append(traits.stream().filter(Trait::isVisible)
                            .map(Object::toString)
                            .collect(Collectors.joining(", ")));
         }
