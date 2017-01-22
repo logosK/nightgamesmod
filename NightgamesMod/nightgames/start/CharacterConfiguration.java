@@ -94,6 +94,7 @@ public abstract class CharacterConfiguration {
         traits.ifPresent(t -> { 
             base.traits = new CopyOnWriteArrayList<>(t);
             t.forEach(trait -> base.getGrowth().addTrait(0, trait));
+        });
         Growth bg=base.getGrowth();
         for (String key : growth.keySet()) {
             if (GROWTH_FIELDS_NAMES.contains(key)) {
