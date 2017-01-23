@@ -93,10 +93,17 @@ public class NPC extends Character {
     @Override
     public String describe(int per, Combat c) {
         String description = ai.describeAll(c, this);
+        boolean wroteStatus = false;
         for (Status s : status) {
-            description = description + "<br/>" + s.describe(c);
+            String statusDesc = s.describe(c);
+            if (!statusDesc.isEmpty()) {
+                description = description + statusDesc + "<br/>";
+                wroteStatus = true;
+            }
         }
-        description = description + "<br/><br/>";
+        if (wroteStatus) {
+            description += "<br/>";
+        }
         description = description + outfit.describe(this);
         description = description + observe(per);
         description = description + c.getCombatantData(this).getManager().describe(this);
@@ -575,7 +582,6 @@ public class NPC extends Character {
     @Override
     public void spy(Character opponent, IEncounter enc) {
         if (ai.attack(opponent)) {
-            // enc.ambush(this, opponent);
             enc.parse(Encs.ambush, this, opponent);
         } else {
             location.endEncounter();
@@ -585,10 +591,14 @@ public class NPC extends Character {
     @Override
     public void ding() {
         level++;
-        ai.ding();
+        ai.ding(this);
         String message = Global.gainSkills(this);
         if (human()) {
             Global.gui().message(message);
+        }
+        Combat currentCombat = Global.gui().combat;
+        if (currentCombat != null && currentCombat.isBeingObserved() && (currentCombat.p1 == this || currentCombat.p2 == this)) {
+            currentCombat.write(this, Global.format("{self:subject-action:have} leveled up!", this, this));
         }
     }
 
@@ -681,7 +691,7 @@ public class NPC extends Character {
                         c.write(this, Global.format(
                                         "{self:NAME-POSSESSIVE} quick wits find a gap in {other:name-possessive} hold and {self:action:slip|slips} away.",
                                         this, target));
-                        c.setStance(new Neutral(this, target), this, true);
+                        c.setStance(new Neutral(this, c.getOpponent(this)), this, true);
                     }
                 } else {
                     target.body.pleasure(this, body.getRandom("hands"), target.body.getRandomBreasts(),
@@ -856,7 +866,7 @@ public class NPC extends Character {
     @Override
     public String getPortrait(Combat c) {
         Disguised disguised = (Disguised) getStatus(Stsflag.disguised);
-        if (disguised != null) {
+        if (disguised != null && !c.isEnded()) {
             return disguised.getTarget().ai.image(c);
         }
         return ai.image(c);
@@ -927,7 +937,6 @@ public class NPC extends Character {
         moodSwing();
         decayMood();
         update();
-        notifyObservers();
     }
 
     public Map<String, List<CharacterLine>> getLines() {

@@ -11,7 +11,8 @@ import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.FacePart;
 import nightgames.characters.body.PussyPart;
-import nightgames.characters.body.mods.TrainedHoleMod;
+import nightgames.characters.body.mods.FieryMod;
+import nightgames.characters.body.mods.TrainedMod;
 import nightgames.characters.custom.CharacterLine;
 import nightgames.combat.Combat;
 import nightgames.combat.CombatScene;
@@ -99,8 +100,7 @@ public class Jewel extends BasePersonality {
         growth.addTrait(25, Trait.temptingass);
         growth.addTrait(25, Trait.assmaster);
         growth.addTrait(37, Trait.powerfulcheeks);
-        growth.addTrait(37, Trait.analFanatic);
-        //growth.addTrait(47, Trait.temptingass);
+        growth.addTrait(37, Trait.analFanatic);        
         growth.addTrait(47, Trait.autonomousAss);
     }
 
@@ -136,7 +136,7 @@ public class Jewel extends BasePersonality {
     public void setGrowth() {
         Growth growth = character.getGrowth();
         growth.stamina = 3;
-        growth.arousal = 3;
+        growth.arousal = 6;
         growth.bonusStamina = 3;
         growth.bonusArousal = 1;
         growth.willpower = 1.7f;
@@ -205,8 +205,7 @@ public class Jewel extends BasePersonality {
                             // some compensation for the added difficulty. She gets 4 traits and 3 attribute points/level, and you only get 2 traits, but you are fighting more people than just her.
                             Global.getPlayer().getGrowth().addTraitPoints(new int[] {1, 57}, Global.getPlayer());
                             return true;
-                        })
-        )));
+                        }))));
 
         preferredAttributes.add(c -> c.get(Attribute.Ki) < 15 ? Optional.of(Attribute.Ki) : Optional.empty());
         preferredAttributes.add(c -> c.get(Attribute.Ki) >= 15 && c.get(Attribute.Fetish) < 100
@@ -254,10 +253,10 @@ public class Jewel extends BasePersonality {
             }
         }
         if (character.getLevel() >= 40 && Global.checkFlag(JEWEL_ANAL_FOCUS)) {
-            if (!character.body.getRandomAss().getMods(character).stream().anyMatch(mod -> mod.countsAs(character, new TrainedHoleMod()))) {
-                character.body.addReplace(character.body.getRandomAss().applyMod(new TrainedHoleMod()), 1);
+            if (!character.body.getRandomAss().getMods().stream().anyMatch(mod -> mod.countsAs(character, new TrainedMod()))) {
+                character.body.addReplace(character.body.getRandomAss().applyMod(new TrainedMod()), 1);
             }
-        } else if (character.body.getRandomAss().getMods(character).stream().anyMatch(mod -> mod.countsAs(character, new TrainedHoleMod()))) {
+        } else if (character.body.getRandomAss().getMods().stream().anyMatch(mod -> mod.countsAs(character, new TrainedMod()))) {
             character.body.addReplace(AssPart.generateGeneric(), 1);
         }
         super.rest(time);
@@ -695,19 +694,17 @@ public class Jewel extends BasePersonality {
                             + "you cum in her hands.";
         }
         if (target.hasDick()) {
-            return String.format(
-                            "Jewel looks over %s, trying to decide what to do with %s."
-                                            + " She stands up and presses her bare foot against %s dick and balls. "
-                                            + "%s groans in pleasure and pain as Jewel roughly grinds her foot against "
-                                            + "the sensitive organs. <i>\"Do you like that? You can't help it, can "
-                                            + "you?\"</i> She grins sadistically. <i>\"I've stomped many " + c.getOpponent(character).boyOrGirl() + "s into "
-                                            + "the ground, but no matter how much pride they have, they always end "
-                                            + "up moaning in pleasure. It's like penises exist just to be dominated.\""
-                                            + "</i> You feel a chill run down your back, watching Jewel's display of"
-                                            + " dominance, but you're also rock hard. %s lets out a loud moan and "
-                                            + "covers Jewel's foot with cum.",
-                            target.getName(), target.directObject(), target.possessiveAdjective(), target.getName(),
-                            target.getName());
+            return String.format("Jewel looks over %s, trying to decide what to do with %s."
+                            + " She stands up and presses her bare foot against %s dick and balls. "
+                            + "%s groans in pleasure and pain as Jewel roughly grinds her foot against "
+                            + "the sensitive organs. <i>\"Do you like that? You can't help it, can "
+                            + "you?\"</i> She grins sadistically. <i>\"I've stomped many " + c.getOpponent(character).boyOrGirl()
+                            + "s into " + "the ground, but no matter how much pride they have, they always end "
+                            + "up moaning in pleasure. It's like penises exist just to be dominated.\""
+                            + "</i> You feel a chill run down your back, watching Jewel's display of"
+                            + " dominance, but you're also rock hard. %s lets out a loud moan and "
+                            + "covers Jewel's foot with cum.", target.getName(), target.directObject(),
+                            target.possessiveAdjective(), target.getName(), target.getName());
         }
         return "Jewel looks over " + target.getName()
                         + ", trying to decide what to do with her. She leans in and kisses the helpless girl firmly on the lips. Breaking the kiss, "
@@ -753,9 +750,11 @@ public class Jewel extends BasePersonality {
 
     public void advance() {
         character.getGrowth().addTrait(10, Trait.fighter);
-        character.body.addReplace(PussyPart.fiery, 100);
+        //character.body.addReplace(PussyPart.fiery, 100); TODO:fix
         if (character.hasDick()) {
-            character.body.addReplace(character.body.getRandomCock().applyMod(CockMod.enlightened), 1);
+            character.body.addReplace(character.body.getRandomCock()
+                                                    .applyMod(CockMod.enlightened),
+                            1);
         }
         character.unequipAllClothing();
         character.outfitPlan.add(Clothing.getByID("gi"));

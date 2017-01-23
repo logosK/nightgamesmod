@@ -6,39 +6,24 @@ import java.util.Map;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Trait;
+import nightgames.characters.body.mods.SizeMod;
 import nightgames.combat.Combat;
 import nightgames.global.Global;
+import nightgames.items.clothing.Clothing;
+import nightgames.items.clothing.ClothingSlot;
 import nightgames.pet.PetCharacter;
 import nightgames.status.Abuff;
 import nightgames.status.Stsflag;
 import nightgames.status.Trance;
 
 public class AssPart extends GenericBodyPart {
-    public static int SIZE_SMALL = 0;
-    public static int SIZE_NORMAL = 1;
-    public static int SIZE_BIG = 2;
-    public static int SIZE_HUGE = 3;
-    public static AssPart generic = new AssPart("ass", 0, 1.2, SIZE_NORMAL);
-    private int size;
-    private static final Map<Integer, String> SIZE_DESCRIPTIONS = new HashMap<>(); 
-    static {
-        SIZE_DESCRIPTIONS.put(SIZE_SMALL, "small ");
-        SIZE_DESCRIPTIONS.put(SIZE_NORMAL, "");
-        SIZE_DESCRIPTIONS.put(SIZE_BIG, "large ");
-        SIZE_DESCRIPTIONS.put(SIZE_HUGE, "huge ");
-    }
-
+    public static AssPart generic = generateGeneric();
     public static AssPart generateGeneric() {
-        return new AssPart("ass", 0, 1.2, 1);
-    }
-
-    public AssPart(String desc, String longDesc, double hotness, double pleasure, double sensitivity, int size) {
-        super(desc, longDesc, hotness, pleasure, sensitivity, false, "ass", "a ");
-        this.size = size;
+        return new AssPart();
     }
 
     public AssPart(String desc, double hotness, double pleasure, double sensitivity) {
-        this(desc, "", hotness, pleasure, sensitivity, SIZE_NORMAL);
+        super(desc, "", hotness, pleasure, sensitivity, false, "ass", "a ");
     }
 
     public AssPart() {
@@ -47,24 +32,35 @@ public class AssPart extends GenericBodyPart {
 
     @Override
     public double getFemininity(Character c) {
-        return size - SIZE_NORMAL;
+        return getSize() - SizeMod.ASS_SIZE_GIRLISH;
+    }
+
+    @Override
+    public double getHotness(Character self, Character opponent) {
+        double hotness = super.getHotness(self, opponent);
+
+        Clothing top = self.getOutfit().getTopOfSlot(ClothingSlot.bottom);
+        hotness += -.1 + Math.sqrt(getSize()) * .2 * self.getOutfit()
+                                                .getExposure(ClothingSlot.bottom);
+        if (!opponent.hasDick()) {
+            hotness /= 2;
+        }
+        if (top == null) {
+            hotness += .1;
+        }
+        return Math.max(0, hotness);
     }
 
     @Override
     public int mod(Attribute a, int total) { 
         int bonus = super.mod(a, total);
-        if (size > SIZE_NORMAL & a == Attribute.Seduction) {
-            bonus += (size - SIZE_NORMAL) * 2;
+        if (getSize() > SizeMod.ASS_SIZE_NORMAL & a == Attribute.Seduction) {
+            bonus += (getSize() - SizeMod.ASS_SIZE_NORMAL) * 2;
         }
-        if (size > SIZE_BIG & a == Attribute.Speed) {
-            bonus += (size - SIZE_BIG);
+        if (getSize() > SizeMod.ASS_SIZE_FLARED & a == Attribute.Speed) {
+            bonus += (getSize() - SizeMod.ASS_SIZE_FLARED);
         }
         return bonus;
-    }
-
-    @Override
-    public String fullDescribe(Character c) {
-        return SIZE_DESCRIPTIONS.get(size) + describe(c);
     }
 
     @Override
@@ -86,7 +82,7 @@ public class AssPart extends GenericBodyPart {
             bonus += 5;
         }
 
-        if ((self.has(Trait.tight) || self.has(Trait.holecontrol)) && c.getStance().anallyPenetrated(c, self)) {
+        if (self.canRespond() && (self.has(Trait.tight) || self.has(Trait.holecontrol)) && c.getStance().anallyPenetrated(c, self)) {
             String desc = "";
             if (self.has(Trait.tight)) {
                 desc += "powerful ";
@@ -102,8 +98,11 @@ public class AssPart extends GenericBodyPart {
             if (self.has(Trait.tight)) {
                 opponent.pain(c, self, Math.min(30, self.get(Attribute.Power)));
             }
+            if (!c.getStance().mobile(opponent) || !opponent.canRespond()) {
+                bonus /= 5;
+            }
         }
-        if (self.has(Trait.drainingass) && !opponent.has(Trait.strapped) && c.getStance().anallyPenetratedBy(c, self, opponent)) {
+        if (self.has(Trait.drainingass) && !target.isType("strapon")) {
             if (Global.random(3) == 0) {
                 c.write(self, Global.format("{self:name-possessive} ass seems to <i>inhale</i>, drawing"
                                 + " great gouts of {other:name-possessive} strength from {other:possessive}"
@@ -113,8 +112,8 @@ public class AssPart extends GenericBodyPart {
                 self.add(c, new Abuff(self, Attribute.Power, 3, 10));
             } else {
                 c.write(self, Global.format("The feel of {self:name-possessive} ass around"
-                                + " {other:name-possessive} {other:body-part:cock} drains"
-                                + " {other:direct-object} of {other:possessive} energy.", self, opponent));
+                                + " {other:name-possessive} %s drains"
+                                + " {other:direct-object} of {other:possessive} energy.", self, opponent, target.describe(opponent)));
                 opponent.drain(c, self, self.getLevel()/2);
             }
         }
@@ -137,7 +136,7 @@ public class AssPart extends GenericBodyPart {
     @Override
     public double applyReceiveBonuses(Character self, Character opponent, BodyPart target, double damage, Combat c) {
         double bonus = super.applyReceiveBonuses(self, opponent, target, damage, c);
-        if (opponent.has(Trait.asshandler) || opponent.has(Trait.anatomyknowledge)) {
+        if ((opponent.has(Trait.asshandler) || opponent.has(Trait.anatomyknowledge)) && opponent.canRespond() && c.getStance().mobile(opponent)) {
             c.write(opponent,
                             Global.format("{other:NAME-POSSESSIVE} expert handling of {self:name-possessive} ass causes {self:subject} to shudder uncontrollably.",
                                             self, opponent));
@@ -218,14 +217,10 @@ public class AssPart extends GenericBodyPart {
     }
 
     public BodyPart upgrade() {
-        AssPart newPart = (AssPart) instance();
-        newPart.size = Global.clamp(newPart.size + 1, SIZE_SMALL, SIZE_HUGE);
-        return newPart;
+        return this.applyMod(new SizeMod(SizeMod.clampToValidSize(this, getSize() + 1)));
     }
 
     public BodyPart downgrade() {
-        AssPart newPart = (AssPart) instance();
-        newPart.size = Global.clamp(newPart.size - 1, SIZE_SMALL, SIZE_HUGE);
-        return newPart;
+        return this.applyMod(new SizeMod(SizeMod.clampToValidSize(this, getSize() - 1)));
     }
 }

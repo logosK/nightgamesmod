@@ -94,7 +94,7 @@
 					},
 					"pussy":"normal"
 				},
-				"breasts":"d"
+				"breasts":4
 			},
 			"traits": [
 				"succubus",
@@ -125,7 +125,7 @@
 			"body": {
 				"archetype":"DEMON",
 				"genitals": {
-					"pussy":"fiery"
+					"pussy":"nightgames.characters.body.mods.FieryMod"
 				}
 			},
 			"traits": [

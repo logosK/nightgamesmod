@@ -11,15 +11,15 @@ import java.util.stream.Collectors;
 import nightgames.characters.Character;
 import nightgames.characters.Trait;
 import nightgames.characters.body.CockMod;
-import nightgames.characters.body.mods.ArcaneHoleMod;
-import nightgames.characters.body.mods.CyberneticHoleMod;
-import nightgames.characters.body.mods.DivineHoleMod;
-import nightgames.characters.body.mods.FeralHoleMod;
-import nightgames.characters.body.mods.FieryHoleMod;
-import nightgames.characters.body.mods.GooeyHoleMod;
-import nightgames.characters.body.mods.PlantHoleMod;
-import nightgames.characters.body.mods.SuccubusHoleMod;
-import nightgames.characters.body.mods.TentacledHoleMod;
+import nightgames.characters.body.mods.ArcaneMod;
+import nightgames.characters.body.mods.CyberneticMod;
+import nightgames.characters.body.mods.DivineMod;
+import nightgames.characters.body.mods.FeralMod;
+import nightgames.characters.body.mods.FieryMod;
+import nightgames.characters.body.mods.GooeyMod;
+import nightgames.characters.body.mods.PlantMod;
+import nightgames.characters.body.mods.DemonicMod;
+import nightgames.characters.body.mods.TentacledMod;
 import nightgames.characters.body.mods.PartMod;
 import nightgames.combat.Combat;
 import nightgames.global.Global;
@@ -86,7 +86,7 @@ public class ArmManager {
                 }
             }
         }
-        if (owner.has(Trait.Pseudopod)) {
+        if (owner.has(Trait.Pseudopod) && owner.has(Trait.slime)) {
             addArm(new TentacleClinger(this));
             if (owner.level >= 58 && owner.has(Trait.Imposter)) {
                 addArm(new TentacleImpaler(this, Global.pickRandom(IMPALER_MODS)));
@@ -106,11 +106,11 @@ public class ArmManager {
     
     private static final List<? extends PartMod> IMPALER_MODS = Collections.unmodifiableList(CockMod.ALL_MODS);
     private static final List<? extends PartMod> SUCKER_MODS = Arrays.asList(
-                    new ArcaneHoleMod(), new CyberneticHoleMod(),
-                    new DivineHoleMod(), new FeralHoleMod(),
-                    new FieryHoleMod(), new GooeyHoleMod(),
-                    new PlantHoleMod(), new SuccubusHoleMod(),
-                    new TentacledHoleMod());
+                    new ArcaneMod(), new CyberneticMod(),
+                    new DivineMod(), new FeralMod(),
+                    new FieryMod(), new GooeyMod(),
+                    new PlantMod(), new DemonicMod(),
+                    new TentacledMod());
 
     public void addArm(Arm arm) {
         arms.add(arm);
@@ -124,7 +124,7 @@ public class ArmManager {
         return new ArrayList<>(arms);
     }
 
-    private String describeArms() {
+    private String describeArms(List<? extends Arm> arms) {
         Map<ArmType, List<Arm>> grouped = arms.stream()
                                                   .collect(Collectors.groupingBy(Arm::getType));
         int counter = 0;
@@ -147,12 +147,19 @@ public class ArmManager {
     }
 
     public String describe(Character owner) {
-        if (!arms.isEmpty()) {
-            return "<p>You can see " + describeArms() + " strapped behind "
-                            + owner.possessiveAdjective() + " back.<br/>";
-        } else { 
-            return "";
+        List<RoboArm> roboArms = arms.stream().filter(arm -> arm instanceof RoboArm).map(arm -> (RoboArm)arm).collect(Collectors.toList());
+        List<TentacleArm> tentacleArms = arms.stream().filter(arm -> arm instanceof TentacleArm).map(arm -> (TentacleArm)arm).collect(Collectors.toList());
+        String msg = "";
+        if (!roboArms.isEmpty()) {
+            msg += "<b>You can see " + describeArms(roboArms) + " strapped behind "
+                            + owner.possessiveAdjective() + " back.</b><br/>";
         }
+        if (!tentacleArms.isEmpty()) {
+            msg += "You can see " + tentacleArms.size() + " tentacles attached to " + owner.possessiveAdjective() + " back.<br/>";
+            msg += tentacleArms.stream().map(arm -> arm.describe()).collect(Collectors.joining("<br/>"));
+            msg += "<br/>";
+        }
+        return msg;
     }
 
     private List<Arm> handleMultiArmMoves(Combat c, Character owner, Character target) {

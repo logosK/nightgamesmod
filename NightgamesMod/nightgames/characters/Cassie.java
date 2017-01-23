@@ -6,10 +6,12 @@ import java.util.Optional;
 
 import nightgames.actions.Action;
 import nightgames.actions.Movement;
+import nightgames.characters.body.AssPart;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.FacePart;
-import nightgames.characters.body.PussyPart;
+import nightgames.characters.body.mods.ArcaneMod;
+import nightgames.characters.body.mods.ExtendedTonguedMod;
 import nightgames.characters.custom.CharacterLine;
 import nightgames.combat.Combat;
 import nightgames.combat.CombatScene;
@@ -19,9 +21,9 @@ import nightgames.global.Flag;
 import nightgames.global.Global;
 import nightgames.items.Item;
 import nightgames.items.clothing.Clothing;
-import nightgames.skills.strategy.OralStrategy;
 import nightgames.skills.strategy.BreastStrategy;
 import nightgames.skills.strategy.NurseStrategy;
+import nightgames.skills.strategy.OralStrategy;
 import nightgames.start.NpcConfiguration;
 import nightgames.status.Energized;
 import nightgames.status.Stsflag;
@@ -159,7 +161,7 @@ public class Cassie extends BasePersonality {
 
     @Override
     public void applyStrategy(NPC self) {
-        self.plan = Plan.hunting;
+        self.plan = Plan.retreating;
         self.mood = Emotion.confident;
         
         self.addPersonalStrategy(new OralStrategy());
@@ -187,6 +189,7 @@ public class Cassie extends BasePersonality {
         Global.gainSkills(self);
         self.setTrophy(Item.CassieTrophy);
         self.body.add(BreastsPart.c);
+        self.body.add(AssPart.generateGeneric().upgrade().upgrade().upgrade());
         self.initialGender = CharacterSex.female;
     }
 
@@ -201,9 +204,9 @@ public class Cassie extends BasePersonality {
     private void useMouthFocus() {
         Global.flag(CASSIE_MOUTH_FOCUS);
         character.getGrowth().addTrait(11, Trait.experttongue);
-        character.getGrowth().addTrait(25, Trait.tongueTraining2);
+        character.getGrowth().addBodyPartMod(25, "mouth", ExtendedTonguedMod.INSTANCE);
         character.getGrowth().addTrait(38, Trait.tongueTraining3);
-        character.getGrowth().addTrait(57, Trait.addictivefluids);
+        character.getGrowth().addBodyPartMod(57, "mouth", new ArcaneMod());
     }
     private void useEnchantressBonus() {
         Global.flag(CASSIE_ENCHANTRESS_FOCUS);
@@ -241,7 +244,7 @@ public class Cassie extends BasePersonality {
     @Override
     public void setGrowth() {
         character.getGrowth().stamina = 2;
-        character.getGrowth().arousal = 4;
+        character.getGrowth().arousal = 7;
         character.getGrowth().willpower = .8f;
         character.getGrowth().bonusStamina = 1;
         character.getGrowth().bonusArousal = 3;
@@ -465,7 +468,7 @@ public class Cassie extends BasePersonality {
                             + " to you. <i>\"Can you touch my nipples more? I really like that.\"</i> You reach up and play with "
                             + "her breasts as she continues to grind against you. She stops your pillow talk by kissing you desperately just before you feel her body tense up in orgasm. She collapses on top of you and kisses "
                             + "your cheek contently. <i>\"I'll keep practicing and make you feel even better next time, \"</i> she tells you happily. <i>\"I promise.\"</i> ";
-        } else if (dominance >= 10 && minDominance==0 && c.getStance().vaginallyPenetrated(c,c.getOpponent(character)) && character.has(Trait.hypnoticsemen) && character.has(Trait.enthrallingjuices) && character.body.getLargestCock().getMods(character).contains(CockMod.runic)) {
+        } else if (dominance >= 10 && minDominance==0 && c.getStance().vaginallyPenetrated(c,c.getOpponent(character)) && character.has(Trait.hypnoticsemen) && character.has(Trait.enthrallingjuices) && character.body.getLargestCock().getMods().contains(CockMod.runic)) {
             minDominance=10;
             return "Cassie pumps her dick into your vagina faster and faster as she nears climax, but at this point it's clear you've lost. Your back arches as you orgasm, your "
                             + "vagina clenching around her magical meat. As you collapse limply to the ground, Cassie thrusts into your cunt as deep as she can go, and then "
@@ -787,7 +790,7 @@ public class Cassie extends BasePersonality {
 
     public void advance() {
         character.getGrowth().addTrait(10, Trait.witch);
-        character.body.addReplace(PussyPart.arcane, 1);
+        character.body.addReplace(character.body.getRandomPussy().applyMod(ArcaneMod.INSTANCE), 1);
         if (character.hasDick()) {
             character.body.addReplace(character.body.getRandomCock().applyMod(CockMod.runic), 1);
         }

@@ -2,7 +2,7 @@ package nightgames.skills;
 
 import nightgames.characters.Character;
 import nightgames.characters.Trait;
-import nightgames.characters.body.BreastsPart;
+import nightgames.characters.body.mods.SizeMod;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
@@ -100,7 +100,7 @@ public class FondleBreasts extends Skill {
                             getSelf().subject(), target.nameOrPossessivePronoun(),
                             target.body.getRandomBreasts().describe(target));
         } else if (modifier == Result.critical) {
-            return "Cassie grabs your "+target.body.getLargestBreasts().describe(target, true)+" and caresses them, pinching your exquisitely sensitive nipples. An incredibly"
+            return "Cassie grabs your "+target.body.getLargestBreasts().describe(target)+" and caresses them, pinching your exquisitely sensitive nipples. An incredibly"
                             + " sensual moan is torn from your lips as you instinctively arch your back, pushing your breasts and rock-hard, massive nipples into Cassie's hands. \"Damn, you "
                             + "really are a total cow-slut now, this is great!\" Cassie exclaims. \"I'll have to see if I can train you to moo though, that would be even hotter"
                             + " than you just moaning. I can't wait to see what happens when I jack up your sensitivity some more.\" She leers at you, a look that seems out of place"
@@ -130,7 +130,7 @@ public class FondleBreasts extends Skill {
 
     @Override
     public String getLabel(Combat c) {
-        return c.getOpponent(getSelf()).body.getBreastsAbove(BreastsPart.flat.size) != null ? "Fondle Breasts"
+        return c.getOpponent(getSelf()).body.getBreastsAbove(SizeMod.getMinimumSize("breasts")) != null ? "Fondle Breasts"
                         : "Tease Chest";
     }
 

@@ -11,9 +11,21 @@ import nightgames.status.Stsflag;
 import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
-public class DivineHoleMod extends PartMod {
-    public DivineHoleMod() {
+public class DivineMod extends PartMod {
+    public static final DivineMod INSTANCE = new DivineMod();
+
+    public DivineMod() {
         super("divine", 0, 1.0, 0.0, -10);
+    }
+
+    public String adjective(BodyPart part) {
+        if (part.getType().equals("pussy")) {
+            return "divine";
+        }
+        if (part.getType().equals("ass")) {
+            return "sacred";
+        }
+        return "holy";
     }
 
     public double applyBonuses(Combat c, Character self, Character opponent, BodyPart part, BodyPart target, double damage) { 
@@ -75,5 +87,10 @@ public class DivineHoleMod extends PartMod {
             pleasureMod += charge.magnitude;
         }
         return pleasureMod;
+    }
+
+    @Override
+    public String describeAdjective(String partType) {
+        return "divine aura";
     }
 }

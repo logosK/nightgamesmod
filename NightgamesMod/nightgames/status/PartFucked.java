@@ -69,7 +69,7 @@ public class PartFucked extends Status implements InsertedStatus {
             return;
         }
         c.write(other, Global.capitalizeFirstLetter(
-                        Global.format("{other:name-possessive} %s relentlessly fucks {self:name-do} in {self:possessive} {self:body-part:"
+                        Global.format("{other:name-possessive} %s relentlessly fucks {self:name-do} {self:possessive} {self:body-part:"
                                         + target + "}.", affected, other, penetrator.describe(other))));
         affected.body.pleasure(other, penetrator, hole, 10, c);
         other.body.pleasure(affected, hole, penetrator, 2, c);
@@ -144,13 +144,13 @@ public class PartFucked extends Status implements InsertedStatus {
     @Override  public JsonObject saveToJson() {
         JsonObject obj = new JsonObject();
         obj.addProperty("type", getClass().getSimpleName());
-        obj.addProperty("penetrator", JsonUtils.gson.toJson(penetrator));
+        obj.addProperty("penetrator", JsonUtils.getGson().toJson(penetrator));
         obj.addProperty("target", target);
         return obj;
     }
 
     @Override public Status loadFromJson(JsonObject obj) {
-        return new PartFucked(null, null, JsonUtils.gson.fromJson(obj.get("penetrator"), BodyPart.class), obj.get("target").getAsString());
+        return new PartFucked(null, null, JsonUtils.getGson().fromJson(obj.get("penetrator"), BodyPart.class), obj.get("target").getAsString());
     }
 
     @Override

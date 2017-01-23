@@ -6,6 +6,8 @@ import nightgames.characters.Trait;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.EarPart;
+import nightgames.characters.body.mods.PlantMod;
+import nightgames.characters.body.mods.TentacledMod;
 import nightgames.characters.body.PussyPart;
 import nightgames.characters.body.TentaclePart;
 import nightgames.combat.Combat;
@@ -16,7 +18,6 @@ import nightgames.status.SlimeMimicry;
 import nightgames.status.Stsflag;
 
 public class MimicDryad extends Skill {
-
     public MimicDryad(Character self) {
         super("Mimicry: Dryad", self);
     }
@@ -28,7 +29,7 @@ public class MimicDryad extends Skill {
 
     @Override
     public boolean usable(Combat c, Character target) {
-        return getSelf().canRespond() && !getSelf().is(Stsflag.mimicry);
+        return getSelf().canRespond() && !getSelf().is(Stsflag.mimicry) && Global.getParticipants().stream().anyMatch(character -> character.has(Trait.dryad));
     }
 
     @Override
@@ -46,19 +47,45 @@ public class MimicDryad extends Skill {
             else 
                 printBlinded(c);
         }
+        if (getSelf().has(Trait.ImitatedStrength)) {
+            getSelf().addTemporaryTrait(Trait.dryad, 10);
+            if (getSelf().getLevel() >= 20) {
+                getSelf().addTemporaryTrait(Trait.magicEyeFrenzy, 10);
+            }
+            if (getSelf().getLevel() >= 28) {
+                getSelf().addTemporaryTrait(Trait.lacedjuices, 10);
+            }
+            if (getSelf().getLevel() >= 36) {
+                getSelf().addTemporaryTrait(Trait.RawSexuality, 10);
+            }
+            if (getSelf().getLevel() >= 44) {
+                getSelf().addTemporaryTrait(Trait.temptingtits, 10);
+            }
+            if (getSelf().getLevel() >= 52) {
+                getSelf().addTemporaryTrait(Trait.addictivefluids, 10);
+            }
+            if (getSelf().getLevel() >= 60) {
+                getSelf().body.temporaryAddPartMod("pussy", TentacledMod.INSTANCE, 10);
+            }
+        }
         getSelf().addTemporaryTrait(Trait.dryad, 10);
         getSelf().addTemporaryTrait(Trait.magicEyeFrenzy, 10);
         getSelf().addTemporaryTrait(Trait.frenzyingjuices, 10);
         getSelf().addTemporaryTrait(Trait.RawSexuality, 10);
         getSelf().addTemporaryTrait(Trait.temptingtits, 10);
         getSelf().body.temporaryAddOrReplacePartWithType(EarPart.pointed, 10);
-        getSelf().body.temporaryAddOrReplacePartWithType(new TentaclePart("vines", "back", "nectar", 0.1, 1.2, 0), 10);
-        BreastsPart part = getSelf().body.getBreastsBelow(BreastsPart.h.size);
+        BreastsPart part = getSelf().body.getBreastsBelow(BreastsPart.h.getSize());
         if (part != null) {
             getSelf().body.temporaryAddOrReplacePartWithType(part.upgrade(), 10);
         }
-        getSelf().add(c, new Abuff(getSelf(), Attribute.Bio, Math.max(10, getSelf().get(Attribute.Slime)), 10));
-        getSelf().add(c, new SlimeMimicry("dryad", PussyPart.plant, CockMod.error, getSelf(), 10));
+
+        int strength = Math.max(10, getSelf().get(Attribute.Slime)) * 2 / 3;
+        if (getSelf().has(Trait.Masquerade)) {
+            strength = strength * 3 / 2;
+        }
+        getSelf().add(c, new Abuff(getSelf(), Attribute.Bio, strength, 10));
+        getSelf().add(c, new SlimeMimicry("dryad", getSelf(), 10));
+        getSelf().body.temporaryAddPartMod("pussy", PlantMod.INSTANCE, 10);
         return true;
     }
 

@@ -54,7 +54,7 @@ public class BreastGrowthSuper extends Skill {
             }
         } else {
             res = Result.miss;
-        }
+        }/*
         int additionalSizes = getSelf().get(Attribute.Arcane)/15;
         boolean permanent = (getSelf().human() || c.shouldPrintReceive(target,c)) && !target.has(Trait.stableform) 
                         && (Global.randomdouble()*20. - getSelf().get(Attribute.Arcane)/5. < 0 );
@@ -75,7 +75,7 @@ public class BreastGrowthSuper extends Skill {
                 target.body.temporaryAddOrReplacePartWithType(part.upgrade(additionalSizes, getSelf().get(Attribute.Arcane)/20.), 10);
                 if(Global.isDebugOn(DebugFlags.DEBUG_SCENE)) System.out.println("New breast sensitivity for "+target.getName()+" is "+target.body.getLargestBreasts().getSensitivity(null,null)+".");
             }
-        }
+        }*/
         return res != Result.miss;
     }
 

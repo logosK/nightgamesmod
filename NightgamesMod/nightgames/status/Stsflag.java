@@ -78,4 +78,5 @@ public enum Stsflag {
     atrophy,
     pressurepoint,
     orgasmPurged,
+    plasticized,
 }

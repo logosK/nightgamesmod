@@ -79,7 +79,7 @@ public abstract class BasePersonality implements Personality {
 
     @Override
     public void rest(int time) {
-        if (preferredCockMod != CockMod.error && character.rank > 0) {
+        if (!preferredCockMod.equals(CockMod.error) && character.rank > 0) {
             Optional<BodyPart> optDick = character.body.get("cock")
                                                        .stream()
                                                        .filter(part -> part.moddedPartCountsAs(character, preferredCockMod))
@@ -157,10 +157,10 @@ public abstract class BasePersonality implements Personality {
     }
 
     @Override
-    public void ding() {
-        character.getGrowth().levelUp(character);
-        onLevelUp();
-        character.distributePoints(preferredAttributes);
+    public void ding(Character self) {
+        self.getGrowth().levelUp(self);
+        onLevelUp(self);
+        self.distributePoints(preferredAttributes);
     }
 
     @Override
@@ -168,10 +168,10 @@ public abstract class BasePersonality implements Personality {
         return preferredAttributes;
     }
 
-    protected void onLevelUp() {
+    protected void onLevelUp(Character self) {
         // NOP
     }
-    
+
     @Override
     public String describeAll(Combat c, Character self) {
         StringBuilder b = new StringBuilder();
