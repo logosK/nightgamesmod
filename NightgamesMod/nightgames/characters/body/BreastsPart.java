@@ -37,6 +37,10 @@ public class BreastsPart extends GenericBodyPart {
         return new BreastsPart();
     }
 
+    public BreastsPart() {
+        super("breasts", "", 0.0, 1.0, 1.0, true, "breasts", "");
+    }
+    
     public static String synonyms[] = {"breasts", "tits", "boobs",};
 
     /*@Override

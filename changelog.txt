@@ -1,4 +1,44 @@
-2.5.0.rc1
+2.5.0.rc.3
+Bug fixes:
+- fixed a bug with the fast combat display not displaying the correct things
+- fixed a bug where orgasming between turn 1 and turn 2 won't skip player 2's turn
+- fixed a crash bug related to disguise
+- added in the money cost to mods like I said I would in the previous mods
+- fixed gui not working correctly when the player levels in combat
+
+Stuff I forgot to put into the old change logs (since rc1):
+- Raised the prices of drafts a bit since they're much more effective now with mods being stackable
+	- lowered the number of drafts needed for transformations a bit to compensate
+- Added the "Molten drippings" item
+	- this is collectable with an empty bottle from defeating someone with a fiery pussy (ie Jewel)
+	- this is drinkable and throwable like other drafts
+	- effects are: deals 500 pain damage, stuns the target for 25 turns, and makes them level up
+	- only usable during combat
+
+Minor:
+- Added a minor non-placeholder message for players using tempt
+
+2.5.0.rc.2
+
+Bug fixes:
+- fixed some crash bugs relating to body part mods
+- fixed start configurations not loading correctly
+- fixed a bunch of scene/grammatical errors (thanks bronze chair)
+
+Minor/Balance?/Making things make sense:
+- kiss can no longer be used in the neutral position
+	- To compensate, it has been buffed slightly
+	- This actually was in the last patch, forgot about putting it into the patch notes
+- changed submissive hold to only be usable when having sex (you could use it in titfuck pin/oral pin, since now they are considered "inserted")
+- changed 69 stance to have the participants not able to "reach top".
+- removed facefuck/facesit's "reach top" requirement
+
+Things to look out for:
+- I've seen the text disappear at times with no crash. I haven't been able to consistently reproduce it unfortunately.
+	- Please try noting what was going on at the time/and or playing with the DEBUG_SCENE option turned on in the debug menu (credits -> debug)
+	- much appreciated :D
+
+2.5.0.rc.1
 
 Quality of Life:
 - Colorized more text in the combat window to make it easier to read
@@ -72,8 +112,6 @@ Bug fixes:
 - Start options with elevated attributes now will automatically generate levelup data so level draining actually does stuff.
 - I can't even remember. It's been too long.
 - I know I pulled in some fixes from logosK, so thanks for that
-
-- Minor: added a few 
 
 2.4.5.5.b
 GUI:

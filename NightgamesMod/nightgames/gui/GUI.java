@@ -91,6 +91,7 @@ import nightgames.skills.Skill;
 import nightgames.skills.TacticGroup;
 import nightgames.skills.Tactics;
 import nightgames.trap.Trap;
+import nightgames.utilities.DebugHelper;
 
 @SuppressWarnings("unused")
 public class GUI extends JFrame implements Observer {
@@ -997,6 +998,10 @@ public class GUI extends JFrame implements Observer {
     }
 
     public void clearText() {
+        if (Global.isDebugOn(DebugFlags.DEBUG_GUI)) {
+            System.out.println("Clearing messages");
+            DebugHelper.printStackFrame(5, 1);
+        }
         textPane.setText("");
     }
 
@@ -1209,9 +1214,12 @@ public class GUI extends JFrame implements Observer {
     }
 
     public void ding() {
+        if (combat != null) {
+            combat.pause();
+        }
         Player player = Global.human;
         if (player.availableAttributePoints > 0) {
-            message(player.availableAttributePoints + " Attribute Points remain.\n");
+            Global.writeIfCombatUpdateImmediately(combat, player, player.availableAttributePoints + " Attribute Points remain.\n");
             clearCommand();
             for (Attribute att : player.att.keySet()) {
                 if (Attribute.isTrainable(player, att) && player.getPure(att) > 0) {
@@ -1225,7 +1233,7 @@ public class GUI extends JFrame implements Observer {
             commandPanel.refresh();
         } else if (player.traitPoints > 0 && !skippedFeat) {
             clearCommand();
-            message("You've earned a new perk. Select one below.");
+            Global.writeIfCombatUpdateImmediately(combat, player, "You've earned a new perk. Select one below.");
             for (Trait feat : Global.getFeats(player)) {
                 if (!player.has(feat)) {
                     commandPanel.add(featButton(feat));
@@ -1237,14 +1245,14 @@ public class GUI extends JFrame implements Observer {
         } else {
             skippedFeat = false;
             clearCommand();
-            Global.gui().message(Global.gainSkills(player));
+            Global.writeIfCombatUpdateImmediately(combat, player, Global.gainSkills(player));
             player.finishDing();
             if (player.getLevelsToGain() > 0) {
                 player.actuallyDing();
                 ding();
             } else {
                 if (combat != null) {
-                    endCombat();
+                    combat.resume();
                 } else if (Global.getMatch() != null) {
                     Global.getMatch().resume();
                 } else if (Global.day != null) {
@@ -1461,7 +1469,7 @@ public class GUI extends JFrame implements Observer {
     private KeyableButton nextButton(Combat combat) {
         return new RunnableButton("Next", () -> {
             clearCommand();
-            combat.turn();
+            combat.resume();
         });
     }
 

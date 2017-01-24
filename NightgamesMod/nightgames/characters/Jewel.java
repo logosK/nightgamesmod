@@ -10,7 +10,6 @@ import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.FacePart;
-import nightgames.characters.body.PussyPart;
 import nightgames.characters.body.mods.FieryMod;
 import nightgames.characters.body.mods.TrainedMod;
 import nightgames.characters.custom.CharacterLine;
@@ -95,11 +94,11 @@ public class Jewel extends BasePersonality {
     private void useAnal() {
         Growth growth = character.getGrowth();
         Global.flag(JEWEL_ANAL_FOCUS);
-        growth.addTrait(11, Trait.oiledass);
+        growth.addTrait(11, Trait.powerfulcheeks);
+        growth.addBodyPartMod(25, "ass", FieryMod.INSTANCE);
+        growth.addTrait(37, Trait.temptingass);
         growth.addTrait(11, Trait.polecontrol);
-        growth.addTrait(25, Trait.temptingass);
         growth.addTrait(25, Trait.assmaster);
-        growth.addTrait(37, Trait.powerfulcheeks);
         growth.addTrait(37, Trait.analFanatic);        
         growth.addTrait(47, Trait.autonomousAss);
     }
@@ -172,15 +171,17 @@ public class Jewel extends BasePersonality {
                             useMartial();
                             growth.extraAttributes += 1;
                             // some compensation for the added difficulty. She gets 4 traits and 3 attribute points/level, and you only get 2 traits, but you are fighting more people than just her.
-                            Global.getPlayer().getGrowth().addTraitPoints(new int[]{25,47},Global.getPlayer());
+                            Global.getPlayer().getGrowth().addTraitPoints(new int[] {25, 47}, Global.getPlayer());
                             return true;
                         })
         )));
 
         character.addCombatScene(new CombatScene((c, self, other) -> {
-            return character.getLevel() >= 20 && !Global.checkFlag(JEWEL_MENTAL_FOCUS) && !Global.checkFlag(JEWEL_PHYSICAL_FOCUS) 
-                && (Global.checkFlag(JEWEL_MARTIAL_FOCUS) || Global.checkFlag(JEWEL_ANAL_FOCUS));
-        }, (c, self, player) -> "Jewel stands over you after the fight while looking at you rather coldly, <i>\"So, " + player.getName() + ". You're going to be doing what I tell"
+            return character.getLevel() >= 20 && !Global.checkFlag(JEWEL_MENTAL_FOCUS)
+                            && !Global.checkFlag(JEWEL_PHYSICAL_FOCUS)
+                            && (Global.checkFlag(JEWEL_MARTIAL_FOCUS) || Global.checkFlag(JEWEL_ANAL_FOCUS));
+        }, (c, self, player) -> "Jewel stands over you after the fight while looking at you rather coldly, <i>\"So, "
+                        + player.getName() + ". You're going to be doing what I tell"
                         + " you. No, don't interrupt. You are. My question is, are you just going"
                         + " to listen to me, or am I going to have to physically force you?\"</i>",
                         Arrays.asList(new CombatSceneChoice("No, No! I'll listen!", (c, self, other) -> {
@@ -335,11 +336,11 @@ public class Jewel extends BasePersonality {
             if (self.has(Trait.bitingwords) && c.getStance().dom(self)) {
                 ArrayList<String> possible = new ArrayList<>(); 
                 possible.add("Jewel looks down at you with a sadistic smirk, <i>\"That's a nice look on you there "
-                                + c.getOpponent(self).getName()
+                                + other.getName()
                                 + ".\"</i>");
                 possible.add("Shifting her weight a bit to glare into your eyes, Jewel says happily, <i>\"Aha, it looks like you're quite comfortable there. Maybe you're a natural bottom?\"</i>");
                 if (other.hasBalls()) {
-                    possible.add("Jewel cups your vulnerable balls and gives them a light squeeze. <i>\"Worthless " + c.getOpponent(character).boyOrGirl() + "s like you should just give up. Why even try when you end up as my seat every time?\"</i>");
+                    possible.add("Jewel cups your vulnerable balls and gives them a light squeeze. <i>\"Worthless " + other.boyOrGirl() + "s like you should just give up. Why even try when you end up as my seat every time?\"</i>");
                 }
                 return possible.get(Global.random(possible.size()));
             }
@@ -392,7 +393,7 @@ public class Jewel extends BasePersonality {
                             };
             switch (other.orgasms) {
                 case 0:
-                    return "<i>\"Heh, no matter what, you're just a horny little " + c.getOpponent(character).boyOrGirl()
+                    return "<i>\"Heh, no matter what, you're just a horny little " + other.boyOrGirl()
                                 + " aren'tcha? Come on, no time for rest, let's see how many times in a row you can cum\"</i>";
                 case 1:
                     return "<i>\"Oooh that's two now. Hope you can keep going!\"</i>";
@@ -750,7 +751,7 @@ public class Jewel extends BasePersonality {
 
     public void advance() {
         character.getGrowth().addTrait(10, Trait.fighter);
-        //character.body.addReplace(PussyPart.fiery, 100); TODO:fix
+        character.body.addReplace(character.body.getRandomPussy().applyMod(FieryMod.INSTANCE), 1);
         if (character.hasDick()) {
             character.body.addReplace(character.body.getRandomCock()
                                                     .applyMod(CockMod.enlightened),

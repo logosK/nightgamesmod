@@ -58,8 +58,9 @@
 						"type":"slimy",
 						"length":"6"
 					},
-					"pussy": "gooey"
-
+					"pussy":{
+						"_type": "nightgames.characters.body.mods.GooeyMod"
+					}
 				}
 			},
 			"traits": [
@@ -100,8 +101,9 @@
 						"type":"blessed",
 						"length":"6"
 					},
-					"pussy": "nightgames.characters.body.mods.DivineMod"
-
+					"pussy":{
+						"_type": "nightgames.characters.body.mods.DivineMod"
+					}
 				}
 			},
 			"traits": [
@@ -145,8 +147,9 @@
 						"type":"runic",
 						"length":"6"
 					},
-					"pussy": "normal"
-
+					"pussy":{
+						"_type": "nightgames.characters.body.mods.ArcaneMod"
+					}
 				}
 			},
 			"traits": [
@@ -240,7 +243,9 @@
 						"type":"enlightened",
 						"length":"6"
 					},
-					"pussy":"nightgames.characters.body.mods.FieryMod"
+					"pussy":{
+						"_type": "nightgames.characters.body.mods.FieryMod"
+					}
 				}
 			},
 			"traits": [
@@ -275,8 +280,9 @@
 						"type":"primal",
 						"length":"6"
 					},
-					"pussy": "nightgames.characters.body.mods.FeralMod"
-
+					"pussy":{
+						"_type": "nightgames.characters.body.mods.FeralMod"
+					}
 				}
 			},
 			"growth": {
@@ -326,8 +332,9 @@
 						"type":"bionic",
 						"length":"6"
 					},
-					"pussy": "nightgames.characters.body.mods.CyberneticMod"
-
+					"pussy":{
+						"_type": "nightgames.characters.body.mods.CyberneticMod"
+					}
 				}
 			},
 			"traits": [
@@ -366,7 +373,9 @@
 						"type":"incubus",
 						"length":"6"
 					},
-					"pussy": "nightgames.characters.body.mods.DemonicMod"
+					"pussy":{
+						"_type":"nightgames.characters.body.mods.DemonicMod"
+					}
 				}
 			},
 			"growth": {

@@ -476,7 +476,7 @@ public class Global {
         getSkillPool().add(new Invitation(ch));
         getSkillPool().add(new SubmissiveHold(ch));
         getSkillPool().add(new BreastGrowth(ch));
-        getSkillPool().add(new BreastGrowthSuper(ch));
+        //getSkillPool().add(new BreastGrowthSuper(ch));
         getSkillPool().add(new CockGrowth(ch));
         getSkillPool().add(new BreastRay(ch));
         getSkillPool().add(new FootSmother(ch));
@@ -1733,6 +1733,12 @@ public class Global {
 
     public static void setTraitRequirements(TraitTree traitRequirements) {
         Global.traitRequirements = traitRequirements;
+    }
+    public static void writeIfCombatUpdateImmediately(Combat c, Character self, String string) {
+        writeIfCombat(c, self, string);
+        if (c != null) {
+            c.updateMessage();
+        }
     }
 
 	public static void writeIfCombat(Combat c, Character self, String string) {

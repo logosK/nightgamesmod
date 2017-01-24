@@ -1594,7 +1594,11 @@ public abstract class Character extends Observable implements Cloneable {
 
     public abstract boolean resist3p(Combat c, Character target, Character assist);
 
-    public abstract void act(Combat c);
+    /**
+     * @param c combat to act in
+     * @return true if combat should be paused.
+     */
+    public abstract boolean act(Combat c);
 
     public abstract void move();
 
@@ -1770,7 +1774,7 @@ public abstract class Character extends Observable implements Cloneable {
             }
         }
 
-        String orgasmLiner = "<b>" + orgasmLiner(c) + "</b>";
+        String orgasmLiner = "<b>" + orgasmLiner(c, opponent == null ? c.getOpponent(this) : opponent) + "</b>";
         String opponentOrgasmLiner = (opponent == null || opponent == this || opponent.isPet()) ? "" : 
             "<b>" + opponent.makeOrgasmLiner(c, this) + "</b>";
         orgasmed = true;
@@ -1853,15 +1857,13 @@ public abstract class Character extends Observable implements Cloneable {
                                 + " the corruption inside of you.");
                 p.addict(AddictionType.CORRUPTION, opponent, Addiction.HIGH_INCREASE);
             }
-            if (p.checkAddiction(AddictionType.ZEAL, opponent) && selfPart != null && opponentPart != null 
-                            && opponentPart.isType("pussy") && selfPart
-                            .isType("cock")) {
+            if (p.checkAddiction(AddictionType.ZEAL, opponent) && selfPart != null && opponentPart != null && c.getStance().penetratedBy(c, opponent, p)
+                            && opponentPart.isType("pussy") && selfPart.isType("cock")) {
                 c.write(this, "Experiencing so much pleasure inside of " + opponent + " reinforces" + " your faith in your lovely goddess.");
                 p.addict(AddictionType.ZEAL, opponent, Addiction.MED_INCREASE);
             }
-            if (p.checkAddiction(AddictionType.ZEAL, opponent) && selfPart != null && opponentPart != null 
-                            && opponentPart.isType("cock") && (selfPart
-                            .isType("pussy") || selfPart.isType("ass"))) {
+            if (p.checkAddiction(AddictionType.ZEAL, opponent) && selfPart != null && opponentPart != null && c.getStance().penetratedBy(c, p, opponent)
+                            && opponentPart.isType("cock") && (selfPart.isType("pussy") || selfPart.isType("ass"))) {
                 c.write(this, "Experiencing so much pleasure from " + opponent.nameOrPossessivePronoun() + " cock inside you reinforces" + " your faith.");
                 p.addict(AddictionType.ZEAL, opponent, Addiction.MED_INCREASE);
             }
@@ -1977,11 +1979,7 @@ public abstract class Character extends Observable implements Cloneable {
         }
     }
 
-    public String getRandomLineFor(String lineType, Combat c, Character other) {
-        return "";
-    }
-
-    public String getRandomLineFor(String lineType, Combat c) {
+    public String getRandomLineFor(String lineType, Combat c, Character target) {
         Character other = c == null ? null : c.getOpponent(this);
         return getRandomLineFor(lineType, c, other);
     }
@@ -2305,7 +2303,7 @@ public abstract class Character extends Observable implements Cloneable {
         }
     }
 
-    public String orgasmLiner(Combat c) {
+    public String orgasmLiner(Combat c, Character target) {
         return "";
     }
 
@@ -3443,7 +3441,7 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public String temptLiner(Combat c, Character target) {
-        return Global.format("{self:SUBJECT-ACTION:tempt|tempts} {other:direct-object}.", this, target);
+        return Global.format("{self:SUBJECT-ACTION:pat} {self:possessive} groin and {self:action:promise} {self:pronoun-action:will} show {other:direct-object} a REAL good time.", this, target);
     }
 
     public String action(String firstPerson, String thirdPerson) {
