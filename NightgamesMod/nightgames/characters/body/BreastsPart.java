@@ -1,10 +1,5 @@
 package nightgames.characters.body;
 
-import java.util.Collection;
-import java.util.Collections;
-
-import com.google.gson.JsonObject;
-
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Player;
@@ -40,16 +35,11 @@ public class BreastsPart extends GenericBodyPart {
     public BreastsPart() {
         super("breasts", "", 0.0, 1.0, 1.0, true, "breasts", "");
     }
-    
-    public static String synonyms[] = {"breasts", "tits", "boobs",};
 
-    /*@Override
-    public void describeLong(StringBuilder b, Character c) {
-        if (c.hasPussy() || size > 0) {
-            b.append(Global.capitalizeFirstLetter(describe(c, true)));
-            b.append(" adorn " + c.nameOrPossessivePronoun() + " chest.");
-        }
-    }*/
+    @Override
+    public boolean isVisible(Character c) {
+        return c.crotchAvailable() || getSize() > 0;
+    }
 
     @Override
     public double getFemininity(Character c) {
@@ -98,10 +88,12 @@ public class BreastsPart extends GenericBodyPart {
         }
     }
 
+    public static String synonyms[] = {"breasts", "tits", "boobs"};
+
     @Override
     public void describeLong(StringBuilder b, Character c) {
         if (c.hasPussy() || getSize() > 0) {
-            b.append(Global.capitalizeFirstLetter(describe(c)));
+            b.append(Global.capitalizeFirstLetter(fullDescribe(c)));
             b.append(" adorn " + c.nameOrPossessivePronoun() + " chest.");
         }
     }

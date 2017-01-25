@@ -80,10 +80,11 @@ public class SixNine extends AbstractBehindStance {
 
     @Override
     public String image() {
+        if (bottom.hasDick() && top.hasDick() && top.hasBreasts() && bottom.useFemalePronouns()) {return "69_hh.jpg";}
         if (bottom.hasDick() || top.hasDick()) {
-            return "69.jpg";
+            return "69_fm.jpg";
         } else {
-            return "les69.jpg";
+            return "69_ff.jpg";
         }
     }
 

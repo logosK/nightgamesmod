@@ -28,6 +28,7 @@ public class ReverseCowgirl extends FemdomSexStance {
 
     @Override
     public String image() {
+        if (top.hasBreasts() && top.hasDick() && top.hasPussy() && bottom.hasBreasts()) return "reverse_cowgirl_hh";
         return "reverse_cowgirl.jpg";
     }
 

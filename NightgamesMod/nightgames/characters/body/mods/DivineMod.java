@@ -57,8 +57,7 @@ public class DivineMod extends PartMod {
     }
 
     public void onOrgasm(Combat c, Character self, Character opponent, BodyPart part) {
-        if (self.has(Trait.zealinspiring) && opponent.human() && opponent instanceof Player
-                        && Global.random(4) > 0) {
+        if (self.has(Trait.zealinspiring) && opponent.human() && opponent instanceof Player && Global.random(4) > 0 && c.getStance().isPartFuckingPartInserted(c, opponent, opponent.body.getLargestCock(), self, part)) {
             c.write(self, Global.format(
                             "As {other:possessive} cum floods {self:name-possessive} "
                                             + "%s, a holy aura surrounds {self:direct-object}. The soothing"

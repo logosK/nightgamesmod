@@ -44,7 +44,7 @@ public class Struggle extends Skill {
         }
         return ((!c.getStance().mobile(getSelf()) && !c.getStance().dom(getSelf()) || getSelf().bound()
                         || getSelf().is(Stsflag.maglocked))
-                        || hasSingleGrabber(c, target))
+                        || hasSingleGrabber(c, getSelf()))
                         && getSelf().canRespond();
     }
 
@@ -71,8 +71,8 @@ public class Struggle extends Skill {
         }
     }
     
-    private boolean hasSingleGrabber(Combat c, Character target) {
-        return c.getCombatantData(target).getIntegerFlag(Grab.FLAG) == 1;
+    private boolean hasSingleGrabber(Combat c, Character self) {
+        return c.getCombatantData(self).getIntegerFlag(Grab.FLAG) == 1;
     }
     
     private boolean blockedByCollar(Combat c, Character target) {
@@ -105,7 +105,7 @@ public class Struggle extends Skill {
                 }
             }
             getSelf().free();
-            c.getCombatantData(target).setIntegerFlag(Grab.FLAG, 0);
+            c.getCombatantData(getSelf()).setIntegerFlag(Grab.FLAG, 0);
             return true;
         } else {
             if (getSelf().human()) {
@@ -328,7 +328,6 @@ public class Struggle extends Skill {
                 c.write("ERROR: Something went wrong with the MagLocks...");
                 return false;
             }
-            
             // Two MagLocks, difficult to remove
             if (!target.check(Attribute.Science, dc)) {
                 String msg = "{self:SUBJECT-ACTION:struggle|struggles} against the powerful"
@@ -372,7 +371,7 @@ public class Struggle extends Skill {
             c.write(getSelf(), Global.format("{self:SUBJECT-ACTION:wrench|wrenches}"
                             + " {other:name-possessive} Grabber off {self:possessive}"
                             + " wrist without too much trouble.", getSelf(), target));
-            c.getCombatantData(target).setIntegerFlag(Grab.FLAG, 0);
+            c.getCombatantData(getSelf()).setIntegerFlag(Grab.FLAG, 0);
             return true;
         } else {
             c.write(getSelf(), Global.format("{self:SUBJECT-ACTION:pull|pulls} mightily"

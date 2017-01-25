@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -125,8 +124,9 @@ public abstract class CharacterConfiguration {
     protected final void apply(Character base) {
         name.ifPresent(n -> base.setName(n));
         money.ifPresent(m -> base.money = m);
-        traits.ifPresent(t -> { 
-            base.traits = new CopyOnWriteArrayList<>(t);
+        traits.ifPresent(t -> {
+            base.clearTraits();
+            t.forEach(base::addTraitDontSaveData);
             t.forEach(trait -> base.getGrowth().addTrait(0, trait));
         });
         Growth bg=base.getGrowth();
