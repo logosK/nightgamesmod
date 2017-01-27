@@ -561,6 +561,10 @@ public class Global {
         getSkillPool().add(new HypnoVisorRemove(ch));
         getSkillPool().add(new StripMinor(ch));
         getSkillPool().add(new DemandArousal(ch));
+        getSkillPool().add(new Embrace(ch));
+        getSkillPool().add(new SuccubusNurse(ch));
+        getSkillPool().add(new WingWrap(ch));
+        getSkillPool().add(new ComeHither(ch));
         getSkillPool().add(new KiShout(ch));
         getSkillPool().add(new PressurePoint(ch));
         getSkillPool().add(new Deepen(ch));
@@ -1205,7 +1209,7 @@ public class Global {
         characterPool.put(eve.getCharacter().getType(), eve.getCharacter());
         characterPool.put(maya.getCharacter().getType(), maya.getCharacter());
         characterPool.put(yui.getCharacter().getType(), yui.getCharacter());
-        debugChars.add(mara.getCharacter());
+        debugChars.add(reyka.getCharacter());
     }
     
     public static void loadWithDialog() {
@@ -1383,12 +1387,12 @@ public class Global {
 
     @SafeVarargs
     public static <T> Optional<T> pickRandom(T ... arr) {
-        if (arr.length == 0) return Optional.empty();
+        if (arr == null || arr.length == 0) return Optional.empty();
         return Optional.of(arr[Global.random(arr.length)]);
     }
     
     public static <T> Optional<T> pickRandom(List<T> list) {
-        if (list.size() == 0) {
+        if (list == null || list.size() == 0) {
             return Optional.empty();
         } else {
             return Optional.of(list.get(random(list.size())));

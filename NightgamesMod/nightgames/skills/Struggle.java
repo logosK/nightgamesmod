@@ -2,6 +2,7 @@ package nightgames.skills;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
@@ -19,9 +20,10 @@ import nightgames.stance.Position;
 import nightgames.stance.Stance;
 import nightgames.status.Bound;
 import nightgames.status.CockBound;
-import nightgames.status.Collared;
+import nightgames.status.Compulsive;
 import nightgames.status.MagLocked;
 import nightgames.status.Stsflag;
+import nightgames.status.Compulsive.Situation;
 
 public class Struggle extends Skill {
 
@@ -71,18 +73,16 @@ public class Struggle extends Skill {
         }
     }
     
-    private boolean hasSingleGrabber(Combat c, Character self) {
-        return c.getCombatantData(self).getIntegerFlag(Grab.FLAG) == 1;
+    private boolean hasSingleGrabber(Combat c, Character target) {
+        return c.getCombatantData(getSelf()).getIntegerFlag(Grab.FLAG) == 1;
     }
     
     private boolean blockedByCollar(Combat c, Character target) {
-        Collared stat = (Collared) getSelf().getStatus(Stsflag.collared);
-        if (stat != null) {
-            c.write(getSelf(), Global.format("{self:SUBJECT-ACTION:try|tries} to struggle, but"
-                            + " the collar is having none of it and shocks {self:direct-object}"
-                            + " into submission.", getSelf(), target));
-            getSelf().pain(c, null, Global.random(20, 50));
-            stat.spendCharges(c, 2);
+        Optional<String> compulsion = Compulsive.describe(c, getSelf(), Situation.PREVENT_STRUGGLE);
+        if (compulsion.isPresent()) {
+            c.write(getSelf(), compulsion.get());
+            getSelf().pain(c, null, 20 + Global.random(40));
+            Compulsive.doPostCompulsion(c, getSelf(), Situation.PREVENT_STRUGGLE);
             return true;
         }
         return false;
@@ -105,7 +105,7 @@ public class Struggle extends Skill {
                 }
             }
             getSelf().free();
-            c.getCombatantData(getSelf()).setIntegerFlag(Grab.FLAG, 0);
+            c.getCombatantData(target).setIntegerFlag(Grab.FLAG, 0);
             return true;
         } else {
             if (getSelf().human()) {
@@ -167,27 +167,6 @@ public class Struggle extends Skill {
             }
             return true;
         } else {
-            if (getSelf().human()) {
-                if (knotted) {
-                    c.write(getSelf(), "You try to force " + target.possessiveAdjective()
-                                    + " dick out of your ass, but the knot at its base is utterly unyielding.");
-                } else {
-                    c.write(getSelf(), "You try to pull free, but " + target.getName()
-                                    + " has a good grip on your waist.");
-                }
-            } else if (c.shouldPrintReceive(target, c)) {
-                if (knotted) {
-                    c.write(getSelf(),
-                                    String.format("%s frantically attempts to get %s cock out of %s ass, "
-                                                    + "but %s knot is keeping it inside %s warm depths.",
-                                                    getSelf().subject(), target.nameOrPossessivePronoun(),
-                                                    getSelf().possessiveAdjective(), target.possessiveAdjective(),
-                                                    getSelf().possessiveAdjective()));
-                } else {
-                    c.write(getSelf(), String.format("%s tries to squirm away, but %s better leverage.",
-                                    getSelf().subject(), target.subjectAction("have", "has")));
-                }
-            }
             getSelf().struggle();
             c.getStance().struggle(c, getSelf());
             return false;

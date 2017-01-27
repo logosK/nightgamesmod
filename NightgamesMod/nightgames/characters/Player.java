@@ -135,6 +135,7 @@ public class Player extends Character {
         if (getTraits().size() > 0) {
             b.append("<br/>Traits:<br/>");
             List<Trait> traits = new ArrayList<>(getTraits());
+            traits.removeIf(t -> t.isOverridden(this));
             traits.sort((first, second) -> first.toString()
                                                 .compareTo(second.toString()));
             b.append(traits.stream().filter(Trait::isVisible)
@@ -1010,7 +1011,7 @@ public class Player extends Character {
             if (part != null && body.getRandomBreasts() != BreastsPart.flat) {
                 body.temporaryAddOrReplacePartWithType(part.upgrade(), 10);
             }
-            body.temporaryAddOrReplacePartWithType(new GenericBodyPart("gooey skin", 2.0, 1.5, .8, "skin", ""), 999);
+            body.temporaryAddOrReplacePartWithType(new GenericBodyPart("gooey skin", .6, 1.5, .8, "skin", ""), 999);
             body.temporaryAddOrReplacePartWithType(new TentaclePart("slime pseudopod", "back", "slime", 0.0, 1.0, 1.0), 999);
             if (level >= 21) {
                 addTemporaryTrait(Trait.Sneaky, 999);

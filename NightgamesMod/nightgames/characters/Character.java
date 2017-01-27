@@ -1335,7 +1335,7 @@ public abstract class Character extends Observable implements Cloneable {
 
     public boolean has(Status status) {
         return this.status.stream().anyMatch(s -> s.flags().containsAll(status.flags()) && status.flags()
-                        .containsAll(status.flags()) && s.getVariant().equals(status.getVariant()));
+                        .containsAll(status.flags()) && s.getClass().equals(status.getClass()) && s.getVariant().equals(status.getVariant()));
     }
 
     public void add(Combat c, Status status) {
@@ -1367,7 +1367,7 @@ public abstract class Character extends Observable implements Cloneable {
         if (!done) {
             boolean unique = true;
             for (Status s : this.status) {
-                if (s.getVariant().equals(status.getVariant())) {
+                if (s.getClass().equals(status.getClass()) && s.getVariant().equals(status.getVariant())) {
                     s.replace(status);
                     message = s.initialMessage(c, true);
                     done = true;
@@ -1881,7 +1881,8 @@ public abstract class Character extends Observable implements Cloneable {
 
             if (p.checkAddiction(AddictionType.CORRUPTION, opponent) && selfPart != null && opponentPart != null 
                             && opponentPart.isType("pussy") && selfPart
-                            .isType("cock") && c.getCombatantData(this).getIntegerFlag("ChoseToFuck") == 1) {
+                            .isType("cock") && (c.getCombatantData(this).getIntegerFlag("ChoseToFuck") == 1
+                            || opponent.has(Trait.TotalSubjugation) && c.getStance().en == Stance.succubusembrace)) {
                 c.write(this, "Your willing sacrifice to " + opponent.getName() + " greatly reinforces"
                                 + " the corruption inside of you.");
                 p.addict(AddictionType.CORRUPTION, opponent, Addiction.HIGH_INCREASE);
@@ -1951,10 +1952,9 @@ public abstract class Character extends Observable implements Cloneable {
                                 "<b>{other:NAME-POSSESSIVE} devilish orfice does not let up, and {other:possessive} intense actions somehow force {self:name-do} to cum again instantly.</b>",
                                 this, partner));
             }
-            if (c.getStance().en == Stance.anal) {
-                partner.body.receiveCum(c, this, partner.body.getRandom("ass"));
-            } else {
-                partner.body.receiveCum(c, this, partner.body.getRandom("pussy"));
+            Optional<BodyPart> opponentHolePart = Global.pickRandom(c.getStance().getPartsFor(c, opponent, this));
+            if (opponentHolePart.isPresent()) {
+                partner.body.receiveCum(c, this, opponentHolePart.get());
             }
         } else if (selfPart != null && selfPart.isType("cock") && opponentPart != null
                         && !opponentPart.isType("none")) {
@@ -2880,7 +2880,7 @@ public abstract class Character extends Observable implements Cloneable {
             dc += getStatus(Stsflag.braced).value();
         }
         if (has(Trait.stabilized)) {
-            dc += 10 + 2 * Math.sqrt(get(Attribute.Science));
+            dc += 12 + 3 * Math.sqrt(get(Attribute.Science));
         }
         if (has(ClothingTrait.heels) && !has(Trait.proheels)) {
             dc -= 7;
@@ -3416,7 +3416,8 @@ public abstract class Character extends Observable implements Cloneable {
                         || !hasDick() 
                         || (body.getLargestBreasts().getSize() > SizeMod.getMinimumSize("breasts") && body.getFace().getFemininity(this) > 0) 
                         || (body.getFace().getFemininity(this) >= 1.5) 
-                        || Global.checkFlag(Flag.FemalePronounsOnly);
+                        || (human() && Global.checkFlag(Flag.PCFemalePronounsOnly))
+                        || (!human() && Global.checkFlag(Flag.NPCFemalePronounsOnly));
     }
 
     public String nameDirectObject() {
@@ -3472,6 +3473,9 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public String temptLiner(Combat c, Character target) {
+        if (c.getStance().sub(this)) {
+            return Global.format("{self:SUBJECT-ACTION:try} to entice {other:name-do} by wiggling suggestively in {other:possessive} grip.", this, target);
+        }
         return Global.format("{self:SUBJECT-ACTION:pat} {self:possessive} groin and {self:action:promise} {self:pronoun-action:will} show {other:direct-object} a REAL good time.", this, target);
     }
 
@@ -3978,7 +3982,7 @@ public abstract class Character extends Observable implements Cloneable {
         this.name = name;
     }
 
-    public boolean hasStatusVariant(String sourceString) {
-        return status.stream().anyMatch(s -> s.getVariant().equals(sourceString));
+    public boolean hasStatusVariant(String variant) {
+        return status.stream().anyMatch(s -> s.getVariant().equals(variant));
     }
 }

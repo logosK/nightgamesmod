@@ -11,6 +11,7 @@ import nightgames.global.Global;
 import nightgames.items.clothing.Clothing;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.status.Abuff;
+import nightgames.status.Charmed;
 import nightgames.status.Stsflag;
 import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
@@ -183,6 +184,14 @@ public class BreastsPart extends GenericBodyPart {
                                                 self, opponent));
                 opponent.weaken(c, opponent.getStamina().max() / 10);
                 opponent.add(c, new Abuff(opponent, Attribute.Power, -Global.random(1, 3), 20));
+            }
+            if (self.has(Trait.Pacification)) {
+                c.write(opponent,
+                                Global.format("With every drop of {self:name-possessive} infernal milk {other:subject-action:swallow},"
+                                                + " {self:pronoun} seems more and more impossibly beautiful to {other:possessive} eyes."
+                                                + " Why would {other:pronoun} want to mar such perfect beauty?",
+                                                self, opponent));
+                opponent.add(c, new Charmed(opponent, 2));
             }
             if (self.has(Trait.PheromonedMilk) && !opponent.has(Trait.Rut)) {
                 c.write(opponent, Global.format("<b>Drinking {self:possessive} breast milk sends {other:direct-object} into a chemically induced rut!</b>",

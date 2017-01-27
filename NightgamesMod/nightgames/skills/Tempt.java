@@ -7,7 +7,9 @@ import nightgames.characters.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
+import nightgames.status.Charmed;
 import nightgames.status.Enthralled;
+import nightgames.status.Stsflag;
 import nightgames.status.Trance;
 
 public class Tempt extends Skill {
@@ -49,6 +51,12 @@ public class Tempt extends Skill {
                             + " authority that {other:subject-action:don't|doesn't} even consider disobeying."
                             , getSelf(), target));
             target.add(c, new Trance(target, 1, false));
+        } else if (getSelf().has(Trait.MelodiousInflection) && !target.is(Stsflag.charmed) && Global.random(3) == 0) {
+            c.write(getSelf(), Global.format("Something about {self:name-possessive} words, the"
+                            + " way {self:possessive} voice rises and falls, {self:possessive}"
+                            + " pauses and pitch... {other:SUBJECT} soon {other:action:find|finds}"
+                            + " {other:reflective} utterly hooked.", getSelf(), target));
+            target.add(c, new Charmed(target, 2));
         }
 
         target.temptNoSource(c, getSelf(), n, this);

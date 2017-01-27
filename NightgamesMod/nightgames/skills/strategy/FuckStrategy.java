@@ -17,7 +17,7 @@ import nightgames.skills.Tactics;
 public class FuckStrategy extends AbstractStrategy {
     @Override
     public double weight(Combat c, Character self) {
-        double weight = 1;
+        double weight = 2;
         if (self.getMood().equals(Emotion.horny)) {
             weight *= 2;
         }

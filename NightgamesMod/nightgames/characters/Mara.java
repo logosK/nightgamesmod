@@ -329,7 +329,6 @@ public class Mara extends BasePersonality {
         character.getGrowth().addTrait(12, Trait.dickhandler);
         character.getGrowth().addTrait(15, Trait.sexTraining1);
         character.getGrowth().addTrait(18, Trait.pussyhandler);
-        character.getGrowth().addTrait(20, Trait.mindcontroller);
         character.getGrowth().addTrait(21, Trait.tongueTraining1);
         character.getGrowth().addTrait(24, Trait.limbTraining2);
         character.getGrowth().addTrait(27, Trait.tight);
@@ -466,7 +465,7 @@ public class Mara extends BasePersonality {
         character.outfitPlan.add(Clothing.getByID("pants"));
         character.outfitPlan.add(Clothing.getByID("pantyhose"));
         character.outfitPlan.add(Clothing.getByID("boots"));
-        character.mod(Attribute.Science, 1);
+        character.modAttributeDontSaveData(Attribute.Science, 1);
         character.getGrowth().addOrRemoveTraits(character, true);
     }
 

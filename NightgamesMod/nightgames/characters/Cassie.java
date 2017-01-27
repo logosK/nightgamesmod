@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 
+import javax.print.attribute.standard.MediaSize.Other;
+
 import nightgames.actions.Action;
 import nightgames.actions.Movement;
 import nightgames.characters.body.AssPart;
@@ -419,7 +421,7 @@ public class Cassie extends BasePersonality {
     @Override
     public String victory(Combat c, Result flag) {
         if (c.getOpponent(character).getLastOrgasmPart() instanceof BreastsPart || c.getStance().vaginallyPenetrated(c,c.getOpponent(character))) dominance +=1;
-        if (c.getOpponent(character).getLastOrgasmPart() instanceof BreastsPart && c.getOpponent(character).body.getLargestBreasts().getSensitivity(null, character.body.getRandom("hands"))>5) {
+        if (c.getOpponent(character).getLastOrgasmPart() instanceof BreastsPart && c.getOpponent(character).body.getLargestBreasts().getSensitivity(c.getOpponent(character), character.body.getRandom("hands"))>5) {
             character.arousal.empty();
             return "incomplete, should be a series of scenes including one where Cassie makes the player lactate magicmilk that only affects themself and prevents breast size reduction"
                             + "and one where Cassie gives the player a bra that reduces breast sensitivity to reasonable levels while worn, but also makes them moo on orgasm, and vibrates while fighting Cassie";
@@ -802,7 +804,7 @@ public class Cassie extends BasePersonality {
         character.outfitPlan.add(Clothing.getByID("skirt"));
         character.outfitPlan.add(Clothing.getByID("shoes"));
 
-        character.mod(Attribute.Arcane, 1);
+        character.modAttributeDontSaveData(Attribute.Arcane, 1);
         character.getGrowth().addOrRemoveTraits(character, true);
     }
 

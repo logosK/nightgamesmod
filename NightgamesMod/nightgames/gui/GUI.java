@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Panel;
@@ -164,7 +165,14 @@ public class GUI extends JFrame implements Observer {
     private static final String USE_CLOSET_UI = "CLOSET";
 
     public GUI() {
-
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+                        | UnsupportedLookAndFeelException e1) {
+            System.err.println("Unable to set look-and-feel");
+            e1.printStackTrace();
+        }
+        
         // frame title
         setTitle("NightGames Mod");
         setBackground(GUIColors.bgDark);
@@ -347,7 +355,7 @@ public class GUI extends JFrame implements Observer {
         
         rdfntnorm.setSelected(true);
         
-        JLabel pronounLabel = new JLabel("Pronoun Usage");
+        JLabel pronounLabel = new JLabel("Human Pronoun Usage");
         ButtonGroup pronoun = new ButtonGroup();
         JRadioButton rdPronounBody = new JRadioButton("Based on Anatomy");
         JRadioButton rdPronounFemale = new JRadioButton("Always Female");
@@ -356,6 +364,16 @@ public class GUI extends JFrame implements Observer {
         optionsPanel.add(pronounLabel);
         optionsPanel.add(rdPronounBody);
         optionsPanel.add(rdPronounFemale);
+
+        JLabel npcPronounLabel = new JLabel("NPC Pronoun Usage");
+        ButtonGroup npcPronoun = new ButtonGroup();
+        JRadioButton rdNPCPronounBody = new JRadioButton("Based on Anatomy");
+        JRadioButton rdNPCPronounFemale = new JRadioButton("Always Female");
+        npcPronoun.add(rdNPCPronounBody);
+        npcPronoun.add(rdNPCPronounFemale);
+        optionsPanel.add(npcPronounLabel);
+        optionsPanel.add(rdNPCPronounBody);
+        optionsPanel.add(rdNPCPronounFemale);
 
         // m/f preference (no (other) males in the games yet... good for
         // modders?)
@@ -432,7 +450,12 @@ public class GUI extends JFrame implements Observer {
             } else {
                 rdfntnorm.setSelected(true);
             }
-            if (Global.checkFlag(Flag.FemalePronounsOnly)) {
+            if (Global.checkFlag(Flag.NPCFemalePronounsOnly)) {
+                rdNPCPronounFemale.setSelected(true);
+            } else {
+                rdNPCPronounBody.setSelected(true);
+            }
+            if (Global.checkFlag(Flag.PCFemalePronounsOnly)) {
                 rdPronounFemale.setSelected(true);
             } else {
                 rdPronounBody.setSelected(true);
@@ -447,7 +470,8 @@ public class GUI extends JFrame implements Observer {
                 Global.setFlag(Flag.hardmode, rdhard.isSelected());
                 Global.setFlag(Flag.autosave, rdautosaveon.isSelected());
                 Global.setFlag(Flag.noportraits, rdporoff.isSelected());
-                Global.setFlag(Flag.FemalePronounsOnly, rdPronounFemale.isSelected());
+                Global.setFlag(Flag.NPCFemalePronounsOnly, rdNPCPronounFemale.isSelected());
+                Global.setFlag(Flag.PCFemalePronounsOnly, rdPronounFemale.isSelected());
                 if (!rdporon.isSelected()) {
                     showNone();
                 }
@@ -1399,15 +1423,30 @@ public class GUI extends JFrame implements Observer {
         ArrayList<JLabel> attlbls = new ArrayList<>();
         for (Attribute a : Attribute.values()) {
             int amt = player.get(a);
+            int pure = player.getPure(a);
             if (amt > 0) {
-                JLabel dirtyTrick = new JLabel(a.name() + ": " + amt);
+                if (amt == pure) {
+                    JLabel dirtyTrick = new JLabel(a.name() + ": " + amt);
+                    dirtyTrick.setForeground(GUIColors.textColorLight);
+                    attlbls.add(count, dirtyTrick);
+                    statsPanel.add(attlbls.get(count++));
+                } else {
+                    JLabel base = new JLabel(String.format("%n%n%s: %d ", a.name(), pure));
+                    base.setSize(base.getPreferredSize());
+                    base.setForeground(GUIColors.textColorLight);
+                    JLabel mod = new JLabel(String.format("(%s%d)", amt > pure ? "+" : "-", Math.abs(amt - pure)));
+                    mod.setForeground(amt > pure ? GUIColors.Green : GUIColors.Red);
+                    mod.setFont(getFont().deriveFont(10.f));
+                    JPanel p = new JPanel();
+                    p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
+                    p.setBackground(GUIColors.bgLight);
+                    p.add(base);
+                    p.add(mod);
+                    p.add(Box.createHorizontalGlue());
+                    statsPanel.add(p);
+                }
 
-                dirtyTrick.setForeground(GUIColors.textColorLight);
 
-                attlbls.add(count, dirtyTrick);
-
-                statsPanel.add(attlbls.get(count));
-                count++;
             }
         }
 

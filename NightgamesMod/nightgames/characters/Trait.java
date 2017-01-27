@@ -1,5 +1,8 @@
 package nightgames.characters;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -166,7 +169,6 @@ public enum Trait {
     druglacedprecum("Drug-laced Precum", "Drugs in your precum are perfect for increasing an enemies sensitivity"), // Anybody part that comes into contact with your precum becomes increasingly sensitive for x turns.
     magicmilk("Magicked Milk", "Magically augmented milk. It's a a strong addictive aphrodisiac, as well as a subtle hypnotic."), // .
     zealinspiring("Zeal Inspiring", "Instills true belief in people, inspiring them to follow her"),
-    corrupting("Corrupting Influence", "Corrupts to the very core."),
     breeder("Breeder", "Particularly inviting"),
     mindcontroller("Mind Controller", "Can take control of others' minds. Inventive, yes?"),
     darkpromises("Dark Promises", "Can enthrall with the right words"), // whisper upgrade, can enthrall
@@ -454,6 +456,33 @@ public enum Trait {
     ControlledRelease("Controlled Release", "Can use mind control to tempt opponents"),
     RemoteControl("Remote Control", "Can deploy a fancy hypnosis trap"),
     EyeOpener("Eye Opener", "The harpoon toy enhances mind control"),
+    
+    //Reyka Disabling Focus
+    SuccubusWarmth("Succubus's Warmth", "Why would you even want to escape?"),
+    Pacification("Pacification", "Milk may cause Charmed"),
+    DemonsEmbrace("Demon's Embrace", "Can wrap up opponent in wings"),
+    VampireWings("Vampire Wings", "Contact with wings drains Power"),
+    
+    // Reyka Seduction Focus
+    MelodiousInflection("Melodious Inflection", "Speaks in a 'Charming' manner"),
+    ComeHither("Come Hither", "Can draw Charmed opponents to herself"),
+    TenderKisses("Tender Kisses", "Kisses may extend existing Charmed status"),
+    PinkHaze("Pink Haze", "Charmed opponents think she is even more beautiful"),
+    
+    // Reyka Corruption Focus
+    Corrupting("Corrupting Influence", "Corrupts to the very core."),
+    InfernalAllegiance("Infernal Allegiance", "'Encourages' corrupted opponents to play along"),
+    LastingCorruption("Lasting Corruption", "Partially Corrupted fades more slowly"),
+    TotalSubjugation("Total Subjugation", "An orgasm in a Succubus Embrace significantly corrupts"),
+    Subversion("Subversion", "Corruption is stronger while Charmed"),
+
+    // Reyka Draining Focus
+    Greedy("Greedy", "Attribute draining lasts 50% longer"),
+    RaptorMentis("Raptor Mentis", "Attribute draining effects also drain Willpower"),
+    BottomlessPit("Bottomless Pit", "Enhances draining by demonic genitalia"),
+    SpecificSapping("Specific Sapping", "Draining effects make escape more difficult for 1 turn"),
+    WillingSacrifice("Willing Sacrifice", "Draining is stronger while Charmed"),
+    
     stronghold("Strong Hold", "Harder to escape Arm/Leg Locks"),
 
     // Item
@@ -472,6 +501,10 @@ public enum Trait {
     //From the training miniquests
     trainedslut("Trained Slut", "Has been trained to be a slut. Reinforcing that training causes increased submissiveness"),
     buttsluttraining("not visible", "the duration of the attached status represents the level ()");
+    
+    private static void override(Map<Trait, Collection<Trait>> o, Trait key, Trait... overrides) {
+        o.put(key, Arrays.asList(overrides));
+    }
     
     private String desc;
     private TraitDescription longDesc;
@@ -522,10 +555,15 @@ public enum Trait {
             b.append(' ');
         }
     }
+    
+    public boolean isOverridden(Character ch) {
+        return OVERRIDES.containsKey(this) && OVERRIDES.get(this).stream().anyMatch(t -> ch.has(t));
+    }
 
     public static Map<Trait, Resistance> resistances;
     public static Resistance nullResistance;
-
+    public static final Map<Trait, Collection<Trait>> OVERRIDES;
+    
     static {
         nullResistance = (combat, c, s) -> "";
         resistances = new HashMap<>();
@@ -611,6 +649,16 @@ public enum Trait {
            }
            return "";
         });
+        Map<Trait, Collection<Trait>> o = new HashMap<>();
+        override(o, tongueTraining1, tongueTraining2, tongueTraining3);
+        override(o, tongueTraining2, tongueTraining3);
+        override(o, sexTraining1, sexTraining2, sexTraining3);
+        override(o, sexTraining2, sexTraining3);
+        override(o, limbTraining1, limbTraining2, limbTraining3);
+        override(o, limbTraining2, limbTraining3);
+        override(o, analTraining1, analTraining2, analTraining3);
+        override(o, analTraining2, analTraining3);
+        OVERRIDES = Collections.unmodifiableMap(o);
     }
 
     public static Resistance getResistance(Trait t) {

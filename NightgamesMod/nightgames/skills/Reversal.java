@@ -1,5 +1,7 @@
 package nightgames.skills;
 
+import java.util.Optional;
+
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
@@ -8,8 +10,8 @@ import nightgames.combat.Result;
 import nightgames.global.Global;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.Pin;
-import nightgames.status.Collared;
-import nightgames.status.Stsflag;
+import nightgames.status.Compulsive;
+import nightgames.status.Compulsive.Situation;
 
 public class Reversal extends Skill {
 
@@ -28,16 +30,19 @@ public class Reversal extends Skill {
     public int getMojoCost(Combat c) {
         return 20;
     }
+    
+    @Override
+    public float priorityMod(Combat c) {
+        return 5.f - (float) getSelf().get(Attribute.Submissive) / 3.f;
+    }
 
     @Override
     public boolean resolve(Combat c, Character target) {
-        Collared stat = (Collared) getSelf().getStatus(Stsflag.collared);
-        if (stat != null) {
-            c.write(getSelf(), Global.format("{self:SUBJECT-ACTION:try|tries} to get the"
-                            + " upper hand, but the collar adamantly refuses by"
-                            + " shocking {self:direct-object}.", getSelf(), target));
+        Optional<String> compulsion = Compulsive.describe(c, getSelf(), Situation.PREVENT_REVERSAL);
+        if (compulsion.isPresent()) {
+            c.write(getSelf(), compulsion.get());
             getSelf().pain(c, null, Global.random(20, 50));
-            stat.spendCharges(c, 2);
+            Compulsive.doPostCompulsion(c, getSelf(), Situation.PREVENT_REVERSAL);
             return false;
         }
         if (target.roll(getSelf(), c, accuracy(c, target))) {

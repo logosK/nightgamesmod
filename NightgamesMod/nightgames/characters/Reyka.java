@@ -18,6 +18,7 @@ import nightgames.global.Global;
 import nightgames.items.Item;
 import nightgames.items.clothing.Clothing;
 import nightgames.skills.strategy.BreastStrategy;
+import nightgames.skills.strategy.DisablingStrategy;
 import nightgames.skills.strategy.FacesitStrategy;
 import nightgames.skills.strategy.FootjobStrategy;
 import nightgames.skills.strategy.KnockdownStrategy;
@@ -44,6 +45,7 @@ public class Reyka extends BasePersonality {
         self.addPersonalStrategy(new BreastStrategy());
         self.addPersonalStrategy(new FacesitStrategy());
         self.addPersonalStrategy(new KnockdownStrategy());
+        self.addPersonalStrategy(new DisablingStrategy());
     }
 
     @Override
@@ -69,7 +71,7 @@ public class Reyka extends BasePersonality {
         self.body.add(TailPart.demonic);
         self.body.add(WingsPart.demonic);
         self.body.add(EarPart.pointed);
-        self.body.add(new FacePart(0.5, 1.1));
+        self.body.add(new FacePart(0.5, 5));
         self.initialGender = CharacterSex.female;
     }
 
@@ -97,7 +99,7 @@ public class Reyka extends BasePersonality {
         character.getGrowth().addTrait(11, Trait.addictivefluids);
         character.getGrowth().addTrait(14, Trait.graceful);
         character.getGrowth().addTrait(17, Trait.insertion);
-        character.getGrowth().addTrait(20, Trait.corrupting);
+        character.getGrowth().addTrait(20, Trait.Corrupting);
         character.getGrowth().addTrait(20, Trait.spiritphage);
         character.getGrowth().addTrait(23, Trait.tongueTraining2);
         character.getGrowth().addTrait(26, Trait.magicEyeTrance);

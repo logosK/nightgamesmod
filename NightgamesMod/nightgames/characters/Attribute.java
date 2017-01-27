@@ -48,7 +48,7 @@ public enum Attribute {
         }
         return a != Speed && a != Perception && (self.has(Trait.divinity) || a != Divinity);
     }
-    
+
     private static String findYourself(String desc) {
         return "{self:action:find|finds} {self:reflective} " + desc;
     }
