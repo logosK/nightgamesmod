@@ -22,6 +22,7 @@ public class TailFucked extends Status implements InsertedStatus {
         requirements.add(eitherinserted());
         flag(Stsflag.bound);
         flag(Stsflag.debuff);
+        flag(Stsflag.tailfucked);
     }
 
     @Override

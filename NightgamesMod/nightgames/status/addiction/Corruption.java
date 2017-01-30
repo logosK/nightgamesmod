@@ -42,7 +42,7 @@ public class Corruption extends Addiction {
         super.tick(c);
         Severity sev = getCombatSeverity();
         int amt = sev.ordinal() * 2;
-        if (cause.has(Trait.Subversion)) {
+        if (cause.has(Trait.Subversion) && affected.is(Stsflag.charmed)) {
             amt *= 1.5;
         }
         List<Abuff> buffs = new ArrayList<>();
@@ -123,7 +123,9 @@ public class Corruption extends Addiction {
     }
     
     private Attribute getDrainAttr() {
-        return Global.pickRandom(Arrays.stream(Attribute.values()).filter(a -> a != Attribute.Dark && affected.get(a) >= 10).toArray(Attribute[]::new)).get();
+        return Global.pickRandom(Arrays.stream(Attribute.values())
+                        .filter(a -> a != Attribute.Dark && affected.get(a) >= 10)
+                        .toArray(Attribute[]::new)).orElse(null);
     }
 
     @Override
