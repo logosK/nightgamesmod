@@ -2,9 +2,12 @@
 <classpath>
 	<classpathentry kind="src" path="NightgamesMod"/>
 	<classpathentry kind="src" path="NightgamesTests"/>
+	<classpathentry kind="src" path="NGCreator/src"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Google_for_NGM"/>
 	<classpathentry exported="true" kind="lib" path="/home/owengray/git/nightgamesmod/NightgamesMod/commons-lang3-3.5.jar"/>
+	<classpathentry kind="lib" path="/home/owengray/Downloads/jre1.8.0_121/lib/ext/jfxrt.jar"/>
+	<classpathentry kind="lib" path="/home/owengray/Downloads/jre1.8.0_121/lib/rt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
