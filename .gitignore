@@ -10,6 +10,7 @@ build
 .classpath
 .project
 .settings
+.gitignore
 CombatStats*
 NightgamesMod/.settings
 combatlogs
