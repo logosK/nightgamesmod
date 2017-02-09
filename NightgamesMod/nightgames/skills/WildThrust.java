@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.Player;
 import nightgames.characters.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -19,7 +18,7 @@ public class WildThrust extends Thrust {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Animism) > 1 || (user.human() && ((Player)user).checkAddiction(AddictionType.BREEDER));
+        return user.get(Attribute.Animism) > 1 || user.checkAddiction(AddictionType.BREEDER);
     }
 
     @Override
@@ -45,7 +44,7 @@ public class WildThrust extends Thrust {
             c.write(getSelf(), Global.format("The sheer ferocity of {self:name-possessive} movements"
                             + " fill you with an unnatural desire to sate {self:possessive} thirst with"
                             + " your cum.", getSelf(), target));
-            ((Player) target).addict(AddictionType.BREEDER, getSelf(), Addiction.LOW_INCREASE);
+            target.addict(c, AddictionType.BREEDER, getSelf(), Addiction.LOW_INCREASE);
         }
         return effective;
     }
@@ -61,42 +60,26 @@ public class WildThrust extends Thrust {
 
         results[0] = m;
         results[1] = mt;
+        modBreeder(c, getSelf(), target, results);
 
-        Player p = null;
-        if (getSelf().human()) {
-            p = (Player) getSelf();
-        } else if (target.human()) {
-            p = (Player) target;
-        }
+        return results;
+    }
 
-        if (p == null) {
-            return results;
-        }
-
-        Character npc = c.getOpponent(p);
+    private void modBreeder(Combat c, Character p, Character target, int results[]) {
         Optional<Addiction> addiction = p.getAddiction(AddictionType.BREEDER);
         if (!addiction.isPresent()) {
-            return results;
+            return;
         }
 
         Addiction add = addiction.get();
-        if (getSelf().human()) {
-            if (add.wasCausedBy(npc)) {
-                //Increased recoil vs Kat
-                mt *= 1 + ((float) add.getSeverity().ordinal() / 3.f);
-                p.addict(AddictionType.BREEDER, npc, Addiction.LOW_INCREASE);
-            } else {
-                //Increased damage vs everyone else
-                m *= 1 + ((float) add.getSeverity().ordinal() / 3.f);
-            }
-        } else if (target.human() && add.wasCausedBy(npc)) {
-            m *= 1 + ((float) add.getSeverity().ordinal() / 4.f);
+        if (add.wasCausedBy(target)) {
+            //Increased recoil vs Kat
+            results[1] *= 1 + ((float) add.getSeverity().ordinal() / 3.f);
+            p.addict(c, AddictionType.BREEDER, target, Addiction.LOW_INCREASE);
+        } else {
+            //Increased damage vs everyone else
+            results[0] *= 1 + ((float) add.getSeverity().ordinal() / 3.f);
         }
-
-        results[0] = m;
-        results[1] = mt;
-
-        return results;
     }
 
     @Override
@@ -111,8 +94,8 @@ public class WildThrust extends Thrust {
                             + " in the ass with no regard to technique. She whimpers in pleasure and can barely summon the strength to hold herself off the floor.";
         } else if (modifier == Result.reverse) {
             return Global.format(
-                            "{self:SUBJECT-ACTION:bounce|bounces} wildly on {other:name-possessive} cock with no regard to technique, relentlessly driving you both towards orgasm.",
-                            getSelf(), target);
+                            "{self:SUBJECT-ACTION:%s {other:name-possessive} cock with no regard to technique, relentlessly driving you both towards orgasm.",
+                            getSelf(), target, c.getStance().sub(getSelf()) ? "grind} against" : "bounce} on");
         } else {
             return "You wildly pound your dick into " + target.getName()
                             + "'s pussy with no regard to technique. Her pleasure filled cries are proof that you're having an effect, but you're feeling it "
@@ -134,8 +117,8 @@ public class WildThrust extends Thrust {
                             getSelf().possessiveAdjective(), target.possessiveAdjective(),
                             target.hasBalls() ? "prostate" : "insides");
         } else if (modifier == Result.reverse) {
-            return String.format("%s frenziedly bounces on %s cock, relentlessly driving %s both toward orgasm.",
-                            getSelf().subject(), target.nameOrPossessivePronoun(), c.bothDirectObject(target));
+            return String.format("%s frenziedly %s %s cock, relentlessly driving %s both toward orgasm.",
+                            getSelf().subject(), target.nameOrPossessivePronoun(), c.bothDirectObject(target), c.getStance().sub(getSelf()) ? "grinds against" : "bounces on");
         } else {
             return Global.format(
                             "{self:SUBJECT-ACTION:rapidly pound|rapidly pounds} {self:possessive} {self:body-part:cock} into {other:possessive} {other:body-part:pussy}, "
@@ -153,6 +136,8 @@ public class WildThrust extends Thrust {
     public String getName(Combat c) {
         if (c.getStance().penetratedBy(c, c.getStance().getPartner(c, getSelf()), getSelf())) {
             return "Wild Thrust";
+        } else if (c.getStance().sub(getSelf())) {
+            return "Wil Grind";
         } else {
             return "Wild Ride";
         }

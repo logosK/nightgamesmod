@@ -117,7 +117,7 @@ public class JewelTime extends BaseNPCTime {
                     Global.gui().message(self.dong());
                 }
                 for (int i = 1; i < level; i++) {
-                    self.ding();
+                    self.ding(c);
                 }
                 return true;
             };
@@ -242,7 +242,7 @@ public class JewelTime extends BaseNPCTime {
                                   + " leaving you standing in the hallway holding your shirt in your hands, to the great amusement"
                                   + " of some of Jewel's neighbors. You hurriedly pull the shirt on and make your way out of the dorm.");
             Global.getPlayer()
-                  .addict(AddictionType.DOMINANCE, npc, Addiction.MED_INCREASE);
+                  .addict(null, AddictionType.DOMINANCE, npc, Addiction.MED_INCREASE);
             Global.getPlayer()
                   .getAddiction(AddictionType.DOMINANCE)
                   .ifPresent(Addiction::flagDaytime);

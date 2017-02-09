@@ -43,14 +43,14 @@ public class LevelDrain extends Drain {
         return 60;
     }
 
-    private int stealXP(Character target) {
+    private int stealXP(Combat c, Character target) {
         int xpStolen = target.getXP();
         if (xpStolen <= 0) {
             return 0;
         }
         target.loseXP(xpStolen);
         getSelf().gainXPPure(xpStolen);
-        getSelf().levelUpIfPossible();
+        getSelf().levelUpIfPossible(c);
         return xpStolen;
     }
 
@@ -68,7 +68,7 @@ public class LevelDrain extends Drain {
                 getSelf().arouse(getSelf().getArousal().max(), c);
                 break;
             case 1:
-                int stolen = stealXP(target);
+                int stolen = stealXP(c, target);
                 if (stolen > 0) {
                     getSelf().add(c, new Satiated(getSelf(), stolen, 0));
                     if (getSelf().human()) {
@@ -80,8 +80,8 @@ public class LevelDrain extends Drain {
                 break;
             case 2:
                 int xpStolen = 95 + 5 * target.getLevel();
-                getSelf().add(c, new Satiated(target, xpStolen, 0));
-                c.write(getSelf(), target.dong());
+                getSelf().add(c, new Satiated(getSelf(), xpStolen, 0));
+                c.write(target, target.dong());
                 if (getSelf().human()) {
                     c.write(getSelf(), "You have stolen a level from " + target.getName() + "'s levels and absorbed it as " + xpStolen
                                     + " XP!\n");
@@ -90,8 +90,8 @@ public class LevelDrain extends Drain {
                                     + " XP!\n");
                 }
                 getSelf().gainXPPure(xpStolen);
-                getSelf().levelUpIfPossible();
-                target.temptNoSource(c, getSelf(), target.getArousal().max(), this);
+                getSelf().levelUpIfPossible(c);
+                target.arouse(target.getArousal().max(), c);
                 String levelDrainLine = getSelf().getRandomLineFor(CharacterLine.LEVEL_DRAIN_LINER, c, target);
                 if (!levelDrainLine.isEmpty()) {
                     c.write(getSelf(), levelDrainLine);

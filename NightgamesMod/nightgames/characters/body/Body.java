@@ -22,7 +22,6 @@ import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.CharacterSex;
-import nightgames.characters.Player;
 import nightgames.characters.Trait;
 import nightgames.characters.body.mods.PartMod;
 import nightgames.characters.body.mods.SizeMod;
@@ -628,7 +627,7 @@ public class Body implements Cloneable {
         }
         double perceptionBonus = 1.0;
         if (opponent != null) {
-            perceptionBonus *= opponent.body.getCharismaBonus(c, character);
+            perceptionBonus *= 1 + (opponent.body.getCharismaBonus(c, character) - 1) / 2;
         }
         double baseBonusDamage = bonus;
         if (opponent != null) {
@@ -687,9 +686,8 @@ public class Body implements Cloneable {
         }
 
         double dominance = 0.0;
-        if (character.human() && character instanceof Player && ((Player)character).checkAddiction(AddictionType.DOMINANCE, opponent)
-                       && c.getStance().dom(opponent)) {
-            float mag = ((Player)character).getAddiction(AddictionType.DOMINANCE).get().getMagnitude();
+        if (character.checkAddiction(AddictionType.DOMINANCE, opponent) && c.getStance().dom(opponent)) {
+            float mag = character.getAddiction(AddictionType.DOMINANCE).get().getMagnitude();
             float dom = c.getStance().getDominanceOfStance(opponent);
             dominance = mag * (dom / 5.0);
         }
@@ -758,9 +756,9 @@ public class Body implements Cloneable {
                 c.writeSystemMessage(battleString);
             }
             Optional<BodyFetish> otherFetish = opponent.body.getFetish(target.getType());
-            if (otherFetish.isPresent() && perceptionlessDamage > 0 && skill != null && skill.getSelf().equals(character) && opponent != character) {
+            if (otherFetish.isPresent() && otherFetish.get().magnitude > .3 && perceptionlessDamage > 0 && skill != null && skill.getSelf().equals(character) && opponent != character && opponent.canRespond()) {
                 c.write(character, Global.format("Playing with {other:possessive} {other:body-part:%s} arouses {self:direct-object} almost as much as {other:direct-object}.", opponent, character, target.getType()));
-                opponent.temptNoSkill(c, character, target, (int) Math.round(perceptionlessDamage * otherFetish.get().magnitude));
+                opponent.temptNoSkill(c, character, target, (int) Math.round(perceptionlessDamage * (otherFetish.get().magnitude - .2)));
             }
         } else {
             String firstColor =
@@ -1090,7 +1088,6 @@ public class Body implements Cloneable {
             if (!has("pussy")) {
                 add(PussyPart.generic);
             }
-
         }
         if (sex.hasCock()) {
             if (!has("cock")) {

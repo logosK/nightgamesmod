@@ -1,15 +1,11 @@
 package nightgames.characters;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import nightgames.actions.Action;
 import nightgames.actions.Leap;
@@ -24,15 +20,14 @@ import nightgames.characters.body.GenericBodyPart;
 import nightgames.characters.body.TentaclePart;
 import nightgames.characters.body.mods.GooeyMod;
 import nightgames.combat.Combat;
+import nightgames.combat.IEncounter;
 import nightgames.combat.Result;
-import nightgames.global.DebugFlags;
+import nightgames.ftc.FTCMatch;
 import nightgames.global.Flag;
 import nightgames.global.Global;
 import nightgames.gui.GUI;
 import nightgames.items.Item;
 import nightgames.items.clothing.Clothing;
-import nightgames.match.Encounter;
-import nightgames.match.ftc.FTCMatch;
 import nightgames.skills.Stage;
 import nightgames.skills.Tactics;
 import nightgames.skills.damage.DamageType;
@@ -46,16 +41,12 @@ import nightgames.status.Pheromones;
 import nightgames.status.PlayerSlimeDummy;
 import nightgames.status.Status;
 import nightgames.status.Stsflag;
-import nightgames.status.addiction.Addiction;
-import nightgames.status.addiction.Addiction.Severity;
-import nightgames.status.addiction.AddictionType;
 import nightgames.trap.Trap;
 
 public class Player extends Character {
     public GUI gui;
     public int traitPoints;
     private int levelsToGain;
-    private List<Addiction> addictions;
 
     public Player(String name) {
         this(name, CharacterSex.male, Optional.empty(), new ArrayList<>(), new HashMap<>());
@@ -66,7 +57,6 @@ public class Player extends Character {
                     Map<Attribute, Integer> selectedAttributes) {
         super(name, 1);
         initialGender = sex;
-        addictions = new ArrayList<>();
         levelsToGain = 0;
         applyBasicStats(this);
         setGrowth();
@@ -80,11 +70,6 @@ public class Player extends Character {
     @Override
     public void finishClone(Character other) {
         super.finishClone(other);
-        List<Addiction> oldaddictions = addictions;
-        addictions = new ArrayList<>();
-        for (Status s : oldaddictions) {
-            addictions.add((Addiction)s.instance(this, other));
-        }
     }
 
     public void applyBasicStats(Character self) {
@@ -252,7 +237,7 @@ public class Player extends Character {
     }
 
     @Override
-    public void faceOff(Character opponent, Encounter enc) {
+    public void faceOff(Character opponent, IEncounter enc) {
         gui.message("You run into <b>" + opponent.nameDirectObject()
                         + "</b> and you both hesitate for a moment, deciding whether to attack or retreat.");
         assessOpponent(opponent);
@@ -301,7 +286,7 @@ public class Player extends Character {
     }
 
     @Override
-    public void spy(Character opponent, Encounter enc) {
+    public void spy(Character opponent, IEncounter enc) {
         gui.message("You spot <b>" + opponent.nameDirectObject()
                         + "</b> but she hasn't seen you yet. You could probably catch her off guard, or you could remain hidden and hope she doesn't notice you.");
         assessOpponent(opponent);
@@ -370,26 +355,24 @@ public class Player extends Character {
                     allowedActions().forEach(a -> gui.addAction(a, this));
                 } else {
                     List<Action> possibleActions = new ArrayList<>();
-                    if (Global.getMatch().canMoveOutOfCombat(this)) {
-                        for (Area path : location.adjacent) {
-                            possibleActions.add(new Move(path));
-                        }
-                        if (getPure(Attribute.Cunning) >= 28) {
-                            for (Area path : location.shortcut) {
-                                possibleActions.add(new Shortcut(path));
-                            }
-                        }
-
-                        if(getPure(Attribute.Ninjutsu)>=5){
-                            for(Area path:location.jump){
-                                possibleActions.add(new Leap(path));
-                            }
+                    for (Area path : location.adjacent) {
+                        possibleActions.add(new Move(path));
+                    }
+                    if (getPure(Attribute.Cunning) >= 28) {
+                        for (Area path : location.shortcut) {
+                            possibleActions.add(new Shortcut(path));
                         }
                     }
-                    possibleActions.addAll(Global.getMatch().getAvailableActions(this));
+
+                    if(getPure(Attribute.Ninjutsu)>=5){
+                        for(Area path:location.jump){
+                            possibleActions.add(new Leap(path));
+                        }
+                    }
+                    possibleActions.addAll(Global.getActions());
                     for (Action act : possibleActions) {
                         if (act.usable(this) 
-                                        && Global.getMatch().getCondition().allowAction(act, this, Global.getMatch())) {
+                                        && Global.getMatch().condition.allowAction(act, this, Global.getMatch())) {
                             gui.addAction(act, this);
                         }
                     }
@@ -399,23 +382,23 @@ public class Player extends Character {
     }
 
     @Override
-    public void ding() {
+    public void ding(Combat c) {
         levelsToGain += 1;
         if (levelsToGain == 1) {
-            actuallyDing();
+            actuallyDing(c);
             if (cloned == 0) {
                 gui.ding();
             }
         }
     }
 
-    public void actuallyDing() {
+    public void actuallyDing(Combat c) {
         level += 1;
         getStamina().gain(getGrowth().stamina);
         getArousal().gain(getGrowth().arousal);
         availableAttributePoints += getGrowth().attributes[Math.min(rank, getGrowth().attributes.length-1)];
-        Global.writeIfCombatUpdateImmediately(gui.combat, this, "You've gained a Level!<br/>Select which attributes to increase.");
-        if (getLevel() % 3 == 0 && level < 10 || (getLevel() + 1) % 2 == 0 && level > 10 /*|| (Global.checkFlag(Flag.SuperTraitMode) && ((level < 10 && getLevel()%2 == 0) || (getLevel() % 3 != 0 && level > 10)))*/) {
+        Global.writeIfCombatUpdateImmediately(c, this, "You've gained a Level!<br/>Select which attributes to increase.");
+        if (getLevel() % 3 == 0 && level < 10 || (getLevel() + 1) % 2 == 0 && level > 10) {
             traitPoints += 1;
         }
     }
@@ -436,7 +419,7 @@ public class Player extends Character {
 
     @Override
     public void bathe() {
-        status.removeIf(s -> !s.isAddiction());
+        status.removeIf(s -> s.flags().contains(Stsflag.purgable));
         stamina.fill();
         if (location.name.equals("Showers")) {
             gui.message("You let the hot water wash away your exhaustion and soon you're back to peak condition.");
@@ -537,7 +520,7 @@ public class Player extends Character {
     }
 
     @Override
-    public void showerScene(Character target, Encounter encounter) {
+    public void showerScene(Character target, IEncounter encounter) {
         if (target.location().name.equals("Showers")) {
             gui.message("You hear running water coming from the first floor showers. There shouldn't be any residents on this floor right now, so it's likely one "
                             + "of your opponents. You peek inside and sure enough, <b>" + target.subject()
@@ -554,7 +537,7 @@ public class Player extends Character {
     }
 
     @Override
-    public void intervene(Encounter enc, Character p1, Character p2) {
+    public void intervene(IEncounter enc, Character p1, Character p2) {
         gui.message("You find <b>" + p1.getName() + "</b> and <b>" + p2.getName()
                         + "</b> fighting too intensely to notice your arrival. If you intervene now, it'll essentially decide the winner.");
         gui.message("Then again, you could just wait and see which one of them comes out on top. It'd be entertaining,"
@@ -629,7 +612,7 @@ public class Player extends Character {
     }
 
     @Override
-    public void promptTrap(Encounter enc, Character target, Trap trap) {
+    public void promptTrap(IEncounter enc, Character target, Trap trap) {
         Global.gui()
               .message("Do you want to take the opportunity to ambush <b>" + target.getName() + "</b>?");
         assessOpponent(target);
@@ -834,159 +817,6 @@ public class Player extends Character {
     @Override
     public boolean resist3p(Combat c, Character target, Character assist) {
         return has(Trait.cursed);
-    }
-
-    public boolean hasAddiction(AddictionType type) {
-        return addictions.stream()
-                         .anyMatch(a -> a.getType() == type);
-    }
-
-    public Optional<Addiction> getAddiction(AddictionType type) {
-        return addictions.stream().filter(a -> a.getType() == type).findAny();
-    }
-    
-    public Optional<Addiction> getStrongestAddiction() {
-        return addictions.stream().max(Comparator.comparing(Addiction::getSeverity));
-    }
-
-    public void addict(AddictionType type, Character cause, float mag) {
-        if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) System.out.println("adding an addiction. Current addictions: "+addictions+", new addiction: "+type+" with mag "+mag);
-        boolean dbg = Global.isDebugOn(DebugFlags.DEBUG_ADDICTION);
-        Optional<Addiction> addiction = getAddiction(type);
-        if (addiction.isPresent()) {
-            if (dbg) {
-                System.out.printf("Aggravating %s on player by %.3f\n", type.name(), mag);
-            }
-            Addiction a = addiction.get();
-            a.aggravate(mag);
-            if (dbg) {
-                System.out.printf("%s magnitude is now %.3f\n", a.getType()
-                                                                 .name(),
-                                a.getMagnitude());
-            }
-        } else {
-            if (dbg) {
-                System.out.printf("Creating initial %s on player with %.3f\n", type.name(), mag);
-            }
-            Addiction addict = type.build(this, cause, mag);
-            addictions.add(addict);
-            addict.describeInitial();
-        }
-    }
-
-    public void unaddict(AddictionType type, float mag) {
-        boolean dbg = Global.isDebugOn(DebugFlags.DEBUG_ADDICTION);
-        if (dbg) {
-            System.out.printf("Alleviating %s on player by %.3f\n", type.name(), mag);
-        }
-        Optional<Addiction> addiction = getAddiction(type);
-        if (!addiction.isPresent()) {
-            return;
-        }
-        Addiction addict = addiction.get();
-        addict.alleviate(mag);
-        if (addict.shouldRemove()) {
-            if (dbg) {
-                System.out.printf("Removing %s from player", type.name());
-            }
-            addictions.remove(addict);
-        }
-    }
-
-    public void addictCombat(AddictionType type, Character cause, float mag, Combat c) {
-        boolean dbg = Global.isDebugOn(DebugFlags.DEBUG_ADDICTION);
-        Optional<Addiction> addiction = getAddiction(type);
-        if (addiction.isPresent()) {
-            if (dbg) {
-                System.out.printf("Aggravating %s on player by %.3f (Combat vs %s)\n", type.name(), mag,
-                                cause.getTrueName());
-            }
-            Addiction a = addiction.get();
-            a.aggravateCombat(mag);
-            if (dbg) {
-                System.out.printf("%s magnitude is now %.3f\n", a.getType()
-                                                                 .name(),
-                                a.getMagnitude());
-            }
-        } else {
-            if (dbg) {
-                System.out.printf("Creating initial %s on player with %.3f (Combat vs %s)\n", type.name(), mag,
-                                cause.getTrueName());
-            }
-            Addiction addict = type.build(this, cause, Addiction.LOW_THRESHOLD);
-            addict.aggravateCombat(mag);
-            addictions.add(addict);
-        }
-    }
-
-    public void unaddictCombat(AddictionType type, Character cause, float mag, Combat c) {
-        boolean dbg = Global.isDebugOn(DebugFlags.DEBUG_ADDICTION);
-        Optional<Addiction> addict = getAddiction(type);
-        if (addict.isPresent()) {
-            if (dbg) {
-                System.out.printf("Alleviating %s on player by %.3f (Combat vs %s)\n", type.name(), mag,
-                                cause.getTrueName());
-            }
-            addict.get().alleviateCombat(mag);
-        }
-    }
-
-    public List<Addiction> getAddictions() {
-        return addictions;
-    }
-
-    public boolean checkAddiction() {
-        return addictions.stream().anyMatch(a -> a.atLeast(Severity.LOW));
-    }
-    
-    public boolean checkAddiction(AddictionType type) {
-        return getAddiction(type).map(Addiction::isActive).orElse(false);
-    }
-    
-    public boolean checkAddiction(AddictionType type, Character cause) {
-        return getAddiction(type).map(addiction -> addiction.isActive() && addiction.wasCausedBy(cause)).orElse(false);
-    }
-    
-    @Override
-    public void regen(Combat c, boolean combat) {
-        super.regen(c, combat);
-        addictions.forEach(Addiction::refreshWithdrawal);
-    }
-    
-     @Override protected void saveInternal(JsonObject object) {
-        JsonArray addictions = new JsonArray();
-        this.addictions.stream().map(Status::saveToJson).forEach(addictions::add);
-        object.add("addictions", addictions);
-    }
-
-    @Override protected void loadInternal(JsonObject object) {
-        JsonArray addictions = object.getAsJsonArray("addictions");
-        if (addictions == null)
-            return;
-        for (Object a : addictions) {
-            JsonObject json = (JsonObject) a;
-            AddictionType type = AddictionType.valueOf(json.get("type").getAsString());
-            Character cause = Global.getCharacterByType(json.get("cause").getAsString());
-            float mag = json.get("magnitude").getAsFloat();
-            float combat = json.get("combat").getAsFloat();
-            boolean overloading = json.has("overloading") ? json.get("overloading").getAsBoolean() : false;
-            boolean reenforced = json.has("reenforced") ? json.get("reenforced").getAsBoolean() : false;
-            Addiction addiction = Addiction.load(this, type, cause, mag, combat, overloading, reenforced);
-            this.addictions.add(addiction);
-        }
-    }
-
-    public Severity getAddictionSeverity(AddictionType type) {
-        return getAddiction(type).map(Addiction::getSeverity).orElse(Severity.NONE);
-    }
-
-    @Override
-    public int getEscape(Combat c, Character other) {
-        int escape = super.getEscape(c, other);
-        if (c != null && checkAddiction(AddictionType.DOMINANCE, c.getOpponent(this))) {
-            escape -= getAddiction(AddictionType.DOMINANCE).get().getCombatSeverity().ordinal() * 8;
-        }
-        return escape;
     }
 
     @Override

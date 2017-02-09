@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
-import nightgames.characters.Player;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Global;
@@ -16,20 +15,17 @@ import nightgames.status.Status;
 import nightgames.status.Stsflag;
 
 public class Breeder extends Addiction {
-    
-    private boolean isSub=false;
-
-    public Breeder(Player affected, Character cause, float magnitude) {
+    public Breeder(Character affected, Character cause, float magnitude) {
         super(affected, "Breeder", cause, magnitude);
     }
 
-    public Breeder(Player affected, Character cause) {
+    public Breeder(Character affected, Character cause) {
         this(affected, cause, .01f);
     }
 
     @Override
     protected Optional<Status> withdrawalEffects() {
-        return Optional.of(new Horny(affected, 5.f * getSeverity().ordinal(), 999, "your animal instincts"));
+        return Optional.of(new Horny(affected, 5.f * getSeverity().ordinal(), 999, affected.possessiveAdjective() + " animal instincts"));
     }
 
     @Override
@@ -234,12 +230,11 @@ public class Breeder extends Addiction {
 
     @Override
     public Status instance(Character newAffected, Character newOther) {
-        return new Breeder((Player) newAffected, newOther, magnitude);
+        return new Breeder((Character) newAffected, newOther, magnitude);
     }
 
     @Override public Status loadFromJson(JsonObject obj) {
-        return new Breeder(Global.getPlayer(), Global.getCharacterByType(obj.get("cause").getAsString()),
+        return new Breeder(Global.noneCharacter(), Global.getCharacterByType(obj.get("cause").getAsString()),
                         (float) obj.get("magnitude").getAsInt());
     }
-
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -13,14 +14,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Observable;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.swing.plaf.basic.BasicTreeUI.TreeIncrementAction;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import nightgames.actions.Action;
@@ -32,7 +39,6 @@ import nightgames.characters.body.Body;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockMod;
-import nightgames.characters.body.CockPart;
 import nightgames.characters.body.PussyPart;
 import nightgames.characters.body.TentaclePart;
 import nightgames.characters.body.ToysPart;
@@ -42,11 +48,14 @@ import nightgames.characters.custom.AiModifiers;
 import nightgames.characters.custom.CharacterLine;
 import nightgames.combat.Combat;
 import nightgames.combat.CombatantData;
+import nightgames.combat.IEncounter;
 import nightgames.combat.Result;
+import nightgames.ftc.FTCMatch;
 import nightgames.global.Challenge;
 import nightgames.global.DebugFlags;
 import nightgames.global.Flag;
 import nightgames.global.Global;
+import nightgames.global.Match;
 import nightgames.items.Item;
 import nightgames.items.clothing.Clothing;
 import nightgames.items.clothing.ClothingSlot;
@@ -54,9 +63,6 @@ import nightgames.items.clothing.ClothingTrait;
 import nightgames.items.clothing.Outfit;
 import nightgames.json.JsonUtils;
 import nightgames.nskills.tags.SkillTag;
-import nightgames.match.Encounter;
-import nightgames.match.Match;
-import nightgames.match.ftc.FTCMatch;
 import nightgames.pet.CharacterPet;
 import nightgames.pet.PetCharacter;
 import nightgames.pet.arms.ArmType;
@@ -74,31 +80,26 @@ import nightgames.stance.Position;
 import nightgames.stance.Stance;
 import nightgames.status.Abuff;
 import nightgames.status.Alluring;
-import nightgames.status.Charmed;
-import nightgames.status.Cynical;
 import nightgames.status.BodyFetish;
 import nightgames.status.Disguised;
 import nightgames.status.DivineCharge;
 import nightgames.status.DivineRecoil;
-import nightgames.status.DurationStatus;
 import nightgames.status.Enthralled;
 import nightgames.status.Falling;
 import nightgames.status.Feral;
 import nightgames.status.Frenzied;
-import nightgames.status.InsertedStatus;
 import nightgames.status.Horny;
 import nightgames.status.InsertedStatus;
-import nightgames.status.Lovestruck;
 import nightgames.status.Masochistic;
 import nightgames.status.Resistance;
 import nightgames.status.Status;
 import nightgames.status.Stsflag;
-import nightgames.status.Suckling;
 import nightgames.status.Trance;
 import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 import nightgames.status.addiction.Dominance;
 import nightgames.status.addiction.MindControl;
+import nightgames.status.addiction.Addiction.Severity;
 import nightgames.trap.Trap;
 import nightgames.utilities.DebugHelper;
 import nightgames.utilities.ProseUtils;
@@ -122,7 +123,7 @@ public abstract class Character extends Observable implements Cloneable {
     public List<Clothing> outfitPlan;
     protected Area location;
     private CopyOnWriteArrayList<Skill> skills;
-    public Set<Status> status;
+    public List<Status> status;
     public Set<Stsflag> statusFlags;
     private CopyOnWriteArrayList<Trait> traits;
     protected Map<Trait, Integer> temporaryAddedTraits;
@@ -183,7 +184,7 @@ public abstract class Character extends Observable implements Cloneable {
 
         closet = new HashSet<>();
         skills = (new CopyOnWriteArrayList<>());
-        status = new HashSet<>();
+        status = new ArrayList<>();
         statusFlags = EnumSet.noneOf(Stsflag.class);
         traits = new CopyOnWriteArrayList<>();
         temporaryAddedTraits = new HashMap<>();
@@ -242,8 +243,8 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public void finishClone(Character other) {
-        Set<Status> oldstatus = status;
-        status = new HashSet<>();
+        List<Status> oldstatus = status;
+        status = new ArrayList<>();
         for (Status s : oldstatus) {
             status.add(s.instance(this, other));
         }
@@ -437,7 +438,7 @@ public abstract class Character extends Observable implements Cloneable {
         rank++;
     }
 
-    public abstract void ding();
+    public abstract void ding(Combat c);
 
     public String dong() {
         getLevelUpFor(getLevel()).unapply(this);;
@@ -692,9 +693,7 @@ public abstract class Character extends Observable implements Cloneable {
         // pleasure = 0;
         arousal.restoreNoLimit(pleasure);
         if (checkOrgasm()) {
-            c.listen(l -> l.preOrgasm(this, source, selfPart, opponentPart));
             doOrgasm(c, source, selfPart, opponentPart);
-            c.listen(l -> l.postOrgasm(this, source, selfPart, opponentPart));
         }
         return pleasure;
     }
@@ -772,7 +771,7 @@ public abstract class Character extends Observable implements Cloneable {
                 if (oblivious) {
                     temptMultiplier /= 10;
                 }
-                dmg = (int) Math.round((i + bonus) * temptMultiplier * stalenessModifier);
+                dmg = (int) Math.max(0, Math.round((i + bonus) * temptMultiplier * stalenessModifier));
                 message = String.format(
                                 "%s tempted by %s %s for <font color='rgb(240,100,100)'>%d<font color='white'> (base:%d%s, charisma:%.1f%s)%s\n",
                                 Global.capitalizeFirstLetter(subjectWas()), tempter.nameOrPossessivePronoun(),
@@ -903,10 +902,10 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public void buildMojo(Combat c, int percent, String source) {
-        if (human() && Dominance.mojoIsBlocked(c)) {
+        if (Dominance.mojoIsBlocked(this, c)) {
             c.write(c.getOpponent(this), 
-                            String.format("Enraptured by %s display of dominance, you build no mojo.", 
-                                            c.getOpponent(this).nameOrPossessivePronoun()));
+                            String.format("Enraptured by %s display of dominance, %s no mojo.", 
+                                            c.getOpponent(this).nameOrPossessivePronoun(), subjectAction("build")));
             return;
         }
         
@@ -1004,7 +1003,7 @@ public abstract class Character extends Observable implements Cloneable {
         outfit.undress();
         outfit.dress(outfitPlan);
         if (Global.getMatch() != null) {
-            Global.getMatch().getCondition().handleOutfit(this);
+            Global.getMatch().condition.handleOutfit(this);
         }
     }
 
@@ -1188,7 +1187,7 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public void modAttributeDontSaveData(Attribute a, int i, boolean silent) {
-        if (human() && i != 0 && !silent) {
+        if (human() && i != 0 && !silent && cloned == 0) {
             Global.writeIfCombatUpdateImmediately(Global.gui().combat, this, "You have " + (i > 0 ? "gained" : "lost") + " " + Math.abs(i) + " " + a.name());
         }
         if (a.equals(Attribute.Willpower)) {
@@ -1299,6 +1298,7 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public void regen(Combat c, boolean combat) {
+        getAdditionStream().forEach(Addiction::refreshWithdrawal);
         int regen = 1;
         // TODO can't find the concurrent modification error, just use a copy
         // for now I guess...
@@ -1347,8 +1347,6 @@ public abstract class Character extends Observable implements Cloneable {
         String message = "";
         boolean done = false;
         Status effectiveStatus = status;
-        if (Global.isDebugOn(DebugFlags.DEBUG_SCENE) && status instanceof Horny) {System.out.println("new Horny being added: "+status);}
-        
         for (Status s : getStatuses()) {
             if (s.flags().contains(Stsflag.cynical)) {
                 cynical = true;
@@ -1428,7 +1426,7 @@ public abstract class Character extends Observable implements Cloneable {
         //return (int) (2 + Math.sqrt(get(Attribute.Animism) + get(Attribute.Bio)) / 2);
     	return 5;
     }
-
+/*
     public void inflictControl(DurationStatus status, String name, int strength) {
         Cynical cynic = getCynical();
         int resistance=0;
@@ -1448,7 +1446,7 @@ public abstract class Character extends Observable implements Cloneable {
         }
         return false;
     }
-    
+    */
     public void dropStatus(Combat c, Character opponent) {
         Set<Status> removedStatuses = status.stream().filter(s -> !s.meetsRequirements(c, this, opponent))
                         .collect(Collectors.toSet());
@@ -1473,12 +1471,12 @@ public abstract class Character extends Observable implements Cloneable {
         removelist.clear();
         addlist.clear();
     }
-
+/*
     public Cynical getCynical() {
         for (Status s:status) {if (s instanceof Cynical) return (Cynical) s;}
         return null;
     }
-    
+  */  
     public void removeStatusNoSideEffects() {
         if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {
             System.out.println("Purging (remove no sideeffects) " + getTrueName());
@@ -1583,6 +1581,9 @@ public abstract class Character extends Observable implements Cloneable {
                 total -= 5;
             }
         }
+        if (c != null && checkAddiction(AddictionType.DOMINANCE, c.getOpponent(this))) {
+            total -= getAddiction(AddictionType.DOMINANCE).get().getCombatSeverity().ordinal() * 8;
+        }
         if (has(Trait.FeralStrength) && is(Stsflag.feral)) {
             total += 5;
         }
@@ -1613,9 +1614,9 @@ public abstract class Character extends Observable implements Cloneable {
 
     public abstract void detect();
 
-    public abstract void faceOff(Character opponent, Encounter enc);
+    public abstract void faceOff(Character opponent, IEncounter enc);
 
-    public abstract void spy(Character opponent, Encounter enc);
+    public abstract void spy(Character opponent, IEncounter enc);
 
     public abstract String describe(int per, Combat c);
 
@@ -1649,9 +1650,9 @@ public abstract class Character extends Observable implements Cloneable {
 
     public abstract String taunt(Combat c, Character target);
 
-    public abstract void intervene(Encounter fight, Character p1, Character p2);
+    public abstract void intervene(IEncounter fight, Character p1, Character p2);
 
-    public abstract void showerScene(Character target, Encounter encounter);
+    public abstract void showerScene(Character target, IEncounter encounter);
 
     public boolean humanControlled(Combat c) {
         return human() || Global.isDebugOn(DebugFlags.DEBUG_SKILL_CHOICES) && c.getOpponent(this).human();
@@ -1685,6 +1686,10 @@ public abstract class Character extends Observable implements Cloneable {
         saveObj.add("flags", JsonUtils.JsonFromMap(flags));
         saveObj.add("levelUps", JsonUtils.JsonFromMap(levelPlan));
         saveObj.add("growth", JsonUtils.getGson().toJsonTree(growth));
+        // TODO eventually this should load any status, for now just load addictions
+        JsonArray status = new JsonArray();
+        getAddictions().stream().map(Addiction::saveToJson).forEach(status::add);
+        saveObj.add("status", status);
         saveInternal(saveObj);
         return saveObj;
     }
@@ -1734,7 +1739,6 @@ public abstract class Character extends Observable implements Cloneable {
         
         body = Body.load(object.getAsJsonObject("body"), this);
         att = JsonUtils.mapFromJson(object.getAsJsonObject("attributes"), Attribute.class, Integer.class);
-
         inventory = JsonUtils.mapFromJson(object.getAsJsonObject("inventory"), Item.class, Integer.class);
 
         flags.clear();
@@ -1745,7 +1749,19 @@ public abstract class Character extends Observable implements Cloneable {
         } else {
             levelPlan = new HashMap<>();
         }
-        loadInternal(object);
+        status = new ArrayList<>();
+        for (JsonElement element : object.getAsJsonArray("status")) {
+            try {
+                Addiction addiction = Addiction.load(this, element.getAsJsonObject());
+                if (addiction != null) {
+                    status.add(addiction);
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to load status:");
+                System.err.println(JsonUtils.getGson().toJson(element));
+                e.printStackTrace();
+            }
+        }
         change();
         Global.gainSkills(this);
         Global.learnSkills(this);
@@ -1754,10 +1770,6 @@ public abstract class Character extends Observable implements Cloneable {
     private void addClothes(JsonArray array) {
         outfitPlan.addAll(
                         JsonUtils.stringsFromJson(array).stream().map(Clothing::getByID).collect(Collectors.toList()));
-    }
-
-    protected void loadInternal(JsonObject obj) {
-
     }
 
     public abstract void afterParty();
@@ -1852,7 +1864,7 @@ public abstract class Character extends Observable implements Cloneable {
                 thrustCopy.resolve(c, opponent);
             }
         }
-        if (this != opponent && times == totalTimes) {
+        if (this != opponent && times == totalTimes && canRespond()) {
             c.write(this, orgasmLiner);
             c.write(opponent, opponentOrgasmLiner);
         }
@@ -1875,43 +1887,43 @@ public abstract class Character extends Observable implements Cloneable {
                             .collect(Collectors.toList());
             if (!purgedStatuses.isEmpty()){
                 if (human()) {
-                    c.write(this, "Your mind clears up after your release.");
+                    c.write(this, "<b>Your mind clears up after your release.</b>");
                 } else {
-                    c.write(this, "You see the light of reason return to " + nameDirectObject() + "  after " + possessiveAdjective() + " release.");
+                    c.write(this, "<b>You see the light of reason return to " + nameDirectObject() + "  after " + possessiveAdjective() + " release.</b>");
                 }
                 purgedStatuses.forEach(this::removeStatus);
             }
         }
-        // TODO: If NPCs are able to acquire long term addictions, replace this check with a call to human().
-        if (this instanceof Player) {
-            Player p = (Player) this;
 
-            if (p.checkAddiction(AddictionType.CORRUPTION, opponent) && selfPart != null && opponentPart != null 
-                            && opponentPart.isType("pussy") && selfPart
-                            .isType("cock") && (c.getCombatantData(this).getIntegerFlag("ChoseToFuck") == 1
-                            || opponent.has(Trait.TotalSubjugation) && c.getStance().en == Stance.succubusembrace)) {
-                c.write(this, "Your willing sacrifice to " + opponent.getName() + " greatly reinforces"
-                                + " the corruption inside of you.");
-                p.addict(AddictionType.CORRUPTION, opponent, Addiction.HIGH_INCREASE);
+        if (checkAddiction(AddictionType.CORRUPTION, opponent) && selfPart != null && opponentPart != null) {
+            if (c.getStance().havingSex(c, this) && (c.getCombatantData(this).getIntegerFlag("ChoseToFuck") == 1)) {
+                c.write(this, Global.format("{self:NAME-POSSESSIVE} willing sacrifice to {other:name-do} greatly reinforces"
+                                + " the corruption inside of {self:direct-object}.", this, opponent));
+                addict(c, AddictionType.CORRUPTION, opponent, Addiction.HIGH_INCREASE);
             }
-            if (p.checkAddiction(AddictionType.ZEAL, opponent) && selfPart != null && opponentPart != null && c.getStance().penetratedBy(c, opponent, p)
-                            && opponentPart.isType("pussy") && selfPart.isType("cock")) {
-                c.write(this, "Experiencing so much pleasure inside of " + opponent + " reinforces" + " your faith in your lovely goddess.");
-                p.addict(AddictionType.ZEAL, opponent, Addiction.MED_INCREASE);
+            if (opponent.has(Trait.TotalSubjugation) && c.getStance().en == Stance.succubusembrace) {
+                c.write(this, Global.format("The succubus takes advantage of {self:name-possessive} moment of vulnerability and overwhelms {self:posssessive} mind with {other:possessive} soul-corroding lips.", this, opponent));
+                addict(c, AddictionType.CORRUPTION, opponent, Addiction.HIGH_INCREASE);
             }
-            if (p.checkAddiction(AddictionType.ZEAL, opponent) && selfPart != null && opponentPart != null && c.getStance().penetratedBy(c, p, opponent)
-                            && opponentPart.isType("cock") && (selfPart.isType("pussy") || selfPart.isType("ass"))) {
-                c.write(this, "Experiencing so much pleasure from " + opponent.nameOrPossessivePronoun() + " cock inside you reinforces" + " your faith.");
-                p.addict(AddictionType.ZEAL, opponent, Addiction.MED_INCREASE);
-            }
-            if (p.checkAddiction(AddictionType.BREEDER, opponent)) {
-                // Clear combat addiction
-                p.unaddictCombat(AddictionType.BREEDER, opponent, 1.f, c);
-            }
-            if (p.checkAddiction(AddictionType.DOMINANCE, opponent) && c.getStance().dom(opponent)) {
-                c.write(this, "Getting dominated by "+opponent+" seems to excite you even more.");
-                p.addict(AddictionType.DOMINANCE, opponent, Addiction.LOW_INCREASE);
-            }
+        }
+        if (checkAddiction(AddictionType.ZEAL, opponent) && selfPart != null && opponentPart != null  && c.getStance().penetratedBy(c, opponent, p)
+                        && selfPart.isType("cock")) {
+            c.write(this, Global.format("Experiencing so much pleasure inside of {other:name-do} reinforces {self:name-possessive} faith in the lovely goddess.", this, opponent));
+            addict(c, AddictionType.ZEAL, opponent, Addiction.MED_INCREASE);
+        }
+        if (checkAddiction(AddictionType.ZEAL, opponent) && selfPart != null && opponentPart != null  && c.getStance().penetratedBy(c, p, opponent)
+                        && opponentPart.isType("cock") && (selfPart
+                        .isType("pussy") || selfPart.isType("ass"))) {
+            c.write(this, Global.format("Experiencing so much pleasure from {other:name-possessive} cock inside {self:direct-object} reinforces {self:name-possessive} faith.", this, opponent));
+            addict(c, AddictionType.ZEAL, opponent, Addiction.MED_INCREASE);
+        }
+        if (checkAddiction(AddictionType.BREEDER, opponent)) {
+            // Clear combat addiction
+            unaddictCombat(AddictionType.BREEDER, opponent, 1.f, c);
+        }
+        if (checkAddiction(AddictionType.DOMINANCE, opponent) && c.getStance().dom(opponent)) {
+            c.write(this, "Getting dominated by " + opponent.nameDirectObject() +" seems to excite " + nameDirectObject() + " even more.");
+            addict(c, AddictionType.DOMINANCE, opponent, Addiction.LOW_INCREASE);
         }
         orgasms += 1;
     }
@@ -1987,21 +1999,21 @@ public abstract class Character extends Observable implements Cloneable {
                                 this, opponent));
             }
         }
-        if (human() && this instanceof Player && opponent.has(Trait.mindcontroller) && cloned == 0) {
-            MindControl.Result res = new MindControl.Result(opponent, c.getStance());
+        if (opponent.has(Trait.mindcontroller) && cloned == 0) {
+            MindControl.Result res = new MindControl.Result(this, opponent, c.getStance());
             String message = res.getDescription();
             if (res.hasSucceeded()) {
                 if (opponent.has(Trait.EyeOpener) && outfit.has(ClothingTrait.harpoonDildo)) {
                     message += "Below, the vibrations of the dildo reach a powerful crescendo,"
                                     + " and your eyes open wide in shock, a perfect target for "
                                     + " what's coming next.";
-                    ((Player)this).addict(AddictionType.MIND_CONTROL, opponent, Addiction.LOW_INCREASE);
+                    addict(c, AddictionType.MIND_CONTROL, opponent, Addiction.LOW_INCREASE);
                 } else if (opponent.has(Trait.EyeOpener) && outfit.has(ClothingTrait.harpoonOnahole)) {
                     message += "The warm sheath around your dick suddenly tightens, pulling incredibly"
                                     + ", almost painfully tight around the shaft. At the same time, it starts"
                                     + " vibrating powerfully. The combined assault causes your eyes to open"
                                     + " wide and defenseless."; 
-                    ((Player)this).addict(AddictionType.MIND_CONTROL, opponent, Addiction.LOW_INCREASE);
+                    addict(c, AddictionType.MIND_CONTROL, opponent, Addiction.LOW_INCREASE);
                 }
                 message += "While your senses are overwhelmed by your violent orgasm, the deep pools of Mara's eyes"
                                 + " swirl and dance. You helplessly stare at the intricate movements and feel a strong"
@@ -2009,7 +2021,7 @@ public abstract class Character extends Observable implements Cloneable {
                                 + " With a satisfied smirk, Mara tells you to lift an arm. Before you have even processed"
                                 + " her words, you discover that your right arm is sticking straight up into the air. This"
                                 + " is probably really bad.";
-                ((Player)this).addict(AddictionType.MIND_CONTROL, opponent, Addiction.MED_INCREASE);
+                addict(c, AddictionType.MIND_CONTROL, opponent, Addiction.MED_INCREASE);
             }
             c.write(this, message);
         }
@@ -2087,7 +2099,7 @@ public abstract class Character extends Observable implements Cloneable {
                 c.write(dong());
                 xp = Math.max(xp, Math.min(getXPReqToNextLevel() - 1, gained - xpStolen));
                 opponent.gainXPPure(gained);
-                opponent.levelUpIfPossible();
+                opponent.levelUpIfPossible(c);
             } else {
                 c.write(opponent, String.format("<b>%s %s pulses, but fails to"
                                                 + " draw in %s experience.</b>", Global.capitalizeFirstLetter(opponent.nameOrPossessivePronoun()),
@@ -2121,7 +2133,7 @@ public abstract class Character extends Observable implements Cloneable {
         if (c != null) {
             c.writeSystemMessage(String.format(
                             "%s lost <font color='rgb(220,130,40)'>%s<font color='white'> willpower" + reduced + "%s.",
-                            subject(), extra == 0 ? Integer.toString(amt) : i + "+" + extra + " (" + amt + ")",
+                            Global.capitalizeFirstLetter(subject()), extra == 0 ? Integer.toString(amt) : i + "+" + extra + " (" + amt + ")",
                             source));
         } else if (human()) {
             Global.gui().systemMessage(String
@@ -2299,20 +2311,18 @@ public abstract class Character extends Observable implements Cloneable {
 
         pleasured = false;
         Optional<PetCharacter> randomOpponentPetOptional = Global.pickRandom(c.getPetsFor(opponent));
-        if (!isPet() && randomOpponentPetOptional.isPresent()) {
+        if (randomOpponentPetOptional.isPresent()) {
             PetCharacter pet = randomOpponentPetOptional.get();
             boolean weakenBetter = modifyDamage(DamageType.physical, pet, 100) / pet.getStamina().remaining() 
                             > 100 / pet.getStamina().remaining();
             if (canAct() && c.getStance().mobile(this) && pet.roll(this, c, 20)) {
-                c.write(this, Global.format("<b>{self:SUBJECT-ACTION:turn} {self:possessive} attention"
-                                + " on {other:name-do}</b>", this, pet));
                 if (weakenBetter) {
                     c.write(Global.format("{self:SUBJECT-ACTION:focus|focuses} {self:possessive} attentions on {other:name-do}, "
-                                    + "thoroughly exhausting {other:direct-object} in a game of cat and mouse.<br/>", this, pet));
+                                    + "thoroughly exhausting {other:direct-object} in a game of cat and mouse.", this, pet));
                     pet.weaken(c, (int) modifyDamage(DamageType.physical, pet, Global.random(10, 20)));
                 } else {
                     c.write(Global.format("{self:SUBJECT-ACTION:focus|focuses} {self:possessive} attentions on {other:name-do}, "
-                                    + "harassing and toying with {other:possessive} body as much as {self:pronoun} can.<br/>", this, pet));
+                                    + "harassing and toying with {other:possessive} body as much as {self:pronoun} can.", this, pet));
                     pet.body.pleasure(this, body.getRandom("hands"), pet.body.getRandomGenital(), Global.random(10, 20), c);
                 }
             }
@@ -2510,57 +2520,53 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public void resupply() {
-/*
         for (String victorType : mercy) {
             Character victor = Global.getCharacterByType(victorType);
             victor.bounty(has(Trait.event) ? 5 : 1, victor);
         }
         mercy.clear();
-*/
         change();
         state = State.ready;
         getWillpower().fill();
         if (location().present.size() > 1) {
             if (location().id() == Movement.dorm) {
-                if (Global.getMatch().gps("Quad").get().present.isEmpty()) {
+                if (Global.getMatch().gps("Quad").present.isEmpty()) {
                     if (human()) {
                         Global.gui()
                                         .message("You hear your opponents searching around the dorm, so once you finish changing, you hop out the window and head to the quad.");
                     }
-                    travel(Global.getMatch().gps("Quad").get());
+                    travel(Global.getMatch().gps("Quad"));
                 } else {
                     if (human()) {
                         Global.gui()
                                         .message("You hear your opponents searching around the dorm, so once you finish changing, you quietly move downstairs to the laundry room.");
                     }
-                    travel(Global.getMatch().gps("Laundry").get());
+                    travel(Global.getMatch().gps("Laundry"));
                 }
             }
             if (location().id() == Movement.union) {
-                if (Global.getMatch().gps("Quad").get().present.isEmpty()) {
+                if (Global.getMatch().gps("Quad").present.isEmpty()) {
                     if (human()) {
                         Global.gui()
                                         .message("You don't want to be ambushed leaving the student union, so once you finish changing, you hop out the window and head to the quad.");
                     }
-                    travel(Global.getMatch().gps("Quad").get());
+                    travel(Global.getMatch().gps("Quad"));
                 } else {
                     if (human()) {
                         Global.gui()
                                         .message("You don't want to be ambushed leaving the student union, so once you finish changing, you sneak out the back door and head to the pool.");
                     }
-                    travel(Global.getMatch().gps("Pool").get());
+                    travel(Global.getMatch().gps("Pool"));
                 }
             }
         }
     }
 
     public void finishMatch() {
-/*
         for (String victorType : mercy) {
             Character victor = Global.getCharacterByType(victorType);
             victor.bounty(has(Trait.event) ? 5 : 1, victor);
         }
-*/
         Global.gui().clearImage();
         mercy.clear();
         change();
@@ -2597,7 +2603,12 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public boolean eligible(Character p2) {
-        return Global.getMatch().canFight(this, p2) && state != State.resupplying;
+        boolean ftc = true;
+        if (Global.checkFlag(Flag.FTC)) {
+            FTCMatch match = (FTCMatch) Global.getMatch();
+            ftc = !match.inGracePeriod() || (!match.isPrey(this) && !match.isPrey(p2));
+        }
+        return ftc && !mercy.contains(p2.getType()) && state != State.resupplying;
     }
 
     public void setTrophy(Item trophy) {
@@ -2700,7 +2711,7 @@ public abstract class Character extends Observable implements Cloneable {
         busy += i;
     }
 
-    public abstract void promptTrap(Encounter fight, Character target, Trap trap);
+    public abstract void promptTrap(IEncounter fight, Character target, Trap trap);
 
     public int lvlBonus(Character opponent) {
         if (opponent.getLevel() > getLevel()) {
@@ -2914,29 +2925,21 @@ public abstract class Character extends Observable implements Cloneable {
         if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {
             System.out.println("Clearing " + getTrueName());
         }
-        status.clear();
+        status.removeIf(status -> !status.flags().contains(Stsflag.permanent));
     }
 
     public Status getStatus(Stsflag flag) {
-        for (Status s : getStatuses()) {
-            if (s.flags().contains(flag)) {
-                return s;
-            }
-        }
-        return null;
+        return getStatusStreamWithFlag(flag).findFirst().orElse(null);
     }
 
     // terrible code? who me? nahhhhh.
     @SuppressWarnings("unchecked")
-    public <T extends Status> Collection<T> getStatusOfClass(Class<T> clazz) {
+    public <T> Collection<T> getStatusOfClass(Class<T> clazz) {
         return status.stream().filter(s -> s.getClass().isInstance(clazz)).map(s -> (T)s).collect(Collectors.toList());
     }
 
-    public List<InsertedStatus> getInsertedStatus() {
-        return status.stream()
-                        .filter(status -> status instanceof InsertedStatus)
-                        .map(status -> (InsertedStatus)status)
-                        .collect(Collectors.toList());
+    public Collection<InsertedStatus> getInsertedStatus() {
+        return getStatusOfClass(InsertedStatus.class);
     }
 
     public Integer prize() {
@@ -2990,7 +2993,7 @@ public abstract class Character extends Observable implements Cloneable {
 
     public void endofbattle(Combat c) {
         for (Status s : status) {
-            if (!s.lingering()) {
+            if (!s.lingering() && !s.flags().contains(Stsflag.permanent)) {
                 removelist.add(s);
             }
         }
@@ -3706,8 +3709,8 @@ public abstract class Character extends Observable implements Cloneable {
         }
         temporaryAddedTraits.clear();
         temporaryRemovedTraits.clear();
-        status = new HashSet<>(status.stream().filter(s -> !s.flags().contains(Stsflag.purgable))
-                        .collect(Collectors.toSet()));
+        status = status.stream().filter(s -> !s.flags().contains(Stsflag.purgable))
+                        .collect(Collectors.toCollection(ArrayList::new));
         body.purge(c);
     }
 
@@ -3768,12 +3771,12 @@ public abstract class Character extends Observable implements Cloneable {
         return Integer.MAX_VALUE;
     }
 
-    public boolean levelUpIfPossible() {
+    public boolean levelUpIfPossible(Combat c) {
         int req;
         boolean dinged = false;
         while (xp > (req = getXPReqToNextLevel())) {
             xp -= req;
-            ding();
+            ding(c);
             dinged = true;
         }
         return dinged;
@@ -3819,9 +3822,9 @@ public abstract class Character extends Observable implements Cloneable {
             location = "Liberal Arts";
             break;
         }
-        m.gps(location).get().place(new NinjaStash(this));
+        m.gps(location).place(new NinjaStash(this));
         if(human()){
-            Global.gui().message("<b>You've arranged for a hidden stash to be placed in the "+m.gps(location).get().name+".</b>");
+            Global.gui().message("<b>You've arranged for a hidden stash to be placed in the "+m.gps(location).name+".</b>");
         }
     }
 
@@ -3904,7 +3907,6 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     @Override public int hashCode() {
-        if (this instanceof NPC && ((NPC)this).ai == null ) return name.hashCode();
         int result = getType().hashCode();
         return result * 31 + name.hashCode();
     }
@@ -3993,5 +3995,134 @@ public abstract class Character extends Observable implements Cloneable {
 
     public boolean hasStatusVariant(String variant) {
         return status.stream().anyMatch(s -> s.getVariant().equals(variant));
+    }
+
+    public List<Addiction> getAddictions() {
+        return getAdditionStream().collect(Collectors.toList());
+    }
+
+    public List<Status> getPermanentStatuses() {
+        return getStatusStreamWithFlag(Stsflag.permanent).collect(Collectors.toList());
+    }
+
+    public Stream<Status> getStatusStreamWithFlag(Stsflag flag) {
+        return status.stream().filter(status -> status.flags().contains(flag));
+    }
+
+    public Stream<Addiction> getAdditionStream() {
+        return status.stream().filter(status -> status instanceof Addiction).map(s -> (Addiction)s);
+    }
+
+    public boolean hasAddiction(AddictionType type) {
+        return getAdditionStream().anyMatch(a -> a.getType() == type);
+    }
+
+    public Optional<Addiction> getAddiction(AddictionType type) {
+        return getAdditionStream().filter(a -> a.getType() == type).findAny();
+    }
+    
+    public Optional<Addiction> getStrongestAddiction() {
+        return getAdditionStream().max(Comparator.comparing(Addiction::getSeverity));
+    }
+
+    public void addict(Combat c, AddictionType type, Character cause, float mag) {
+        boolean dbg = Global.isDebugOn(DebugFlags.DEBUG_ADDICTION);
+        Optional<Addiction> addiction = getAddiction(type);
+        if (addiction.isPresent()) {
+            if (dbg) {
+                System.out.printf("Aggravating %s on player by %.3f\n", type.name(), mag);
+            }
+            Addiction a = addiction.get();
+            a.aggravate(c, mag);
+            if (dbg) {
+                System.out.printf("%s magnitude is now %.3f\n", a.getType()
+                                                                 .name(),
+                                a.getMagnitude());
+            }
+        } else {
+            if (dbg) {
+                System.out.printf("Creating initial %s on player with %.3f\n", type.name(), mag);
+            }
+            Addiction addict = type.build(this, cause, mag);
+            addNonCombat(addict);
+            addict.describeInitial();
+        }
+    }
+
+    public void unaddict(Combat c, AddictionType type, float mag) {
+        boolean dbg = Global.isDebugOn(DebugFlags.DEBUG_ADDICTION);
+        if (dbg) {
+            System.out.printf("Alleviating %s on player by %.3f\n", type.name(), mag);
+        }
+        Optional<Addiction> addiction = getAddiction(type);
+        if (!addiction.isPresent()) {
+            return;
+        }
+        Addiction addict = addiction.get();
+        addict.alleviate(c, mag);
+        if (addict.shouldRemove()) {
+            if (dbg) {
+                System.out.printf("Removing %s from player", type.name());
+            }
+            removeStatusImmediately(addict);
+        }
+    }
+
+    private void removeStatusImmediately(Status status) {
+        this.status.remove(status);
+    }
+
+    public void addictCombat(AddictionType type, Character cause, float mag, Combat c) {
+        boolean dbg = Global.isDebugOn(DebugFlags.DEBUG_ADDICTION);
+        Optional<Addiction> addiction = getAddiction(type);
+        if (addiction.isPresent()) {
+            if (dbg) {
+                System.out.printf("Aggravating %s on player by %.3f (Combat vs %s)\n", type.name(), mag,
+                                cause.getTrueName());
+            }
+            Addiction a = addiction.get();
+            a.aggravateCombat(c, mag);
+            if (dbg) {
+                System.out.printf("%s magnitude is now %.3f\n", a.getType()
+                                                                 .name(),
+                                a.getMagnitude());
+            }
+        } else {
+            if (dbg) {
+                System.out.printf("Creating initial %s on player with %.3f (Combat vs %s)\n", type.name(), mag,
+                                cause.getTrueName());
+            }
+            Addiction addict = type.build(this, cause, Addiction.LOW_THRESHOLD);
+            addict.aggravateCombat(c, mag);
+            add(c, addict);
+        }
+    }
+
+    public void unaddictCombat(AddictionType type, Character cause, float mag, Combat c) {
+        boolean dbg = Global.isDebugOn(DebugFlags.DEBUG_ADDICTION);
+        Optional<Addiction> addict = getAddiction(type);
+        if (addict.isPresent()) {
+            if (dbg) {
+                System.out.printf("Alleviating %s on player by %.3f (Combat vs %s)\n", type.name(), mag,
+                                cause.getTrueName());
+            }
+            addict.get().alleviateCombat(c, mag);
+        }
+    }
+
+    public Severity getAddictionSeverity(AddictionType type) {
+        return getAddiction(type).map(Addiction::getSeverity).orElse(Severity.NONE);
+    }
+
+    public boolean checkAddiction() {
+        return getAdditionStream().anyMatch(a -> a.atLeast(Severity.LOW));
+    }
+    
+    public boolean checkAddiction(AddictionType type) {
+        return getAddiction(type).map(Addiction::isActive).orElse(false);
+    }
+    
+    public boolean checkAddiction(AddictionType type, Character cause) {
+        return getAddiction(type).map(addiction -> addiction.isActive() && addiction.wasCausedBy(cause)).orElse(false);
     }
 }

@@ -294,7 +294,7 @@ public class MaraTime extends BaseNPCTime {
                                 + "will not only be able to make you feel amazing, they'll have impressive therapeutic applications too.\"");
             }
             Global.gui().choose(this, "Leave");
-            Global.getPlayer().addict(AddictionType.MIND_CONTROL, npc, Addiction.MED_INCREASE);
+            Global.getPlayer().addict(null, AddictionType.MIND_CONTROL, npc, Addiction.MED_INCREASE);
             Global.getPlayer().getAddiction(AddictionType.MIND_CONTROL).ifPresent(Addiction::flagDaytime);
         }
         

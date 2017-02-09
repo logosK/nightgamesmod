@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Global;
@@ -39,7 +38,7 @@ public class MFMDoublePenThreesome extends MaledomSexStance {
 
     @Override
     public boolean canthrust(Combat c, Character self) {
-        return domSexCharacter(c) == self || top == self || self.has(Trait.powerfulhips);
+        return domSexCharacter(c) == self || top == self;
     }
 
     @Override

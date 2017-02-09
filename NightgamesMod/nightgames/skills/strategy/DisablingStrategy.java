@@ -1,5 +1,6 @@
 package nightgames.skills.strategy;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,6 +12,8 @@ import nightgames.skills.Reversal;
 import nightgames.skills.Skill;
 import nightgames.skills.SuccubusNurse;
 import nightgames.skills.WingWrap;
+import nightgames.stance.Stance;
+import nightgames.status.Stsflag;
 
 public class DisablingStrategy extends KnockdownThenActionStrategy {
     @Override
@@ -18,7 +21,7 @@ public class DisablingStrategy extends KnockdownThenActionStrategy {
         if (!self.has(Trait.SuccubusWarmth)) {
             return Double.MIN_VALUE;
         }
-        double weight = 4;
+        double weight = 2;
         if (self.has(Trait.Pacification)) {
             weight += 2;
         }
@@ -39,31 +42,24 @@ public class DisablingStrategy extends KnockdownThenActionStrategy {
     
     @Override
     protected Set<Skill> filterSkills(Combat c, Character self, Set<Skill> allowedSkills) {
-        
-        Set<Skill> skills = new FuckStrategy().filterSkills(c, self, allowedSkills);
-        if (skills.isEmpty()) {
-            skills = new HashSet<>();
+        if (c.getOpponent(self).is(Stsflag.charmed) && c.getStance().en == Stance.succubusembrace) {
+            return Collections.emptySet();
         }
-        
-        if (!c.getStance().havingSex(c)) {
-            return skills;
-        }
-        
+        Set<Skill> skills = new HashSet<>();
         skills.add(new Embrace(self));
         
         if (c.getStance().sub(self)) {
             skills.add(new Reversal(self));
         }
-        
         if (self.has(Trait.Pacification)) {
             skills.add(new SuccubusNurse(self));
         }
-        
         if (self.has(Trait.DemonsEmbrace)) {
             skills.add(new WingWrap(self));
         }
-        
-        return skills;
+        if (skills.stream().anyMatch(skill -> skill.usable(c, c.getOpponent(self)))) {
+            return skills;
+        }
+        return skills = new FuckStrategy().filterSkills(c, self, allowedSkills);
     }
-
 }
