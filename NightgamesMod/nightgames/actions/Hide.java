@@ -22,7 +22,7 @@ public class Hide extends Action {
     }
 
     @Override
-    public Movement execute(Character user) {
+    public IMovement execute(Character user) {
         if (user.human()) {
             Global.gui().message("You find a decent hiding place and wait for unwary opponents.");
         }
@@ -31,7 +31,7 @@ public class Hide extends Action {
     }
 
     @Override
-    public Movement consider() {
+    public IMovement consider() {
         return Movement.hide;
     }
 }

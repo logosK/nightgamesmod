@@ -9,8 +9,8 @@ import nightgames.global.Global;
 import nightgames.status.HypnoVisor;
 import nightgames.status.Stsflag;
 import nightgames.status.addiction.Addiction;
-import nightgames.status.addiction.AddictionType;
 import nightgames.status.addiction.Addiction.Severity;
+import nightgames.status.addiction.AddictionType;
 
 public class HypnoVisorPlace extends Skill {
 

@@ -1,9 +1,9 @@
 package nightgames.modifier.item;
 
 import nightgames.characters.Character;
-import nightgames.ftc.FTCMatch;
 import nightgames.global.Global;
 import nightgames.items.Item;
+import nightgames.match.ftc.FTCMatch;
 
 public class FlagOnlyModifier extends ItemModifier {
     private static final String name = "flag-only";

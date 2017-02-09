@@ -28,7 +28,7 @@ public class Use extends Action {
     }
 
     @Override
-    public Movement execute(Character user) {
+    public IMovement execute(Character user) {
         if (item == Item.Lubricant) {
             if (user.human()) {
                 Global.gui().message(
@@ -57,7 +57,7 @@ public class Use extends Action {
     }
 
     @Override
-    public Movement consider() {
+    public IMovement consider() {
         if (item == Item.Lubricant) {
             return Movement.oil;
         } else if (item == Item.EnergyDrink) {

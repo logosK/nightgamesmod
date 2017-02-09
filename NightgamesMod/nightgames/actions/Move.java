@@ -21,7 +21,7 @@ public class Move extends Action {
     }
 
     @Override
-    public Movement execute(Character user) {
+    public IMovement execute(Character user) {
         user.travel(destination);
         return destination.id();
     }
@@ -31,7 +31,7 @@ public class Move extends Action {
     }
 
     @Override
-    public Movement consider() {
+    public IMovement consider() {
         return destination.id();
     }
 }

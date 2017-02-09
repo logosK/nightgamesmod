@@ -20,13 +20,13 @@ public class Scavenge extends Action {
     }
 
     @Override
-    public Movement execute(Character user) {
+    public IMovement execute(Character user) {
         user.state = State.searching;
         return Movement.scavenge;
     }
 
     @Override
-    public Movement consider() {
+    public IMovement consider() {
         return Movement.scavenge;
     }
 

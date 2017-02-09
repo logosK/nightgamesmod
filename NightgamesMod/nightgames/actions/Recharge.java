@@ -22,7 +22,7 @@ public class Recharge extends Action {
     }
 
     @Override
-    public Movement execute(Character user) {
+    public IMovement execute(Character user) {
         if (user.human()) {
             Global.gui().message("You find a power supply and restore your batteries to full.");
         }
@@ -31,7 +31,7 @@ public class Recharge extends Action {
     }
 
     @Override
-    public Movement consider() {
+    public IMovement consider() {
         return Movement.recharge;
     }
 

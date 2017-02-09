@@ -33,7 +33,7 @@ public class Locate extends Action {
     }
 
     @Override
-    public Movement execute(Character self) {
+    public IMovement execute(Character self) {
         GUI gui = Global.gui();
         gui.clearCommand();
         gui.clearText();
@@ -49,7 +49,7 @@ public class Locate extends Action {
         Character target;
         GUI gui = Global.gui();
         if (choice.equals("Start")) {
-            Global.getMatch().combatants.stream().filter(c -> self.getAffection(c) >= MINIMUM_SCRYING_REQUIREMENT)
+            Global.getMatch().getCombatants().stream().filter(c -> self.getAffection(c) >= MINIMUM_SCRYING_REQUIREMENT)
                             .forEach((character) -> {
                                 gui.choose(this, character.getTrueName(), self);
                             });
@@ -94,7 +94,7 @@ public class Locate extends Action {
     }
 
     @Override
-    public Movement consider() {
+    public IMovement consider() {
         return Movement.locating;
     }
 

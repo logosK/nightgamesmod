@@ -5,9 +5,9 @@ import java.awt.Font;
 import javax.swing.JButton;
 
 import nightgames.characters.Character;
-import nightgames.combat.IEncounter;
 import nightgames.global.Encs;
 import nightgames.global.Global;
+import nightgames.match.Encounter;
 import nightgames.trap.Trap;
 
 public class EncounterButton extends JButton {
@@ -15,12 +15,12 @@ public class EncounterButton extends JButton {
      * 
      */
     private static final long serialVersionUID = 6203417731879208074L;
-    private IEncounter enc;
+    private Encounter enc;
     private Character target;
     private Encs choice;
     private Trap trap;
 
-    public EncounterButton(String label, IEncounter enc, Character target, Encs choice) {
+    public EncounterButton(String label, Encounter enc, Character target, Encs choice) {
         super(label);
         setFont(new Font("Baskerville Old Face", 0, 18));
         this.enc = enc;
@@ -33,7 +33,7 @@ public class EncounterButton extends JButton {
         });
     }
 
-    public EncounterButton(String label, IEncounter enc2, Character target, Encs choice, Trap trap) {
+    public EncounterButton(String label, Encounter enc2, Character target, Encs choice, Trap trap) {
         super(label);
         setFont(new Font("Baskerville Old Face", 0, 18));
         this.enc = enc2;

@@ -8,13 +8,11 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Panel;
-import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -24,14 +22,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -52,11 +48,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -76,21 +69,23 @@ import nightgames.characters.Character;
 import nightgames.characters.Meter;
 import nightgames.characters.Player;
 import nightgames.characters.Trait;
-import nightgames.characters.TraitTree;
 import nightgames.combat.Combat;
 import nightgames.combat.CombatSceneChoice;
-import nightgames.combat.IEncounter;
 import nightgames.daytime.Activity;
 import nightgames.daytime.Store;
 import nightgames.debug.DebugGUIPanel;
-import nightgames.global.*;
+import nightgames.global.DebugFlags;
+import nightgames.global.Encs;
+import nightgames.global.Flag;
+import nightgames.global.Global;
+import nightgames.global.Time;
 import nightgames.items.Item;
 import nightgames.items.Loot;
-import nightgames.items.clothing.Clothing;
+import nightgames.match.Encounter;
+import nightgames.match.MatchType;
 import nightgames.modifier.standard.NoModifier;
 import nightgames.skills.Skill;
 import nightgames.skills.TacticGroup;
-import nightgames.skills.Tactics;
 import nightgames.trap.Trap;
 import nightgames.utilities.DebugHelper;
 
@@ -1176,7 +1171,7 @@ public class GUI extends JFrame implements Observer {
         commandPanel.refresh();
     }
 
-    public void promptFF(IEncounter enc, Character target) {
+    public void promptFF(Encounter enc, Character target) {
         clearCommand();
         commandPanel.add(encounterButton("Fight", enc, target, Encs.fight));
         commandPanel.add(encounterButton("Flee", enc, target, Encs.flee));
@@ -1187,7 +1182,7 @@ public class GUI extends JFrame implements Observer {
         commandPanel.refresh();
     }
 
-    public void promptAmbush(IEncounter enc, Character target) {
+    public void promptAmbush(Encounter enc, Character target) {
         clearCommand();
         commandPanel.add(encounterButton("Attack " + target.getName(), enc, target, Encs.ambush));
         commandPanel.add(encounterButton("Wait", enc, target, Encs.wait));
@@ -1196,7 +1191,7 @@ public class GUI extends JFrame implements Observer {
         commandPanel.refresh();
     }
 
-    public void promptOpportunity(IEncounter enc, Character target, Trap trap) {
+    public void promptOpportunity(Encounter enc, Character target, Trap trap) {
         clearCommand();
         commandPanel.add(encounterButton("Attack " + target.getName(), enc, target, Encs.capitalize, trap));
         commandPanel.add(encounterButton("Wait", enc, target, Encs.wait));
@@ -1204,7 +1199,7 @@ public class GUI extends JFrame implements Observer {
         commandPanel.refresh();
     }
 
-    public void promptShower(IEncounter encounter, Character target) {
+    public void promptShower(Encounter encounter, Character target) {
         clearCommand();
         commandPanel.add(encounterButton("Suprise Her", encounter, target, Encs.showerattack));
         if (!target.mostlyNude()) {
@@ -1218,7 +1213,7 @@ public class GUI extends JFrame implements Observer {
         commandPanel.refresh();
     }
 
-    public void promptIntervene(IEncounter enc, Character p1, Character p2) {
+    public void promptIntervene(Encounter enc, Character p1, Character p2) {
         clearCommand();
         commandPanel.add(interveneButton(enc, p1));
         commandPanel.add(interveneButton(enc, p2));
@@ -1282,7 +1277,7 @@ public class GUI extends JFrame implements Observer {
                 } else if (Global.day != null) {
                     Global.getDay().plan();
                 } else {
-                    new Prematch(Global.human);
+                    MatchType.NORMAL.runPrematch();
                 }
             }
         }
@@ -1424,29 +1419,29 @@ public class GUI extends JFrame implements Observer {
         for (Attribute a : Attribute.values()) {
             int amt = player.get(a);
             int pure = player.getPure(a);
-            if (amt > 0) {
+            if (pure > 0 || amt > 0) {
                 if (amt == pure) {
-                    JLabel dirtyTrick = new JLabel(a.name() + ": " + amt);
-                    dirtyTrick.setForeground(GUIColors.textColorLight);
-                    attlbls.add(count, dirtyTrick);
+                    JLabel label = new JLabel(a.name() + ": " + amt);
+                    label.setForeground(GUIColors.textColorLight);
+                    attlbls.add(count, label);
                     statsPanel.add(attlbls.get(count++));
                 } else {
-                    JLabel base = new JLabel(String.format("%n%n%s: %d ", a.name(), pure));
-                    base.setSize(base.getPreferredSize());
-                    base.setForeground(GUIColors.textColorLight);
-                    JLabel mod = new JLabel(String.format("(%s%d)", amt > pure ? "+" : "-", Math.abs(amt - pure)));
-                    mod.setForeground(amt > pure ? GUIColors.Green : GUIColors.Red);
-                    mod.setFont(getFont().deriveFont(10.f));
-                    JPanel p = new JPanel();
-                    p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
-                    p.setBackground(GUIColors.bgLight);
-                    p.add(base);
-                    p.add(mod);
-                    p.add(Box.createHorizontalGlue());
-                    statsPanel.add(p);
+                    String attrColor;
+                    String bonusColor;
+                    if (amt < pure) {
+                        attrColor = "255,100,100";
+                        bonusColor = "255,0,0";
+                    } else {
+                        attrColor = "100,255,255";
+                        bonusColor = "0,255,0";
+                    }
+                    String labelString = String.format("<html>%s: <font color='rgb(%s)'>%d</font> <font size=2 color='rgb(%s)'>(%+d)</font></html>",
+                                    a.name(), attrColor, amt, bonusColor, amt - pure);
+                    JLabel label = new JLabel(labelString);
+                    label.setForeground(GUIColors.textColorLight);
+                    attlbls.add(count, label);
+                    statsPanel.add(attlbls.get(count++));
                 }
-
-
             }
         }
 
@@ -1565,14 +1560,14 @@ public class GUI extends JFrame implements Observer {
         return button;
     }
 
-    private KeyableButton interveneButton(IEncounter enc, Character assist) {
+    private KeyableButton interveneButton(Encounter enc, Character assist) {
         RunnableButton button = new RunnableButton("Help " + assist.getName(), () -> {
             enc.intrude(Global.getPlayer(), assist);
         });
         return button;
     }
 
-    private KeyableButton encounterButton(String label, IEncounter enc, Character target, Encs choice) {
+    private KeyableButton encounterButton(String label, Encounter enc, Character target, Encs choice) {
         RunnableButton button = new RunnableButton(label, () -> {
             enc.parse(choice, Global.getPlayer(), target);
             Global.getMatch().resume();
@@ -1580,7 +1575,7 @@ public class GUI extends JFrame implements Observer {
         return button;
     }
 
-    private KeyableButton encounterButton(String label, IEncounter enc, Character target, Encs choice, Trap trap) {
+    private KeyableButton encounterButton(String label, Encounter enc, Character target, Encs choice, Trap trap) {
         RunnableButton button = new RunnableButton(label, () -> {
             enc.parse(choice, Global.getPlayer(), target, trap);
             Global.getMatch().resume();
@@ -1588,7 +1583,7 @@ public class GUI extends JFrame implements Observer {
         return button;
     }
 
-    private KeyableButton watchButton(IEncounter enc) {
+    private KeyableButton watchButton(Encounter enc) {
         RunnableButton button = new RunnableButton("Watch them fight", () -> {
             enc.watch();
         });

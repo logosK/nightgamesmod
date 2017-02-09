@@ -3,7 +3,6 @@ package nightgames.debug;
 import java.awt.GridLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,17 +16,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
-import nightgames.characters.Character;
 import nightgames.characters.Attribute;
+import nightgames.characters.Character;
 import nightgames.characters.Trait;
 import nightgames.global.DebugFlags;
 import nightgames.global.Global;
 import nightgames.items.Item;
 
-@SuppressWarnings("unused")
 public class DebugGUIPanel extends JPanel {
     /**
      *

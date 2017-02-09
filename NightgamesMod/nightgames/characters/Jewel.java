@@ -465,7 +465,7 @@ public class Jewel extends BasePersonality {
                             + " I like. Thanks for being cool about it.\"</i> You smile back tell her she's welcome, but you'd appreciate it if she weren't so rough. "
                             + "The last thing you hear before she round the corner is her giggled response. <i>\"We'll see.\"</i>";
         }
-        if (character.has(Trait.fighter) && character.get(Attribute.Ki) >= 10) {
+        if (character.has(Trait.fighter) && character.get(Attribute.Ki) >= 10 && Global.random(4) != 0) {
             String message = "Your duel with Jewel is rapidly reaching its conclusion and it's not going that well for you. Something seems different about her, her moves have an additional level of "
                             + "coordination that is made worse by her already monstrous strength. But the worst thing is that she is throwing powerful moves at you like they were nothing!<br/><br/>"
                             + "All of this has culminated in the situation you find yourself in now, namely pinned to the ground by Jewel as "
@@ -476,14 +476,14 @@ public class Jewel extends BasePersonality {
                             + "Once you are finished you look up to see Jewel grinning down at you.<br/>"
                             + "<i>\"Well, you didn't put up much of a fight did ya?\"</i> She taunts, <i>\"must have really wanted me to be on top.\"</i><br/>"
                             + "You feel yourself flush slightly from the embarrassment, but you are unable to complain as you can't deny that you did enjoy yourself. ";
-            if (other.hasDick()) {
+            if (other.hasDick() && !(other.hasPussy() && c.getStance().vaginallyPenetratedBy(c, other, character))) {
                 message += "As all of this occurs Jewel has yet to fully release your dick and you soon feel yourself becoming hard again.<br/><br/>"
                                 + "When Jewel notices your returning hard-on, her face flashes through surprise before fixing itself in a predatory smile. <i>\"You never do disappoint.\"</i> She quips as "
                                 + "she moves to align herself with your now fully erect cock. As she does so, you feel a smirk make itself onto your face. However it doesn't last because as soon "
                                 + "as your dick enters Jewel, you are unable to stop the gasp of yelp of surprise as the sensation hits you. Jewel's insides are incredibly hot! It's to the point where you "
                                 + "aren't sure if it feels too hot or if its the best thing you've felt. As such, you make a strangled gasping sound as Jewel fully sheathes you in herself.<br/><br/>"
                                 + "Only when you are fully inside her does Jewel notice the 'unique' expression that must be adorning your face. ";
-            } else if (other.hasPussy()) {
+            } else if (other.hasPussy() && !c.getStance().vaginallyPenetratedBy(c, other, character)) {
                 message += "As all of this occurs Jewel has yet to withdraw her roving hands from your cunt.<br/><br/>"
                                 + "When Jewel notices your pussy moistening and your body flushing again, her face flashes through surprise before fixing itself in a predatory smile. "
                                 + "<i>\"You never do disappoint.\"</i> She quips as she moves to align her cunt with yours. As she does so, you feel a smirk make itself onto your face. "
@@ -491,13 +491,21 @@ public class Jewel extends BasePersonality {
                                 + "Jewel's pussy is incredibly hot! It's to the point where you aren't sure if it feels too hot or if its the best thing you've felt. "
                                 + "As such, you make a strangled gasping sound as Jewel starts grinding into you.<br/><br/> Only after pressing her pussy against yours for a good minute does Jewel notice the "
                                 + "'unique' expression that must be adorning your face. ";
+            } else if (other.hasPussy() && c.getStance().vaginallyPenetratedBy(c, other, character)) {
+                message += "As all of this occurs Jewel has yet to withdraw her roving hands from your cunt.<br/><br/>"
+                                + "When Jewel notices your pussy moistening and your body flushing again, her face flashes through surprise before fixing itself in a predatory smile. "
+                                + "<i>\"You never do disappoint.\"</i> She quips as she moves to align her cock with your opening. As she does so, you feel a smirk make itself onto your face. "
+                                + "However it doesn't last because as soon as she penetrates you, you are unable to stop the gasp of yelp of surprise as the sensation hits you. "
+                                + "Jewel's cock is incredibly hot! It's to the point where you aren't sure if it feels too hot or if its the best thing you've felt. "
+                                + "As such, you make a strangled gasping sound as Jewel starts thrusting into you.<br/><br/> Only after using your pussy for a good minute does Jewel notice the "
+                                + "'unique' expression that must be adorning your face. ";
             }
             message += "<i>\"Hey, what's wrong?\"</i> She asks momentarily dropping "
                             + "her grin but quickly regains it as understanding spreads across her face. <i>\"Ahhhh,\"</i> She exclaims, leaning down so that her face is close to yours, <i>\"Is it a bit "
                             + "too warm for you down there?\"</i> She asks, her face full of mock sympathy. You are still slightly off kilter from the unique feeling of Jewel's molten warmth, so you "
                             + "can only demurely shake you head as you look upwards at Jewel.<br/><br/>"
                             + "<i>\"Good,\"</i> she breathes as she begins to grind her hips against yours, <i>\"Because I don't think I'd stop anyway.\"</i>";
-            if (other.hasDick()) {
+            if (other.hasDick() && !(other.hasPussy() && c.getStance().vaginallyPenetratedBy(c, other, character))) {
                 message += "With this said Jewel begins to ride you hard, jackhammering down onto you ruthlessly.<br/><br/>"
                                 + "The sensations that this brings are overwhelming. Whenever your penis is extracted from Jewel, the cold air makes you gasp. But when you are fully inside her, the "
                                 + "heat is nearly unbearable. Because of this, you don't know whether to tell Jewel to stop or beg her to keep going.<br/><br/>"
@@ -505,12 +513,20 @@ public class Jewel extends BasePersonality {
                                 + "breathing becoming more ragged and her pace reaching a crescendo.<br/><br/>"
                                 + "With a mewl of pleasure Jewel climaxes above you, bringing you fully inside as she does so. The sensation of her superheated walls clamping down on you is too much "
                                 + "and you find yourself coming once again.<br/><br/>";
-            } else if (other.hasPussy()) {
+            } else if (other.hasPussy() && !c.getStance().vaginallyPenetratedBy(c, other, character)) {
                 message += "With this said Jewel begins to scissor you, grinding down onto you ruthlessly.<br/><br/>"
                                 + "The sensations that this brings are overwhelming. The heat is nearly unbearable and because of this, you don't know whether to tell Jewel to stop or beg her to keep going.<br/><br/>"
                                 + "It's probably a moot point anyway as Jewel is in her own world above you, sliding her cunt across yours, and soon you begin to notice her "
                                 + "breathing becoming more ragged and her pace reaching a crescendo.<br/><br/>"
                                 + "With a mewl of pleasure Jewel climaxes above you, pressing her superheated nether lips against yours and making you come yet again.<br/><br/>";
+            } else if (other.hasPussy() && c.getStance().vaginallyPenetratedBy(c, other, character)) {
+                message += "With this said Jewel begins to ride you hard, jackhammering down into you ruthlessly.<br/><br/>"
+                                + "The sensations that this brings are overwhelming. Whenever Jewel's penis is extracted from you, the cold air makes you gasp. But when she is fully inside you, the "
+                                + "heat is nearly unbearable. Because of this, you don't know whether to tell Jewel to stop or beg her to keep going.<br/><br/>"
+                                + "It's probably a moot point anyway as Jewel is in her own world above you, slamming her length in and out of your overheated canal and soon you begin to notice her "
+                                + "breathing becoming more ragged and her pace reaching a crescendo.<br/><br/>"
+                                + "With a mewl of pleasure Jewel climaxes above you, bringing herself fully inside as she does so. The sensation of her superheated dick pumping cum that feels almost boiling hot into you is too much "
+                                + "and you find yourself coming once again.<br/><br/>";
             }
             message += "After you both catch your breath, Jewel stands and extracts you from herself. You can't help the groan of discomfort that escapes you when your privates are exposed to "
                             + "the cold once again. Jewel laughs at your discomfort and looks down at you as she collects her clothes.<br/><br/>"

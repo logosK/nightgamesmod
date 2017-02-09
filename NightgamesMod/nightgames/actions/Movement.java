@@ -2,7 +2,7 @@ package nightgames.actions;
 
 import nightgames.areas.Area;
 
-public enum Movement {
+public enum Movement implements IMovement {
     quad(" head outside, toward the quad."),
     kitchen(" move into the kitchen."),
     dorm(" move to the first floor of the dorm."),
@@ -60,9 +60,7 @@ public enum Movement {
 
     private String desc;
 
-    /**
-     * @return the Item name
-     */
+    @Override
     public String describe() {
         return desc;
     }

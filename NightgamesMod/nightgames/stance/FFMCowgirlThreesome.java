@@ -21,6 +21,11 @@ public class FFMCowgirlThreesome extends FemdomSexStance {
     }
 
     @Override
+    public final boolean isThreesome() {
+        return true;
+    }
+    
+    @Override
     public Character domSexCharacter(Combat c) {
         return domSexCharacter;
     }

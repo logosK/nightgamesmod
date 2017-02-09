@@ -141,7 +141,7 @@ public class Dominance extends Addiction {
     }
 
     @Override
-    public String initialMessage(Combat c, boolean replaced) {
+    public String initialMessage(Combat c, Optional<Status> replacement) {
         if (inWithdrawal) {
             return cause.getName() + " is looking meaner than ever after you neglected to visit today. Equal"
                             + " parts of fear and desire well up inside of you at the thought of what "
@@ -179,12 +179,12 @@ public class Dominance extends Addiction {
     }
 
     @Override
-    public int weakened(int x) {
+    public int weakened(Combat c, int x) {
         return 0;
     }
 
     @Override
-    public int tempted(int x) {
+    public int tempted(Combat c, int x) {
         return 0;
     }
 

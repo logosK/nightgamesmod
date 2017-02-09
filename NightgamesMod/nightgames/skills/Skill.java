@@ -100,7 +100,7 @@ public abstract class Skill {
                         && s.type(c) != Tactics.fucking && s.type(c) != Tactics.pleasure && s.type(c) != Tactics.misc;
         boolean allureRestricted =
                         target.is(Stsflag.alluring) && (s.type(c) == Tactics.damage || s.type(c) == Tactics.debuff);
-        boolean modifierRestricted = !Global.getMatch().condition.getSkillModifier().allowedSkill(c,s);
+        boolean modifierRestricted = !Global.getMatch().getCondition().getSkillModifier().allowedSkill(c,s);
         boolean usable = s.usable(c, target) && s.getSelf().canSpend(s.getMojoCost(c)) && !charmRestricted
                         && !allureRestricted && !modifierRestricted;
         return usable;
@@ -111,7 +111,7 @@ public abstract class Skill {
                         && s.type(c) != Tactics.fucking && s.type(c) != Tactics.pleasure && s.type(c) != Tactics.misc;
         boolean allureRestricted =
                         target.is(Stsflag.alluring) && (s.type(c) == Tactics.damage || s.type(c) == Tactics.debuff);
-        boolean modifierRestricted = !Global.getMatch().condition.getSkillModifier().allowedSkill(c,s);
+        boolean modifierRestricted = !Global.getMatch().getCondition().getSkillModifier().allowedSkill(c,s);
         boolean usable = s.usable(c, target) && s.getSelf().canSpend(s.getMojoCost(c)-mojodiff) && !charmRestricted
                         && !allureRestricted && !modifierRestricted;
         return usable;

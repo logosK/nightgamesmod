@@ -440,7 +440,7 @@ public class Angel extends BasePersonality {
                             + "she could have been disappointed with that performance.  You can only gape as you look up to see Angel is gone along with your clothes. You sigh as you "
                             + "stand and ready yourself to move on. You wouldn't put past Angel to tell her girlfriends regardless of how well you performed, you just hope that's as "
                             + "far as that information goes.";
-            if(Global.checkFlag(Flag.Buttslutification) && opponent.get(Attribute.Submissive) > 0) {opponent.add(c, new EnemyButtslutTrainingStatus(opponent));}
+            //if(Global.checkFlag(Flag.Buttslutification) && opponent.get(Attribute.Submissive) > 0) {opponent.add(c, new EnemyButtslutTrainingStatus(opponent));}
         } else if (c.getStance().anallyPenetrated(c, opponent) && opponent.hasStatus(Stsflag.buttsluttraining) && !opponent.has(Trait.buttslut)) {
          // This is supposed to be a mini-quest where the girls try to train you into a buttslut and you try to resist them. Every time you gain a level of the buttslut training status, you get
          // 1 point in submissive, and every time you win by fucking one of them who is training you in the pussy from a dominant position, you gain a point of power (Jewel), cunning (Mara), 

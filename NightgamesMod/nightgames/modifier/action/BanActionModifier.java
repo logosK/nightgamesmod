@@ -14,8 +14,8 @@ import com.google.gson.JsonObject;
 import nightgames.actions.Action;
 import nightgames.characters.Character;
 import nightgames.global.Global;
-import nightgames.global.Match;
 import nightgames.json.JsonUtils;
+import nightgames.match.Match;
 import nightgames.modifier.ModifierComponentLoader;
 
 public class BanActionModifier extends ActionModifier implements ModifierComponentLoader<ActionModifier> {

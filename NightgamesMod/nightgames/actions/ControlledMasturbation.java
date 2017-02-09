@@ -17,7 +17,7 @@ public class ControlledMasturbation extends Action {
     }
 
     @Override
-    public Movement execute(Character user) {
+    public IMovement execute(Character user) {
         
         String mast;
         if (user.hasDick()) {
@@ -43,7 +43,7 @@ public class ControlledMasturbation extends Action {
     }
 
     @Override
-    public Movement consider() {
+    public IMovement consider() {
         return Movement.wait;
     }
 

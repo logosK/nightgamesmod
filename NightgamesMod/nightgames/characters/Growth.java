@@ -69,8 +69,8 @@ public class Growth implements Cloneable {
 
     public void addTrait(int level, Trait trait) {
         if (trait == null) {
-            System.err.println("Tried to add a null trait to a growth.");
-            DebugHelper.printStackFrame(5, 1);
+            System.err.println("Tried to add an null trait to growth!");
+            DebugHelper.printStackFrame(3, 1);
             return;
         }
         if (!traits.containsKey(level)) {
@@ -80,7 +80,7 @@ public class Growth implements Cloneable {
     }
 
     public Map<Integer, List<Trait>> getTraits() {
-        return new HashMap<>(traits);
+        return Collections.unmodifiableMap(new HashMap<>(traits));
     }
     
     public void addTraitPoints(int[] levels, Character charfor) {
@@ -113,6 +113,7 @@ public class Growth implements Cloneable {
     public void addOrRemoveTraits(Character character) {addOrRemoveTraits(character, false);}
     
     public void addOrRemoveTraits(Character character, boolean addonly) {
+        traits.values().forEach(l -> l.removeIf(t -> t == null));        
         if (!addonly) {
             traits.keySet().stream().filter(i -> i > character.level).forEach(i -> {
                 traits.get(i).forEach(character::remove);

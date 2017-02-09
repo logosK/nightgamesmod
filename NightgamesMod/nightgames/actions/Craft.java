@@ -21,13 +21,13 @@ public class Craft extends Action {
     }
 
     @Override
-    public Movement execute(Character user) {
+    public IMovement execute(Character user) {
         user.state = State.crafting;
         return Movement.craft;
     }
 
     @Override
-    public Movement consider() {
+    public IMovement consider() {
         return Movement.craft;
     }
 

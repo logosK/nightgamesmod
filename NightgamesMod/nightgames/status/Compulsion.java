@@ -1,5 +1,7 @@
 package nightgames.status;
 
+import java.util.Optional;
+
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
@@ -24,7 +26,7 @@ public class Compulsion extends DurationStatus implements Compulsive {
     }
 
     @Override
-    public String initialMessage(Combat c, boolean replaced) {
+    public String initialMessage(Combat c, Optional<Status> replacement) {
         return Global.format("{other:SUBJECT-ACTION:have|has} placed a compulsion on"
                         + " {self:name-possessive} mind!", affected, compeller);
     }
@@ -52,12 +54,12 @@ public class Compulsion extends DurationStatus implements Compulsive {
     }
 
     @Override
-    public int weakened(int x) {
+    public int weakened(Combat c, int x) {
         return 0;
     }
 
     @Override
-    public int tempted(int x) {
+    public int tempted(Combat c, int x) {
         return 0;
     }
 

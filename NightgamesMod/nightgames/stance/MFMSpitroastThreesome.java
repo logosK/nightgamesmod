@@ -20,6 +20,11 @@ public class MFMSpitroastThreesome extends MaledomSexStance {
         super(top, bottom, Stance.doggy);
         this.domSexCharacter = domSexCharacter;
     }
+    
+    @Override
+    public final boolean isThreesome() {
+        return true;
+    }
 
     @Override
     public Character domSexCharacter(Combat c) {

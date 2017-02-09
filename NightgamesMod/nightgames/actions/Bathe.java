@@ -21,7 +21,7 @@ public class Bathe extends Action {
     }
 
     @Override
-    public Movement execute(Character user) {
+    public IMovement execute(Character user) {
         if (user.human()) {
             if (user.location().name.equals("Showers")) {
                 Global.gui().message("It's a bit dangerous, but a shower sounds especially inviting right now.");
@@ -35,7 +35,7 @@ public class Bathe extends Action {
     }
 
     @Override
-    public Movement consider() {
+    public IMovement consider() {
         return Movement.bathe;
     }
 

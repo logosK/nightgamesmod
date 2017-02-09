@@ -94,12 +94,13 @@ import nightgames.characters.custom.JsonSourceNPCDataLoader;
 import nightgames.characters.custom.NPCData;
 import nightgames.combat.Combat;
 import nightgames.daytime.Daytime;
-import nightgames.ftc.FTCMatch;
 import nightgames.gui.GUI;
 import nightgames.gui.HeadlessGui;
 import nightgames.items.Item;
 import nightgames.items.clothing.Clothing;
 import nightgames.json.JsonUtils;
+import nightgames.match.Match;
+import nightgames.match.MatchType;
 import nightgames.modifier.CustomModifierLoader;
 import nightgames.modifier.Modifier;
 import nightgames.modifier.standard.FTCModifier;
@@ -163,6 +164,7 @@ public class Global {
     public static double xpRate = 1.0;
     public static ContextFactory factory;
     public static Context cx;
+    private static MatchType currentMatchType = MatchType.NORMAL;
     
     private static final int LINEUP_SIZE = 5;
 
@@ -267,7 +269,7 @@ public class Global {
         
         time = Time.NIGHT;
         setCharacterDisabledFlag(getNPCByType("Yui"));
-        //setFlag(Flag.systemMessages, true);
+        setFlag(Flag.systemMessages, true);
         setUpMatch(new NoModifier());
     }
 
@@ -773,14 +775,16 @@ public class Global {
     }
 
     public static void startNight() {
-        decideMatchType().buildPrematch(human);
+        currentMatchType = decideMatchType();
+        currentMatchType.runPrematch();
     }
 
     public static List<Character> getMatchParticipantsInAffectionOrder() {
         if (match == null) {
             return Collections.emptyList();
         }
-        return getInAffectionOrder(match.combatants.stream().filter(c -> !c.human()).collect(Collectors.toList()));
+        return getInAffectionOrder(match.getCombatants().stream()
+                        .filter(c -> !c.human()).collect(Collectors.toList()));
     }
 
     public static List<Character> getInAffectionOrder(List<Character> viableList) {
@@ -872,7 +876,7 @@ public class Global {
             withEffect.ifPresent(s -> Global.getPlayer().addNonCombat(s));
         });
         Global.gui().startMatch();
-        match.round();
+        match.start();
     }
 
     public static String gainSkills(Character c) {
@@ -1209,7 +1213,6 @@ public class Global {
         characterPool.put(eve.getCharacter().getType(), eve.getCharacter());
         characterPool.put(maya.getCharacter().getType(), maya.getCharacter());
         characterPool.put(yui.getCharacter().getType(), yui.getCharacter());
-        debugChars.add(reyka.getCharacter());
     }
     
     public static void loadWithDialog() {
@@ -1480,6 +1483,13 @@ public class Global {
             }
             return "";
         });
+
+        matchActions.put("if-nonhuman", (self, first, second, third) -> {
+            if (self != null && third != null) {
+                return !self.human() ? third : "";
+            }
+            return "";
+        });
         matchActions.put("subject", (self, first, second, third) -> {
             if (self != null) {
                 return self.subject();
@@ -1554,6 +1564,14 @@ public class Global {
                 return "mistress";
             } else {
                 return "master";
+            }
+        });
+
+        matchActions.put("mister", (self, first, second, third) -> {
+            if (self.useFemalePronouns()) {
+                return "miss";
+            } else {
+                return "mister";
             }
         });
 
@@ -1672,7 +1690,7 @@ public class Global {
     }
 
     public static MatchType decideMatchType() {
-        return MatchType.NORMAL;
+        return MatchType.TEAM;
         /*
          * TODO Lots of FTC bugs right now, will disable it for the time being.
          * Enable again once some of the bugs are sorted out.
@@ -1688,15 +1706,7 @@ public class Global {
     }
 
     private static Match buildMatch(Collection<Character> combatants, Modifier mod) {
-        if (mod.name().equals("ftc")) {
-            if (combatants.size() < 5) {
-                return new Match(combatants, new NoModifier());
-            }
-            flag(Flag.FTC);
-            return new FTCMatch(combatants, ((FTCModifier) mod).getPrey());
-        } else {
-            return new Match(combatants, mod);
-        }
+        return currentMatchType.buildMatch(combatants, mod);
     }
 
     public static HashSet<Character> getParticipants() {
@@ -1729,7 +1739,7 @@ public class Global {
     }    
 
     public static void unsetCharacterDisabledFlag(Character self) {
-        unflag(String.format(DISABLED_FORMAT, self.getName()));
+        unflag(String.format(DISABLED_FORMAT, self.getTrueName()));
     }
 
     public static TraitTree getTraitRequirements() {

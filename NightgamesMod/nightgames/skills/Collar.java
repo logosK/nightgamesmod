@@ -57,7 +57,7 @@ public class Collar extends Skill {
                             + " out a metal collar and {self:action:lock|locks} it in place around"
                             + " {other:name-possessive} neck. <i>\"Is that comfortable, {other:name}?\"</i>"
                             + " {self:pronoun-action:ask|asks} {other:direct-object}, <i>\"That little"
-                            + " collar is going to make sure you behave. You can be a good %s, right {other:name}?\"<i>"
+                            + " collar is going to make sure you behave. You can be a good %s, right {other:name}?\"</i>"
                             , getSelf(), target, target.boyOrGirl()));
             target.add(c, new Collared(target, getSelf()));
         }

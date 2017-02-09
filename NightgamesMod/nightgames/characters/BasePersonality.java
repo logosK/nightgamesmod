@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import nightgames.actions.Action;
-import nightgames.actions.Movement;
+import nightgames.actions.IMovement;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.CockPart;
@@ -124,7 +124,7 @@ public abstract class BasePersonality implements Personality {
     }
 
     @Override
-    public Action move(Collection<Action> available, Collection<Movement> radar) {
+    public Action move(Collection<Action> available, Collection<IMovement> radar) {
         Action proposed = Decider.parseMoves(available, radar, character);
         return proposed;
     }

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import com.google.gson.JsonObject;
@@ -47,7 +48,7 @@ public abstract class Status implements Cloneable {
         return requirements.stream().allMatch((req) -> req.meets(c, self, other));
     }
 
-    public abstract String initialMessage(Combat c, boolean replaced);
+    public abstract String initialMessage(Combat c, Optional<Status> replacement);
 
     public abstract String describe(Combat c);
 
@@ -59,9 +60,9 @@ public abstract class Status implements Cloneable {
 
     public abstract double pleasure(Combat c, BodyPart withPart, BodyPart targetPart, double x);
 
-    public abstract int weakened(int x);
+    public abstract int weakened(Combat c, int x);
 
-    public abstract int tempted(int x);
+    public abstract int tempted(Combat c, int x);
 
     public double sensitivity(double x) {
         return 0;
@@ -79,7 +80,7 @@ public abstract class Status implements Cloneable {
 
     public abstract int value();
     
-    public int drained(int x) {
+    public int drained(Combat c, int x) {
         return 0;
     }
 

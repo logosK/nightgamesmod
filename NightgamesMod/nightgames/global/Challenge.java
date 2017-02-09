@@ -1,6 +1,7 @@
 package nightgames.global;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import nightgames.areas.Deployable;
 import nightgames.characters.Attribute;
@@ -72,16 +73,30 @@ public class Challenge implements Deployable {
     }
 
     private enum GOAL {
-        kisswin,
-        clothedwin,
-        bathambush,
-        peggedloss,
-        analwin,
-        pendomwin,
-        pendraw,
-        subwin
+        kisswin("'Win with a kiss'"),
+        clothedwin("'Win while opponent is clothed'"),
+        bathambush("'Ambush opponent while bathing'"),
+        peggedloss("'Lose by being pegged'"),
+        analwin("'Win through anal sex'"),
+        pendomwin("'Win through dominant sex'"),
+        pendraw("'Force a draw through sex'"),
+        subwin("'Win from a submissive position'");
+        
+        private final String name;
+        
+        private GOAL(String name) {
+            this.name = name;
+        }
+        
+        public String getName() {
+            return name;
+        }
     }
 
+    public String describe() {
+        return goal.getName() + " Challenge vs. " + target.getTrueName();
+    }
+    
     public void check(Combat state, Character victor) {
         if (!done && (state.p1 == target || state.p2 == target || target == null)) {
             switch (goal) {
@@ -130,9 +145,10 @@ public class Challenge implements Deployable {
     public boolean resolve(Character active) {
         if (active.state == State.ready) {
             owner = active;
-            target = Global.getMatch().combatants.get(Global.random(Global.getMatch().combatants.size() - 1));
+            List<Character> combatants = Global.getMatch().getCombatants();
+            target = combatants.get(Global.random(combatants.size() - 1));
             for (int i = 0; i < 10 && target == active; i++) {
-                target = Global.getMatch().combatants.get(Global.random(Global.getMatch().combatants.size() - 1));
+                target = combatants.get(Global.random(combatants.size() - 1));
             }
             if (target == active) {
                 return false;

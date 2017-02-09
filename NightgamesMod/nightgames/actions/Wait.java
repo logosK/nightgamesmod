@@ -19,12 +19,12 @@ public class Wait extends Action {
     }
 
     @Override
-    public Movement execute(Character user) {
+    public IMovement execute(Character user) {
         return Movement.wait;
     }
 
     @Override
-    public Movement consider() {
+    public IMovement consider() {
         return Movement.wait;
     }
 

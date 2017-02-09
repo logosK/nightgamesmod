@@ -6,7 +6,6 @@ import java.util.Map;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.sun.jndi.url.iiopname.iiopnameURLContextFactory;
 
 import javafx.beans.property.ReadOnlyObjectPropertyBase;
 import javafx.beans.value.ObservableValue;

@@ -13,6 +13,7 @@ import nightgames.items.clothing.Clothing;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.pet.PetCharacter;
 import nightgames.status.Abuff;
+import nightgames.status.Drained;
 import nightgames.status.Stsflag;
 import nightgames.status.Trance;
 
@@ -108,7 +109,7 @@ public class AssPart extends GenericBodyPart {
                                 + " great gouts of {other:name-possessive} strength from {other:possessive}"
                                 + " body.", self, opponent));
                 opponent.drain(c, self, self.getLevel());
-                Abuff.drain(c, self, opponent, Attribute.Power, 3, 10, true);
+                Drained.drain(c, self, opponent, Attribute.Power, 3, 10, true);
             } else {
                 c.write(self, Global.format("The feel of {self:name-possessive} ass around"
                                 + " {other:name-possessive} %s drains"

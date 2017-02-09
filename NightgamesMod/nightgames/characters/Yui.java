@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 import nightgames.actions.Action;
+import nightgames.actions.IMovement;
 import nightgames.actions.Movement;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockMod;
@@ -106,7 +107,7 @@ public class Yui extends BasePersonality {
     }
 
     @Override
-    public Action move(Collection<Action> available, Collection<Movement> radar) {
+    public Action move(Collection<Action> available, Collection<IMovement> radar) {
         for (Action act : available) {
             if (act.consider() == Movement.mana) {
                 return act;

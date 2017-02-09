@@ -12,11 +12,11 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.FFMCowgirlThreesome;
 import nightgames.stance.FFMFacesittingThreesome;
 import nightgames.stance.FFXTribThreesome;
-import nightgames.stance.XHFDaisyChainThreesome;
 import nightgames.stance.MFFMissionaryThreesome;
 import nightgames.stance.MFMDoublePenThreesome;
 import nightgames.stance.MFMSpitroastThreesome;
 import nightgames.stance.ReverseXHFDaisyChainThreesome;
+import nightgames.stance.XHFDaisyChainThreesome;
 
 public class PetThreesome extends Skill {
     public PetThreesome(String name, Character self, int cooldown) {

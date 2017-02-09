@@ -23,6 +23,11 @@ public class MFMDoublePenThreesome extends MaledomSexStance {
     }
 
     @Override
+    public final boolean isThreesome() {
+        return true;
+    }
+    
+    @Override
     public Character domSexCharacter(Combat c) {
         return domSexCharacter;
     }

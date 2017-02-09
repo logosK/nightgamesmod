@@ -73,6 +73,6 @@ public class NurseStrategy extends KnockdownThenActionStrategy {
 
     @Override
     public int initialDuration(Combat c, Character self) {
-        return Global.random(2, 6);
+        return Global.random(4, 7);
     }
 }

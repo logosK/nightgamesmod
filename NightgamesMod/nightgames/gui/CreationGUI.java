@@ -513,8 +513,7 @@ public class CreationGUI extends JPanel {
 
 
     protected void makeGame(Optional<StartConfiguration> startConfig) {
-        if (!namefield.getText()
-                        .isEmpty() || (startConfig.isPresent() && startConfig.get().player.nameIsSet())) {
+        if (!namefield.getText().isEmpty() || (startConfig.isPresent() && startConfig.get().player.nameIsSet())) {
             String name = namefield.getText();
             CharacterSex sex = (CharacterSex) sexBox.getSelectedItem();
             List<Trait> traits = Collections.emptyList();

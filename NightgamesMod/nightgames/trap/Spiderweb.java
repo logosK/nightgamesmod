@@ -4,10 +4,10 @@ import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.State;
 import nightgames.characters.Trait;
-import nightgames.combat.IEncounter;
 import nightgames.global.Global;
 import nightgames.items.Item;
 import nightgames.items.clothing.ClothingSlot;
+import nightgames.match.Encounter;
 
 public class Spiderweb extends Trap {
 
@@ -68,7 +68,7 @@ public class Spiderweb extends Trap {
     }
 
     @Override
-    public void capitalize(Character attacker, Character victim, IEncounter enc) {
+    public void capitalize(Character attacker, Character victim, Encounter enc) {
         if (attacker.human()) {
             Global.gui().message(
                             victim.getName() + " is naked and helpless in the giant rope web. You approach slowly, taking in the lovely view of her body. You trail your fingers "

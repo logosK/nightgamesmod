@@ -19,7 +19,7 @@ public class Struggle extends Action {
     }
 
     @Override
-    public Movement execute(Character user) {
+    public IMovement execute(Character user) {
         Bound status = (Bound) user.getStatus(Stsflag.bound);
         int difficulty = 20 - user.getEscape(null, null);
         if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {
@@ -48,7 +48,7 @@ public class Struggle extends Action {
     }
 
     @Override
-    public Movement consider() {
+    public IMovement consider() {
         return Movement.struggle;
     }
 

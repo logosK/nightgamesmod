@@ -1,5 +1,7 @@
 package nightgames.status;
 
+import java.util.Optional;
+
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
@@ -61,7 +63,6 @@ public class EnemyButtslutTrainingStatus extends Status {
         if (trainingLevel <= 0 && sensitivityLevel <= 0) {affected.removelist.add(this);}
     }
 
-    @Override
     public String initialMessage(Combat c, boolean replaced) {
         return Global.format("Your enemies have started to train you to be a buttslut", affected, c.getOpponent(affected));
     }
@@ -92,12 +93,12 @@ public class EnemyButtslutTrainingStatus extends Status {
     }
 
     @Override
-    public int weakened(int x) {
+    public int weakened(Combat c, int x) {
         return 0;
     }
 
     @Override
-    public int tempted(int x) {
+    public int tempted(Combat c, int x) {
         return 0;
     }
 
@@ -155,6 +156,12 @@ public class EnemyButtslutTrainingStatus extends Status {
     public static EnemyButtslutTrainingStatus getThisTypeForPlayer() {
         if(!Global.getPlayer().hasStatus(Stsflag.buttsluttraining)) {return new EnemyButtslutTrainingStatus(null);}
         return ((EnemyButtslutTrainingStatus)Global.getPlayer().getStatus(Stsflag.buttsluttraining));
+    }
+
+    @Override
+    public String initialMessage(Combat c, Optional<Status> replacement) {
+        // TODO Auto-generated method stub
+        return null;
     }
     
 }

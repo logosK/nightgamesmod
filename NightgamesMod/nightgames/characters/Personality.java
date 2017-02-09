@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import nightgames.actions.Action;
-import nightgames.actions.Movement;
+import nightgames.actions.IMovement;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.custom.AiModifiers;
 import nightgames.characters.custom.CommentSituation;
@@ -19,7 +19,7 @@ import nightgames.skills.Skill;
 public interface Personality extends Serializable {
     Skill act(HashSet<Skill> available, Combat c);
 
-    Action move(Collection<Action> available, Collection<Movement> radar);
+    Action move(Collection<Action> available, Collection<IMovement> radar);
 
     NPC getCharacter();
 

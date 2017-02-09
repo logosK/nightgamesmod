@@ -1,66 +1,31 @@
-package nightgames.ftc;
+package nightgames.match.ftc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import nightgames.characters.Character;
-import nightgames.characters.Player;
 import nightgames.global.Flag;
 import nightgames.global.Global;
-import nightgames.global.Scene;
 import nightgames.gui.KeyableButton;
-import nightgames.gui.SaveButton;
 import nightgames.gui.SceneButton;
+import nightgames.match.Prematch;
+import nightgames.match.PrematchEvent;
 import nightgames.modifier.standard.FTCModifier;
 
-public class FTCPrematch implements Scene {
+public class FTCPrematch extends Prematch {
 
     private Character prey;
 
-    public FTCPrematch(Player player) {        
-        Global.current = this;
-        Global.unflag(Flag.victory);
-        List<KeyableButton> choice = new ArrayList<>();
-        String message = "";
-        if (!Global.checkFlag(Flag.didFTC)) {
-            message += "When you get to the student union, you find it deserted save for"
-                            + " a note telling you to go to the parking lot instead. Once you get"
-                            + " there, the others, including Lilly, are already waiting next to a van. "
-                            + "\"Nice of you to join us, " + player.getTrueName() + ". I've been working for a while"
-                            + " on devising an alternative match format, and tonight the lot"
-                            + " of you get to be my guniea pigs.\" That sounds patently"
-                            + " uncomfortable, but you listen on anyway. \"The idea is this: I drop"
-                            + " you off in some nearby woods, and then let four of you hunt the fifth."
-                            + " One of you will be assigned as the 'Prey', while the others will be"
-                            + " 'Hunters'. At the start of the match, the Prey will get a ribbon, which"
-                            + " we will call the Flag. The Prey's goal is to keep the Flag. If a Hunter"
-                            + " encounters the Prey, they will fight under the same rules that apply"
-                            + " on campus. If the Hunter wins, they take the Flag. Their goal then"
-                            + " becomes taking the flag safely back to their base. Hunters"
-                            + " may attack other Hunters at will. If a Hunter turns in"
-                            + " the Flag, a new one will appear in the center of the forest, where the"
-                            + " Prey can pick it up. For the sake of fairness, the Prey cannot be attacked"
-                            + " for 15 minutes after picking up the Flag. Scoring is as follows: Hunters"
-                            + " get one point for beating the Prey, two points for beating a Hunter,"
-                            + " and five points for delivering a Flag to their base. The Prey gets one"
-                            + " point for every 15 minutes they hold on to the Flag, plus three points for every"
-                            + " fight they win. Everyone will get $100 per point at the end of the night."
-                            + " So, anyone want to volunteer to be our first Prey?\"";
-        } else {
-            message += "You find a note in the student union saying that tonight's match will"
-                            + " take place in the forest again. When you get to the van, Lilly asks the"
-                            + " assembled competitors who wants to be the Prey tonight.\"";
-        }
-        choice.add(new SceneButton("Volunteer"));
-        choice.add(new SceneButton("Keep Silent"));
-        choice.add(new SaveButton());
-        Global.gui().prompt(message, choice);
+    public FTCPrematch() { 
+        super(new FTCFirstIntroEvent(), new FTCIntroEvent());
     }
 
     @Override
     public void respond(String response) {
         if (response.equals("Start the Match")) {
             FTCModifier mod = new FTCModifier(prey);
+            type = mod;
             Global.flag(Flag.didFTC);
             Global.setUpMatch(mod);
         } else {
@@ -111,5 +76,67 @@ public class FTCPrematch implements Scene {
             choices.add(new SceneButton("Start the Match"));
             Global.gui().prompt(message, choices);
         }
+    }
+    
+    private static class FTCFirstIntroEvent extends PrematchEvent {
+
+        FTCFirstIntroEvent() {
+            super("When you get to the student union, you find it deserted save for"
+                            + " a note telling you to go to the parking lot instead. Once you get"
+                            + " there, the others, including Lilly, are already waiting next to a van. "
+                            + "\"Nice of you to join us, " + Global.getPlayer().getTrueName() + ". I've been working for a while"
+                            + " on devising an alternative match format, and tonight the lot"
+                            + " of you get to be my guniea pigs.\" That sounds patently"
+                            + " uncomfortable, but you listen on anyway. \"The idea is this: I drop"
+                            + " you off in some nearby woods, and then let four of you hunt the fifth."
+                            + " One of you will be assigned as the 'Prey', while the others will be"
+                            + " 'Hunters'. At the start of the match, the Prey will get a ribbon, which"
+                            + " we will call the Flag. The Prey's goal is to keep the Flag. If a Hunter"
+                            + " encounters the Prey, they will fight under the same rules that apply"
+                            + " on campus. If the Hunter wins, they take the Flag. Their goal then"
+                            + " becomes taking the flag safely back to their base. Hunters"
+                            + " may attack other Hunters at will. If a Hunter turns in"
+                            + " the Flag, a new one will appear in the center of the forest, where the"
+                            + " Prey can pick it up. For the sake of fairness, the Prey cannot be attacked"
+                            + " for 15 minutes after picking up the Flag. Scoring is as follows: Hunters"
+                            + " get one point for beating the Prey, two points for beating a Hunter,"
+                            + " and five points for delivering a Flag to their base. The Prey gets one"
+                            + " point for every 15 minutes they hold on to the Flag, plus three points for every"
+                            + " fight they win. Everyone will get $100 per point at the end of the night."
+                            + " So, anyone want to volunteer to be our first Prey?\"", null,
+                            Arrays.asList(new SceneButton("Volunteer"), new SceneButton("Keep Silent")));
+        }
+        
+        @Override
+        protected void extraEffects() {
+            
+        }
+
+        @Override
+        protected boolean valid() {
+            return !Global.checkFlag(Flag.didFTC);
+        }
+        
+    }
+    
+    private static class FTCIntroEvent extends PrematchEvent {
+
+        FTCIntroEvent() {
+            super("You find a note in the student union saying that tonight's match will"
+                            + " take place in the forest again. When you get to the van, Lilly asks the"
+                            + " assembled competitors who wants to be the Prey tonight.\"", null,
+                            Arrays.asList(new SceneButton("Volunteer"), new SceneButton("Keep Silent")));
+        }
+        
+        @Override
+        protected void extraEffects() {
+            
+        }
+
+        @Override
+        protected boolean valid() {
+            return true;
+        }
+        
     }
 }

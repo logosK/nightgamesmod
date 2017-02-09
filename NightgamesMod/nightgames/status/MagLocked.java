@@ -1,6 +1,7 @@
 package nightgames.status;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import com.google.gson.JsonObject;
@@ -37,7 +38,7 @@ public class MagLocked extends Status {
     }
 
     @Override
-    public String initialMessage(Combat c, boolean replaced) {
+    public String initialMessage(Combat c, Optional<Status> replacement) {
         return "";
     }
 
@@ -109,12 +110,12 @@ public class MagLocked extends Status {
     }
 
     @Override
-    public int weakened(int x) {
+    public int weakened(Combat c, int x) {
         return 0;
     }
 
     @Override
-    public int tempted(int x) {
+    public int tempted(Combat c, int x) {
         return 0;
     }
 

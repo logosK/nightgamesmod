@@ -1,6 +1,5 @@
-package nightgames.combat;
+package nightgames.match.defaults;
 
-import java.io.Serializable;
 import java.util.Optional;
 
 import nightgames.actions.Movement;
@@ -9,10 +8,12 @@ import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.State;
 import nightgames.characters.Trait;
+import nightgames.combat.Combat;
 import nightgames.global.DebugFlags;
 import nightgames.global.Encs;
 import nightgames.global.Global;
 import nightgames.items.Item;
+import nightgames.match.Encounter;
 import nightgames.status.Enthralled;
 import nightgames.status.Flatfooted;
 import nightgames.status.Hypersensitive;
@@ -21,9 +22,8 @@ import nightgames.status.Stsflag;
 import nightgames.trap.Spiderweb;
 import nightgames.trap.Trap;
 
-public class Encounter implements Serializable, IEncounter {
+public class DefaultEncounter implements Encounter {
 
-    private static final long serialVersionUID = 3122246133619156539L;
     protected Character p1;
     protected Character p2;
     protected boolean p1ff;
@@ -35,7 +35,7 @@ public class Encounter implements Serializable, IEncounter {
     protected int checkin;
     protected int fightTime;
 
-    public Encounter(Character first, Character second, Area location) {
+    public DefaultEncounter(Character first, Character second, Area location) {
         this.location = location;
         p1 = first;
         p2 = second;
@@ -154,7 +154,7 @@ public class Encounter implements Serializable, IEncounter {
                       .message("You find " + p2.getName()
                                       + " still naked from your last encounter, but she's not fair game again until she replaces her clothes.");
             }
-            location.endEncounter();
+            //location.endEncounter();
             return false;
         }
     }

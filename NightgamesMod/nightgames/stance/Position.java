@@ -444,4 +444,8 @@ public abstract class Position implements Cloneable {
         List<InsertedStatus> insertedStatus = Stream.concat(inserter.getInsertedStatus().stream(), inserted.getInsertedStatus().stream()).collect(Collectors.toList());
         return insertedStatus.stream().anyMatch(is -> hole.equals(is.getHolePart()) && inserted.equals(is.getReceiver()) && inserter.equals(is.getPitcher()) && stick.equals(is.getStickPart()));
     }
+
+    public boolean isThreesome() {
+        return false;
+    }
 }

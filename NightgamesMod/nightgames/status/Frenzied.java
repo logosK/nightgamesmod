@@ -2,6 +2,7 @@ package nightgames.status;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.google.gson.JsonObject;
@@ -74,7 +75,7 @@ public class Frenzied extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, boolean replaced) {
+    public String initialMessage(Combat c, Optional<Status> replacement) {
         if (affected.has(Trait.Rut) && !affected.human()) {
             return Global.format("There's a frenzied look in {self:name-possessive} eyes as they zero in on {other:name-possessive} crotch. "
                             + "This could be bad.", affected, c.getOpponent(affected));
@@ -143,12 +144,12 @@ public class Frenzied extends DurationStatus {
     }
 
     @Override
-    public int weakened(int x) {
+    public int weakened(Combat c, int x) {
         return (int) (-x * 0.2);
     }
 
     @Override
-    public int tempted(int x) {
+    public int tempted(Combat c, int x) {
         return (int) (x * 0.2);
     }
 

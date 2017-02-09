@@ -205,6 +205,10 @@ public class Clothing implements Loot {
         return sb.toString();
     }
 
+    public boolean isForGender(CharacterSex sex) {
+        return this.sex.contains(sex);
+    }
+    
     @Override public boolean equals(Object o) {
         return o != null && ((Clothing) o).id.equals(id);
     }

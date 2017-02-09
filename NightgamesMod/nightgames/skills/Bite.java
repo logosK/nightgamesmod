@@ -5,11 +5,9 @@ import nightgames.characters.Player;
 import nightgames.characters.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
-import nightgames.global.Global;
 import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
-@SuppressWarnings("unused")
 public class Bite extends Skill {
 
     public Bite(Character self) {

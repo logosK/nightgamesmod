@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 import nightgames.actions.Action;
-import nightgames.actions.Movement;
+import nightgames.actions.IMovement;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.FacePart;
@@ -88,7 +88,7 @@ public class Caroline extends BasePersonality {
     }
 
     @Override
-    public Action move(Collection<Action> available, Collection<Movement> radar) {
+    public Action move(Collection<Action> available, Collection<IMovement> radar) {
         Action proposed = Decider.parseMoves(available, radar, character);
         return proposed;
     }

@@ -1,5 +1,7 @@
 package nightgames.status;
 
+import java.util.Optional;
+
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
@@ -28,7 +30,7 @@ public class PartiallyCorrupted extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, boolean replaced) {
+    public String initialMessage(Combat c, Optional<Status> replacement) {
         return cause.nameOrPossessivePronoun() + " lips tug on your very soul."
                         + " If this keeps up, you could be in serious trouble!";
     }
@@ -79,12 +81,12 @@ public class PartiallyCorrupted extends DurationStatus {
     }
 
     @Override
-    public int weakened(int x) {
+    public int weakened(Combat c, int x) {
         return 0;
     }
 
     @Override
-    public int tempted(int x) {
+    public int tempted(Combat c, int x) {
         return 0;
     }
 

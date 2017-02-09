@@ -16,10 +16,11 @@ import nightgames.characters.Trait;
 import nightgames.characters.WeightedSkill;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
-import nightgames.combat.IEncounter;
 import nightgames.combat.Result;
 import nightgames.global.DebugFlags;
 import nightgames.global.Global;
+import nightgames.match.Encounter;
+import nightgames.match.team.TeamPrematch;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
@@ -155,10 +156,10 @@ public class PetCharacter extends Character {
     public void detect() {}
 
     @Override
-    public void faceOff(Character opponent, IEncounter enc) {}
+    public void faceOff(Character opponent, Encounter enc) {}
 
     @Override
-    public void spy(Character opponent, IEncounter enc) {}
+    public void spy(Character opponent, Encounter enc) {}
 
     @Override
     public String describe(int per, Combat c) {
@@ -222,11 +223,15 @@ public class PetCharacter extends Character {
             if (Global.isDebugOn(DebugFlags.DEBUG_PET)) {
                 System.out.println("Using enemy skill " + bestEnemySkill.skill.getLabel(c));
             }
+            c.write(this, String.format("<b>%s uses %s against %s</b>\n", getTrueName(), 
+                            bestEnemySkill.skill.getLabel(c), target.nameDirectObject()));
             Skill.resolve(bestEnemySkill.skill, c, target);
         } else {
             if (Global.isDebugOn(DebugFlags.DEBUG_PET)) {
                 System.out.println("Using master skill " + bestMasterSkill.skill.getLabel(c));
             }
+            c.write(this, String.format("<b>%s uses %s against %s</b>\n", 
+                            getTrueName(), bestMasterSkill.skill.getLabel(c), target.nameDirectObject()));
             Skill.resolve(bestMasterSkill.skill, c, self.owner());
         }
     }
@@ -234,7 +239,7 @@ public class PetCharacter extends Character {
     @Override
     public void add(Combat c, Status status) {
         super.add(c, status);
-        if (stunned()) {
+        if (stunned() && !Global.checkFlag(TeamPrematch.DID_FIRST_TEAM_MATCH_FLAG)) {
             c.write(this, Global.format("With {self:name-possessive} link to the fight weakened, {self:subject-action:disappears|disappears}..", this, this));
             c.removePet(this);
         }
@@ -299,10 +304,10 @@ public class PetCharacter extends Character {
     }
 
     @Override
-    public void intervene(IEncounter fight, Character p1, Character p2) {}
+    public void intervene(Encounter fight, Character p1, Character p2) {}
 
     @Override
-    public void showerScene(Character target, IEncounter encounter) {}
+    public void showerScene(Character target, Encounter encounter) {}
     @Override
     public void afterParty() {}
     
@@ -310,7 +315,7 @@ public class PetCharacter extends Character {
     public void emote(Emotion emo, int amt) {}
 
     @Override
-    public void promptTrap(IEncounter fight, Character target, Trap trap) {}
+    public void promptTrap(Encounter fight, Character target, Trap trap) {}
 
     @Override
     public void counterattack(Character target, Tactics type, Combat c) {}

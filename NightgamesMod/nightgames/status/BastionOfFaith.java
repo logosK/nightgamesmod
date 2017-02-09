@@ -1,11 +1,16 @@
 package nightgames.status;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
+import nightgames.global.Global;
 
 public class BastionOfFaith extends DurationStatus {
 
@@ -19,7 +24,7 @@ public class BastionOfFaith extends DurationStatus {
     }
 
     @Override
-    public String initialMessage(Combat c, boolean replaced) {
+    public String initialMessage(Combat c, Optional<Status> replacement) {
         return String.format("%s divine protection.\n", affected.subjectAction("have", "has"));
     }
 
@@ -40,6 +45,12 @@ public class BastionOfFaith extends DurationStatus {
 
     @Override
     public int damage(Combat c, int x) {
+        List<String> possibleStrings = Arrays.asList(
+                        "{self:NAME-POSSESSIVE} holy barrier makes it impossible to damage {self:direct-object}.",
+                        "{self:NAME-POSSESSIVE} holy barrier is making it impossible to damage {self:direct-object}.",
+                        "A golden barrier surrounding {self:name-do} is making it impossible to damage {self:direct-object}."
+                        );
+        Global.writeIfCombat(c, affected, Global.format(Global.pickRandom(possibleStrings).get(), affected, affected));
         return -x;
     }
 
@@ -49,17 +60,28 @@ public class BastionOfFaith extends DurationStatus {
     }
 
     @Override
-    public int weakened(int x) {
+    public int weakened(Combat c, int x) {
+        List<String> possibleStrings = Arrays.asList(
+                        "{self:NAME-POSSESSIVE} holy barrier is reenergizing {self:direct-object}.",
+                        "{self:NAME-POSSESSIVE} holy barrier is buoying up {self:possessive} stamina."
+                        );
+        Global.writeIfCombat(c, affected, Global.format(Global.pickRandom(possibleStrings).get(), affected, affected));
         return -x;
     }
 
     @Override
-    public int drained(int x) {
+    public int drained(Combat c, int x) {
+        List<String> possibleStrings = Arrays.asList(
+                        "{self:NAME-POSSESSIVE} holy barrier is preventing {self:direct-object} from being drained.",
+                        "{self:NAME-POSSESSIVE} holy barrier prevents {self:direct-object} draining effects.",
+                        "A golden barrier surrounding {self:name-do} stops the theft of {self:possessive} stamina."
+                        );
+        Global.writeIfCombat(c, affected, Global.format(Global.pickRandom(possibleStrings).get(), affected, affected));
         return -x;
     }
 
     @Override
-    public int tempted(int x) {
+    public int tempted(Combat c, int x) {
         return 0;
     }
 

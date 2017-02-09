@@ -5,6 +5,7 @@ import nightgames.characters.Character;
 import nightgames.characters.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
+import nightgames.global.Global;
 import nightgames.pet.Fairy;
 import nightgames.pet.FairyFem;
 import nightgames.pet.FairyMale;
@@ -20,7 +21,7 @@ public class SpawnFaerie extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return user.get(Attribute.Arcane) >= 3;
+        return user.get(Attribute.Arcane) >= 3 && !(gender == Ptype.fairymale && Global.checkFlag("isFuta"));
     }
 
     @Override

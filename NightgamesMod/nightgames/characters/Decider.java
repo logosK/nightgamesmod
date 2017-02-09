@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import nightgames.actions.Action;
+import nightgames.actions.IMovement;
 import nightgames.actions.Move;
 import nightgames.actions.Movement;
 import nightgames.characters.custom.effect.CustomEffect;
@@ -130,7 +131,7 @@ public class Decider {
          */ return priority;
     }
 
-    public static Action parseMoves(Collection<Action> available, Collection<Movement> radar, NPC character) {
+    public static Action parseMoves(Collection<Action> available, Collection<IMovement> radar, NPC character) {
         HashSet<Action> enemy = new HashSet<Action>();
         HashSet<Action> onlyWhenSafe = new HashSet<Action>();
         HashSet<Action> utility = new HashSet<Action>();
@@ -174,7 +175,7 @@ public class Decider {
                 }
             }
             String workshop = Global.checkFlag(Flag.FTC) ? "Cabin" : "Workshop";
-            Move path = character.findPath(Global.getMatch().gps(workshop));
+            Move path = character.findPath(Global.getMatch().gps(workshop).orElse(character.location));
             if (path != null) {
                 return path;
             }
@@ -276,7 +277,7 @@ public class Decider {
 
             // Sum up rating, add to map
             rating = (double) Math.pow(2, RATING_FACTOR * raw_rating + wskill.weight + wskill.skill.priorityMod(c)
-                            + Global.getMatch().condition.getSkillModifier().encouragement(wskill.skill, c, self));
+                            + Global.getMatch().getCondition().getSkillModifier().encouragement(wskill.skill, c, self));
             sum += rating;
             moveList.add(new WeightedSkill(sum, raw_rating, rating, wskill.skill));
         }
@@ -340,7 +341,7 @@ public class Decider {
             }
             // Sum up rating, add to map
             rating = (double) Math.pow(2, RATING_FACTOR * raw_rating + wskill.weight + wskill.skill.priorityMod(c)
-                            + Global.getMatch().condition.getSkillModifier().encouragement(wskill.skill, c, self));
+                            + Global.getMatch().getCondition().getSkillModifier().encouragement(wskill.skill, c, self));
             sum += rating;
             moveList.add(new WeightedSkill(sum, raw_rating, rating, wskill.skill));
         }

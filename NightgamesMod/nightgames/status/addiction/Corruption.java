@@ -80,13 +80,11 @@ public class Corruption extends Addiction {
             }
         } else {
             for (int i = 0; i < amt; i++) {
-                Attribute att;
-                do {
-                    att = getDrainAttr();
-                } while (att != null && (att == Attribute.Dark || affected.get(att) < 10));
-                if (noMoreAttrs())
+                Optional<Attribute> att = getDrainAttr();
+                if (!att.isPresent()) {
                     break;
-                buffs.add(new Abuff(affected, att, -1, 20));
+                }
+                buffs.add(new Abuff(affected, att.get(), -1, 20));
                 buffs.add(new Abuff(affected, Attribute.Dark, 1, 20));
             }
             switch (sev) {
@@ -119,13 +117,11 @@ public class Corruption extends Addiction {
     }
     
     private boolean noMoreAttrs() {
-        return getDrainAttr() == null;
+        return !getDrainAttr().isPresent();
     }
-    
-    private Attribute getDrainAttr() {
-        return Global.pickRandom(Arrays.stream(Attribute.values())
-                        .filter(a -> a != Attribute.Dark && affected.get(a) >= 10)
-                        .toArray(Attribute[]::new)).orElse(null);
+
+    private Optional<Attribute> getDrainAttr() {
+        return Global.pickRandom(Arrays.stream(Attribute.values()).filter(a -> a != Attribute.Dark && affected.get(a) >= 10).toArray(Attribute[]::new));
     }
 
     @Override
@@ -214,7 +210,7 @@ public class Corruption extends Addiction {
     }
 
     @Override
-    public String initialMessage(Combat c, boolean replaced) {
+    public String initialMessage(Combat c, Optional<Status> replacement) {
         if (inWithdrawal) {
             return "The blackness resonates with " + cause.getName() + ", growing even more powerful and troublesome than before.";
         }
@@ -248,12 +244,12 @@ public class Corruption extends Addiction {
     }
 
     @Override
-    public int weakened(int x) {
+    public int weakened(Combat c, int x) {
         return 0;
     }
 
     @Override
-    public int tempted(int x) {
+    public int tempted(Combat c, int x) {
         return 0;
     }
 

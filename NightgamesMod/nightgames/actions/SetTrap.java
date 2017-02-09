@@ -23,7 +23,7 @@ public class SetTrap extends Action {
     }
 
     @Override
-    public Movement execute(Character user) {
+    public IMovement execute(Character user) {
         try {
             Trap newTrap = trap.getClass().newInstance();
             newTrap.setStrength(user);
@@ -39,7 +39,7 @@ public class SetTrap extends Action {
     }
 
     @Override
-    public Movement consider() {
+    public IMovement consider() {
         return Movement.trap;
     }
 

@@ -10,7 +10,7 @@ import nightgames.nskills.tags.SkillTag;
 import nightgames.stance.Stance;
 import nightgames.status.BodyFetish;
 
-public class OrgasmicTighten extends Thrust {
+public class OrgasmicTighten extends Tighten {
     public OrgasmicTighten(Character self) {
         super("Orgasmic Tighten", self);
         removeTag(SkillTag.pleasureSelf);
@@ -19,6 +19,17 @@ public class OrgasmicTighten extends Thrust {
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
         return false;
+    }
+
+    @Override
+    public BodyPart getSelfOrgan(Combat c, Character target) {
+        if (c.getStance().anallyPenetratedBy(c, getSelf(), target)) {
+            return getSelf().body.getRandom("ass");
+        } else if (c.getStance().vaginallyPenetratedBy(c, getSelf(), target)) {
+            return getSelf().body.getRandomPussy();
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -87,11 +98,6 @@ public class OrgasmicTighten extends Thrust {
     @Override
     public String describe(Combat c) {
         return "Squeeze opponent's dick, no pleasure to self";
-    }
-
-    @Override
-    public String getName(Combat c) {
-        return "Tighten";
     }
 
     @Override

@@ -23,7 +23,7 @@ public class Energize extends Action {
     }
 
     @Override
-    public Movement execute(Character user) {
+    public IMovement execute(Character user) {
         if (user.human()) {
             Global.gui().message(
                             "You duck into the creative writing room and find a spellbook sitting out in the open. Aisha must have left it for you. The spellbook builds mana "
@@ -35,7 +35,7 @@ public class Energize extends Action {
     }
 
     @Override
-    public Movement consider() {
+    public IMovement consider() {
         return Movement.mana;
     }
 

@@ -3,10 +3,10 @@ package nightgames.actions;
 import nightgames.characters.Character;
 import nightgames.characters.State;
 import nightgames.characters.Trait;
-import nightgames.ftc.FTCMatch;
 import nightgames.global.Flag;
 import nightgames.global.Global;
 import nightgames.items.Item;
+import nightgames.match.ftc.FTCMatch;
 
 public class Resupply extends Action {
 
@@ -26,7 +26,7 @@ public class Resupply extends Action {
     }
 
     @Override
-    public Movement execute(Character user) {
+    public IMovement execute(Character user) {
         if (Global.checkFlag(Flag.FTC)) {
             FTCMatch match = (FTCMatch) Global.getMatch();
             if (user.human()) {
@@ -39,7 +39,7 @@ public class Resupply extends Action {
             }
         } else {
             if (user.human()) {
-                if (Global.getMatch().condition.name().equals("nudist")) {
+                if (Global.getMatch().getCondition().name().equals("nudist")) {
                     Global.gui().message(
                                     "You check in so that you're eligible to fight again, but you still don't get any clothes.");
                 } else {
@@ -52,7 +52,7 @@ public class Resupply extends Action {
     }
 
     @Override
-    public Movement consider() {
+    public IMovement consider() {
         return Movement.resupply;
     }
 

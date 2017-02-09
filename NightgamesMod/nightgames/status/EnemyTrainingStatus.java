@@ -22,7 +22,6 @@ public abstract class EnemyTrainingStatus extends Status {
         trainingLevel -= 0.01;
     }
 
-    @Override
     public String initialMessage(Combat c, boolean replaced) {
         return Global.format("Your enemies have started to train you to be a "+trainingTrait.getDesc(), affected, c.getOpponent(affected));
     }
@@ -53,12 +52,12 @@ public abstract class EnemyTrainingStatus extends Status {
     }
 
     @Override
-    public int weakened(int x) {
+    public int weakened(Combat c, int x) {
         return 0;
     }
 
     @Override
-    public int tempted(int x) {
+    public int tempted(Combat c, int x) {
         return 0;
     }
 

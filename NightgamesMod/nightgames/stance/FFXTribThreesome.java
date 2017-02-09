@@ -20,6 +20,11 @@ public class FFXTribThreesome extends Position {
         super(top, bottom, Stance.trib);
         this.domSexCharacter = domSexCharacter;
     }
+    
+    @Override
+    public final boolean isThreesome() {
+        return true;
+    }
 
     @Override
     public String describe(Combat c) {

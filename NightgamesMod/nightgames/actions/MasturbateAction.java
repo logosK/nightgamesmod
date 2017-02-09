@@ -22,7 +22,7 @@ public class MasturbateAction extends Action {
     }
 
     @Override
-    public Movement execute(Character user) {
+    public IMovement execute(Character user) {
         if (user.human()) {
             if (user.hasDick()) {
                 Global.gui().message(
@@ -52,7 +52,7 @@ public class MasturbateAction extends Action {
     }
 
     @Override
-    public Movement consider() {
+    public IMovement consider() {
         return Movement.masturbate;
     }
 

@@ -13,11 +13,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import nightgames.actions.Action;
+import nightgames.actions.IMovement;
 import nightgames.actions.Leap;
 import nightgames.actions.Move;
 import nightgames.actions.Movement;
 import nightgames.actions.Resupply;
 import nightgames.actions.Shortcut;
+import nightgames.actions.Wait;
 import nightgames.areas.Area;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.custom.CharacterLine;
@@ -25,9 +27,7 @@ import nightgames.characters.custom.CommentSituation;
 import nightgames.characters.custom.RecruitmentData;
 import nightgames.combat.Combat;
 import nightgames.combat.CombatScene;
-import nightgames.combat.IEncounter;
 import nightgames.combat.Result;
-import nightgames.ftc.FTCMatch;
 import nightgames.global.DebugFlags;
 import nightgames.global.Encs;
 import nightgames.global.Flag;
@@ -35,6 +35,8 @@ import nightgames.global.Global;
 import nightgames.items.Item;
 import nightgames.items.clothing.Clothing;
 import nightgames.items.clothing.ClothingSlot;
+import nightgames.match.Encounter;
+import nightgames.match.ftc.FTCMatch;
 import nightgames.skills.Nothing;
 import nightgames.skills.Skill;
 import nightgames.skills.Stage;
@@ -212,7 +214,7 @@ public class NPC extends Character {
         gainXP(getDefeatXP(target));
         target.gainXP(target.getVictoryXP(this));
         arousal.empty();
-        if (!target.human() || !Global.getMatch().condition.name().equals("norecovery")) {
+        if (!target.human() || !Global.getMatch().getCondition().name().equals("norecovery")) {
             target.arousal.empty();
         }
         if (this.has(Trait.insatiable)) {
@@ -508,12 +510,12 @@ public class NPC extends Character {
             if (!location.encounter(this)) {
                 
                 HashSet<Action> moves = new HashSet<>();
-                HashSet<Movement> radar = new HashSet<>();
+                HashSet<IMovement> radar = new HashSet<>();
                 FTCMatch match;
                 if (Global.checkFlag(Flag.FTC) && allowedActions().isEmpty()) {
                     match = (FTCMatch) Global.getMatch();
                     if (match.isPrey(this) && match.getFlagHolder() == null) {
-                        moves.add(findPath(match.gps("Central Camp")));
+                        moves.add(findPath(match.gps("Central Camp").get()));
                         if (Global.isDebugOn(DebugFlags.DEBUG_FTC))
                             System.out.println(getTrueName() + " moving to get flag (prey)");
                     } else if (!match.isPrey(this) && has(Item.Flag) && !match.isBase(this, location)) {
@@ -551,12 +553,17 @@ public class NPC extends Character {
         }
     }
     
-    private void pickAndDoAction(Collection<Action> available, Collection<Action> moves, Collection<Movement> radar) {
+    private void pickAndDoAction(Collection<Action> available, Collection<Action> moves, Collection<IMovement> radar) {
         if (available.isEmpty()) {
-            available.addAll(Global.getActions());
-            available.addAll(moves);
+            available.addAll(Global.getMatch().getAvailableActions(this));
+            if (Global.getMatch().canMoveOutOfCombat(this)) {
+                available.addAll(moves);
+            }
         }
         available.removeIf(a -> a == null || !a.usable(this));
+        if (available.isEmpty()) {
+            available.add(new Wait());
+        }
         if (location.humanPresent()) {
             Global.gui().message("You notice " + getName() + ai.move(available, radar).execute(this).describe());
         } else {
@@ -565,7 +572,7 @@ public class NPC extends Character {
     }
 
     @Override
-    public void faceOff(Character opponent, IEncounter enc) {
+    public void faceOff(Character opponent, Encounter enc) {
         Encs encType;
         if (ai.fightFlight(opponent)) {
             encType = Encs.fight;
@@ -579,7 +586,7 @@ public class NPC extends Character {
     }
 
     @Override
-    public void spy(Character opponent, IEncounter enc) {
+    public void spy(Character opponent, Encounter enc) {
         if (ai.attack(opponent)) {
             enc.parse(Encs.ambush, this, opponent);
         } else {
@@ -598,7 +605,7 @@ public class NPC extends Character {
     }
 
     @Override
-    public void showerScene(Character target, IEncounter encounter) {
+    public void showerScene(Character target, Encounter encounter) {
         Encs response;
         if (this.has(Item.Aphrodisiac)) {
             // encounter.aphrodisiactrick(this, target);
@@ -614,7 +621,7 @@ public class NPC extends Character {
     }
 
     @Override
-    public void intervene(IEncounter enc, Character p1, Character p2) {
+    public void intervene(Encounter enc, Character p1, Character p2) {
         if (Global.random(20) + getAffection(p1) + (p1.has(Trait.sympathetic) ? 10 : 0) >= Global.random(20)
                         + getAffection(p2) + (p2.has(Trait.sympathetic) ? 10 : 0)) {
             enc.intrude(this, p1);
@@ -624,7 +631,7 @@ public class NPC extends Character {
     }
 
     @Override
-    public void promptTrap(IEncounter enc, Character target, Trap trap) {
+    public void promptTrap(Encounter enc, Character target, Trap trap) {
         if (ai.attack(target) && (!target.human() || !Global.isDebugOn(DebugFlags.DEBUG_SPECTATE))) {
             enc.trap(this, target, trap);
         } else {
@@ -871,6 +878,7 @@ public class NPC extends Character {
 
     @Override
     public String getType() {
+        if(ai==null) {System.out.println("is broken: name "+this.getTrueName());return "Nobody";}
         return ai.getType();
     }
 

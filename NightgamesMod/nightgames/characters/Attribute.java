@@ -4,36 +4,42 @@ import nightgames.nskills.tags.AttributeSkillTag;
 import nightgames.nskills.tags.SkillTag;
 
 public enum Attribute {
-    Power(findYourself("weaker")),
-    Seduction(findYourself("less seductive")),
-    Cunning("{self:action:find|finds} that it's harder to think"),
-    Perception(findYourself("less perceptive")),
-    Speed(findYourself("slower")),
-    Arcane(findYourself("more mundane")),
-    Science(findYourself("dumber")),
-    Dark(findYourself("lacking some of {self:possessive} usual darkness")),
-    Fetish(youFind("it's harder to fetishize things")),
-    Animism("tamer"),
-    Ki(findYourself("with less aura")),
-    Bio(findYourself("with less control over {self:possessive} biology")),
-    Divinity(findYourself("less divine")),
-    Willpower(findYourself("with less self-control")),
-    Medicine(findYourself("with less medical knowledge")),
-    Technique(findYourself("with less technique")),
-    Submissive(findYourself("with understanding of being a bottom")),
-    Hypnosis(findYourself("less hypnotic")),
-    Nymphomania(findYourself("with less sex drive")),
-    Slime(findYourself("with less control over {self:possessive} slime")),
-    Ninjutsu(findYourself("less stealthy")),
-    Temporal(findYourself("forgetting some finer details of the procrastinator"));
+    Power("weaker", "stronger", "physical strength", "power"),
+    Seduction("less seductive", "more seductive", "allure", "seductiveness"),
+    Cunning("that it's harder to think", "more intelligent", "guile", "cunning"),
+    Perception("less perceptive", "more perceptive", "keenness", "perception"),
+    Speed("slower", "faster", "quickness", "speed"),
+    Arcane("more mundane", "more in tune with mystic energies", "mystic energies", "arcane powers"),
+    Science("dumber", "more technologically inclined", "gadget know-how", "scientific knowledge"),
+    Dark("like {self:pronoun-action:are} lacking some of {self:possessive} usual darkness", "more sinful", "sin", "dark powers"),
+    Fetish("like it's harder to fetishize things", "it's easier to dream about fetishes", "fantasies", "fetishes"),
+    Animism("tamer", "wilder", "instinct", "animism"),
+    Ki("like {self:pronoun-action:have} less aura", "more in control of your body", "spirit", "ki"),
+    Bio("like {self:pronoun-action:have} less control over {self:possessive} biology", "more in control of {self:possessive} biology", "essence", "biological control"),
+    Divinity("less divine", "more divine", "divinity", ""),
+    Willpower("like {self:pronoun-action:have} less self-control", "more psyched up", "self-control", "willpower"),
+    Medicine("like {self:pronoun-action:have} less medical knowledge", "{self:reflective} more in command of medical knowledge", "medical knowledge", ""),
+    Technique("like {self:pronoun-action:have} less technique", "more sexually-experienced", "sexual flair", "techniques"),
+    Submissive("less in tune with your partner's needs", "more responsive", "submissiveness", "responsiveness"),
+    Hypnosis("less hypnotic", "like it's easier to bend other's wills", "entrancing demeanour", "hypnotic gaze"),
+    Nymphomania("like {self:pronoun-action:have} less sex drive", "hornier", "sex drive", "nymphomania"),
+    Slime("like {self:pronoun-action:have} less control over {self:possessive} slime", "more in control over {self:possessive} slime", "control over {self:possessive} amorphous body", "slime"),
+    Ninjutsu("less stealthy", "stealthier", "stealth and training", "ninjutsu"),
+    Temporal("like {self:pronoun-action:are} forgetting some finer details of the procrastinator", "better in tune with the finer details of the procrastinator", "knowledge of the procrastinator", "");
 
     private final SkillTag skillTag;
     private final String lowerVerb;
-    private Attribute(String lowerVerb) {
+    private final String raiseVerb;
+    private final String drainedDirectObject;
+    private final String drainerDirectObject;
+    Attribute(String lowerVerb, String raiseVerb, String drainedDirectObject, String drainerDirectObject) {
         skillTag = new AttributeSkillTag(this);
         this.lowerVerb = lowerVerb;
+        this.raiseVerb = raiseVerb;
+        this.drainedDirectObject = drainedDirectObject;
+        this.drainerDirectObject = drainerDirectObject;
     }
-    
+
     public SkillTag getSkillTag() {
         return skillTag;
     }
@@ -49,15 +55,19 @@ public enum Attribute {
         return a != Speed && a != Perception && (self.has(Trait.divinity) || a != Divinity);
     }
 
-    private static String findYourself(String desc) {
-        return "{self:action:find|finds} {self:reflective} " + desc;
-    }
-
-    private static String youFind(String desc) {
-        return "{self:subject-action:find|finds} " + desc;
-    }
-
     public String getLowerPhrase() {
         return lowerVerb;
+    }
+
+    public String getRaisePhrase() {
+        return raiseVerb;
+    }
+
+    public String getDrainedDO() {
+        return drainedDirectObject;
+    }
+
+    public String getDrainerOwnDO() {
+        return drainerDirectObject.isEmpty() ? "own" : "own " + drainerDirectObject;
     }
 }

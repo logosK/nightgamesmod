@@ -21,7 +21,7 @@ public class BushAmbush extends Action {
     }
 
     @Override
-    public Movement execute(Character user) {
+    public IMovement execute(Character user) {
         if (user.human()) {
             if (user.get(Attribute.Animism) >= 10) {
                 Global.gui().message("You crouch down in some dense bushes, ready" + " to pounce on passing prey.");
@@ -36,7 +36,7 @@ public class BushAmbush extends Action {
     }
 
     @Override
-    public Movement consider() {
+    public IMovement consider() {
         return Movement.ftcBushAmbush;
     }
 

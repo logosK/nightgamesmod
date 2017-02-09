@@ -17,14 +17,14 @@ public abstract class Action implements Serializable {
 
     public abstract boolean usable(Character user);
 
-    public abstract Movement execute(Character user);
+    public abstract IMovement execute(Character user);
 
     @Override
     public String toString() {
         return name;
     }
 
-    public abstract Movement consider();
+    public abstract IMovement consider();
 
     public boolean freeAction() {
         return false;

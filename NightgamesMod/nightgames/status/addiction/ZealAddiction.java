@@ -173,7 +173,7 @@ public class ZealAddiction extends Addiction {
     }
 
     @Override
-    public String initialMessage(Combat c, boolean replaced) {
+    public String initialMessage(Combat c, Optional<Status> replacement) {
         if (inWithdrawal) {
             return "You tremble as " + cause.getName()
                             + " steps into view. Will " + cause.pronoun() + " punish you for not being pious enough?"
@@ -222,12 +222,12 @@ public class ZealAddiction extends Addiction {
     }
 
     @Override
-    public int weakened(int x) {
+    public int weakened(Combat c, int x) {
         return 0;
     }
 
     @Override
-    public int tempted(int x) {
+    public int tempted(Combat c, int x) {
         return 0;
     }
 

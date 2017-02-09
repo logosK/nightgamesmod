@@ -114,7 +114,7 @@ public class MagicMilkAddiction extends Addiction {
     }
 
     @Override
-    public String initialMessage(Combat c, boolean replaced) {
+    public String initialMessage(Combat c, Optional<Status> replacement) {
         if (inWithdrawal) {
             return "The burning thirst wells up at the sight of " + cause.getName() + ". It would be so easy to subdue,"
                         + " just a little sip...";
@@ -161,12 +161,12 @@ public class MagicMilkAddiction extends Addiction {
     }
 
     @Override
-    public int weakened(int x) {
+    public int weakened(Combat c, int x) {
         return 0;
     }
 
     @Override
-    public int tempted(int x) {
+    public int tempted(Combat c, int x) {
         return (int) (x * (combatAtLeast(Severity.MED) ? combatAtLeast(Severity.HIGH) ? 1.5 : 1.25 : 1));
     }
 
