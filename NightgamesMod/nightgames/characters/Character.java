@@ -26,6 +26,8 @@ import java.util.stream.Stream;
 
 import javax.swing.plaf.basic.BasicTreeUI.TreeIncrementAction;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -39,6 +41,7 @@ import nightgames.characters.body.Body;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockMod;
+import nightgames.characters.body.CockPart;
 import nightgames.characters.body.PussyPart;
 import nightgames.characters.body.TentaclePart;
 import nightgames.characters.body.ToysPart;
@@ -454,12 +457,12 @@ public abstract class Character extends Observable implements Cloneable {
 
 
     public double modifyDamage(DamageType type, Character other, double baseDamage) {
-        // so for each damage type, one level from the attacker should result in about 10% increased damage, while a point in defense should reduce damage by around 5% per level.
-        // this differential should be max capped to (2 * (100 + attacker's level * 3))%
-        // this differential should be min capped to (.5 * (100 + attacker's level * 3))%
-        double maxDamage = baseDamage * 2 * (1 + .03 * getLevel());
-        double minDamage = baseDamage * .5 * (1 + .03 * getLevel());
-        double multiplier = (1 + .1 * getOffensivePower(type) - .05 * other.getDefensivePower(type));
+        // so for each damage type, one level from the attacker should result in about 3% increased damage, while a point in defense should reduce damage by around 1.5% per level.
+        // this differential should be max capped to (2 * (100 + attacker's level * 1.5))%
+        // this differential should be min capped to (.5 * (100 + attacker's level * 1.5))%
+        double maxDamage = baseDamage * 2 * (1 + .015 * getLevel());
+        double minDamage = baseDamage * .5 * (1 + .015 * getLevel());
+        double multiplier = (1 + .03 * getOffensivePower(type) - .015 * other.getDefensivePower(type));
         if (Global.isDebugOn(DebugFlags.DEBUG_DAMAGE)) {
             System.out.println(baseDamage + " from " + getTrueName() + " has multiplier " + multiplier + " against " + other.getTrueName() + " ["+ getOffensivePower(type) +", " + other.getDefensivePower(type) + "].");
         }
@@ -632,14 +635,15 @@ public abstract class Character extends Observable implements Cloneable {
         if (drained >= stamina.get()) {
             drained = stamina.get();
         }
-        drained = Math.max(drained, i);
-        if (c != null) {
-            c.writeSystemMessage(
-                            String.format("%s drained of <font color='rgb(200,200,200)'>%d<font color='white'> stamina by %s",
-                                            subjectWas(), drained, drainer.subject()));
+        if (drained > 0) {
+            if (c != null) {
+                c.writeSystemMessage(
+                                String.format("%s drained of <font color='rgb(200,200,200)'>%d<font color='white'> stamina by %s",
+                                                subjectWas(), drained, drainer.subject()));
+            }
+            stamina.reduce(drained);
+            drainer.stamina.restore(drained);
         }
-        stamina.reduce(drained);
-        drainer.stamina.restore(drained);
     }
 
     public void weaken(Combat c, final int i) {
@@ -1298,7 +1302,7 @@ public abstract class Character extends Observable implements Cloneable {
     }
 
     public void regen(Combat c, boolean combat) {
-        getAdditionStream().forEach(Addiction::refreshWithdrawal);
+        getAddictions().forEach(Addiction::refreshWithdrawal);
         int regen = 1;
         // TODO can't find the concurrent modification error, just use a copy
         // for now I guess...
@@ -1750,7 +1754,7 @@ public abstract class Character extends Observable implements Cloneable {
             levelPlan = new HashMap<>();
         }
         status = new ArrayList<>();
-        for (JsonElement element : object.getAsJsonArray("status")) {
+        for (JsonElement element : Optional.of(object.getAsJsonArray("status")).orElse(new JsonArray())) {
             try {
                 Addiction addiction = Addiction.load(this, element.getAsJsonObject());
                 if (addiction != null) {
@@ -1906,12 +1910,12 @@ public abstract class Character extends Observable implements Cloneable {
                 addict(c, AddictionType.CORRUPTION, opponent, Addiction.HIGH_INCREASE);
             }
         }
-        if (checkAddiction(AddictionType.ZEAL, opponent) && selfPart != null && opponentPart != null  && c.getStance().penetratedBy(c, opponent, p)
+        if (checkAddiction(AddictionType.ZEAL, opponent) && selfPart != null && opponentPart != null  && c.getStance().penetratedBy(c, opponent, this)
                         && selfPart.isType("cock")) {
             c.write(this, Global.format("Experiencing so much pleasure inside of {other:name-do} reinforces {self:name-possessive} faith in the lovely goddess.", this, opponent));
             addict(c, AddictionType.ZEAL, opponent, Addiction.MED_INCREASE);
         }
-        if (checkAddiction(AddictionType.ZEAL, opponent) && selfPart != null && opponentPart != null  && c.getStance().penetratedBy(c, p, opponent)
+        if (checkAddiction(AddictionType.ZEAL, opponent) && selfPart != null && opponentPart != null  && c.getStance().penetratedBy(c, this, opponent)
                         && opponentPart.isType("cock") && (selfPart
                         .isType("pussy") || selfPart.isType("ass"))) {
             c.write(this, Global.format("Experiencing so much pleasure from {other:name-possessive} cock inside {self:direct-object} reinforces {self:name-possessive} faith.", this, opponent));
@@ -1956,11 +1960,12 @@ public abstract class Character extends Observable implements Cloneable {
                     int times, int total) {
         if (c.getStance().inserted(this) && !has(Trait.strapped)) {
             Character partner = c.getStance().getPenetratedCharacter(c, this);
+            BodyPart holePart = Global.pickRandom(c.getStance().getPartsFor(c, partner, this)).orElse(null);
             if (times == 1) {
                 String hole = "pulsing hole";
-                if (opponentPart != null && opponentPart.isType("breasts")) {
+                if (holePart != null && holePart.isType("breasts")) {
                     hole = "cleavage";
-                } else if (opponentPart != null && opponentPart.isType("mouth")) {
+                } else if (holePart != null && holePart.isType("mouth")) {
                     hole = "hungry mouth";
                 }
                 c.write(this, Global.format(
@@ -4020,15 +4025,21 @@ public abstract class Character extends Observable implements Cloneable {
     public Optional<Addiction> getAddiction(AddictionType type) {
         return getAdditionStream().filter(a -> a.getType() == type).findAny();
     }
-    
+
     public Optional<Addiction> getStrongestAddiction() {
         return getAdditionStream().max(Comparator.comparing(Addiction::getSeverity));
     }
 
+    private static final Set<AddictionType> NPC_ADDICTABLES = EnumSet.of(AddictionType.CORRUPTION);
     public void addict(Combat c, AddictionType type, Character cause, float mag) {
         boolean dbg = Global.isDebugOn(DebugFlags.DEBUG_ADDICTION);
+        if (!human() && !NPC_ADDICTABLES.contains(type)) {
+            if (dbg) {
+                System.out.printf("Skipping %s addiction on %s because it's not supported for NPCs", type.name(), getType());
+            }
+        }
         Optional<Addiction> addiction = getAddiction(type);
-        if (addiction.isPresent()) {
+        if (addiction.isPresent() && Objects.equals(addiction.map(Addiction::getCause).orElse(null), cause)) {
             if (dbg) {
                 System.out.printf("Aggravating %s on player by %.3f\n", type.name(), mag);
             }

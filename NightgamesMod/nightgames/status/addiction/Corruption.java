@@ -1,9 +1,11 @@
 package nightgames.status.addiction;
 
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import com.google.gson.JsonObject;
 
@@ -22,6 +24,7 @@ import nightgames.combat.Combat;
 import nightgames.global.Global;
 import nightgames.status.Abuff;
 import nightgames.status.Compulsion;
+import nightgames.status.Converted;
 import nightgames.status.DarkChaos;
 import nightgames.status.Status;
 import nightgames.status.Stsflag;
@@ -38,19 +41,22 @@ public class Corruption extends Addiction {
     @Override
     public void tick(Combat c) {
         super.tick(c);
+        if (c == null && Global.random(100) < 66) {
+            // if you aren't in combat, just apply corrupt 1/3rd of the time.
+            return;
+        }
         Severity sev = getCombatSeverity();
         int amt = sev.ordinal() * 2;
         if (cause.has(Trait.Subversion) && affected.is(Stsflag.charmed)) {
             amt *= 1.5;
         }
         Map<Attribute, Integer> buffs = new HashMap<>();
-        int darkPlus = 0;
-        if (noMoreAttrs()) {
+        if (noMoreAttrs() || (atLeast(Severity.MED) && Global.random(100) < 5)) {
             if (!atLeast(Severity.MED)) {
                 Global.writeIfCombat(c, affected, Global.format(
                                 "The corruption is churning within {self:name-do}, but it seems that it's done all it can for now.", affected, cause));
             } else if (!affected.body.has("tail") || affected.body.getRandom("tail") != TailPart.demonic) {
-                Global.writeIfCombat(c, affected, Global.format( "<b>The dark taint changes you even further, and a spade-tipped tail bursts out of {self:possessive}"
+                Global.writeIfCombat(c, affected, Global.format( "<b>The dark taint changes {self:name-do} even further, and a spade-tipped tail bursts out of {self:possessive}"
                                 + " lower back!</b>", affected, cause));
                 affected.body.temporaryAddOrReplacePartWithType(TailPart.demonic, Global.random(15, 40));
             } else if (!affected.body.has("wings") || affected.body.getRandom("wings") != WingsPart.demonic) {
@@ -94,16 +100,15 @@ public class Corruption extends Addiction {
                 if (!att.isPresent()) {
                     break;
                 }
-                buffs.compute(att.get(), (a, old) -> old == null ? -1 : old - 1);
-                darkPlus += 1;
+                buffs.compute(att.get(), (a, old) -> old == null ? 1 : old + 1);
             }
             switch (sev) {
                 case HIGH:
-                    Global.writeIfCombat(c, affected, Global.format( "The corruption is rampaging through {self:possessive} soul, rapidly demonizing {self:direct-object}.", affected, cause));
+                    Global.writeIfCombat(c, affected, Global.format( "The corruption is rampaging through {self:name-possessive} soul, rapidly demonizing {self:direct-object}.", affected, cause));
                     break;
                 case MED:
                     Global.writeIfCombat(c, affected, Global.format(
-                                    "The corruption is rapidly subverting {self:possessive} skills, putting them to a darker use...", affected, cause));
+                                    "The corruption is rapidly subverting {self:name-possessive} skills, putting them to a darker use...", affected, cause));
                     break;
                 case LOW:
                     Global.writeIfCombat(c, affected, Global.format( "The corruption inside of {self:name-do} is slowly changing {self:possessive} mind...", affected, cause));
@@ -112,10 +117,7 @@ public class Corruption extends Addiction {
                     assert buffs.isEmpty();
                 default:
             }
-            buffs.forEach((att, b) -> affected.add(c, new Abuff(affected, att, b, 20)));
-            if (darkPlus > 0) {
-                affected.add(c, new Abuff(affected, Attribute.Dark, darkPlus, 20));
-            }
+            buffs.forEach((att, b) -> affected.add(c, new Converted(affected, Attribute.Dark, att, b, 20)));
         }
         if (c != null && cause.has(Trait.InfernalAllegiance) && !affected.is(Stsflag.compelled) && shouldCompel() && c.getOpponent(affected).equals(cause)) {
             Global.writeIfCombat(c, affected, Global.format( "A wave of obedience radiates out from the dark essence within {self:name-do}, constraining"
@@ -133,10 +135,14 @@ public class Corruption extends Addiction {
         return !getDrainAttr().isPresent();
     }
 
+    private static final Set<Attribute> UNDRAINABLE_ATTS = EnumSet.of(Attribute.Dark, Attribute.Speed, Attribute.Perception);
+    private boolean attIsDrainable(Attribute att) {
+        return !UNDRAINABLE_ATTS.contains(att) && affected.get(att) > Math.max(10, affected.getPure(att) / 10);
+    }
     private Optional<Attribute> getDrainAttr() {
         Optional<Abuff> darkBuff = affected.getStatusOfClass(Abuff.class).stream().filter(status -> status.getModdedAttribute() == Attribute.Dark).findAny();
         if (!darkBuff.isPresent() || darkBuff.get().getValue() <  10 + getMagnitude() * 50) {
-            return Global.pickRandom(Arrays.stream(Attribute.values()).filter(a -> a != Attribute.Dark && affected.get(a) >= 10).toArray(Attribute[]::new));            
+            return Global.pickRandom(Arrays.stream(Attribute.values()).filter(this::attIsDrainable).toArray(Attribute[]::new));            
         }
         return Optional.empty();
     }
@@ -258,7 +264,7 @@ public class Corruption extends Addiction {
             return "The blackness resonates with " + cause.getName() + ", growing even more powerful and troublesome than before.";
         }
         return "The blackness " + cause.getName() + " places in you resonates with " + cause.directObject() + ". You can"
-                        + " feel it starting to corrupt {self:possessive} mind and body!";
+                        + " feel it starting to corrupt " + affected.possessiveAdjective() + " mind and body!";
     }
 
     @Override

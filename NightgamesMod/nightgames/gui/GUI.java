@@ -8,11 +8,13 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Panel;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -21,13 +23,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -48,8 +53,11 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -69,23 +77,22 @@ import nightgames.characters.Character;
 import nightgames.characters.Meter;
 import nightgames.characters.Player;
 import nightgames.characters.Trait;
+import nightgames.characters.TraitTree;
 import nightgames.combat.Combat;
 import nightgames.combat.CombatSceneChoice;
+import nightgames.combat.IEncounter;
 import nightgames.daytime.Activity;
 import nightgames.daytime.Store;
 import nightgames.debug.DebugGUIPanel;
-import nightgames.global.DebugFlags;
-import nightgames.global.Encs;
-import nightgames.global.Flag;
-import nightgames.global.Global;
-import nightgames.global.Time;
+import nightgames.global.*;
 import nightgames.items.Item;
 import nightgames.items.Loot;
-import nightgames.match.Encounter;
-import nightgames.match.MatchType;
+import nightgames.items.clothing.Clothing;
+import nightgames.match.Prematch;
 import nightgames.modifier.standard.NoModifier;
 import nightgames.skills.Skill;
 import nightgames.skills.TacticGroup;
+import nightgames.skills.Tactics;
 import nightgames.trap.Trap;
 import nightgames.utilities.DebugHelper;
 
@@ -152,6 +159,7 @@ public class GUI extends JFrame implements Observer {
     public NgsChooser saveFileChooser;
     private Box groupBox;
 	private JFrame inventoryFrame;
+    private JMenuItem mntmOptions;
 
     private final static String USE_PORTRAIT = "PORTRAIT";
     private final static String USE_MAP = "MAP";
@@ -234,7 +242,7 @@ public class GUI extends JFrame implements Observer {
 
         // menu bar - options
 
-        JMenuItem mntmOptions = new JMenuItem("Options");
+        mntmOptions = new JMenuItem("Options");
         //mntmOptions.setForeground(Color.WHITE);
         //mntmOptions.setBackground(GUIColors.bgGrey);
 
@@ -293,7 +301,7 @@ public class GUI extends JFrame implements Observer {
 
         // autosave - options submenu - visible -(not currently working?)
 
-        JLabel lblauto = new JLabel("Autosave (saves to auto.sav)");
+        JLabel lblauto = new JLabel("Autosave (saves to auto.ngs)");
         ButtonGroup auto = new ButtonGroup();
         rdautosaveon = new JRadioButton("on");
         rdautosaveoff = new JRadioButton("off");
@@ -335,20 +343,25 @@ public class GUI extends JFrame implements Observer {
         // fontSizeLabel - options submenu - visible
         JLabel fontSizeLabel = new JLabel("Font Size");
         ButtonGroup size = new ButtonGroup();
-        
+        rdfntnorm = new JButton("Smaller");
+        rdfntnorm.addActionListener(a -> {
+            fontsize = Global.clamp(fontsize - 1, 1, 7);
+            Global.gui().message("Text Size changed to " + fontsize);
+        });
+        rdnfntlrg = new JButton("Larger");
+        rdnfntlrg.addActionListener(a -> {
+            fontsize = Global.clamp(fontsize + 1, 1, 7);
+            Global.gui().message("Text Size changed to " + fontsize);
+        });
         rdfntsmall = new JRadioButton("small");
-        rdfntnorm = new JRadioButton("normal");
-        rdfntlrg = new JRadioButton("large");
         size.add(rdfntsmall);
-        size.add(rdfntnorm);
-        size.add(rdfntlrg);
+	size.add(rdfntnorm);
+        size.add(rdnfntlrg);
 
         optionsPanel.add(fontSizeLabel);
         //optionsPanel.add(rdfntsmall);
         optionsPanel.add(rdfntnorm);
-        optionsPanel.add(rdfntlrg);
-        
-        rdfntnorm.setSelected(true);
+        optionsPanel.add(rdnfntlrg);
         
         JLabel pronounLabel = new JLabel("Human Pronoun Usage");
         ButtonGroup pronoun = new ButtonGroup();
@@ -478,7 +491,7 @@ public class GUI extends JFrame implements Observer {
                         imgPanel.remove(imgLabel);
                     }
                     imgPanel.repaint();
-                }
+                /*}
                 if (rdfntlrg.isSelected()) {
                     Global.unflag(Flag.smallfonts);
                     Global.flag(Flag.largefonts);
@@ -491,8 +504,7 @@ public class GUI extends JFrame implements Observer {
                     Global.unflag(Flag.smallfonts);
                     Global.unflag(Flag.largefonts);
                     fontsize = 5;
-
-                }
+                }*/
             }
         });
 
@@ -699,6 +711,15 @@ public class GUI extends JFrame implements Observer {
     }
 
     // image loader
+    public static void setUIFont (javax.swing.plaf.FontUIResource f){
+        Enumeration<Object> keys = UIManager.getDefaults().keys();
+        while (keys.hasMoreElements()) {
+          Object key = keys.nextElement();
+          Object value = UIManager.get (key);
+          if (value != null && value instanceof javax.swing.plaf.FontUIResource)
+            UIManager.put (key, f);
+          }
+    }
 
     public void displayImage(String path, String artist) {
         if (Global.checkFlag(Flag.noimage)){ 
@@ -848,6 +869,7 @@ public class GUI extends JFrame implements Observer {
         } else {
             fontsize = 5;
         }
+        mntmOptions.setEnabled(true);
         getContentPane().remove(creation);
         getContentPane().add(gamePanel);
         getContentPane().validate();
@@ -999,6 +1021,7 @@ public class GUI extends JFrame implements Observer {
     }
 
     public void createCharacter() {
+        mntmOptions.setEnabled(false);
         getContentPane().remove(gamePanel);
         creation = new CreationGUI();
         getContentPane().add(creation);
@@ -1052,7 +1075,7 @@ public class GUI extends JFrame implements Observer {
         HTMLEditorKit editorKit = (HTMLEditorKit) textPane.getEditorKit();
         try {
             editorKit.insertHTML(doc, doc.getLength(),
-                            "<font face='Georgia'><font color='white'><font size='" + fontsize + "'>" + text + "<br/>",
+                            "<font face='Georgia' color='white' size='" + fontsize + "'>" + text + "</font><br/>",
                             0, 0, null);
         } catch (BadLocationException | IOException e) {
             // TODO Auto-generated catch block
@@ -1066,7 +1089,7 @@ public class GUI extends JFrame implements Observer {
         HTMLEditorKit editorKit = (HTMLEditorKit) textPane.getEditorKit();
         try {
             editorKit.insertHTML(doc, doc.getLength(),
-                            "<font face='Georgia'><font color='white'><font size='" + fontsize + "'>" + text + "<br/>",
+                            "<font face='Georgia' color='white' size='" + fontsize + "'>" + text + "</font><br/>",
                             0, 0, null);
         } catch (BadLocationException | IOException e) {
             // TODO Auto-generated catch block
@@ -1171,7 +1194,7 @@ public class GUI extends JFrame implements Observer {
         commandPanel.refresh();
     }
 
-    public void promptFF(Encounter enc, Character target) {
+    public void promptFF(IEncounter enc, Character target) {
         clearCommand();
         commandPanel.add(encounterButton("Fight", enc, target, Encs.fight));
         commandPanel.add(encounterButton("Flee", enc, target, Encs.flee));
@@ -1182,7 +1205,7 @@ public class GUI extends JFrame implements Observer {
         commandPanel.refresh();
     }
 
-    public void promptAmbush(Encounter enc, Character target) {
+    public void promptAmbush(IEncounter enc, Character target) {
         clearCommand();
         commandPanel.add(encounterButton("Attack " + target.getName(), enc, target, Encs.ambush));
         commandPanel.add(encounterButton("Wait", enc, target, Encs.wait));
@@ -1191,7 +1214,7 @@ public class GUI extends JFrame implements Observer {
         commandPanel.refresh();
     }
 
-    public void promptOpportunity(Encounter enc, Character target, Trap trap) {
+    public void promptOpportunity(IEncounter enc, Character target, Trap trap) {
         clearCommand();
         commandPanel.add(encounterButton("Attack " + target.getName(), enc, target, Encs.capitalize, trap));
         commandPanel.add(encounterButton("Wait", enc, target, Encs.wait));
@@ -1199,7 +1222,7 @@ public class GUI extends JFrame implements Observer {
         commandPanel.refresh();
     }
 
-    public void promptShower(Encounter encounter, Character target) {
+    public void promptShower(IEncounter encounter, Character target) {
         clearCommand();
         commandPanel.add(encounterButton("Suprise Her", encounter, target, Encs.showerattack));
         if (!target.mostlyNude()) {
@@ -1213,7 +1236,7 @@ public class GUI extends JFrame implements Observer {
         commandPanel.refresh();
     }
 
-    public void promptIntervene(Encounter enc, Character p1, Character p2) {
+    public void promptIntervene(IEncounter enc, Character p1, Character p2) {
         clearCommand();
         commandPanel.add(interveneButton(enc, p1));
         commandPanel.add(interveneButton(enc, p2));
@@ -1277,7 +1300,7 @@ public class GUI extends JFrame implements Observer {
                 } else if (Global.day != null) {
                     Global.getDay().plan();
                 } else {
-                    MatchType.NORMAL.runPrematch();
+                    new Prematch(Global.human);
                 }
             }
         }
@@ -1336,26 +1359,30 @@ public class GUI extends JFrame implements Observer {
             map.repaint();
         }
         // We may be in between setting NIGHT and building the Match object
+        String timeText;
+        String textColor = "rgb(0, 0, 0)";
         if (Global.getTime() == Time.NIGHT) {
-                // yup... silverbard pls :D
+            // yup... silverbard pls :D
             if (Global.getMatch() == null) {
-                timeLabel.setText("9:50 pm");
+                timeText = "9:50 pm";
             } else if (Global.getMatch().getHour() >= 12) {
-                timeLabel.setText(Global.getMatch().getTime() + " am");
+                timeText = Global.getMatch().getTime() + " am";
             } else {
-                timeLabel.setText(Global.getMatch().getTime() + " pm");
+                timeText = Global.getMatch().getTime() + " pm";
             }
-            timeLabel.setForeground(new Color(51, 101, 202));
+            textColor = "rgb(51, 101, 202)";
         } else if (Global.getTime() == Time.DAY) { // not updating correctly during daytime
             if (Global.getDay() != null) {
-                timeLabel.setText(Global.getDay().getTime());
+                timeText = Global.getDay().getTime();
             } else {
-                timeLabel.setText("10:00 am");
+                timeText = "10:00 am";
             }
-            timeLabel.setForeground(new Color(253, 184, 19));
+            textColor = "rgb(253, 184, 19)";
         } else {
             System.err.println("Unknown time of day: " + Global.getTime());
+            timeText = "";
         }
+        timeLabel.setText(String.format("<html>Day %d - <font color='%s'>%s</font></html>", Global.getDate(), textColor, timeText));
         displayStatus();
         List<Item> availItems = player.getInventory().entrySet().stream().filter(entry -> (entry.getValue() > 0))
                 .map(Map.Entry::getKey).collect(Collectors.toList());
@@ -1415,13 +1442,14 @@ public class GUI extends JFrame implements Observer {
         statusPanel.add(sep);
         int count = 0;
         statsPanel.setBackground(GUIColors.bgLight);
+        int descFontSize = fontsize - 1;
         ArrayList<JLabel> attlbls = new ArrayList<>();
         for (Attribute a : Attribute.values()) {
             int amt = player.get(a);
             int pure = player.getPure(a);
             if (pure > 0 || amt > 0) {
                 if (amt == pure) {
-                    JLabel label = new JLabel(a.name() + ": " + amt);
+                    JLabel label = new JLabel(String.format("<html><font face='Georgia' size=%d>%s: %s</font></html>", descFontSize, a.name(), amt));
                     label.setForeground(GUIColors.textColorLight);
                     attlbls.add(count, label);
                     statsPanel.add(attlbls.get(count++));
@@ -1435,8 +1463,9 @@ public class GUI extends JFrame implements Observer {
                         attrColor = "100,255,255";
                         bonusColor = "0,255,0";
                     }
-                    String labelString = String.format("<html>%s: <font color='rgb(%s)'>%d</font> <font size=2 color='rgb(%s)'>(%+d)</font></html>",
-                                    a.name(), attrColor, amt, bonusColor, amt - pure);
+                    int statBonusFontSize = descFontSize - 1;
+                    String labelString = String.format("<html><font face='Georgia' size=%d>%s: <font color='rgb(%s)'>%d</font> <font size=%d color='rgb(%s)'>(%+d)</font></font></html>",
+                                    descFontSize, a.name(), attrColor, amt, statBonusFontSize, bonusColor, amt - pure);
                     JLabel label = new JLabel(labelString);
                     label.setForeground(GUIColors.textColorLight);
                     attlbls.add(count, label);
@@ -1454,16 +1483,18 @@ public class GUI extends JFrame implements Observer {
         statusText.setContentType("text/html");
         HTMLDocument doc = (HTMLDocument) statusText.getDocument();
         HTMLEditorKit editorKit = (HTMLEditorKit) statusText.getEditorKit();
+        Global.freezeRNG();
         try {
             editorKit.insertHTML(doc, doc.getLength(),
-                            "<font face='Georgia'><font color='white'><font size='3'>"
+                            "<font face='Georgia' color='white' size='" + descFontSize + "'>"
                                             + player.getOutfit().describe(player) + "<br/>" + player.describeStatus()
-                                            + "<br/>",
+                                            + "</font><br/>",
                             0, 0, null);
         } catch (BadLocationException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        Global.unfreezeRNG();
         JScrollPane scrollPane = new JScrollPane(statusText);
         scrollPane.setBackground(GUIColors.bgLight);
         scrollPane.setOpaque(false);
@@ -1560,14 +1591,14 @@ public class GUI extends JFrame implements Observer {
         return button;
     }
 
-    private KeyableButton interveneButton(Encounter enc, Character assist) {
+    private KeyableButton interveneButton(IEncounter enc, Character assist) {
         RunnableButton button = new RunnableButton("Help " + assist.getName(), () -> {
             enc.intrude(Global.getPlayer(), assist);
         });
         return button;
     }
 
-    private KeyableButton encounterButton(String label, Encounter enc, Character target, Encs choice) {
+    private KeyableButton encounterButton(String label, IEncounter enc, Character target, Encs choice) {
         RunnableButton button = new RunnableButton(label, () -> {
             enc.parse(choice, Global.getPlayer(), target);
             Global.getMatch().resume();
@@ -1575,7 +1606,7 @@ public class GUI extends JFrame implements Observer {
         return button;
     }
 
-    private KeyableButton encounterButton(String label, Encounter enc, Character target, Encs choice, Trap trap) {
+    private KeyableButton encounterButton(String label, IEncounter enc, Character target, Encs choice, Trap trap) {
         RunnableButton button = new RunnableButton(label, () -> {
             enc.parse(choice, Global.getPlayer(), target, trap);
             Global.getMatch().resume();
@@ -1583,7 +1614,7 @@ public class GUI extends JFrame implements Observer {
         return button;
     }
 
-    private KeyableButton watchButton(Encounter enc) {
+    private KeyableButton watchButton(IEncounter enc) {
         RunnableButton button = new RunnableButton("Watch them fight", () -> {
             enc.watch();
         });

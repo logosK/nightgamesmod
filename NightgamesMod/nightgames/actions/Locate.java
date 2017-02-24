@@ -49,7 +49,7 @@ public class Locate extends Action {
         Character target;
         GUI gui = Global.gui();
         if (choice.equals("Start")) {
-            Global.getMatch().getCombatants().stream().filter(c -> self.getAffection(c) >= MINIMUM_SCRYING_REQUIREMENT)
+            Global.getMatch().combatants.stream().filter(c -> self.getAffection(c) >= MINIMUM_SCRYING_REQUIREMENT)
                             .forEach((character) -> {
                                 gui.choose(this, character.getTrueName(), self);
                             });

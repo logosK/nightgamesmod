@@ -226,7 +226,7 @@ public class Combat extends Observable implements Cloneable {
         if (other.human()) {
             write(self.challenge(other));
         }
-        self.getAdditionStream().forEach(a -> {
+        self.getAddictions().forEach(a -> {
             if (a.isActive()) {
                 Optional<Status> status = a.startCombat(this, other);
                 if (status.isPresent()) {
@@ -1384,7 +1384,7 @@ public class Combat extends Observable implements Cloneable {
                     }
                 } else if (getStance().havingSex(this, p) && getStance().dom(p) && getStance().reversable(this)) {
                     write(getOpponent(p), Global.format("{other:SUBJECT-ACTION:take|takes} the chance to shift into a more dominant position.", p, getOpponent(p)));
-                    setStance(getStance().reverse(this, true));
+                    setStance(getStance().reverse(this, false));
                 } else {
                     if (stance.havingSex(this)) {
                         setStance(stance.reverse(this, true));
