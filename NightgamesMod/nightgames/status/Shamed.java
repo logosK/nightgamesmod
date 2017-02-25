@@ -18,7 +18,7 @@ public class Shamed extends DurationStatus {
         super("Shamed", affected, 4);
         flag(Stsflag.shamed);
         flag(Stsflag.debuff);
-        flag(Stsflag.purgable);
+        //flag(Stsflag.purgable);
         flag(Stsflag.mindgames);
         magnitude = 1;
     }
