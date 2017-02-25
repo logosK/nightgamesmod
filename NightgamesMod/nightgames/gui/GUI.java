@@ -88,7 +88,7 @@ import nightgames.global.*;
 import nightgames.items.Item;
 import nightgames.items.Loot;
 import nightgames.items.clothing.Clothing;
-import nightgames.match.Prematch;
+import nightgames.global.Prematch;
 import nightgames.modifier.standard.NoModifier;
 import nightgames.skills.Skill;
 import nightgames.skills.TacticGroup;
@@ -147,9 +147,9 @@ public class GUI extends JFrame implements Observer {
     private JRadioButton rdporoff;
     private JRadioButton rdimgon;
     private JRadioButton rdimgoff;
-    private JRadioButton rdfntsmall;
-    private JRadioButton rdfntnorm;
-    private JRadioButton rdfntlrg;
+    private JButton rdfntsmall;
+    private JButton rdfntnorm;
+    private JButton rdfntlrg;
     private JSlider malePrefSlider;
     private int width;
     private int height;
@@ -348,20 +348,20 @@ public class GUI extends JFrame implements Observer {
             fontsize = Global.clamp(fontsize - 1, 1, 7);
             Global.gui().message("Text Size changed to " + fontsize);
         });
-        rdnfntlrg = new JButton("Larger");
-        rdnfntlrg.addActionListener(a -> {
+        rdfntlrg = new JButton("Larger");
+        rdfntlrg.addActionListener(a -> {
             fontsize = Global.clamp(fontsize + 1, 1, 7);
             Global.gui().message("Text Size changed to " + fontsize);
         });
-        rdfntsmall = new JRadioButton("small");
+        rdfntsmall = new JButton("small");
         size.add(rdfntsmall);
 	size.add(rdfntnorm);
-        size.add(rdnfntlrg);
+        size.add(rdfntlrg);
 
         optionsPanel.add(fontSizeLabel);
         //optionsPanel.add(rdfntsmall);
         optionsPanel.add(rdfntnorm);
-        optionsPanel.add(rdnfntlrg);
+        optionsPanel.add(rdfntlrg);
         
         JLabel pronounLabel = new JLabel("Human Pronoun Usage");
         ButtonGroup pronoun = new ButtonGroup();
@@ -491,7 +491,7 @@ public class GUI extends JFrame implements Observer {
                         imgPanel.remove(imgLabel);
                     }
                     imgPanel.repaint();
-                /*}
+                }/*
                 if (rdfntlrg.isSelected()) {
                     Global.unflag(Flag.smallfonts);
                     Global.flag(Flag.largefonts);
@@ -666,7 +666,6 @@ public class GUI extends JFrame implements Observer {
         skills = new HashMap<>();
         clearCommand();
         currentTactics = TacticGroup.all;
-        createCharacter();
         setVisible(true);
         pack();
         JPanel panel = (JPanel) getContentPane();
@@ -862,13 +861,6 @@ public class GUI extends JFrame implements Observer {
     }
 
     public void populatePlayer(Player player) {
-        if (Global.checkFlag(Flag.largefonts)) {
-            fontsize = 6;
-        } else if (Global.checkFlag(Flag.smallfonts)){
-            fontsize = 4;
-        } else {
-            fontsize = 5;
-        }
         mntmOptions.setEnabled(true);
         getContentPane().remove(creation);
         getContentPane().add(gamePanel);
@@ -1134,8 +1126,9 @@ public class GUI extends JFrame implements Observer {
         commandPanel.refresh();
     }
 
-    private void addToCommandPanel(KeyableButton button) {
+    public void addToCommandPanel(KeyableButton button) {
         commandPanel.add(button);
+        commandPanel.refresh();
     }
 
     public void addAction(Action action, Character user) {
@@ -1328,6 +1321,7 @@ public class GUI extends JFrame implements Observer {
         if (Global.isDebugOn(DebugFlags.DEBUG_GUI)) {
             System.out.println("Match end");
         }
+        combat = null;
         clearCommand();
         showNone();
         mntmQuitMatch.setEnabled(false);

@@ -6,7 +6,7 @@ import nightgames.combat.Combat;
 import nightgames.global.Global;
 import nightgames.items.Item;
 import nightgames.items.clothing.ClothingSlot;
-import nightgames.match.Encounter;
+import nightgames.combat.Encounter;
 import nightgames.status.RemoteMasturbation;
 
 public class RemoteControl extends Trap {

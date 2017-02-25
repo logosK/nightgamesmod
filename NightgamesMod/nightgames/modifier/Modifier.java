@@ -5,7 +5,7 @@ import java.util.Map;
 
 import nightgames.actions.Action;
 import nightgames.characters.Character;
-import nightgames.match.Match;
+import nightgames.global.Match;
 import nightgames.modifier.skill.SkillModifier;
 
 @SuppressWarnings("unused")
@@ -34,14 +34,14 @@ public interface Modifier {
     /**
      * Process non-combat turn
      */
-    void handleTurn(Character c, Match m);
+    void handleTurn(Character c, Match match);
 
     /**
      * Undo all changes to the character's inventory made by handleItems
      */
     void undoItems(Character c);
 
-    boolean allowAction(Action act, Character c, Match m);
+    boolean allowAction(Action act, Character c, Match match);
 
     int bonus();
 

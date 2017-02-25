@@ -34,6 +34,8 @@ import nightgames.characters.CharacterSex;
 import nightgames.characters.Trait;
 import nightgames.global.Flag;
 import nightgames.global.Global;
+import nightgames.global.start.GameStarter;
+import nightgames.global.start.TutorialStart;
 import nightgames.start.StartConfiguration;
 
 public class CreationGUI extends JPanel {
@@ -41,6 +43,9 @@ public class CreationGUI extends JPanel {
      * 
      */
     private static final long serialVersionUID = -101675245609325067L;
+
+    private static final GameStarter STARTER = new TutorialStart();
+    
     private JTextField powerfield;
     private JTextField seductionfield;
     private JTextField cunningfield;
@@ -531,7 +536,7 @@ public class CreationGUI extends JPanel {
             selectedAttributes.put(Attribute.Seduction, seduction);
             selectedAttributes.put(Attribute.Cunning, cunning);
             Global.newGame(name, startConfig, traits, sex, selectedAttributes);
-            Global.startMatch();
+            STARTER.startGame();
         }
     }
 

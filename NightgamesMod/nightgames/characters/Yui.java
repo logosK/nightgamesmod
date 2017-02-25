@@ -277,15 +277,22 @@ public class Yui extends BasePersonality {
             return "Yui looks apologetic as she bends down and stokes your cock. <i>\"Sorry Master, the rules says a victory is a victory, and I cannot afford to lose with your orders.\"</i>";
         }
         if (target.hasDick()) {
-            return String.format(
-                            "Yui kneels between %s's legs and takes a hold of %s cock. "
-                                            + "<i>Master, thank you for assisting your servant. Don't worry, this will just take a second...</i> And indeed, %s blows %s load literally within a second of Yui touching her. Wow.",
-                            target.getName(), target.possessiveAdjective(), target.getName(), target.pronoun(), target.possessiveAdjective());
+            return Global.format(
+                            "Yui kneels between {other:name-possessive} legs and "
+                            + "takes a hold of {other:possessive} cock. "
+                                            + "<i>Master, thank you for assisting your servant. "
+                                            + "Don't worry, this will just take a second...</i> "
+                                            + "And indeed, {other:pronoun-action:blow|blows}"
+                                            + " {other:possessive} load literally within a second "
+                                            + "of Yui touching her. Wow.",
+                            character, target);
         }
-        return String.format(
-                        "Yui kneels between %s's legs and hooks two fingers inside %s pussy. "
-                                        + "<i>Master, thank you for assisting your servant. Don't worry, this will just take a second...</i> And indeed, %s back arches and lets out a wail within a second of Yui touching her. Wow.",
-                                        target.getName(), target.possessiveAdjective(), target.getName(), target.possessiveAdjective());
+        return Global.format(
+                        "Yui kneels between {other:name-possessive} legs and hooks two fingers inside {other:possessive} pussy. "
+                                        + "<i>Master, thank you for assisting your servant. Don't worry, this will just take a "
+                                        + "second...</i> And indeed, {other:possessive} back arches and {other:pronoun} lets out"
+                                        + " a wail within a second of Yui touching her. Wow.",
+                                        character, target);
 }
 
     @Override

@@ -101,7 +101,7 @@ public class IncubusEmbrace extends MaledomSexStance {
 
     @Override
     public String image() {
-        return top.hasBreasts() ? "incubus_embrace.jpg" : "";
+        return top.useFemalePronouns() ? "incubus_embrace.jpg" : "";
     }
 
 }

@@ -1124,7 +1124,7 @@ public class CreatorGui extends Application {
 	}
 
 	public static void main(String[] args) {
-		new Global(true);
+		// TODO: init
 		Global.newGame("", Optional.empty(), Collections.emptyList(), CharacterSex.male, Collections.emptyMap());
 		Global.rebuildCharacterPool(Optional.empty());
 		launch(args);

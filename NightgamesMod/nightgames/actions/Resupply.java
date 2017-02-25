@@ -6,7 +6,7 @@ import nightgames.characters.Trait;
 import nightgames.global.Flag;
 import nightgames.global.Global;
 import nightgames.items.Item;
-import nightgames.match.ftc.FTCMatch;
+import nightgames.ftc.FTCMatch;
 
 public class Resupply extends Action {
 
@@ -39,7 +39,7 @@ public class Resupply extends Action {
             }
         } else {
             if (user.human()) {
-                if (Global.getMatch().getCondition().name().equals("nudist")) {
+                if (Global.getMatch().condition.name().equals("nudist")) {
                     Global.gui().message(
                                     "You check in so that you're eligible to fight again, but you still don't get any clothes.");
                 } else {

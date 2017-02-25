@@ -145,7 +145,7 @@ public class Challenge implements Deployable {
     public boolean resolve(Character active) {
         if (active.state == State.ready) {
             owner = active;
-            List<Character> combatants = Global.getMatch().getCombatants();
+            List<Character> combatants = Global.getMatch().combatants;
             target = combatants.get(Global.random(combatants.size() - 1));
             for (int i = 0; i < 10 && target == active; i++) {
                 target = combatants.get(Global.random(combatants.size() - 1));

@@ -64,7 +64,7 @@ public class SkillsTest {
 
 	@Before
 	public void prepare() throws JsonParseException, IOException {
-		new Global(true);
+		new Global();
 		Global.newGame("Dummy", Optional.empty(), Collections.emptyList(),
 	                    CharacterSex.male, Collections.emptyMap());
 		npcs1 = new ArrayList<Personality>();

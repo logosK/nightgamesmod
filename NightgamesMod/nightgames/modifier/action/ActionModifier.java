@@ -9,7 +9,7 @@ import java.util.function.BiPredicate;
 
 import nightgames.actions.Action;
 import nightgames.characters.Character;
-import nightgames.match.Match;
+import nightgames.global.Match;
 import nightgames.modifier.ModifierCategory;
 import nightgames.modifier.ModifierComponent;
 

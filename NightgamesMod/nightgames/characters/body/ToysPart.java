@@ -63,7 +63,7 @@ public enum ToysPart implements BodyPart,BodyPartMod {
 
     @Override
     public boolean isType(String type) {
-        return type.equalsIgnoreCase(type);
+        return this.type.equalsIgnoreCase(type);
     }
 
     @Override

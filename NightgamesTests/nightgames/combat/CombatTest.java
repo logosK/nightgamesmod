@@ -8,6 +8,7 @@ import nightgames.characters.NPC;
 import nightgames.characters.Trait;
 import nightgames.global.Global;
 import nightgames.global.TestGlobal;
+import nightgames.modifier.standard.NoModifier;
 import nightgames.stance.Stance;
 import nightgames.stance.TestPosition;
 import org.junit.Before;
@@ -28,6 +29,7 @@ public class CombatTest {
     @BeforeClass public static void setUpClass() throws Exception {
         new TestGlobal();
         Global.newGame("TestPlayer", Optional.empty(), new ArrayList<>(), CharacterSex.asexual, new HashMap<>());
+        Global.setUpMatch(new NoModifier());
     }
 
     private NPC self;

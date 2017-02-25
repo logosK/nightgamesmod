@@ -8,10 +8,10 @@ import nightgames.gui.TestGUI;
  */
 public class TestGlobal extends Global {
     public TestGlobal() {
-        super(false);
+        super();
     }
 
-    @Override protected GUI makeGUI(boolean headless) {
-        return new TestGUI();
+    protected static void makeGUI(boolean headless) {
+        /*return*/ new TestGUI();
     }
 }

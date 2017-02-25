@@ -298,6 +298,7 @@ public enum Trait {
     divinity("Divinity", "Has aspects of divinity."),
     leveldrainer("Level Drainer", "Natrually adept at draining levels."),
     ExpertLevelDrainer("Expert Level Drainer", "Can drain more than one level at a time."),
+    IndiscriminateThief("Indiscriminate Thief", "Drains levels from other level drainers."),
 
     // Strength
     dexterous("Dexterous", "Dexterous limbs and fingers. Underwear is not an obstacle."),
@@ -456,13 +457,13 @@ public enum Trait {
     ControlledRelease("Controlled Release", "Can use mind control to tempt opponents"),
     RemoteControl("Remote Control", "Can deploy a fancy hypnosis trap"),
     EyeOpener("Eye Opener", "The harpoon toy enhances mind control"),
-    
+
     //Reyka Disabling Focus
     SuccubusWarmth("Succubus's Warmth", "Why would you even want to escape?"),
     Pacification("Pacification", "Milk may cause Charmed"),
     DemonsEmbrace("Demon's Embrace", "Can wrap up opponent in wings"),
     VampireWings("Vampire Wings", "Contact with wings drains Power"),
-    
+
     // Reyka Seduction Focus
     MelodiousInflection("Melodious Inflection", "Speaks in a 'Charming' manner"),
     ComeHither("Come Hither", "Can draw Charmed opponents to herself"),

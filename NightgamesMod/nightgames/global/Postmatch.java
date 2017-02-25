@@ -1,22 +1,36 @@
-package nightgames.match.defaults;
+package nightgames.global;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import nightgames.characters.Character;
-import nightgames.global.Flag;
-import nightgames.global.Global;
 import nightgames.gui.KeyableButton;
 import nightgames.gui.SceneButton;
-import nightgames.match.Postmatch;
 
-public class DefaultPostmatch extends Postmatch {
+public class Postmatch implements Scene {
 
+    private Character player;
+    private ArrayList<Character> combatants;
     private boolean normal;
 
-    public DefaultPostmatch(List<Character> combatants) {
-        super(combatants);
+    public Postmatch(Character player, ArrayList<Character> combatants) {
+        this.player = player;
+        this.combatants = combatants;
         normal = true;
+        for (Character self : combatants) {
+            for (Character other : combatants) {
+                if (self != other && self.getAffection(other) >= 1 && self.getAttraction(other) >= 20) {
+                    self.gainAttraction(other, -20);
+                    self.gainAffection(other, 2);
+                }
+            }
+        }
+
+        events();
+        if (normal) {
+            normal();
+        }
+        Global.endNight();
     }
 
     @Override
@@ -55,23 +69,6 @@ public class DefaultPostmatch extends Postmatch {
             closest.afterParty();
         } else {
             Global.gui().message("You walk back to your dorm and get yourself cleaned up.");
-        }
-    }
-
-    @Override
-    protected void runInternal() {
-        for (Character self : combatants) {
-            for (Character other : combatants) {
-                if (self != other && self.getAffection(other) >= 1 && self.getAttraction(other) >= 20) {
-                    self.gainAttraction(other, -20);
-                    self.gainAffection(other, 2);
-                }
-            }
-        }
-
-        events();
-        if (normal) {
-            normal();
         }
     }
 }

@@ -11,7 +11,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Timestamp;
@@ -100,6 +102,8 @@ import nightgames.gui.HeadlessGui;
 import nightgames.items.Item;
 import nightgames.items.clothing.Clothing;
 import nightgames.json.JsonUtils;
+import nightgames.global.Match;
+import nightgames.global.MatchType;
 import nightgames.modifier.CustomModifierLoader;
 import nightgames.modifier.Modifier;
 import nightgames.modifier.standard.FTCModifier;
@@ -154,7 +158,7 @@ public class Global {
     public static Daytime day;
     protected static int date;
     private static Time time;
-    private Date jdate;
+    private static Date jdate;
     private static TraitTree traitRequirements;
     public static Scene current;
     public static boolean debug[] = new boolean[DebugFlags.values().length];
@@ -163,14 +167,14 @@ public class Global {
     public static double xpRate = 1.0;
     public static ContextFactory factory;
     public static Context cx;
-    private static MatchType currentMatchType = MatchType.NORMAL;
-    
+    private static Character noneCharacter = new NPC("none", 1, null);
+    private static HashMap<String, MatchAction> matchActions;
     private static final int LINEUP_SIZE = 5;
 
     public static final Path COMBAT_LOG_DIR = new File("combatlogs").toPath();
-
-    public Global(boolean headless) {
-        rng = new Random();
+    
+    static {
+        hookLogwriter();rng = new Random();
         flags = new HashSet<>();
         players = new HashSet<>();
         debugChars = new HashSet<>();
@@ -188,26 +192,26 @@ public class Global {
             OutputStream ostream = new TeeStream(System.out, fstream);
             System.setErr(new PrintStream(estream));
             System.setOut(new PrintStream(ostream));
-    		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-    		InputStream stream = loader.getResourceAsStream("build.properties");
+            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+            InputStream stream = loader.getResourceAsStream("build.properties");
 
             System.out.println("=============================================");
             System.out.println("Nightgames Mod");
-    		if (stream != null) {
-    			Properties prop = new Properties();
-    			prop.load(stream);
-    			System.out.println("version: " + prop.getProperty("version"));
-    			System.out.println("buildtime: " + prop.getProperty("buildtime"));
-    			System.out.println("builder: " + prop.getProperty("builder"));
-    		} else {
-    			System.out.println("dev-build");
-    		}
+            if (stream != null) {
+                Properties prop = new Properties();
+                prop.load(stream);
+                System.out.println("version: " + prop.getProperty("version"));
+                System.out.println("buildtime: " + prop.getProperty("buildtime"));
+                System.out.println("builder: " + prop.getProperty("builder"));
+            } else {
+                System.out.println("dev-build");
+            }
             System.out.println(new Timestamp(jdate.getTime()));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
-			e.printStackTrace();
-		}
+            e.printStackTrace();
+        }
 
 
         setTraitRequirements(new TraitTree(ResourceLoader.getFileResourceAsStream("data/TraitRequirements.xml")));
@@ -219,11 +223,10 @@ public class Global {
         buildFeatPool();
         buildSkillPool(noneCharacter);
         buildModifierPool();
-        gui = makeGUI(headless);
     }
 
-    protected GUI makeGUI(boolean headless) {
-        return headless ? new HeadlessGui() : new GUI();
+    protected static void makeGUI(boolean headless) {
+        gui = headless ? new HeadlessGui() : new GUI();
     }
 
     public static boolean meetsRequirements(Character c, Trait t) {
@@ -270,7 +273,6 @@ public class Global {
         date = 1;
         setCharacterDisabledFlag(getNPCByType("Yui"));
         setFlag(Flag.systemMessages, true);
-        setUpMatch(new NoModifier());
     }
 
     public static int random(int start, int end) {
@@ -1141,6 +1143,7 @@ public class Global {
         data.counters.putAll(counters);
         data.time = time;
         data.date = date;
+        data.fontsize = gui.fontsize;
         return data;
     }
 
@@ -1284,6 +1287,7 @@ public class Global {
         counters.putAll(data.counters);
         date = data.date;
         time = data.time;
+        gui.fontsize = data.fontsize;
     }
 
     public static Set<Character> everyone() {
@@ -1317,7 +1321,7 @@ public class Global {
     }
 
     public static void main(String[] args) {
-        new Logwriter();
+        hookLogwriter();
         for (String arg : args) {
             try {
                 DebugFlags flag = DebugFlags.valueOf(arg);
@@ -1326,9 +1330,23 @@ public class Global {
                 // pass
             }
         }
-        new Global(false);
+        init(false);
+    }
+    
+    public static void init(boolean headless) {
+        makeGUI(headless);
+        gui.createCharacter();
     }
 
+    public static void hookLogwriter() {
+        Thread.currentThread().setUncaughtExceptionHandler((t, e) -> {
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            String stacktrace = sw.toString();
+            System.err.println(stacktrace);
+        });
+    }
+    
     public static String getIntro() {
         return "You don't really know why you're going to the Student Union in the middle of the night."
                         + " You'd have to be insane to accept the invitation you received this afternoon."
@@ -1392,7 +1410,7 @@ public class Global {
         if (arr == null || arr.length == 0) return Optional.empty();
         return Optional.of(arr[Global.random(arr.length)]);
     }
-    
+
     public static <T> Optional<T> pickRandom(List<T> list) {
         if (list == null || list.size() == 0) {
             return Optional.empty();
@@ -1408,8 +1426,6 @@ public class Global {
     interface MatchAction {
         String replace(Character self, String first, String second, String third);
     }
-
-    private static HashMap<String, MatchAction> matchActions = null;
 
     public static void buildParser() {
         matchActions = new HashMap<>();
@@ -1643,8 +1659,6 @@ public class Global {
         return b.toString();
     }
 
-    private static Character noneCharacter = new NPC("none", 1, null);
-
     public static Character noneCharacter() {
         return noneCharacter;
     }
@@ -1706,7 +1720,7 @@ public class Global {
 
     private static Match buildMatch(Collection<Character> combatants, Modifier mod) {
         if (mod.name().equals("ftc")) {
-            if (combatants.size() < NUM_COMBATANTS) {
+            if (combatants.size() < LINEUP_SIZE) {
                 return new Match(combatants, new NoModifier());
             }
             flag(Flag.FTC);
@@ -1779,22 +1793,12 @@ public class Global {
 			c.write(self, format(string, self, other, args));
 		}
 	}
-	
+
 	public static String getFlagStartingWith(Collection<String> collection, String start) {
 	    for (String f:collection) {
 	        if (f.startsWith(start)) return f;
 	    }
 	    return "";
-	}
-	
-	public static int getFontSize() {
-	    if (checkFlag(Flag.largefonts)) {
-	        return 6;
-	    } else if (checkFlag(Flag.smallfonts)) {
-	        return 4;
-	    } else {
-	        return 5;
-	    }
 	}
 
 	/**

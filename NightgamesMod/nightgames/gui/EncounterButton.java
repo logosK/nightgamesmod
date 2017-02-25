@@ -7,7 +7,7 @@ import javax.swing.JButton;
 import nightgames.characters.Character;
 import nightgames.global.Encs;
 import nightgames.global.Global;
-import nightgames.match.Encounter;
+import nightgames.combat.Encounter;
 import nightgames.trap.Trap;
 
 public class EncounterButton extends JButton {

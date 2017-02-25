@@ -287,7 +287,7 @@ public class GenericBodyPart implements BodyPart {
 
     @Override
     public String getFluids(Character c) {
-        Optional<String> nonJuicesMod = mods.stream().filter(mod -> mod.getFluids().isPresent() && !mod.getFluids().equals("juices")).findFirst().flatMap(PartMod::getFluids);
+        Optional<String> nonJuicesMod = mods.stream().filter(mod -> mod.getFluids().isPresent() && !mod.getFluids().get().equals("juices")).findFirst().flatMap(PartMod::getFluids);
         if (nonJuicesMod.isPresent()) {
             return nonJuicesMod.get();
         }

@@ -1,8 +1,6 @@
 package nightgames.characters.body.mods;
 
 import java.util.EnumSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;

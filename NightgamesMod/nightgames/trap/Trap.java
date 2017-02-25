@@ -2,7 +2,7 @@ package nightgames.trap;
 
 import nightgames.areas.Deployable;
 import nightgames.characters.Character;
-import nightgames.match.Encounter;
+import nightgames.combat.Encounter;
 
 public abstract class Trap implements Deployable {
     

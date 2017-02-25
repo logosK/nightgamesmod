@@ -370,7 +370,7 @@ public abstract class Character extends Observable implements Cloneable {
             default:
                 break;
         }
-        return total;
+        return Math.max(0, total);
     }
 
     public boolean has(ClothingTrait attribute) {
@@ -1711,6 +1711,7 @@ public abstract class Character extends Observable implements Cloneable {
         xp = object.get("xp").getAsInt();
         if (object.has("growth")) {
             growth = JsonUtils.getGson().fromJson(object.get("growth"), Growth.class);
+            growth.removeNullTraits();
         }
         money = object.get("money").getAsInt();
         {
@@ -2064,7 +2065,7 @@ public abstract class Character extends Observable implements Cloneable {
                                             + opponent.possessiveAdjective() + " ego.</b>"));
             opponent.restoreWillpower(c, 10 + Global.random(10));
         }
-        if (opponent.has(Trait.leveldrainer) && !has(Trait.leveldrainer)
+        if (opponent.has(Trait.leveldrainer) && (!has(Trait.leveldrainer) || opponent.has(Trait.IndiscriminateThief))
                         && (((c.getStance().penetratedBy(c, opponent, this) || c.getStance().penetratedBy(c, this, opponent))
                                         && !has(Trait.strapped)
                                         && !opponent.has(Trait.strapped))
@@ -3787,12 +3788,12 @@ public abstract class Character extends Observable implements Cloneable {
         return dinged;
     }
 
-    public void matchPrep(Match m) {
+    public void matchPrep(Match match) {
         if(getPure(Attribute.Ninjutsu)>=9){
             Global.gainSkills(this);
-            placeNinjaStash(m);
+            placeNinjaStash(match);
         }
-        ArmManager manager = m.getMatchData().getDataFor(this).getArmManager();
+        ArmManager manager = match.getMatchData().getDataFor(this).getArmManager();
         manager.selectArms(this);
         if (manager.getActiveArms().stream().anyMatch(a -> a.getType() == ArmType.STABILIZER)) {
             add(Trait.stabilized);
@@ -3906,7 +3907,8 @@ public abstract class Character extends Observable implements Cloneable {
             return true;
         if (o == null || !getClass().equals(o.getClass()))
             return false;
-
+        if (o == Global.noneCharacter() || this == Global.noneCharacter())
+            return false;
         Character character = (Character) o;
         return getType().equals(character.getType()) && name.equals(character.name);
     }
@@ -4079,7 +4081,7 @@ public abstract class Character extends Observable implements Cloneable {
         }
     }
 
-    private void removeStatusImmediately(Status status) {
+    public void removeStatusImmediately(Status status) {
         this.status.remove(status);
     }
 

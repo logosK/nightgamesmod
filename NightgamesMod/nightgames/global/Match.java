@@ -14,6 +14,7 @@ import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.State;
 import nightgames.characters.Trait;
+import nightgames.combat.Encounter;
 import nightgames.modifier.Modifier;
 import nightgames.status.Stsflag;
 import nightgames.status.addiction.Addiction;
