@@ -38,6 +38,7 @@ import nightgames.skills.Divide;
 import nightgames.skills.Skill;
 import nightgames.status.Abuff;
 import nightgames.status.BodyFetish;
+import nightgames.status.Charmed;
 import nightgames.status.Status;
 import nightgames.status.Stsflag;
 import nightgames.status.addiction.AddictionType;
@@ -806,6 +807,11 @@ public class Body implements Cloneable {
                 c.write(character, character.subjectAction("now have", "now has") + " a new fetish, courtesy of "
                                 + opponent.directObject() + ".");
                 character.add(c, new BodyFetish(character, opponent, with.getType(), .25));
+            }
+            if (opponent.has(Trait.fetishCharmer) && Global.random(100) < 4 * Math.min(opponent.get(Attribute.Fetish), 25)) {
+                c.write(character, character.subjectAction("find yourself", "finds themself") + " hesitant to resist "
+                                + opponent.directObject() + " due to the demands of "+character.possessiveAdjective()+" fetish.");
+                character.add(c, new Charmed(character));
             }
         }
         lastPleasuredBy = with;

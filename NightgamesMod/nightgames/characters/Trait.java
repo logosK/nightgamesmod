@@ -184,6 +184,7 @@ public enum Trait {
     oiledass("Oiled Ass", "Natural oils makes her ass always ready."),
     autonomousAss("Autonomous Ass", "Asshole instinctively forces anything inside of it to cum."),
     fetishTrainer("Fetish Trainer", "Capable of developing others' fetishes."),
+    fetishCharmer("Fetish Charmer", "Capable of using others' fetishes to charm them"),
     insertion("Insertion Master", "More pleasure on insertion"), // more damage on insertion.
     hawkeye("Hawk Eye", "More accurate"), // 5% additional accuracy
     proheels("Heels Pro", "Pro at walking around in heels"), // no speed penalty from heels

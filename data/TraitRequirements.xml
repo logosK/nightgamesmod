@@ -44,6 +44,14 @@
 		</Requirements>
 	</Trait>
 	<Trait>
+		<Name>fetishCharmer</Name>
+		<Requirements>
+			<AttributeReq type="Fetish">30</AttributeReq>
+			<LevelReq>30</LevelReq>
+			<TraitReq>fetishTrainer</TraitReq>
+		</Requirements>
+	</Trait>
+	<Trait>
 		<Name>analFanatic</Name>
 		<Requirements>
 			<LevelReq>15</LevelReq>
