@@ -19,6 +19,7 @@ import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
 import nightgames.characters.NPC;
+import nightgames.characters.Player;
 import nightgames.characters.State;
 import nightgames.characters.Trait;
 import nightgames.characters.body.Body;
@@ -572,7 +573,8 @@ public class Combat extends Observable implements Cloneable {
 
         Character mainOpponent = getOpponent(character);
         String buttslutCompletedFlag = Trait.buttslut.name() + "Completed";
-        if (((mainOpponent.hasDick() && mainOpponent.crotchAvailable() && mainOpponent.getArousal().percent() > 20) || mainOpponent.has(Trait.strapped)) && ((character.has(Trait.buttslut) && !getCombatantData(character).getBooleanFlag(buttslutCompletedFlag)) || character.getStatus(Stsflag.buttslutificationReady) != null)) {
+        Boolean isButtSlutting = (character.has(Trait.buttslut) && !getCombatantData(character).getBooleanFlag(buttslutCompletedFlag)) || (character instanceof Player && Global.getButtslutQuest().isPresent() && Global.random(100) < 100*Global.getButtslutQuest().get().getAssPresentChance());
+        if (((mainOpponent.hasDick() && mainOpponent.crotchAvailable() && mainOpponent.getArousal().percent() > 20) || mainOpponent.has(Trait.strapped)) && isButtSlutting) {
             write(character, Global.format("<b>Seeing the thick phallus in front of {self:reflective}, {self:subject} can't "
                             + "but help offer up {self:possessive} ass in hopes that {other:subject} will fill {self:possessive} rear door.</b>", character, mainOpponent));
             for (int i = 0; i < 5; i++) {
@@ -1117,7 +1119,7 @@ public class Combat extends Observable implements Cloneable {
     }
     
     private void doStanceTick(Character self) {
-        int stanceDominance = getStance().getDominanceOfStance(self);
+        double stanceDominance = getStance().getDominanceOfStance(this, self);
         if (!(stanceDominance > 0)) {
             return;
         }
@@ -1135,7 +1137,7 @@ public class Combat extends Observable implements Cloneable {
                             Global.format("{self:NAME-POSSESSIVE} cold gaze in {self:possessive} dominant position"
                                             + " makes {other:direct-object} shiver.",
                                             self, other));
-            other.loseWillpower(this, stanceDominance, 0, false, " (SM Queen)");
+            other.loseWillpower(this, (int)stanceDominance, 0, false, " (SM Queen)");
         } else if (getStance().time % 2 == 0 && getStance().time > 0) {
             if (other.has(Trait.indomitable)) {
                 write(self, Global.format("{other:SUBJECT}, typically being the dominant one,"
@@ -1146,7 +1148,7 @@ public class Combat extends Observable implements Cloneable {
                 write(self, Global.format("{other:NAME-POSSESSIVE} compromising position takes a toll on {other:possessive} willpower.",
                                             self, other));
             }
-            other.loseWillpower(this, stanceDominance, 0, false, " (Dominance)");
+            other.loseWillpower(this, (int)stanceDominance, 0, false, " (Dominance)");
         }
         
         if (self.has(Trait.confidentdom) && Global.random(2) == 0) {

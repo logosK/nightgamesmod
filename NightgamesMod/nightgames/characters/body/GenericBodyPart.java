@@ -32,7 +32,7 @@ public class GenericBodyPart implements BodyPart {
     public double pleasure;
     public String descLong;
     private boolean notable;
-    private List<PartMod> mods;
+    protected List<PartMod> mods;
 
     public GenericBodyPart(String desc, String descLong, double hotness, double pleasure, double sensitivity,
                     boolean notable, String type, String prefix) {

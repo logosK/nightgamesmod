@@ -1,5 +1,7 @@
 package nightgames.skills;
 
+import java.util.Optional;
+
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
@@ -9,10 +11,12 @@ import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
 import nightgames.items.Item;
+import nightgames.quest.ButtslutQuest;
 import nightgames.stance.Anal;
 import nightgames.stance.AnalProne;
 import nightgames.stance.BehindFootjob;
 import nightgames.stance.Stance;
+import nightgames.status.Enthralled;
 import nightgames.status.Flatfooted;
 import nightgames.status.Frenzied;
 import nightgames.status.IgnoreOrgasm;
@@ -26,7 +30,7 @@ public class AssFuck extends Fuck {
 
     @Override
     public float priorityMod(Combat c) {
-        return 0.0f + (getSelf().getMood() == Emotion.dominant ? 1.0f : 0);
+        return 0.0f + (getSelf().getMood() == Emotion.dominant ? 1.0f : 0) + (Global.getButtslutQuest().isPresent()?5:0);
     }
 
     @Override
@@ -120,9 +124,13 @@ public class AssFuck extends Fuck {
         } else {
             target.emote(Emotion.horny, 25);
         }
-        if (!target.has(Trait.Unflappable)) {
-            target.add(c, new Flatfooted(target, 1));
-        }
+        int dur=target.has(Trait.Unflappable)?0:1;
+        Optional<ButtslutQuest> bsq = Global.getButtslutQuest();
+        if (bsq.isPresent() && target==Global.getPlayer()) {
+            dur += bsq.get().getEnthrallDurationOnPenetration();
+            target.add(c, new Enthralled(getSelf(), target, dur));
+        } else {target.add(c, new Flatfooted(target, dur));}
+        
         if (getSelf().has(Trait.analFanatic) && getSelf().hasDick()) {
             c.write(getSelf(),
                             String.format("Now with %s %s deeply embedded within %s ass,"

@@ -37,7 +37,7 @@ public class ManipulateFetish extends Skill {
     
     @Override
     public boolean usable(Combat c, Character target) {
-        return getSelf().canRespond() && !target.wary() && withPart.isPresent();
+        return getSelf().canRespond() && !target.wary() && withPart != null && withPart.isPresent();
     }
 
     @Override

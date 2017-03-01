@@ -67,7 +67,7 @@ public class PullOut extends Skill {
         int powerMod = Math.min(20, Math.max(5, target.get(Attribute.Power) - getSelf().get(Attribute.Power)));
         if (target.is(Stsflag.enthralled) || target.is(Stsflag.trance) || target.is(Stsflag.lovestruck)) {powerMod-=target.get(Attribute.Power)/2;}
         if (getSelf().is(Stsflag.bondage) || getSelf().is(Stsflag.charmed) || target.is(Stsflag.lovestruck)) {powerMod+=target.get(Attribute.Power)/4;}
-	if (c.getStance().en == Stance.anal) {
+        if (c.getStance().en == Stance.anal) {
             if (target.has(Trait.bewitchingbottom)) {
                 Optional<BodyFetish> fetish = getSelf().body.getFetish("ass");
                 if(fetish.isPresent()) {

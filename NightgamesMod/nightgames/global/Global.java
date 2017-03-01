@@ -119,6 +119,8 @@ import nightgames.modifier.standard.VibrationModifier;
 import nightgames.modifier.standard.VulnerableModifier;
 import nightgames.pet.PetCharacter;
 import nightgames.pet.Ptype;
+import nightgames.quest.ButtslutQuest;
+import nightgames.quest.Quest;
 import nightgames.skills.*;
 import nightgames.start.NpcConfiguration;
 import nightgames.start.PlayerConfiguration;
@@ -170,6 +172,7 @@ public class Global {
     private static Character noneCharacter = new NPC("none", 1, null);
     private static HashMap<String, MatchAction> matchActions;
     private static final int LINEUP_SIZE = 5;
+    private static List<Quest> quests = new ArrayList<Quest>();
 
     public static final Path COMBAT_LOG_DIR = new File("combatlogs").toPath();
     
@@ -268,6 +271,8 @@ public class Global {
                 debug[db.ordinal()]=true;
             }
         }
+        
+        if (flags.contains("ButtslutQuesting")) {quests.add(new ButtslutQuest());}
         
         time = Time.NIGHT;
         date = 1;
@@ -1816,5 +1821,9 @@ public class Global {
     public static void unfreezeRNG() {
         FROZEN_RNG = new Random();
         rng = FROZEN_RNG;
+    }
+    
+    public static Optional<ButtslutQuest> getButtslutQuest() {
+        return quests.stream().filter(q -> q instanceof ButtslutQuest).map(q -> (ButtslutQuest)q).findFirst();
     }
 }

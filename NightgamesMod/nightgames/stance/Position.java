@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -13,6 +14,7 @@ import nightgames.characters.body.Body;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.global.Global;
+import nightgames.quest.ButtslutQuest;
 import nightgames.skills.Skill;
 import nightgames.skills.damage.DamageType;
 import nightgames.status.InsertedStatus;
@@ -384,7 +386,7 @@ public abstract class Position implements Cloneable {
      * @return The dominance of the current position, modified by one combatant's traits. Higher return values cause more willpower loss on each combat tick.
      * If a character is not the dominant character of the position, their effective dominance is 0.
      */
-    public int getDominanceOfStance(Character self) {
+    public double getDominanceOfStance(Combat c, Character self) {
         if (sub(self)) {
             return 0;
         }
@@ -398,6 +400,8 @@ public abstract class Position implements Cloneable {
             // Rescales stance dominance values from 0-1-2-3-4-5 to 0-0-1-1-2-3
             stanceDominance = Double.valueOf(Math.floor(stanceDominance * 0.6)).intValue();
         }
+        Optional<ButtslutQuest> bsq = Global.getButtslutQuest();
+        if (bsq.isPresent() && this.anallyPenetrated(c, c.getOpponent(self)) && c.getOpponent(self)==Global.getPlayer()) {stanceDominance += bsq.get().getBonusDominance(this);}
         return Math.max(0, stanceDominance);
     }
 

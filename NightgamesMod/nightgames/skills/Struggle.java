@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.Player;
 import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.CockMod;
@@ -133,6 +134,7 @@ public class Struggle extends Skill {
         if (target.is(Stsflag.enthralled) || target.is(Stsflag.trance) || target.is(Stsflag.lovestruck)) {diffMod-=target.get(Attribute.Power);}
         if (getSelf().is(Stsflag.bondage) || getSelf().is(Stsflag.charmed) || target.is(Stsflag.lovestruck)) {diffMod+=target.get(Attribute.Power)/2;}
         if (getSelf().has(Trait.nymphomania)) {diffMod+=getSelf().get(Attribute.Nymphomania)/4;}
+        if (getSelf() instanceof Player && Global.getButtslutQuest().isPresent()) {diffMod += Global.getButtslutQuest().get().getStruggleDiffMod();}
         if (getSelf().check(Attribute.Power,target.getStamina().get() / 2 - getSelf().getStamina().get() / 2
                                         + target.get(Attribute.Power) - getSelf().get(Attribute.Power)
                                         - getSelf().getEscape(c, target) + diffMod)) {

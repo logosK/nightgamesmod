@@ -22,6 +22,7 @@ import com.google.gson.JsonObject;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.CharacterSex;
+import nightgames.characters.Player;
 import nightgames.characters.Trait;
 import nightgames.characters.body.mods.PartMod;
 import nightgames.characters.body.mods.SizeMod;
@@ -659,7 +660,7 @@ public class Body implements Cloneable {
         Optional<BodyFetish> fetish = getFetish(with.getType());
         if (fetish.isPresent()) {
             double fetishBonus = fetish.get().magnitude * 3 * with.getFetishEffectiveness();
-            if(with.getType()=="ass" && character.has(Trait.analFanatic)) fetishBonus/=4;
+            if(with.getType().equals("ass") && character.has(Trait.analFanatic)) fetishBonus/=4;
             perceptionBonus += fetishBonus;
             // if a fetish is present, the chance of it intensifying is 4 times the chance of a new fetish occurring of that type with fetishtrainer
             if(Global.random(100) > 4*100*with.getFetishChance()) {character.add(c, new BodyFetish(character, opponent, with.getType(), .05));}
@@ -693,7 +694,7 @@ public class Body implements Cloneable {
         double dominance = 0.0;
         if (character.checkAddiction(AddictionType.DOMINANCE, opponent) && c.getStance().dom(opponent)) {
             float mag = character.getAddiction(AddictionType.DOMINANCE).get().getMagnitude();
-            float dom = c.getStance().getDominanceOfStance(opponent);
+            double dom = c.getStance().getDominanceOfStance(c, opponent);
             dominance = mag * (dom / 5.0);
         }
         perceptionBonus += dominance;
@@ -801,9 +802,10 @@ public class Body implements Cloneable {
 
         character.resolvePleasure(result, c, opponent, target, with);
 
-        if (opponent != null && Arrays.asList(fetishParts)
-                                      .contains(with.getType())) {
-            if (opponent.has(Trait.fetishTrainer) && Global.random(100) < 4 * Math.min(opponent.get(Attribute.Fetish), 25) * with.getFetishChance()) {
+        if (opponent != null && Arrays.asList(fetishParts).contains(with.getType())) {
+            double chance = opponent.has(Trait.fetishTrainer)?4 * Math.min(opponent.get(Attribute.Fetish), 25):0;
+            if (with.getType().equals("cock") && target.getType().equals("ass") && Global.getButtslutQuest().isPresent()) chance += Global.getButtslutQuest().get().getBonusFetishChance();
+            if (Global.random(100) < chance * with.getFetishChance()) {
                 c.write(character, character.subjectAction("now have", "now has") + " a new fetish, courtesy of "
                                 + opponent.directObject() + ".");
                 character.add(c, new BodyFetish(character, opponent, with.getType(), .25));
@@ -838,7 +840,7 @@ public class Body implements Cloneable {
         } else {
             double effectiveSeduction = character.get(Attribute.Seduction);
             if (c.getStance().dom(character) && character.has(Trait.brutesCharisma)) {
-                effectiveSeduction += c.getStance().getDominanceOfStance(character) * (character.get(Attribute.Power) / 5.0 + character.get(Attribute.Ki) / 5.0);
+                effectiveSeduction += c.getStance().getDominanceOfStance(c, character) * (character.get(Attribute.Power) / 5.0 + character.get(Attribute.Ki) / 5.0);
             }
 
             if (character.has(Trait.PrimalHeat) && character.is(Stsflag.frenzied)) {
@@ -1304,6 +1306,9 @@ public class Body implements Cloneable {
                             "<br><b>{other:NAME-POSSESSIVE} boiling semen takes its toll on {self:name-possessive} stamina, rendering {self:direct-object} limp and compliant.</b>",
                             character, opponent));
             character.drain(c, opponent, character.getStamina().max()/3+20);
+        }
+        if (character instanceof Player && part.getType().equals("ass") && Global.getButtslutQuest().isPresent()) {
+            character.arouse(Global.getButtslutQuest().get().getAnalCreampieLust(), c);
         }
         if (part.getType().equals("ass") || part.getType().equals("pussy")) {
             if (character.has(Trait.RapidMeiosis) && character.has(Trait.slime)) {

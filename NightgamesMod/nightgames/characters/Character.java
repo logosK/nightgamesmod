@@ -1374,6 +1374,12 @@ public abstract class Character extends Observable implements Cloneable {
             boolean unique = true;
             for (Status s : this.status) {
                 if (s.getClass().equals(status.getClass()) && s.getVariant().equals(status.getVariant())) {
+                    if (status instanceof BodyFetish) {
+                        BodyFetish bf = (BodyFetish)status;
+                        if (this instanceof Player && bf.part=="Cock" && c.getStance().anallyPenetrated(c, this) && Global.getButtslutQuest().isPresent()) {
+                            bf.magnitude += Global.getButtslutQuest().get().getBonusFetish();
+                        }
+                    }
                     s.replace(status);
                     message = s.initialMessage(c, Optional.of(status));
                     done = true;
@@ -3282,7 +3288,7 @@ public abstract class Character extends Observable implements Cloneable {
         }
         fit += Math.sqrt(totalAtts) * 5;
         // Always important: Position
-        fit += (c.getStance().priorityMod(this) + c.getStance().getDominanceOfStance(this)) * 4;
+        fit += (c.getStance().priorityMod(this) + c.getStance().getDominanceOfStance(c, this)) * 4;
         fit += c.getPetsFor(this).stream().mapToDouble(pet -> (10 + pet.getSelf().power()) * ((100 + pet.percentHealth()) / 200.0) / 2).sum();
 
         int escape = getEscape(c, other);

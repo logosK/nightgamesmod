@@ -2,22 +2,26 @@ package nightgames.characters.body;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Trait;
+import nightgames.characters.body.mods.PartMod;
 import nightgames.characters.body.mods.SizeMod;
 import nightgames.combat.Combat;
 import nightgames.global.Global;
 import nightgames.items.clothing.Clothing;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.pet.PetCharacter;
+import nightgames.quest.ButtslutQuest;
 import nightgames.status.Abuff;
 import nightgames.status.Drained;
 import nightgames.status.Stsflag;
 import nightgames.status.Trance;
 
 public class AssPart extends GenericBodyPart {
+    private double bonusSensitivity;
     public static AssPart generic = generateGeneric();
     public static AssPart generateGeneric() {
         return new AssPart();
@@ -149,7 +153,7 @@ public class AssPart extends GenericBodyPart {
         }
         if (self.has(Trait.buttslut)) {
             bonus += 10;
-            if (Global.random(4) == 0 && self.is(Stsflag.trance)) {
+            if (Global.random(4) == 0 && !self.is(Stsflag.trance)) {
                 c.write(opponent, Global.format(
                                 "The foreign object rummaging around inside {self:name-possessive} ass <i><b>just feels so right</b></i>. {self:SUBJECT-ACTION:feel|feels} {self:reflective} slipping into a trance!",
                                                 self, opponent));
@@ -158,32 +162,8 @@ public class AssPart extends GenericBodyPart {
             c.write(opponent, Global.format(
                             "The foreign object rummaging around inside {self:name-possessive} ass feels so <i>right</i>. {self:SUBJECT} can't help moaning in time with the swelling pleasure.",
                                             self, opponent));
-            if(self.has(Trait.trainedslut) && self.hasStatus(Stsflag.buttsluttraining)) {
-                int strength = 3 + self.get(Attribute.Submissive)/10;
-                Attribute stolen = null;
-                switch (opponent.getName()) {
-                    case "Angel":
-                        stolen = Attribute.Seduction;break;
-                    case "Mara":
-                        stolen = Attribute.Cunning;break;
-                    case "Jewel":
-                        stolen = Attribute.Power;break;
-                    case "Cassie":
-                        stolen = Attribute.Willpower;break;    
-                    default:
-                        //System.out.println("Illegal character name for pounding a buttslut");
-                }
-                if (stolen != null && self.get(stolen) > 0) {
-                    int stolenStrength = Math.min(strength, opponent.get(stolen));
-                    self.add(c, new Abuff(opponent, stolen, -stolenStrength, 20));
-                    self.add(c, new Abuff(self, Attribute.Submissive, stolenStrength, 20));
-                    if (self.isPet()) {
-                        Character master = ((PetCharacter) self).getSelf().owner();
-                        master.add(c, new Abuff(master, stolen, stolenStrength, 20));
-                    }
-                    c.write(opponent, Global.format("The feeling makes you remember your buttslut training, and {self:subject} suddenly feel much more submissive.", self, opponent));
-                }
-            }
+            Optional<ButtslutQuest> bsq = Global.getButtslutQuest();
+            if (bsq.isPresent() && self==Global.getPlayer()) {bonus += bsq.get().applyReceiveBonusesAnal(c, opponent, target);}
         }
         return bonus;
     }
@@ -222,5 +202,23 @@ public class AssPart extends GenericBodyPart {
 
     public BodyPart downgrade() {
         return this.applyMod(new SizeMod(SizeMod.clampToValidSize(this, getSize() - 1)));
+    }
+    @Override
+    public double getSensitivity(Character self, BodyPart target) {
+        double sensitivityMod = sensitivity;
+        double bonus = 1.0;
+        for (PartMod mod : mods) {
+            bonus += mod.modSensitivity(self);
+        }
+        sensitivityMod += bonusSensitivity;
+        return sensitivityMod * bonus;
+    }
+
+    public double getBonusSensitivity() {
+        return bonusSensitivity;
+    }
+
+    public void addBonusSensitivity(double bonusSensitivity) {
+        this.bonusSensitivity += bonusSensitivity;
     }
 }
