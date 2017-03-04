@@ -21,6 +21,7 @@ import nightgames.status.Converted;
 public class ButtslutQuest extends Quest {
 
     private static final Attribute[] WHICH_ATTR = {Attribute.Science, Attribute.Seduction, Attribute.Arcane, Attribute.Fetish, Attribute.Power, Attribute.Animism, Attribute.Cunning, Attribute.Dark};
+    @SuppressWarnings("rawtypes")
     private static final Class[] WHICH_CHARACTER ={Airi.class,        Angel.class,         Cassie.class,     Eve.class,        Jewel.class,     Kat.class,         Mara.class,        Reyka.class};
     private static final int ASS_SIZE_INCREASE_THRESHOLD_REDUCTION_POINT8 = 1;
     private static final double ANAL_STRUGGLE_DIFFMOD_PER_POINT8 = 1.0;
@@ -39,6 +40,10 @@ public class ButtslutQuest extends Quest {
         super("Buttslut Training", 16); //8 characters, points for win and loss
     }
     
+    public ButtslutQuest(Map<Character, int[]> points) {
+        super(points, "Buttslut Training", 16);
+    }
+    
     public String getDescription() {
         return "A quest to avoid becoming a buttslut. Enemies will be more likely to try to fuck your ass, and losing with a cock in your ass maskes you more of a buttslut. "
                         + "Winning gives bonus attributes. Win and loss bonuses depend on who you defeat or are defeated by.";
@@ -47,7 +52,8 @@ public class ButtslutQuest extends Quest {
     public String getDescriptionFor(Character who) {
         return "You have gained stats: \n" + Arrays.stream(new Integer[]{0,1,2,3,4,5,6,7}).filter(i -> getPointsForOfType(Global.getPlayer(),i)>0)
                         .map(i -> ("\n"+WHICH_ATTR[i].name()+": +"+(getPointsForOfType(Global.getPlayer(),i)))).collect(Collectors.joining()) 
-                        + " and been trained: \n<incomplete>";
+                        + " and been trained: \n" + Arrays.stream(new Integer[]{0,1,2,3,4,5,6,7}).filter(i -> getPointsForOfType(Global.getPlayer(),i)>0)
+                        .map(i -> ("\n by "+WHICH_ATTR[i].name()+": +"+(getPointsForOfType(Global.getPlayer(),i))+"times.")).collect(Collectors.joining()) ;
     }
     
     public void addPlayerLossPoint(Character lostTo) {
@@ -72,11 +78,11 @@ public class ButtslutQuest extends Quest {
     
     //Loss effects:
     //Airi:   increases ass size by sqrt(points), increases struggle difficulty when penetrated by 1.0*points
-    //Angel:  Causes player to have a chance to present ass on cock reveal
+    //Angel:  Causes player to have a chance each turn to present ass to a visible cock equal to 0.05*points
     //Cassie: Causes player to be enthralled on initial anal penetration for a number of turns equal to 1.0*points
-    //Eve:    Increases chance of fetish formation/magnitude of increase from cock in ass
+    //Eve:    For a cock in the player's ass, the chance of fetish formation is increased by 5%*points, and any cock fetish magnitude increases are increased by 0.01*points
     //Jewel:  Reduces the dominance of stances where the player is anally penetrated by 0.2*points
-    //Kat:    Each turn while anally penetrated causes some of your stats to turn into submissive
+    //Kat:    Each turn while anally penetrated causes 3.0*points of your stats to turn into submissive (like corruption)
     //Mara:   Increases anal sensitivity by 0.25*points
     //Reyka:  Receiving cum in ass increases lust by 30*points
     
@@ -134,4 +140,5 @@ public class ButtslutQuest extends Quest {
     public int getAnalCreampieLust() {
         return (int)(getPointsForOfType(Global.getPlayer(),13) * ANAL_CREAMPIE_LUST_PER_POINT15);
     }
+    
 }

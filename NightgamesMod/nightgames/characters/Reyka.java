@@ -417,6 +417,8 @@ public class Reyka extends BasePersonality {
     @Override
     public String victory(Combat c, Result flag) {
         Character opponent = character.equals(c.p1) ? c.p2 : c.p1;
+        if (c.getOpponent(character) instanceof Player && Global.getButtslutQuest().isPresent() && c.getStance().anallyPenetratedBy(c, character, c.getOpponent(character))) {Global.getButtslutQuest().get().addPlayerLossPoint(character);}
+
         if (c.getStance().anallyPenetrated(c, opponent)) {
             return "Reyka alternates between long hard thrusts and sensual grinding to keep you from getting used to the stimulation, and the pleasure it is "
                             + "inflicting on you stops you from mustering the resolve to fight back. <i>\"I do love a good bit of pegging.\"</i> Reyka comments as she begins "

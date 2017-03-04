@@ -475,6 +475,8 @@ public class Mara extends BasePersonality {
     public String victory(Combat c, Result flag) {
         Character target = c.getOpponent(character);
         character.arousal.empty();
+        if (c.getOpponent(character) instanceof Player && Global.getButtslutQuest().isPresent() && c.getStance().anallyPenetratedBy(c, character, c.getOpponent(character))) {Global.getButtslutQuest().get().addPlayerLossPoint(character);}
+
         if (c.getStance().anallyPenetrated(c, target)) {
             return "The sensations coming from your prostate are too much as your arms give out below you. Mara doesn't let up either, grinding the head of the strap on over your "
                             + "prostate. <i>\"I've read that the prostate is the male equivalent of a g-spot,\"</i> she pants as she continues her assault on your ass. <i>\"I'd like to see if I can "

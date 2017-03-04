@@ -508,6 +508,7 @@ public class Global {
         getSkillPool().add(new Kneel(ch));
         getSkillPool().add(new Dive(ch));
         getSkillPool().add(new Offer(ch));
+        getSkillPool().add(new OfferAss(ch));
         getSkillPool().add(new ShamefulDisplay(ch));
         getSkillPool().add(new Stumble(ch));
         getSkillPool().add(new TortoiseWrap(ch));
@@ -1147,6 +1148,7 @@ public class Global {
         data.players.addAll(players);
         data.flags.addAll(flags);
         data.counters.putAll(counters);
+        data.quests.addAll(quests);
         data.time = time;
         data.date = date;
         data.fontsize = gui.fontsize;
@@ -1291,8 +1293,9 @@ public class Global {
                         c -> characterPool.put(c.getType(), (NPC) c));
         flags.addAll(data.flags);
         counters.putAll(data.counters);
+        quests.addAll(data.quests);
         date = data.date;
-        time = data.time;
+        time = data.time; 
         gui.fontsize = data.fontsize;
     }
 
