@@ -40,7 +40,7 @@ public class ButtslutQuest extends Quest {
         super("Buttslut Training", 16); //8 characters, points for win and loss
     }
     
-    public ButtslutQuest(Map<Character, int[]> points) {
+    public ButtslutQuest(Map<String, int[]> points) {
         super(points, "Buttslut Training", 16);
     }
     
@@ -50,10 +50,11 @@ public class ButtslutQuest extends Quest {
     }
     
     public String getDescriptionFor(Character who) {
+        if (!(who instanceof Player)) {return "";}
         return "You have gained stats: \n" + Arrays.stream(new Integer[]{0,1,2,3,4,5,6,7}).filter(i -> getPointsForOfType(Global.getPlayer(),i)>0)
                         .map(i -> ("\n"+WHICH_ATTR[i].name()+": +"+(getPointsForOfType(Global.getPlayer(),i)))).collect(Collectors.joining()) 
-                        + " and been trained: \n" + Arrays.stream(new Integer[]{0,1,2,3,4,5,6,7}).filter(i -> getPointsForOfType(Global.getPlayer(),i)>0)
-                        .map(i -> ("\n by "+WHICH_ATTR[i].name()+": +"+(getPointsForOfType(Global.getPlayer(),i))+"times.")).collect(Collectors.joining()) ;
+                        + " and been trained: \n" + Arrays.stream(new Integer[]{8,9,10,11,12,13,14,15}).filter(i -> getPointsForOfType(Global.getPlayer(),i)>0)
+                        .map(i -> ("\n by "+Global.getNPCByType(WHICH_CHARACTER[i-8].getSimpleName()).getTrueName()+": +"+(getPointsForOfType(Global.getPlayer(),i))+" times.")).collect(Collectors.joining()) ;
     }
     
     public void addPlayerLossPoint(Character lostTo) {
@@ -66,6 +67,7 @@ public class ButtslutQuest extends Quest {
             Global.getPlayer().body.getRandomAss().upgrade();
             //Should probably be a message here
         }
+        Global.gui().displayStatus();
     }
     
     public void addPlayerWonPoint(Character defeated) {
@@ -74,6 +76,7 @@ public class ButtslutQuest extends Quest {
         int opponentIndex = Arrays.asList(WHICH_CHARACTER).indexOf(opponent.getClass());
         super.pointTo(Global.getPlayer(), opponentIndex);
         Global.getPlayer().mod(WHICH_ATTR[opponentIndex], 1);
+        Global.gui().displayStatus();
     }
     
     //Loss effects:

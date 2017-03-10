@@ -586,7 +586,7 @@ public class Combat extends Observable implements Cloneable {
                 }
             }
             if (character.has(Trait.buttslut)) getCombatantData(character).setBooleanFlag(buttslutCompletedFlag, true);
-            else {((EnemyButtslutTrainingStatus)character.getStatus(Stsflag.buttslutificationReady)).activate();}
+            //else {((EnemyButtslutTrainingStatus)character.getStatus(Stsflag.buttslutificationReady)).activate();}
             setStance(new Behind(mainOpponent, character));
         }
 

@@ -353,7 +353,7 @@ public class CreationGUI extends JPanel {
         lblStrength.setBackground(new Color(0, 10, 30));
         lblStrength.setForeground(new Color(240, 240, 255));
         verticalBox.add(lblStrength);
-        
+
         StrengthBox = new JComboBox<>();
         StrengthBox.setBackground(new Color(0, 10, 30));
         StrengthBox.setForeground(new Color(0, 200, 0));
@@ -378,7 +378,7 @@ public class CreationGUI extends JPanel {
         StrengthDescription.setForeground(new Color(240, 240, 255));
         StrengthDescription.setText(((Trait) StrengthBox.getSelectedItem()).getDesc());
         verticalBox.add(StrengthDescription);
-        
+
         separator_2 = new JSeparator();
         verticalBox.add(separator_2);
 
@@ -416,7 +416,7 @@ public class CreationGUI extends JPanel {
         WeaknessDescription.setEditable(false);
         WeaknessDescription.setText(((Trait) WeaknessBox.getSelectedItem()).getDesc());
         verticalBox.add(WeaknessDescription);
-        
+
         JLabel expLbl = new JLabel("Exp Rate");
         expLbl.setBackground(new Color(0, 10, 30));
         expLbl.setForeground(new Color(240, 240, 255));

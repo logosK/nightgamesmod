@@ -69,7 +69,7 @@ public class SaveData {
         counters.putAll(JsonUtils.mapFromJson(countersJSON, String.class, Float.class));
         
         JsonArray questsJSON = rootJSON.getAsJsonArray(JSONKey.QUESTS.key);
-        quests.addAll(JsonUtils.collectionFromJson(questsJSON, Quest.class));
+        quests.addAll(JsonUtils.loadQuests(questsJSON));
 
         date = rootJSON.get(JSONKey.DATE.key).getAsInt();
         if (rootJSON.has(JSONKey.FONTSIZE.key)) {

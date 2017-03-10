@@ -272,7 +272,7 @@ public class Global {
             }
         }
         
-        if (flags.contains("ButtslutQuesting")) {quests.add(new ButtslutQuest());}
+        if (flags.contains("ButtslutQuesting") && !getButtslutQuest().isPresent()) {quests.add(new ButtslutQuest());}
         time = Time.NIGHT;
         date = 1;
         setCharacterDisabledFlag(getNPCByType("Yui"));
@@ -1294,7 +1294,7 @@ public class Global {
         counters.putAll(data.counters);
         quests.addAll(data.quests);
         date = data.date;
-        time = data.time; 
+        time = data.time;
         gui.fontsize = data.fontsize;
     }
 
