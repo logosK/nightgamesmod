@@ -10,6 +10,7 @@ public class TutorialStart implements GameStarter, Scene {
 
     @Override
     public void respond(String response) {
+        Global.current = this;
         switch (response) {
             case "Start":
                 Global.gui().prompt("Would you like to play the tutorial sequence?",
@@ -518,7 +519,6 @@ public class TutorialStart implements GameStarter, Scene {
 
     @Override
     public void startGame() {
-        Global.current = this;
         respond("Start");
     }
 

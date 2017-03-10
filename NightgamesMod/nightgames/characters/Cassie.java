@@ -422,7 +422,7 @@ public class Cassie extends BasePersonality {
 
     @Override
     public String victory(Combat c, Result flag) {
-        if (c.getOpponent(character) instanceof Player && Global.getButtslutQuest().isPresent() && c.getStance().anallyPenetratedBy(c, character, c.getOpponent(character))) {Global.getButtslutQuest().get().addPlayerLossPoint(character);}
+        if (c.getOpponent(character) instanceof Player && Global.getButtslutQuest().isPresent() && c.getStance().anallyPenetratedBy(c, c.getOpponent(character), character)) {Global.getButtslutQuest().get().addPlayerLossPoint(character);}
 
         if (c.getOpponent(character).getLastOrgasmPart() instanceof BreastsPart || c.getStance().vaginallyPenetrated(c,c.getOpponent(character))) dominance +=1;
         if (c.getOpponent(character).getLastOrgasmPart() instanceof BreastsPart && c.getOpponent(character).body.getLargestBreasts().getSensitivity(c.getOpponent(character), character.body.getRandom("hands"))>5) {

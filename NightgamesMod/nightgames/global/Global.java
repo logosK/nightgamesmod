@@ -273,7 +273,6 @@ public class Global {
         }
         
         if (flags.contains("ButtslutQuesting")) {quests.add(new ButtslutQuest());}
-        
         time = Time.NIGHT;
         date = 1;
         setCharacterDisabledFlag(getNPCByType("Yui"));
@@ -1803,11 +1802,8 @@ public class Global {
 		}
 	}
 
-	public static String getFlagStartingWith(Collection<String> collection, String start) {
-	    for (String f:collection) {
-	        if (f.startsWith(start)) return f;
-	    }
-	    return "";
+	public static Optional<String> getFlagStartingWith(Collection<String> collection, String start) {
+	    return collection.stream().filter(s -> s.startsWith(start)).findFirst();
 	}
 
 	/**

@@ -536,6 +536,9 @@ public class CreationGUI extends JPanel {
             selectedAttributes.put(Attribute.Seduction, seduction);
             selectedAttributes.put(Attribute.Cunning, cunning);
             Global.newGame(name, startConfig, traits, sex, selectedAttributes);
+            if(startConfig.isPresent() && Global.getFlagStartingWith(startConfig.get().getFlags(), "SkipTutorial").isPresent() && STARTER instanceof TutorialStart) {
+                ((TutorialStart)STARTER).respond("No");return;
+            }
             STARTER.startGame();
         }
     }
@@ -555,20 +558,23 @@ public class CreationGUI extends JPanel {
         remaining = points;
         
         String defaultExp = "Normal";
-        if(Global.getFlagStartingWith(cfg.getFlags(), "defaultExp") != "") {
-            defaultExp = Global.getFlagStartingWith(cfg.getFlags(), "defaultExp").substring(10);
+        if(Global.getFlagStartingWith(cfg.getFlags(), "defaultExp").isPresent()) {
+            defaultExp = Global.getFlagStartingWith(cfg.getFlags(), "defaultExp").get().substring(10);
         }
         ExpBox.setSelectedItem(defaultExp);
         Trait defaultStrength = Trait.romantic;
-        if(Global.getFlagStartingWith(cfg.getFlags(), "defaultStrength") != "") {
-            defaultStrength = Trait.valueOf(Global.getFlagStartingWith(cfg.getFlags(), "defaultStrength").substring(15));
+        if(Global.getFlagStartingWith(cfg.getFlags(), "defaultStrength").isPresent()) {
+            defaultStrength = Trait.valueOf(Global.getFlagStartingWith(cfg.getFlags(), "defaultStrength").get().substring(15));
         }
         StrengthBox.setSelectedItem(defaultStrength);
         Trait defaultWeakness = Trait.insatiable;
-        if(Global.getFlagStartingWith(cfg.getFlags(), "defaultWeakness") != "") {
-            defaultWeakness = Trait.valueOf(Global.getFlagStartingWith(cfg.getFlags(), "defaultWeakness").substring(15));
+        if(Global.getFlagStartingWith(cfg.getFlags(), "defaultWeakness").isPresent()) {
+            defaultWeakness = Trait.valueOf(Global.getFlagStartingWith(cfg.getFlags(), "defaultWeakness").get().substring(15));
         }
         WeaknessBox.setSelectedItem(defaultWeakness);
+        
+        Optional<String> fontSizeFlag = Global.getFlagStartingWith(cfg.getFlags(), "DefaultFontSize");
+        if (fontSizeFlag.isPresent()) {Global.gui().fontsize=Integer.parseInt(fontSizeFlag.get().substring(15));}
         
         refresh();
     }

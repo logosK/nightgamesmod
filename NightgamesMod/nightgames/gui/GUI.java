@@ -353,13 +353,10 @@ public class GUI extends JFrame implements Observer {
             fontsize = Global.clamp(fontsize + 1, 1, 7);
             Global.gui().message("Text Size changed to " + fontsize);
         });
-        rdfntsmall = new JButton("small");
-        size.add(rdfntsmall);
-	size.add(rdfntnorm);
+        size.add(rdfntnorm);
         size.add(rdfntlrg);
 
         optionsPanel.add(fontSizeLabel);
-        //optionsPanel.add(rdfntsmall);
         optionsPanel.add(rdfntnorm);
         optionsPanel.add(rdfntlrg);
         

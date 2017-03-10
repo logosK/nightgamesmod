@@ -392,7 +392,7 @@ public class Kat extends BasePersonality {
     public String victory(Combat c, Result flag) {
         Character opponent = c.getOpponent(character);
         character.arousal.empty();
-        if (c.getOpponent(character) instanceof Player && Global.getButtslutQuest().isPresent() && c.getStance().anallyPenetratedBy(c, character, c.getOpponent(character))) {Global.getButtslutQuest().get().addPlayerLossPoint(character);}
+        if (c.getOpponent(character) instanceof Player && Global.getButtslutQuest().isPresent() && c.getStance().anallyPenetratedBy(c, c.getOpponent(character), character)) {Global.getButtslutQuest().get().addPlayerLossPoint(character);}
 
         if (c.getStance().vaginallyPenetrated(c,opponent) && opponent instanceof Player && ((Player) opponent).checkAddiction(AddictionType.BREEDER)) {
             opponent.add(c, Pheromones.getWith(character, opponent, 5, 10));
