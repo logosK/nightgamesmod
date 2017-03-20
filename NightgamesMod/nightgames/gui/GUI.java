@@ -450,8 +450,6 @@ public class GUI extends JFrame implements Observer {
             }
             if (Global.checkFlag(Flag.largefonts)) {
                 rdfntlrg.setSelected(true);
-            } else if (Global.checkFlag(Flag.smallfonts)){
-                rdfntsmall.setSelected(true);
             } else {
                 rdfntnorm.setSelected(true);
             }

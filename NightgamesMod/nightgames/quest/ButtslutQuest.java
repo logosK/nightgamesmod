@@ -114,7 +114,7 @@ public class ButtslutQuest extends Quest {
     }
     
     public double applyReceiveBonusesAnal(Combat c, Character opponent, BodyPart ass) {
-        if (Global.isDebugOn(DebugFlags.DEBUG_ADDICTION)) {System.out.println("Doing attribute conversion");}
+        if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {System.out.println("Doing attribute conversion");}
         //attribute converting text copied from Corruption
         int strength = (int) (getPointsForOfType(Global.getPlayer(),13) * STATS_CONVERTED_TO_SUB_PER_POINT13);
         Map<Attribute, Integer> buffs = new HashMap<>();
@@ -141,7 +141,7 @@ public class ButtslutQuest extends Quest {
     }
     
     public int getAnalCreampieLust() {
-        return (int)(getPointsForOfType(Global.getPlayer(),13) * ANAL_CREAMPIE_LUST_PER_POINT15);
+        return (int)(getPointsForOfType(Global.getPlayer(),15) * ANAL_CREAMPIE_LUST_PER_POINT15);
     }
     
 }

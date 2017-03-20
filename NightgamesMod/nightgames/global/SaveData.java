@@ -79,6 +79,7 @@ public class SaveData {
         }
         
         time = Time.fromDesc(rootJSON.get(JSONKey.TIME.key).getAsString());
+        System.out.println("savedata constructed: "+this.toString());
     }
 
     public JsonObject toJson() {
@@ -105,6 +106,8 @@ public class SaveData {
 
         rootJSON.addProperty(JSONKey.DATE.key, date);
         rootJSON.addProperty(JSONKey.FONTSIZE.key, fontsize);
+        
+        System.out.println("savedata toJson: "+this.toString());
 
         return rootJSON;
     }

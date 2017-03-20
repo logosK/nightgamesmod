@@ -18,18 +18,21 @@ public abstract class Quest {
         this.name="ERROR";
         this.numPointTypes=0;
         this.points=new HashMap<String, int[]>();
+        System.out.println("0-arg constructor called");throw new RuntimeException();
     }
     
     public Quest(String name, int numPointTypes) {
         this.name=name;
         this.numPointTypes=numPointTypes;
         this.points=new HashMap<String, int[]>();
+        System.out.println("2-arg constructor called");throw new RuntimeException();
     }
     
     protected Quest(Map<String, int[]> points, String name, int numPointTypes) {
         this.name=name;
         this.numPointTypes=numPointTypes;
         this.points=points;
+        System.out.println("3-arg constructor called");//throw new RuntimeException();
     }
     
     public void pointTo(Character charto, int pointType) {
@@ -61,8 +64,7 @@ public abstract class Quest {
         Map<String, int[]> points = JsonUtils.mapFromJson(object.getAsJsonObject("points"), String.class, int[].class);
         System.out.println(points);
         //return new Quest(name, numPointTypes, points);
-        if (name.equals("Buttslut Training")) {return new ButtslutQuest(points);}
-        Global.gui().displayStatus();
+        if (name.equals("Buttslut Training")) {System.out.println("Is a BSQ");return new ButtslutQuest(points);}
         return null;
     }
 }
