@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import nightgames.characters.TestAngel;
@@ -59,12 +59,16 @@ public class NpcConfigurationTest {
     @Test public void testNpcCreation() throws Exception {
         TestAngel angel = new TestAngel(Optional.of(angelConfig), Optional.of(startConfig.npcCommon));
         assertThat(angel.character.getType(), equalTo("TestAngel"));
-        assertThat(angel.character.att, allOf(Arrays.asList(IsMapContaining.hasEntry(Attribute.Power, 13),
-                        IsMapContaining.hasEntry(Attribute.Seduction, 20),
-                        IsMapContaining.hasEntry(Attribute.Cunning, 15),
-                        IsMapContaining.hasEntry(Attribute.Divinity, 10), IsMapContaining.hasEntry(Attribute.Arcane, 2),
-                        IsMapContaining.hasEntry(Attribute.Perception, 6),
-                        IsMapContaining.hasEntry(Attribute.Speed, 5))));
+        
+        // These can't be exact matches, as the NPCs will level themselves up on creation
+        assertThat(angel.character.att, allOf(Arrays.asList(
+                        IsMapContaining.hasEntry(equalTo(Attribute.Power), greaterThanOrEqualTo(13)),
+                        IsMapContaining.hasEntry(equalTo(Attribute.Seduction), greaterThanOrEqualTo(20)),
+                        IsMapContaining.hasEntry(equalTo(Attribute.Cunning), greaterThanOrEqualTo(15)),
+                        IsMapContaining.hasEntry(equalTo(Attribute.Divinity), greaterThanOrEqualTo(10)),
+                        IsMapContaining.hasEntry(equalTo(Attribute.Arcane), greaterThanOrEqualTo(2)),
+                        IsMapContaining.hasEntry(equalTo(Attribute.Perception), greaterThanOrEqualTo(6)),
+                        IsMapContaining.hasEntry(equalTo(Attribute.Speed), greaterThanOrEqualTo(5)))));
         assertThat(angel.character.xp, equalTo(50));
         assertThat(angel.character.level, equalTo(5));
         assertThat(angel.character.money, equalTo(5000));
@@ -73,8 +77,9 @@ public class NpcConfigurationTest {
     @Test public void testBodyMerge() throws Exception {
         TestAngel angel = new TestAngel(Optional.of(angelConfig), Optional.of(startConfig.npcCommon));
 
-        // Starting stats should match config but breasts should be the same as base Angel if not overwritten in config.
-        assertThat(angel.character.get(Attribute.Seduction), equalTo(angelConfig.attributes.get(Attribute.Seduction)));
+        // Starting stats should be at least as large as config (NPCs level up and distribute points on creation)
+        // but breasts should be the same as base Angel if not overwritten in config.
+        assertThat(angel.character.get(Attribute.Seduction), greaterThan(angelConfig.attributes.get(Attribute.Seduction)));
         assertThat(angel.character.body.getLargestBreasts(),
                         equalTo(TestAngel.baseTestAngelChar.body.getLargestBreasts()));
         assertEquals(TestAngel.baseTestAngelChar.body.getLargestBreasts(),

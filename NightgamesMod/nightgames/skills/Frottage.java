@@ -10,6 +10,7 @@ import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
 import nightgames.nskills.tags.SkillTag;
+import nightgames.stance.Stance;
 import nightgames.status.BodyFetish;
 
 public class Frottage extends Skill {
@@ -29,7 +30,8 @@ public class Frottage extends Skill {
         return getSelf().canAct() && c.getStance().mobile(getSelf()) && !c.getStance().sub(getSelf())
                         && !c.getStance().havingSex(c) && target.crotchAvailable()
                         && (getSelf().hasDick() && getSelf().crotchAvailable() || getSelf().has(Trait.strapped))
-                        && c.getStance().reachBottom(getSelf());
+                        && c.getStance().reachBottom(getSelf())
+                        && c.getStance().en != Stance.facesitting;
     }
 
     @Override

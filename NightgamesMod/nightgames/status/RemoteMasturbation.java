@@ -34,7 +34,7 @@ public class RemoteMasturbation extends DurationStatus {
     }
 
     @Override
-    public Collection<Skill> allowedSkills(Combat c) {
+    public Collection<Skill> skillWhitelist(Combat c) {
         return Collections.singleton(new Masturbate(affected));
     }
 

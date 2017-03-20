@@ -20,14 +20,14 @@ import nightgames.characters.body.GenericBodyPart;
 import nightgames.characters.body.TentaclePart;
 import nightgames.characters.body.mods.GooeyMod;
 import nightgames.combat.Combat;
-import nightgames.combat.IEncounter;
 import nightgames.combat.Result;
-import nightgames.ftc.FTCMatch;
 import nightgames.global.Flag;
 import nightgames.global.Global;
 import nightgames.gui.GUI;
 import nightgames.items.Item;
 import nightgames.items.clothing.Clothing;
+import nightgames.match.Encounter;
+import nightgames.match.ftc.FTCMatch;
 import nightgames.skills.Stage;
 import nightgames.skills.Tactics;
 import nightgames.skills.damage.DamageType;
@@ -239,7 +239,7 @@ public class Player extends Character {
     }
 
     @Override
-    public void faceOff(Character opponent, IEncounter enc) {
+    public void faceOff(Character opponent, Encounter enc) {
         gui.message("You run into <b>" + opponent.nameDirectObject()
                         + "</b> and you both hesitate for a moment, deciding whether to attack or retreat.");
         assessOpponent(opponent);
@@ -288,7 +288,7 @@ public class Player extends Character {
     }
 
     @Override
-    public void spy(Character opponent, IEncounter enc) {
+    public void spy(Character opponent, Encounter enc) {
         gui.message("You spot <b>" + opponent.nameDirectObject()
                         + "</b> but she hasn't seen you yet. You could probably catch her off guard, or you could remain hidden and hope she doesn't notice you.");
         assessOpponent(opponent);
@@ -343,38 +343,41 @@ public class Player extends Character {
                     gui.message("You've set a " + trap.toString() + " here.");
                 }
             }
-            if (state == State.inTree)
+            if (state == State.inTree) {
                 gui.message("You are hiding in a tree, waiting to drop down on an unwitting foe.");
-            else if (state == State.inBushes)
+            } else if (state == State.inBushes) {
                 gui.message("You are hiding in dense bushes, waiting for someone to pass by.");
-            else if (state == State.inPass)
+            } else if (state == State.inPass) {
                 gui.message("You are hiding in an alcove in the pass.");
-            else if (state == State.hidden)
+            } else if (state == State.hidden) {
                 gui.message("You have found a hiding spot and are waiting for someone to pounce upon.");
+            }
             detect();
             if (!location.encounter(this)) {
                 if (!allowedActions().isEmpty()) {
                     allowedActions().forEach(a -> gui.addAction(a, this));
                 } else {
                     List<Action> possibleActions = new ArrayList<>();
-                    for (Area path : location.adjacent) {
-                        possibleActions.add(new Move(path));
-                    }
-                    if (getPure(Attribute.Cunning) >= 28) {
-                        for (Area path : location.shortcut) {
-                            possibleActions.add(new Shortcut(path));
+                    if (Global.getMatch().canMoveOutOfCombat(this)) {
+                        for (Area path : location.adjacent) {
+                            possibleActions.add(new Move(path));
                         }
-                    }
+                        if (getPure(Attribute.Cunning) >= 28) {
+                            for (Area path : location.shortcut) {
+                                possibleActions.add(new Shortcut(path));
+                            }
+                        }
 
-                    if(getPure(Attribute.Ninjutsu)>=5){
-                        for(Area path:location.jump){
-                            possibleActions.add(new Leap(path));
+                        if(getPure(Attribute.Ninjutsu)>=5){
+                            for(Area path:location.jump){
+                                possibleActions.add(new Leap(path));
+                            }
                         }
                     }
-                    possibleActions.addAll(Global.getActions());
+                    possibleActions.addAll(Global.getMatch().getAvailableActions(this));
                     for (Action act : possibleActions) {
                         if (act.usable(this) 
-                                        && Global.getMatch().condition.allowAction(act, this, Global.getMatch())) {
+                                        && Global.getMatch().getCondition().allowAction(act, this, Global.getMatch())) {
                             gui.addAction(act, this);
                         }
                     }
@@ -522,7 +525,7 @@ public class Player extends Character {
     }
 
     @Override
-    public void showerScene(Character target, IEncounter encounter) {
+    public void showerScene(Character target, Encounter encounter) {
         if (target.location().name.equals("Showers")) {
             gui.message("You hear running water coming from the first floor showers. There shouldn't be any residents on this floor right now, so it's likely one "
                             + "of your opponents. You peek inside and sure enough, <b>" + target.subject()
@@ -539,7 +542,7 @@ public class Player extends Character {
     }
 
     @Override
-    public void intervene(IEncounter enc, Character p1, Character p2) {
+    public void intervene(Encounter enc, Character p1, Character p2) {
         gui.message("You find <b>" + p1.getName() + "</b> and <b>" + p2.getName()
                         + "</b> fighting too intensely to notice your arrival. If you intervene now, it'll essentially decide the winner.");
         gui.message("Then again, you could just wait and see which one of them comes out on top. It'd be entertaining,"
@@ -614,7 +617,7 @@ public class Player extends Character {
     }
 
     @Override
-    public void promptTrap(IEncounter enc, Character target, Trap trap) {
+    public void promptTrap(Encounter enc, Character target, Trap trap) {
         Global.gui()
               .message("Do you want to take the opportunity to ambush <b>" + target.getName() + "</b>?");
         assessOpponent(target);

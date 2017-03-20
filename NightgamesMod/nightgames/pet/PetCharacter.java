@@ -19,8 +19,7 @@ import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.DebugFlags;
 import nightgames.global.Global;
-import nightgames.combat.Encounter;
-import nightgames.combat.IEncounter;
+import nightgames.match.Encounter;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
@@ -185,14 +184,14 @@ public class PetCharacter extends Character {
 
     public void act(Combat c, Character target) {
         List<Skill> allowedEnemySkills = new ArrayList<>(getSkills()
-                        .stream().filter(skill -> Skill.skillIsUsable(c, skill, target) && Collections.disjoint(skill.getTags(c), PET_UNUSABLE_TAG))
+                        .stream().filter(skill -> Skill.isUsableOn(c, skill, target) && Collections.disjoint(skill.getTags(c), PET_UNUSABLE_TAG))
                         .collect(Collectors.toList()));
         Skill.filterAllowedSkills(c, allowedEnemySkills, this, target);        
 
         List<Skill> possibleMasterSkills = new ArrayList<>(getSkills());
         possibleMasterSkills.addAll(Combat.WORSHIP_SKILLS);
         List<Skill> allowedMasterSkills = new ArrayList<>(getSkills()
-                        .stream().filter(skill -> Skill.skillIsUsable(c, skill, getSelf().owner)
+                        .stream().filter(skill -> Skill.isUsableOn(c, skill, getSelf().owner)
                                         && (skill.getTags(c).contains(SkillTag.helping) || (getSelf().owner.has(Trait.showmanship) && skill.getTags(c).contains(SkillTag.worship)))
                                         && Collections.disjoint(skill.getTags(c), PET_UNUSABLE_TAG))
                         .collect(Collectors.toList()));
@@ -298,10 +297,10 @@ public class PetCharacter extends Character {
     }
 
     @Override
-    public void intervene(IEncounter fight, Character p1, Character p2) {}
+    public void intervene(Encounter fight, Character p1, Character p2) {}
 
     @Override
-    public void showerScene(Character target, IEncounter encounter) {}
+    public void showerScene(Character target, Encounter encounter) {}
     @Override
     public void afterParty() {}
     
@@ -309,11 +308,10 @@ public class PetCharacter extends Character {
     public void emote(Emotion emo, int amt) {}
 
     @Override
-    public void promptTrap(IEncounter fight, Character target, Trap trap) {}
+    public void promptTrap(Encounter fight, Character target, Trap trap) {}
 
     @Override
     public void counterattack(Character target, Tactics type, Combat c) {}
-
 
     @Override
     public Growth getGrowth() {
@@ -337,13 +335,13 @@ public class PetCharacter extends Character {
     }
 
     @Override
-    public void faceOff(Character opponent, IEncounter enc) {
+    public void faceOff(Character opponent, Encounter enc) {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void spy(Character opponent, IEncounter enc) {
+    public void spy(Character opponent, Encounter enc) {
         // TODO Auto-generated method stub
         
     }

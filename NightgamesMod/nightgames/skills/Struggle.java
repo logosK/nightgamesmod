@@ -22,9 +22,9 @@ import nightgames.stance.Stance;
 import nightgames.status.Bound;
 import nightgames.status.CockBound;
 import nightgames.status.Compulsive;
+import nightgames.status.Compulsive.Situation;
 import nightgames.status.MagLocked;
 import nightgames.status.Stsflag;
-import nightgames.status.Compulsive.Situation;
 
 public class Struggle extends Skill {
 

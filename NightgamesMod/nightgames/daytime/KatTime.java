@@ -4,12 +4,13 @@ import static nightgames.requirements.RequirementShortcuts.bodypart;
 import static nightgames.requirements.RequirementShortcuts.not;
 
 import java.util.ArrayList;
+
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Trait;
 import nightgames.characters.body.CockMod;
-import nightgames.characters.body.EarPart;
 import nightgames.characters.body.CockPart;
+import nightgames.characters.body.EarPart;
 import nightgames.characters.body.TailPart;
 import nightgames.characters.body.mods.FeralMod;
 import nightgames.characters.body.mods.SizeMod;

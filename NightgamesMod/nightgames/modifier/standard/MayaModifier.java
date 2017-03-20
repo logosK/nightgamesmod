@@ -35,7 +35,7 @@ public class MayaModifier extends BaseModifier {
                         + "opportunity to compete anymore, but I like to indulge every once in"
                         + " awhile.\"</i> Her eyes meet yours and something in her piercing gaze"
                         + " makes you feel like a small prey animal. Despite feeling intimidated,"
-                        + " you feel your cock stir in your pants against your will. <i>\"I may "
+                        + " you feel a stirring arousal in your groin against your will. <i>\"I may "
                         + "be a bit rusty, but I'll try to set a good example for you.\"</i><br/><br/>"
                         + "Lilly takes the lead again. <i>\"If any of you actually manage to make "
                         + "Maya cum, I'll give you multiple points for it. Otherwise you can just"

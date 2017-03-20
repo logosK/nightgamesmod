@@ -86,7 +86,7 @@ public class BodyFetish extends DurationStatus {
     }
 
     @Override
-    public Collection<Skill> allowedSkills(Combat c) {
+    public Collection<Skill> skillWhitelist(Combat c) {
         if (magnitude <= .99) {
             return Collections.emptySet();
         } else if (part.equals("pussy")) {

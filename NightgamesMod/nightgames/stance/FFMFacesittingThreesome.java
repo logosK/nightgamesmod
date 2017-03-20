@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import nightgames.characters.Character;
@@ -91,15 +92,15 @@ public class FFMFacesittingThreesome extends FFMCowgirlThreesome {
     }
 
     @Override
-    public Collection<Skill> availSkills(Combat c, Character self) {
+    public Optional<Collection<Skill>> allowedSkills(Combat c, Character self) {
         if (self != domSexCharacter) {
-            return Collections.emptySet();
+            return Optional.empty();
         } else {
             Collection<Skill> avail = self.getSkills().stream()
                             .filter(skill -> skill.requirements(c, self, bottom))
-                            .filter(skill -> Skill.skillIsUsable(c, skill, bottom))
+                            .filter(skill -> Skill.isUsableOn(c, skill, bottom))
                             .filter(skill -> skill.type(c) == Tactics.fucking).collect(Collectors.toSet());
-            return avail;
+            return Optional.of(avail);
         }
     }
 

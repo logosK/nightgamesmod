@@ -181,7 +181,7 @@ public class FluidAddiction extends DurationStatus {
     }
 
     @Override
-    public Collection<Skill> allowedSkills(Combat c) {
+    public Collection<Skill> skillWhitelist(Combat c) {
         List<Skill> availSkills;
         if (!isActive()) {
             return Collections.emptySet();

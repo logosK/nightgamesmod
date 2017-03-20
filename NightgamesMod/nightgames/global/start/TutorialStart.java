@@ -1,6 +1,7 @@
 package nightgames.global.start;
 
 import java.util.Arrays;
+
 import nightgames.global.Global;
 import nightgames.global.Scene;
 import nightgames.gui.SceneButton;

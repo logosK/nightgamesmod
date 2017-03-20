@@ -26,7 +26,7 @@ public class NoToysModifier extends BaseModifier {
     @Override
     public String intro() {
         return "<i>\"I've only got a small bonus available tonight, so I have a simple little handicap for you. Leave your sex toys under the bed tonight. You're better off "
-                        + "getting some practice with your fingers, tongue, or whatever other body parts you like sticking into girls. Liquids, traps, any consumables are fine, only "
+                        + "getting some practice with your fingers, tongue, or whatever other body parts you like sticking into people. Liquids, traps, any consumables are fine, only "
                         + "toys are off limits. The bonus is only $" + bonus()
                         + ", but it shouldn't give you much trouble.\"</i>";
     }
@@ -41,7 +41,11 @@ public class NoToysModifier extends BaseModifier {
     @Override
     public boolean isApplicable() {
         Map<Item, Integer> inv = Global.getPlayer().getInventory();
-        return inv.containsKey(Item.Dildo) || inv.containsKey(Item.Dildo2) || inv.containsKey(Item.Onahole)
-                        || inv.containsKey(Item.Onahole2);
+        for (Item item : BanToysModifier.TOYS) {
+            if (inv.containsKey(item)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

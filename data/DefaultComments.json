@@ -61,11 +61,11 @@
       },
       {
         "situation": "VAG_SUB_CATCH_WIN",
-        "comment": "Haha! I knew a horny {other:boy} like just can't resist once he's inside of me! Now finish it!"
+        "comment": "Haha! I knew a horny {other:boy} like {other:direct-object} just couldn't resist once {other:pronoun-action:were|was} inside of me! Now finish it!"
       },
       {
         "situation": "VAG_SUB_CATCH_LOSE",
-        "comment": "Ah, ah ah! Please..."
+        "comment": "Ah, ah, ah! Please..."
       },
       {
         "situation": "ANAL_DOM_CATCH_WIN",
@@ -178,8 +178,12 @@
         "comment": "I love fucking a pretty ass! You love it too, right? I know you do. Are you actually going to cum like this now?"
       },
       {
+        "situation": "ANAL_SUB_PITCH_WIN",
+        "comment": "I have a {other:boy} pegging {other:direct-object}self for me! Best. Day. Ever!"
+      },
+      {
         "situation": "ANAL_SUB_CATCH_WIN",
-        "comment": "I have a {other:boy} pegging himself for me! Best. Day. Ever!"
+        "comment": "Ha! Even like this you can't keep up with me!"
       },
       {
         "situation": "ANAL_DOM_CATCH_LOSE",
@@ -243,10 +247,6 @@
         "comment": "Ooh! Are you going to fill up my ass?"
       },
       {
-        "situation": "ANAL_SUB_CATCH_WIN",
-        "comment": "Ooh! Are you going to fill up my ass?"
-      },
-      {
         "situation": "MOUNT_DOM_WIN",
         "comment": "Nyanyanya! I'm going to win now!"
       },
@@ -297,11 +297,11 @@
       },
       {
         "situation": "ANAL_DOM_CATCH_WIN",
-        "comment": "So it's true that men enjoy anal more!"
+        "comment": "So it's true that pitchers enjoy anal more!"
       },
       {
         "situation": "ANAL_DOM_PITCH_WIN",
-        "comment": "Hah! I thought men would be ashamed of this, but you seem to like it! Show me how much!"
+        "comment": "Hah! I thought people were ashamed of this, but you seem to like it! Show me how much!"
       },
       {
         "situation": "BEHIND_DOM_WIN",

@@ -26,7 +26,6 @@ import nightgames.characters.custom.CommentSituation;
 import nightgames.characters.custom.RecruitmentData;
 import nightgames.combat.Combat;
 import nightgames.combat.CombatScene;
-import nightgames.combat.IEncounter;
 import nightgames.combat.Result;
 import nightgames.global.DebugFlags;
 import nightgames.global.Encs;
@@ -35,6 +34,8 @@ import nightgames.global.Global;
 import nightgames.items.Item;
 import nightgames.items.clothing.Clothing;
 import nightgames.items.clothing.ClothingSlot;
+import nightgames.match.Encounter;
+import nightgames.match.ftc.FTCMatch;
 import nightgames.skills.Nothing;
 import nightgames.skills.Skill;
 import nightgames.skills.Stage;
@@ -213,7 +214,7 @@ public class NPC extends Character {
         gainXP(getDefeatXP(target));
         target.gainXP(target.getVictoryXP(this));
         arousal.empty();
-        if (!target.human() || !Global.getMatch().condition.name().equals("norecovery")) {
+        if (!target.human() || !Global.getMatch().getCondition().name().equals("norecovery")) {
             target.arousal.empty();
         }
         if (this.has(Trait.insatiable)) {
@@ -275,10 +276,6 @@ public class NPC extends Character {
             pickSkillsWithGUI(c, target);
             return true;
         } else {
-            // if there's no strategy, try getting a new one.
-            if (!c.getCombatantData(this).getStrategy().isPresent()) {
-                c.getCombatantData(this).setStrategy(c, this, pickStrategy(c));
-            }
             // if the strategy is out of moves, try getting a new one.
             Collection<Skill> possibleSkills = c.getCombatantData(this).getStrategy().get().nextSkills(c, this);
             if (possibleSkills.isEmpty()) {
@@ -304,7 +301,7 @@ public class NPC extends Character {
             }
             HashSet<Skill> available = new HashSet<>();
             for (Skill act : possibleSkills) {
-                if (Skill.skillIsUsable(c, act) && cooldownAvailable(act)) {
+                if (Skill.isUsable(c, act) && cooldownAvailable(act)) {
                     available.add(act);
                 }
             }
@@ -317,11 +314,14 @@ public class NPC extends Character {
         }
     }
 
+    /**
+     * We choose a random strategy from union of the defaults and this NPC's
+     * personal strategies. The weights given to each strategy are dynamic,
+     * calculated from the state of the given Combat.
+     */
     private CombatStrategy pickStrategy(Combat c) {
         if (Global.random(100) < 60 ) {
-            if (Global.isDebugOn(DebugFlags.DEBUG_STRATEGIES)) {
-                System.out.println("Using default strategy");
-            }
+            Global.ifDebuggingPrintln(DebugFlags.DEBUG_STRATEGIES, "Using default strategy");
             // most of the time don't bother using a strategy.
             return new DefaultStrategy();
         }
@@ -339,9 +339,8 @@ public class NPC extends Character {
             lastWeight += strat.weight(c, this);
             stratsWithCumulativeWeights.put(lastWeight, strat);
         }
-        if (Global.isDebugOn(DebugFlags.DEBUG_STRATEGIES)) {
-            System.out.println("Available strategies: "+ stratsWithCumulativeWeights);
-        }
+        Global.ifDebuggingPrintln(DebugFlags.DEBUG_STRATEGIES,
+            "Available strategies: "+ stratsWithCumulativeWeights);
         double random = Global.randomdouble() * lastWeight;
         for (Map.Entry<Double, CombatStrategy> entry: stratsWithCumulativeWeights.entrySet()) {
             if (random < entry.getKey()) {
@@ -361,7 +360,7 @@ public class NPC extends Character {
             target = c.p1;
         }
         for (Skill act : getSkills()) {
-            if (Skill.skillIsUsable(c, act) && cooldownAvailable(act)) {
+            if (Skill.isUsable(c, act) && cooldownAvailable(act)) {
                 available.add(act);
             }
         }
@@ -469,20 +468,16 @@ public class NPC extends Character {
 
     @Override
     public void move() {
-        //this print was getting annoying, so I concatenated it with the one in match
-        /*if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {       
-            System.out.println(getTrueName() + " is moving with state " + state);
-        }*/
+        Global.ifDebuggingPrintln(DebugFlags.DEBUG_SCENE,
+            getTrueName() + " is moving with state " + state);
         if (state == State.combat) {
             if (location != null && location.fight != null) {
-                if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {
-                    System.out.println(getTrueName() + " is battling in the " + location.name);
-                }
+                Global.ifDebuggingPrintln(DebugFlags.DEBUG_SCENE,
+                    getTrueName() + " is battling in the " + location.name);
                 location.fight.battle();
             } else {
-                if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {
-                    System.out.println(getTrueName() + " is done battling in the " + location.name);
-                }
+                Global.ifDebuggingPrintln(DebugFlags.DEBUG_SCENE,
+                    getTrueName() + " is done battling in the " + location.name);
             }
         } else if (busy > 0) {
             busy--;
@@ -506,71 +501,70 @@ public class NPC extends Character {
             state = State.ready;
         } else if (state == State.masturbating) {
             masturbate();
-        } else {
-            if (!location.encounter(this)) {
-                
-                HashSet<Action> moves = new HashSet<>();
-                HashSet<IMovement> radar = new HashSet<>();
-                nightgames.ftc.FTCMatch match;
-                if (Global.checkFlag(Flag.FTC) && allowedActions().isEmpty()) {
-                    match = (nightgames.ftc.FTCMatch) Global.getMatch();
-                    if (match.isPrey(this) && match.getFlagHolder() == null) {
-                        moves.add(findPath(match.gps("Central Camp")));
-                        if (Global.isDebugOn(DebugFlags.DEBUG_FTC))
-                            System.out.println(getTrueName() + " moving to get flag (prey)");
-                    } else if (!match.isPrey(this) && has(Item.Flag) && !match.isBase(this, location)) {
-                        moves.add(findPath(match.getBase(this)));
-                        if (Global.isDebugOn(DebugFlags.DEBUG_FTC))
-                            System.out.println(getTrueName() + " moving to deliver flag (hunter)");
-                    } else if (!match.isPrey(this) && has(Item.Flag) && match.isBase(this, location)) {
-                        if (Global.isDebugOn(DebugFlags.DEBUG_FTC))
-                            System.out.println(getTrueName() + " delivering flag (hunter)");
-                        new Resupply().execute(this);
-                        return;
-                    }
+        } else if (!location.encounter(this)) {
+            HashSet<Action> moves = new HashSet<>();
+            HashSet<IMovement> radar = new HashSet<>();
+            FTCMatch match;
+            if (Global.checkFlag(Flag.FTC) && allowedActions().isEmpty()) {
+                match = (FTCMatch) Global.getMatch();
+                if (match.isPrey(this) && match.getFlagHolder() == null) {
+                    moves.add(findPath(match.gps("Central Camp").get()));
+                    Global.ifDebuggingPrintln(DebugFlags.DEBUG_FTC,
+                        getTrueName() + " moving to get flag (prey)");
+                } else if (!match.isPrey(this) && has(Item.Flag) && !match.isBase(this, location)) {
+                    moves.add(findPath(match.getBase(this)));
+                    Global.ifDebuggingPrintln(DebugFlags.DEBUG_FTC,
+                        getTrueName() + " moving to deliver flag (hunter)");
+                } else if (!match.isPrey(this) && has(Item.Flag) && match.isBase(this, location)) {
+                    Global.ifDebuggingPrintln(DebugFlags.DEBUG_FTC,
+                        getTrueName() + " delivering flag (hunter)");
+                    new Resupply().execute(this);
+                    return;
                 }
-                if (!has(Trait.immobile) && moves.isEmpty()) {
-                    for (Area path : location.adjacent) {
-                        moves.add(new Move(path));
-                        if (path.ping(get(Attribute.Perception))) {
-                            radar.add(path.id());
-                        }
-                    }
-                    if (getPure(Attribute.Cunning) >= 28) {
-                        for (Area path : location.shortcut) {
-                            moves.add(new Shortcut(path));
-                        }
-                    }
-                    if(getPure(Attribute.Ninjutsu)>=5){
-                        for(Area path:location.jump){
-                            moves.add(new Leap(path));
-                        }
-                    }
-                }
-                
-                pickAndDoAction(allowedActions(), moves, radar);
             }
+            if (!has(Trait.immobile) && moves.isEmpty()) {
+                for (Area path : location.adjacent) {
+                    moves.add(new Move(path));
+                    if (path.ping(get(Attribute.Perception))) {
+                        radar.add(path.id());
+                    }
+                }
+                if (getPure(Attribute.Cunning) >= 28) {
+                    for (Area path : location.shortcut) {
+                        moves.add(new Shortcut(path));
+                    }
+                }
+                if(getPure(Attribute.Ninjutsu)>=5){
+                    for(Area path:location.jump){
+                        moves.add(new Leap(path));
+                    }
+                }
+            }
+            
+            pickAndDoAction(allowedActions(), moves, radar);
         }
     }
     
     private void pickAndDoAction(Collection<Action> available, Collection<Action> moves, Collection<IMovement> radar) {
         if (available.isEmpty()) {
-            available.addAll(Global.getActions());
-            available.addAll(moves);
+            available.addAll(Global.getMatch().getAvailableActions(this));
+            if (Global.getMatch().canMoveOutOfCombat(this)) {
+                available.addAll(moves);
+            }
         }
         available.removeIf(a -> a == null || !a.usable(this));
         if (available.isEmpty()) {
             available.add(new Wait());
         }
         if (location.humanPresent()) {
-            Global.gui().message("You notice " + getName() + ai.move(available, radar).execute(this).describe());
+            Global.gui().message("You notice " + getName() + ai.move(available, radar).execute(this).describe(this));
         } else {
             ai.move(available, radar).execute(this);
         }
     }
 
     @Override
-    public void faceOff(Character opponent, IEncounter enc) {
+    public void faceOff(Character opponent, Encounter enc) {
         Encs encType;
         if (ai.fightFlight(opponent)) {
             encType = Encs.fight;
@@ -584,7 +578,7 @@ public class NPC extends Character {
     }
 
     @Override
-    public void spy(Character opponent, IEncounter enc) {
+    public void spy(Character opponent, Encounter enc) {
         if (ai.attack(opponent)) {
             enc.parse(Encs.ambush, this, opponent);
         } else {
@@ -602,7 +596,7 @@ public class NPC extends Character {
     }
 
     @Override
-    public void showerScene(Character target, IEncounter encounter) {
+    public void showerScene(Character target, Encounter encounter) {
         Encs response;
         if (this.has(Item.Aphrodisiac)) {
             // encounter.aphrodisiactrick(this, target);
@@ -618,7 +612,7 @@ public class NPC extends Character {
     }
 
     @Override
-    public void intervene(IEncounter enc, Character p1, Character p2) {
+    public void intervene(Encounter enc, Character p1, Character p2) {
         if (Global.random(20) + getAffection(p1) + (p1.has(Trait.sympathetic) ? 10 : 0) >= Global.random(20)
                         + getAffection(p2) + (p2.has(Trait.sympathetic) ? 10 : 0)) {
             enc.intrude(this, p1);
@@ -628,7 +622,7 @@ public class NPC extends Character {
     }
 
     @Override
-    public void promptTrap(IEncounter enc, Character target, Trap trap) {
+    public void promptTrap(Encounter enc, Character target, Trap trap) {
         if (ai.attack(target) && (!target.human() || !Global.isDebugOn(DebugFlags.DEBUG_SPECTATE))) {
             enc.trap(this, target, trap);
         } else {
@@ -738,9 +732,7 @@ public class NPC extends Character {
         for (WeightedSkill wskill : plist) {
             sum += wskill.weight;
             wlist.add(new WeightedSkill(sum, wskill.skill));
-            if (Global.isDebugOn(DebugFlags.DEBUG_SKILLS)) {
-                System.out.printf("%.1f %s\n", sum, wskill.skill);
-            }
+            Global.ifDebuggingPrintf(DebugFlags.DEBUG_SKILLS, "%.1f %s\n", sum, wskill.skill);
         }
 
         if (wlist.isEmpty()) {
@@ -748,9 +740,8 @@ public class NPC extends Character {
         }
         double s = Global.randomdouble() * sum;
         for (WeightedSkill wskill : wlist) {
-            if (Global.isDebugOn(DebugFlags.DEBUG_SKILLS)) {
-                System.out.printf("%.1f/%.1f %s\n", wskill.weight, s, wskill.skill);
-            }
+            Global.ifDebuggingPrintf(DebugFlags.DEBUG_SKILLS,
+                "%.1f/%.1f %s\n", wskill.weight, s, wskill.skill);
             if (wskill.weight > s) {
                 return wskill.skill;
             }
@@ -760,9 +751,8 @@ public class NPC extends Character {
 
     @Override
     public void emote(Emotion emo, int amt) {
-        if (Global.isDebugOn(DebugFlags.DEBUG_MOOD)) {
-            System.out.printf("%s: %+d %s", getTrueName(), amt, emo.name());
-        }
+        Global.ifDebuggingPrintf(DebugFlags.DEBUG_MOOD, 
+            "%s: %+d %s", getTrueName(), amt, emo.name());
         if (emo == mood) {
             // if already this mood, cut gain by half
             amt = Math.max(1, amt / 2);
@@ -781,9 +771,8 @@ public class NPC extends Character {
                     emotes.put(e2, emotes.get(e2) / 2);
                 }
                 mood = e;
-                if (Global.isDebugOn(DebugFlags.DEBUG_MOOD)) {
-                    System.out.printf("Moodswing: %s is now %s\n", getTrueName(), mood.name());
-                }
+                Global.ifDebuggingPrintf(DebugFlags.DEBUG_MOOD,
+                    "Moodswing: %s is now %s\n", getTrueName(), mood.name());
                 if (c.p1.human() || c.p2.human()) {
                     Global.gui().loadPortrait(c, c.p1, c.p2);
                 }

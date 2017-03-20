@@ -1,6 +1,7 @@
 package nightgames.pet;
 
 import java.util.HashMap;
+
 import nightgames.characters.Character;
 import nightgames.characters.Player;
 import nightgames.combat.Combat;

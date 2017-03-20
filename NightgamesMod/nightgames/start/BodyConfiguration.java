@@ -9,6 +9,7 @@ import java.util.Optional;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
 import nightgames.characters.body.AssPart;
 import nightgames.characters.body.Body;
 import nightgames.characters.body.BodyPart;
@@ -23,13 +24,13 @@ import nightgames.characters.body.TentaclePart;
 import nightgames.characters.body.WingsPart;
 import nightgames.characters.body.mods.ArcaneMod;
 import nightgames.characters.body.mods.CyberneticMod;
+import nightgames.characters.body.mods.DemonicMod;
 import nightgames.characters.body.mods.DivineMod;
 import nightgames.characters.body.mods.FeralMod;
 import nightgames.characters.body.mods.GooeyMod;
 import nightgames.characters.body.mods.PartMod;
 import nightgames.characters.body.mods.SecondPussyMod;
 import nightgames.characters.body.mods.SizeMod;
-import nightgames.characters.body.mods.DemonicMod;
 import nightgames.json.JsonUtils;
 
 class BodyConfiguration {

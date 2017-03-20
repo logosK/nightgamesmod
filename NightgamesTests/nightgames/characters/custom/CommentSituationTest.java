@@ -3,19 +3,35 @@ package nightgames.characters.custom;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import nightgames.Resources.ResourceLoader;
+import nightgames.actions.Movement;
+import nightgames.areas.Area;
+import nightgames.characters.BlankPersonality;
+import nightgames.characters.CharacterSex;
+import nightgames.characters.NPC;
+import nightgames.combat.Combat;
+import nightgames.global.Global;
+import nightgames.global.TestGlobal;
 import nightgames.json.JsonUtils;
-import org.hamcrest.core.IsEqual;
+import org.hamcrest.core.*;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.File;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * Tests for the CommentSituation class.
@@ -59,5 +75,13 @@ public class CommentSituationTest {
         for (Object commentJSON : failureCommentsJSON) {
             CommentSituation.parseComment((JsonObject) commentJSON, failureComments);
         }
+    }
+    
+    @Test public void loadDefaultComments() {
+        // Check that a couple of the default characters have lines loaded to ensure
+        // the json is well formed.
+        assertFalse(CommentSituation.getDefaultComments("Angel").isEmpty());
+        assertFalse(CommentSituation.getDefaultComments("Cassie").isEmpty());
+        assertFalse(CommentSituation.getDefaultComments("Jewel").isEmpty());
     }
 }

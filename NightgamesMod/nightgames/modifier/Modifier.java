@@ -1,14 +1,10 @@
 package nightgames.modifier;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import nightgames.actions.Action;
 import nightgames.characters.Character;
-import nightgames.global.Match;
+import nightgames.match.Match;
 import nightgames.modifier.skill.SkillModifier;
 
-@SuppressWarnings("unused")
 public interface Modifier {
 
     /**

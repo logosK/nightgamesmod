@@ -1,4 +1,4 @@
-package nightgames.ftc;
+package nightgames.match.ftc;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,9 +12,10 @@ import nightgames.areas.Area;
 import nightgames.characters.Character;
 import nightgames.global.Flag;
 import nightgames.global.Global;
-import nightgames.global.Match;
-import nightgames.global.MatchType;
 import nightgames.items.Item;
+import nightgames.match.Encounter;
+import nightgames.match.Match;
+import nightgames.match.MatchType;
 import nightgames.modifier.standard.FTCModifier;
 
 public class FTCMatch extends Match {
@@ -45,6 +46,11 @@ public class FTCMatch extends Match {
     }
 
     @Override
+    protected void preStart() {
+        Global.flag(Flag.FTC);
+    }
+    
+    @Override
     public MatchType getType() {
         return MatchType.FTC;
     }
@@ -70,10 +76,10 @@ public class FTCMatch extends Match {
     }
 
     @Override
-    public void end() {
-        super.end();
+    protected void afterEnd() {
         Global.unflag(Flag.FTC);
         combatants.forEach(c -> c.remove(Item.Flag));
+        super.afterEnd();
     }
 
     @Override
@@ -247,5 +253,10 @@ public class FTCMatch extends Match {
     @Override
     public String genericRoomDescription() {
         return "area";
+    }
+    
+    @Override
+    public Encounter buildEncounter(Character first, Character second, Area location) {
+        return new FTCEncounter(first, second, location);
     }
 }

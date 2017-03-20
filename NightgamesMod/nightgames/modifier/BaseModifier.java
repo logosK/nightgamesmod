@@ -7,7 +7,7 @@ import java.util.function.BiConsumer;
 import nightgames.actions.Action;
 import nightgames.characters.Character;
 import nightgames.items.Item;
-import nightgames.global.Match;
+import nightgames.match.Match;
 import nightgames.modifier.action.ActionModifier;
 import nightgames.modifier.clothing.ClothingModifier;
 import nightgames.modifier.item.ItemModifier;

@@ -1,11 +1,11 @@
-package nightgames.combat;
+package nightgames.match;
 
 import nightgames.characters.Character;
+import nightgames.combat.Combat;
 import nightgames.global.Encs;
 import nightgames.trap.Trap;
 
-// C# naming convention, I know, I know
-public interface IEncounter {
+public interface Encounter {
     boolean battle();
 
     void engage(Combat c);

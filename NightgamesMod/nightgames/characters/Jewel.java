@@ -610,7 +610,8 @@ public class Jewel extends BasePersonality {
     @Override
     public String defeat(Combat c, Result flag) {
         Character other = c.getOpponent(character);
-        if (character.has(Trait.fighter)) {
+        
+        if (character.has(Trait.fighter) && Global.randomBool()) {
             return "Jewel falters as her arousal begins to overwhelm her. You manage to force her to the ground and pin her hands. You press your thigh against her slick pussy, "
                             + "making her moan in pleasure. You rub her with your leg and suck on her neck until she can't resist grinding against you. She climaxes with a scream and you kiss "
                             + "her on the lips to quiet her. You start to get off her, but her voice stops you. <i>\"Don't tell me you're done already. I can keep going for another couple rounds "

@@ -173,16 +173,16 @@ public class FaceSit extends Skill {
                                 getSelf().subject(), target.nameOrPossessivePronoun(), target.directObject(),
                                 getSelf().possessiveAdjective(), target.possessiveAdjective(),
                                 getSelf().nameOrPossessivePronoun(), target.subject(),
-                                getSelf().subject(), target.subject(), target.action("suck"),
-                                getSelf().possessiveAdjective());
+                                Global.capitalizeFirstLetter(getSelf().subject()),
+                                target.subject(), target.action("suck"), getSelf().possessiveAdjective());
             } else {
                 return String.format("%s straddles %s head and dominates %s by putting %s balls in %s mouth. "
                                 + "%s gives a superior smile as %s obediently %s on %s nuts.",
                                 getSelf().subject(), target.nameOrPossessivePronoun(), target.directObject(),
                                 getSelf().possessiveAdjective(),
                                 target.possessiveAdjective(),
-                                getSelf().subject(), target.subject(), target.action("suck"),
-                                getSelf().possessiveAdjective());
+                                Global.capitalizeFirstLetter(getSelf().subject()), 
+                                target.subject(), target.action("suck"), getSelf().possessiveAdjective());
             }
         } else {
             if (modifier == Result.special) {

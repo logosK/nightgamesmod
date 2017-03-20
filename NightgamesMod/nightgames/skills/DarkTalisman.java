@@ -74,7 +74,7 @@ public class DarkTalisman extends Skill {
                             + target.pronoun() + " is currently unable to see, it crumbles uselessly in your hands.";
         } else {
             return "You brandish the dark talisman, which seems to glow with power. The trinket crumbles to dust, with "
-                            + target + " seemingly unimpressed.";
+                            + target.getName() + " seemingly unimpressed.";
         }
     }
 

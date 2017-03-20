@@ -1,23 +1,21 @@
-package nightgames.ftc;
+package nightgames.match.ftc;
 
 import nightgames.areas.Area;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.State;
 import nightgames.combat.Combat;
-import nightgames.combat.Encounter;
 import nightgames.global.Encs;
 import nightgames.global.Global;
 import nightgames.items.Item;
+import nightgames.match.defaults.DefaultEncounter;
 import nightgames.stance.Mount;
 import nightgames.stance.Pin;
 import nightgames.status.Bound;
 import nightgames.status.Flatfooted;
 import nightgames.trap.Trap;
 
-public class FTCEncounter extends Encounter {
-
-    private static final long serialVersionUID = 5190164935968044626L;
+public class FTCEncounter extends DefaultEncounter {
 
     public FTCEncounter(Character first, Character second, Area location) {
         super(first, second, location);

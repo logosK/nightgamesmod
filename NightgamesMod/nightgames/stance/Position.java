@@ -125,8 +125,12 @@ public abstract class Position implements Cloneable {
         return insertRandomDom(c, top);
     }
 
-    public Collection<Skill> availSkills(Combat c, Character self) {
-        return Collections.emptySet();
+    /** If the Position has a restricted set of usable skills, return those. Otherwise
+     *  return empty Optional to distinguish it from the case where the stance has
+     *  restricted all of a Character's options.
+     */
+    public Optional<Collection<Skill>> allowedSkills(Combat c, Character self) {
+        return Optional.empty();
     }
 
     public boolean canthrust(Combat c, Character self) {

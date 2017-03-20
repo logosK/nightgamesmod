@@ -4,8 +4,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 
-import javax.print.attribute.standard.MediaSize.Other;
-
 import nightgames.actions.Action;
 import nightgames.actions.IMovement;
 import nightgames.actions.Movement;
@@ -31,7 +29,6 @@ import nightgames.start.NpcConfiguration;
 import nightgames.status.Energized;
 import nightgames.status.Stsflag;
 
-@SuppressWarnings("unused")
 public class Cassie extends BasePersonality {
     /**
      *

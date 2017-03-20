@@ -3,6 +3,7 @@ package nightgames.skills;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import nightgames.characters.Character;
@@ -53,46 +54,65 @@ public abstract class Skill {
     public static void filterAllowedSkills(Combat c, Collection<Skill> skills, Character user) {
         filterAllowedSkills(c, skills, user, null);
     }
+    
+    
     public static void filterAllowedSkills(Combat c, Collection<Skill> skills, Character user, Character target) {
-        boolean filtered = false;
-        Set<Skill> stanceSkills = new HashSet<Skill>(c.getStance().availSkills(c, user));
-
-        if (stanceSkills.size() > 0) {
+        boolean restrictedByStance = false;
+        boolean restrictedByStatus = false;
+   
+        // If there's a set of skills we're restricted to because of stance, filter down to those
+        Optional<Collection<Skill>> possibleGivenStance = c.getStance().allowedSkills(c, user);
+        if (possibleGivenStance.isPresent()) {
+            Set<Skill> stanceSkills = new HashSet<Skill>(possibleGivenStance.get());
             skills.retainAll(stanceSkills);
-            filtered = true;
+            restrictedByStance = true;
         }
-        Set<Skill> availSkills = new HashSet<Skill>();
+        
+        // From the list of possible actions, possibly restricted by stance, we check Status
+        // effect to see if anything is forcing or preventing remaining skill choices.
+        Set<Skill> forcedGivenStatus = new HashSet<Skill>();
+        Set<Skill> statusBlacklist = new HashSet<Skill>();
         for (Status st : user.status) {
-            for (Skill sk : st.allowedSkills(c)) {
-                if ((target != null && skillIsUsable(c, sk, target)) || skillIsUsable(c, sk)) {
-                    availSkills.add(sk);
-                }
+            for (Skill sk : st.skillWhitelist(c)) {
+                forcedGivenStatus.add(sk);
+            }
+            for (Skill sk: st.skillBlacklist(c)) {
+                statusBlacklist.add(sk);
             }
         }
-        if (availSkills.size() > 0) {
-            skills.retainAll(availSkills);
-            filtered = true;
+        
+        // We don't take the blacklist into account when deciding whether skills were restricted
+        // by status because those it doesn't remove still have to be checked.
+        if (!forcedGivenStatus.isEmpty()) {
+            skills.retainAll(forcedGivenStatus);
+            restrictedByStatus = true;
         }
-        Set<Skill> noReqs = new HashSet<Skill>();
-        if (!filtered) {
-            // if the skill is restricted by status/stance, do not check for
-            // requirements
-            for (Skill sk : skills) {
-                if (sk.getTags(c).contains(SkillTag.mean) && user.has(Trait.softheart)) {
-                    continue;
-                }
-                if (!sk.requirements(c, target != null? target : sk.getDefaultTarget(c))) {
-                    noReqs.add(sk);
-                }
+       
+        // Both Stance and Status lists take precedence over the general checking we're about
+        // to do, so if we've used either then we're done.
+        if (restrictedByStance || restrictedByStatus) {
+            return;
+        }
+        
+        // Remove using generic requirements & tags.
+        Set<Skill> filtered = new HashSet<Skill>();
+        for (Skill sk : skills) {
+            if (sk.getTags(c).contains(SkillTag.mean) && user.has(Trait.softheart)) {
+                filtered.add(sk);
+                continue;
             }
-            skills.removeAll(noReqs);
+            if (!sk.requirements(c, target != null? target : sk.getDefaultTarget(c))) {
+                filtered.add(sk);
+            }
         }
+        skills.removeAll(filtered);
     }
 
-    public static boolean skillIsUsable(Combat c, Skill s) {
-        return skillIsUsable(c, s, null);
+    public static boolean isUsable(Combat c, Skill s) {
+        return isUsableOn(c, s, null);
     }
-    public static boolean skillIsUsable(Combat c, Skill s, Character target) {
+
+    public static boolean isUsableOn(Combat c, Skill s, Character target) {
         if (target == null) {
             target = s.getDefaultTarget(c);
         }
@@ -100,7 +120,7 @@ public abstract class Skill {
                         && s.type(c) != Tactics.fucking && s.type(c) != Tactics.pleasure && s.type(c) != Tactics.misc;
         boolean allureRestricted =
                         target.is(Stsflag.alluring) && (s.type(c) == Tactics.damage || s.type(c) == Tactics.debuff);
-        boolean modifierRestricted = !Global.getMatch().condition.getSkillModifier().allowedSkill(c,s);
+        boolean modifierRestricted = !Global.getMatch().getCondition().getSkillModifier().allowedSkill(c,s);
         boolean usable = s.usable(c, target) && s.getSelf().canSpend(s.getMojoCost(c)) && !charmRestricted
                         && !allureRestricted && !modifierRestricted;
         return usable;
@@ -111,7 +131,7 @@ public abstract class Skill {
                         && s.type(c) != Tactics.fucking && s.type(c) != Tactics.pleasure && s.type(c) != Tactics.misc;
         boolean allureRestricted =
                         target.is(Stsflag.alluring) && (s.type(c) == Tactics.damage || s.type(c) == Tactics.debuff);
-        boolean modifierRestricted = !Global.getMatch().condition.getSkillModifier().allowedSkill(c,s);
+        boolean modifierRestricted = !Global.getMatch().getCondition().getSkillModifier().allowedSkill(c,s);
         boolean usable = s.usable(c, target) && s.getSelf().canSpend(s.getMojoCost(c)-mojodiff) && !charmRestricted
                         && !allureRestricted && !modifierRestricted;
         return usable;

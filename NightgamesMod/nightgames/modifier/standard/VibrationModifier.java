@@ -35,8 +35,10 @@ public class VibrationModifier extends BaseModifier {
                             + "<i>\"Vibrating clit-ring,\"</i> she explains. <i>\"I'll give you a $" + bonus()
                             + " for each fight you win while this little fellow keeps you horny and ready to "
                             + "burst.\"</i>";
+        } else {
+            // Only available to those with genitals
+            return null;
         }
-        return null;
     }
 
     @Override

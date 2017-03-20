@@ -2,6 +2,7 @@ package nightgames.stance;
 
 import java.util.Collections;
 import java.util.List;
+
 import nightgames.characters.Character;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;

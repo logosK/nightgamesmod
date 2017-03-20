@@ -1,5 +1,6 @@
 package nightgames.modifier.standard;
 
+import nightgames.characters.Player;
 import nightgames.global.Global;
 import nightgames.modifier.BaseModifier;
 import nightgames.modifier.skill.BanTacticsModifier;
@@ -23,18 +24,22 @@ public class PacifistModifier extends BaseModifier {
 
     @Override
     public String intro() {
-        return "Lilly gives you a long, appraising look. <i>\"I'm trying to decide what sort of man you are. You strike me as a good guy, probably not the type "
-                        + "to hit a girl outside a match. I propose you try being a perfect gentleman by refusing to hit anyone during tonight's match too. So no slapping, "
-                        + "kicking, anything intended to purely cause pain. If you agree, I'll add $" + bonus()
+        return "Lilly gives you a long, appraising look. <i>\"I'm trying to decide what sort of person you are. You strike me as reasonable, probably not the type "
+                        + "to assault someone outside a match. I propose you try being a perfect " + Global.getPlayer().gentlemanOrLady() + " by refusing to hit "
+                        + "anyone during tonight's match too. So no slapping, kicking, anything intended to purely cause pain. If you agree, I'll add $" + bonus()
                         + " to each point. What do you say?\"</i>";
     }
 
     @Override
     public String acceptance() {
-        return "Lilly flashes you a broad grin and slaps you on the back uncomfortably hard. <i>\"Just so everyone's aware,\"</i> she calls out to your opponents, <i>\""
-                        + Global.getPlayer().getTrueName()
-                        + " has sworn that he won't hurt any girls tonight. So no matter how much anyone taunts him, whips him, or kicks him in the balls, he can't retaliate in "
-                        + "any way.\"</i> As you try to ignore a growing sense of dread, she leans close to your ear and whispers, <i>\"Good luck.\"</i>";
+        Player player = Global.getPlayer();
+        return String.format("Lilly flashes you a broad grin and slaps you on the back uncomfortably hard. <i>\"Just so everyone's aware,\"</i> she calls out to your opponents, <i>\""
+                        + "%s has sworn that %s won't hurt anyone tonight. So no matter how much anyone taunts %s, whips %s, or kicks %s in the crotch, %s can't retaliate in "
+                        + "any way.\"</i> As you try to ignore a growing sense of dread, she leans close to your ear and whispers, <i>\"Good luck.\"</i>",
+                        player.getTrueName(),
+                        player.pronoun(),
+                        player.directObject(), player.directObject(), player.directObject(),
+                        player.pronoun());
     }
 
 }

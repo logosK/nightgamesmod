@@ -13,7 +13,7 @@ public abstract class AbstractStrategy implements CombatStrategy {
     protected Set<Skill> getAllowedSkills(Combat c, nightgames.characters.Character self) {
         Set<Skill> availableSkills = new HashSet<>(self.getSkills());
         Skill.filterAllowedSkills(c, availableSkills, self);
-        Set<Skill> allowedSkills = availableSkills.stream().filter(skill -> Skill.skillIsUsable(c, skill)).collect(Collectors.toSet());
+        Set<Skill> allowedSkills = availableSkills.stream().filter(skill -> Skill.isUsable(c, skill)).collect(Collectors.toSet());
         return allowedSkills;
     }
     /*

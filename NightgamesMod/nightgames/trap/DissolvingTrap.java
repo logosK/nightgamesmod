@@ -6,7 +6,7 @@ import nightgames.characters.Trait;
 import nightgames.combat.Combat;
 import nightgames.global.Global;
 import nightgames.items.Item;
-import nightgames.combat.Encounter;
+import nightgames.match.Encounter;
 import nightgames.status.Flatfooted;
 
 public class DissolvingTrap extends Trap {

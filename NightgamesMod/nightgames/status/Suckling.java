@@ -27,7 +27,7 @@ public class Suckling extends DurationStatus {
     }
 
     @Override
-    public Collection<Skill> allowedSkills(Combat c) {
+    public Collection<Skill> skillWhitelist(Combat c) {
         return Collections.singleton((Skill) new Suckle(affected));
     }
 

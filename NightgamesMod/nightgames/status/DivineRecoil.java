@@ -8,6 +8,7 @@ import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
+import nightgames.skills.Skill;
 
 public class DivineRecoil extends DurationStatus {
     public double magnitude;
@@ -71,7 +72,7 @@ public class DivineRecoil extends DurationStatus {
     }
 
     @Override
-    public double sensitivity(double x) {
+    public double sensitivity(double x, BodyPart withPart, BodyPart targetPart, Skill skill) {
         return magnitude;
     }
 

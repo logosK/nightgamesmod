@@ -7,7 +7,7 @@ import nightgames.characters.Trait;
 import nightgames.global.Global;
 import nightgames.items.Item;
 import nightgames.items.clothing.ClothingSlot;
-import nightgames.combat.Encounter;
+import nightgames.match.Encounter;
 
 public class Spiderweb extends Trap {
 
@@ -69,6 +69,29 @@ public class Spiderweb extends Trap {
 
     @Override
     public void capitalize(Character attacker, Character victim, Encounter enc) {
+        onSpiderwebDefeat(attacker, victim, this);
+    }
+    
+    public static void onSpiderwebDefeat(Character attacker, Character victim, Spiderweb trap) {
+        printSpiderwebLines(attacker, victim);
+
+        // This code is identical to the encounter defeat code. If there are more use
+        // cases like this it needs to be encapsulated somewhere more general.
+        if (victim.mostlyNude()) {
+            attacker.gain(victim.getTrophy());
+        }
+        victim.nudify();
+        victim.defeated(attacker);
+        victim.getArousal().empty();
+        attacker.tempt(20);
+        Global.getMatch().score(attacker, victim.has(Trait.event) ? 5 : 1);
+        attacker.state = State.ready;
+        victim.state = State.ready;
+        victim.location().endEncounter();
+        victim.location().remove(trap);
+    }
+    
+    private static void printSpiderwebLines(Character attacker, Character victim) {
         if (attacker.human()) {
             Global.gui().message(
                             victim.getName() + " is naked and helpless in the giant rope web. You approach slowly, taking in the lovely view of her body. You trail your fingers "
@@ -88,18 +111,6 @@ public class Spiderweb extends Trap {
                             + "now and fondles your balls. When you cum, you shoot your load onto her face and chest. You hang in the rope web, literally and figuratively drained. "
                             + attacker.getName() + " " + "gratiously unties you and helps you down.");
         }
-        if (victim.getOutfit().getBottomOfSlot(ClothingSlot.bottom) != null) {
-            attacker.gain(victim.getTrophy());
-        }
-        victim.nudify();
-        victim.defeated(attacker);
-        victim.getArousal().empty();
-        attacker.tempt(20);
-        Global.getMatch().score(attacker, victim.has(Trait.event) ? 5 : 1);
-        attacker.state = State.ready;
-        victim.state = State.ready;
-        victim.location().endEncounter();
-        victim.location().remove(this);
     }
 
 }

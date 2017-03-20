@@ -126,7 +126,7 @@ public class SkillsTest {
 			for (Skill skill : Global.getSkillPool()) {
 				Combat cloned = c.clone();
 				Skill used = skill.copy(cloned.p1);
-				if (Skill.skillIsUsable(cloned, used)) {
+				if (Skill.isUsable(cloned, used)) {
 					System.out.println("["+cloned.getStance().getClass().getSimpleName()+"] Skill usable: " + used.getLabel(cloned) + ".");
 					used.resolve(cloned, cloned.p2);
 				}

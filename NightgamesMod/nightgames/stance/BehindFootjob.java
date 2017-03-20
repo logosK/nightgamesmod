@@ -146,7 +146,7 @@ public class BehindFootjob extends AbstractBehindStance {
     public void struggle(Combat c, Character struggler) {
         if (struggler.hasDick()) {
             c.write(struggler, Global.format("{self:SUBJECT-ACTION:attempt} to twist out of {other:name-possessive} grip, but "
-                            + " {other:pronoun-action:wraps} {other:possessive} legs around {self:possessive} waist and steps "
+                            + " {other:pronoun-action:wrap} {other:possessive} legs around {self:possessive} waist and {other:pronoun-action:step} "
                             + "on {self:possessive} cock hard, making {self:direct-object} yelp.", struggler, top));
             struggler.body.pleasure(top, top.body.getRandom("feet"), struggler.body.getRandomCock(), Global.random(6, 11), c);
         } else {

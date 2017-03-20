@@ -280,15 +280,17 @@ public class RequirementTest {
     }
 
     @Test public void winningTest() throws Exception {
-        assertThat(winning().meets(combat, self, other), is(false));
-        assertThat(winning().meets(combat, other, self), is(false));
-        self.getWillpower().setTemporaryMax(500);
-        self.getWillpower().set(500);
         assertThat(winning().meets(combat, self, other), is(true));
-        assertThat(winning().meets(combat, other, self), is(false));
-        other.getWillpower().setTemporaryMax(1000);
-        other.getWillpower().set(1000);
+        assertThat(winning().meets(combat, other, self), is(true));
+
+        self.getWillpower().setTemporaryMax(50);
+        self.getWillpower().set(25);
         assertThat(winning().meets(combat, self, other), is(false));
         assertThat(winning().meets(combat, other, self), is(true));
+
+        other.getWillpower().setTemporaryMax(1000);
+        other.getWillpower().set(100);
+        assertThat(winning().meets(combat, self, other), is(true));
+        assertThat(winning().meets(combat, other, self), is(false));
     }
 }

@@ -9,6 +9,7 @@ import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.global.Global;
 import nightgames.nskills.tags.SkillTag;
+import nightgames.skills.Focus;
 import nightgames.skills.Skill;
 import nightgames.skills.Tactics;
 
@@ -24,6 +25,10 @@ public class ForeplayStrategy extends KnockdownThenActionStrategy {
         if (c.getStance().havingSex(c) && c.getStance().getPartsFor(c, self, c.getStance().getPartner(c, self)).stream().allMatch(part -> part.isGenital())) {
             // terminate this strategy if already fucking
             return Optional.of(Collections.emptySet());
+        }
+        Focus.OnForeplay focus = new Focus.OnForeplay(self);
+        if (focus.usable(c, c.getOpponent(self))) {
+            return Optional.of(Collections.singleton(focus));
         }
         return emptyIfSetEmpty(allowedSkills.stream().filter(skill -> Tactics.pleasure.equals(skill.type(c)) || skill.getTags(c).contains(SkillTag.stripping)).collect(Collectors.toSet()));
     }

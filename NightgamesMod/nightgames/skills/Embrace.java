@@ -94,7 +94,7 @@ public class Embrace extends Skill {
                                     + " appendage does not stop, though, and keeps on pistoning in and out"
                                     + " at a speed which is leaving {other:name-do} even more breathless"
                                     + " than {other:pronoun} already {other:action:were|was}.", getSelf(), target));
-                    return new TailFucked(getSelf(), target, "pussy");
+                    return new TailFucked(target, getSelf(), "pussy");
                 }, Stsflag.tailfucked);
             } else {
                 next = new IncubusEmbrace(getSelf(), target);

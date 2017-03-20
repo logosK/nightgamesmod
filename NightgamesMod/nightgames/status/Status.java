@@ -36,7 +36,19 @@ public abstract class Status implements Cloneable {
         return name;
     }
 
-    public Collection<Skill> allowedSkills(Combat c) {
+    /** The set of skills that this status effect restricts Characters to using. The union of
+     * these sets is taken if a Character is afflicted by multiple Statuses using this feature,
+     * so it's still possible that the Character will use a skill outside of this set.
+     */
+    public Collection<Skill> skillWhitelist(Combat c) {
+        return Collections.emptySet();
+    }
+    
+    /** The set of skills that this Status prevents a Character from using. This takes
+     * precedence over the whitelist. The sets of blackslists from all Statuses are also
+     * unioned.
+     */
+    public Set<Skill> skillBlacklist(Combat c) {
         return Collections.emptySet();
     }
     
@@ -56,15 +68,21 @@ public abstract class Status implements Cloneable {
 
     public abstract int regen(Combat c);
 
+    // Increases damage received by the returned value
     public abstract int damage(Combat c, int x);
 
+    // Increases pleasure received by the returned value
     public abstract double pleasure(Combat c, BodyPart withPart, BodyPart targetPart, double x);
 
     public abstract int weakened(Combat c, int x);
 
     public abstract int tempted(Combat c, int x);
 
-    public double sensitivity(double x) {
+    public double sensitivity(double x, BodyPart withPart, BodyPart targetPart, Skill skill) {
+        return 0;
+    }
+    
+    public double opponentSensitivity(double x, BodyPart withPart, BodyPart targetPart, Skill skill) {
         return 0;
     }
 

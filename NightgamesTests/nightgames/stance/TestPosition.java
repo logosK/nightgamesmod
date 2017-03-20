@@ -67,7 +67,8 @@ public class TestPosition extends Position {
     }
 
     @Override public String image() {
-        return null;
+        // No reason to introduce null here, plus it breaks things. Using empty str instead.
+        return "";
     }
 
     @Override

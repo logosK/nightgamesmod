@@ -7,7 +7,7 @@ import nightgames.combat.Combat;
 import nightgames.global.Global;
 import nightgames.items.Item;
 import nightgames.items.clothing.ClothingTrait;
-import nightgames.combat.Encounter;
+import nightgames.match.Encounter;
 import nightgames.stance.StandingOver;
 import nightgames.status.Flatfooted;
 import nightgames.status.Winded;

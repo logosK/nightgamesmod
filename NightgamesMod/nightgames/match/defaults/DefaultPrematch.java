@@ -1,35 +1,68 @@
-package nightgames.global;
+package nightgames.match.defaults;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
-import nightgames.characters.Player;
+import nightgames.global.Flag;
+import nightgames.global.Global;
 import nightgames.gui.KeyableButton;
-import nightgames.gui.SaveButton;
 import nightgames.gui.SceneButton;
-import nightgames.modifier.Modifier;
+import nightgames.match.Prematch;
+import nightgames.match.PrematchEvent;
 import nightgames.modifier.standard.MayaModifier;
 import nightgames.modifier.standard.NoModifier;
 import nightgames.modifier.standard.UnderwearOnlyModifier;
 
-public class Prematch implements Scene {
-    private Modifier type;
+public class DefaultPrematch extends Prematch {
 
-    public Prematch(Player player) {
-        Global.current = this;
-        Global.unflag(Flag.victory);
-        List<KeyableButton> choice = new ArrayList<KeyableButton>();
+    public DefaultPrematch() {
+        super(new EarlyGameEvent(), new FirstLillyEvent(), new MayaEvent(), new AiriEvent());
+    }
+    
+    @Override
+    public void respond(String response) {
         String message = "";
-        if (player.getLevel() < 5) {
-            message += "You arrive at the student union a few minutes before the start of the match. "
-                            + "You have enough time to check in and make idle chat with your opponents before "
-                            + "you head to your assigned starting point and wait. At exactly 10:00, the match is on.";
+        List<KeyableButton> choice = new ArrayList<KeyableButton>();
+        if (response.startsWith("Start")) {
+            Global.setUpMatch(type);
+        } else if (response.startsWith("Not")) {
             type = new NoModifier();
+            Global.setUpMatch(type);
+        } else if (response.startsWith("Do")) {
+            message += type.acceptance();
             choice.add(new SceneButton("Start The Match"));
-        } else if (!Global.checkFlag(Flag.metLilly)) {
-            message += "You get to the student union a little earlier than usual. Cassie and Jewel are there already and you spend a few minutes talking with them while "
+            Global.gui().prompt(message, choice);
+        }
+    }
+
+    static class EarlyGameEvent extends PrematchEvent {
+
+        EarlyGameEvent() {
+            super("You arrive at the student union a few minutes before the start of the match. "
+                            + "You have enough time to check in and make idle chat with your opponents before "
+                            + "you head to your assigned starting point and wait. At exactly 10:00, the match is on.",
+                            new NoModifier(), Collections.singletonList(new SceneButton("Start the Match")));
+        }
+
+        @Override
+        protected void extraEffects() {
+
+        }
+
+        @Override
+        protected boolean valid() {
+            return Global.getPlayer()
+                         .getLevel() < 5;
+        }
+
+    }
+
+    static class FirstLillyEvent extends PrematchEvent {
+
+        FirstLillyEvent() {
+            super("You get to the student union a little earlier than usual. Cassie and Jewel are there already and you spend a few minutes talking with them while "
                             + "you wait for the other girls to show up. A few people are still rushing around making preparations, but it's not clear exactly what they're doing. "
                             + "Other than making sure there are enough spare clothes to change into, there shouldn't be too much setup required. Maybe they're responsible for "
                             + "making sure the game area is clear of normal students, but you can't imagine how a couple students could pull that off.<br/><br/>A girl who appears to be "
@@ -47,13 +80,27 @@ public class Prematch implements Scene {
                             + "so it's better for everyone.\"</i> That's.... You're not entirely sure how to respond to that. <i>\"For the first rule, I'll start with something simple: for "
                             + "tonight's match, you're only allowed to wear your underwear. Even when you come back here for a change of clothes, you'll only get your underwear. If you "
                             + "agree to this, I'll throw an extra $" + new UnderwearOnlyModifier().bonus()
-                            + " on top of your normal prize for each point you score. Interested?\"</i>";
-            type = new UnderwearOnlyModifier();
+                            + " on top of your normal prize for each point you score. Interested?\"</i>",
+                            new UnderwearOnlyModifier(),
+                            Arrays.asList(new SceneButton("Do It"), new SceneButton("Not Interested")));
+        }
+
+        @Override
+        protected void extraEffects() {
             Global.flag(Flag.metLilly);
-            choice.add(new SceneButton("Do it"));
-            choice.add(new SceneButton("Not interested"));
-        } else if (player.getRank() > 0 && Global.getDate() % 30 == 0) {
-            message = message + "When you arrive at the student union, you notice the girls have all "
+        }
+
+        @Override
+        protected boolean valid() {
+            return !Global.checkFlag(Flag.metLilly);
+        }
+
+    }
+
+    static class MayaEvent extends PrematchEvent {
+
+        MayaEvent() {
+            super("When you arrive at the student union, you notice the girls have all "
                             + "gathered around Lilly. As you get closer, you notice Maya, the recruiter"
                             + ", standing next to her. She isn't usually present during a match, or at"
                             + " least you haven't seen her, so this must be a special occasion. Lilly"
@@ -74,49 +121,57 @@ public class Prematch implements Scene {
                             + "Lilly takes the lead again. <i>\"If any of you actually manage to make "
                             + "Maya cum, I'll give you multiple points for it. Otherwise you can just"
                             + " consider this a learning opportunity and a chance to experience an "
-                            + "orgasm at the hands of a master.\"</i><br/><br/>\n\n";
+                            + "orgasm at the hands of a master.\"</i><br/><br/>\n\n", new MayaModifier(),
+                            Collections.singletonList(new SceneButton("Start the Match")));
+        }
 
-            type = new MayaModifier();
-            choice.add(new SceneButton("Start The Match"));
-        } else {
-            message += "You arrive at the student union with about 10 minutes to spare before the start of the match. You greet each of the girls and make some idle chatter with "
-                            + "them before you check in with Lilly to see if she has any custom rules for you.<br/><br/>";
-            type = offer(player);
-            message += type.intro();
-            if (type.name().equals("normal")) {
-                choice.add(new SceneButton("Start The Match"));
+        @Override
+        protected void extraEffects() {
+
+        }
+
+        @Override
+        protected boolean valid() {
+            return Global.getPlayer()
+                         .getRank() > 0 && Global.getDate() % 30 == 0;
+        }
+
+    }
+
+    static class AiriEvent extends PrematchEvent {
+
+        AiriEvent() {
+            message = "You arrive at the student union with about 10 minutes to spare before the start of the match. "
+                            + "You greet each of the girls and make some idle chatter with "
+                            + "them before you check in with Lilly to see if she has any custom rules for you.<br/><br/>"
+                            + "Before you have a chance to ask though, Lilly mentions to you that there is a new "
+                            + "competitor. However, when you ask her for details, she only mentions that her "
+                            + "name is Airi, and that she's a Biology student, while holding"
+                            + " a visible smirk. Your instincts tells you something is wrong, but"
+                            + " you decide to ignore it for now.<br/><br/>"
+                            + "<b>Airi has entered the games.</b><br/><br/>";
+            if (type.name()
+                    .equals("normal")) {
+                buttons.add(new SceneButton("Start The Match"));
             } else {
-                choice.add(new SceneButton("Do it"));
-                choice.add(new SceneButton("Not interested"));
+                buttons.add(new SceneButton("Do it"));
+                buttons.add(new SceneButton("Not interested"));
             }
         }
 
-        choice.add(new SaveButton());
-        Global.gui().prompt(message, choice);
+        @Override
+        protected void extraEffects() {
+            Global.newChallenger(Global.getNPCByType("Airi").ai);
+            Global.flag(Flag.Airi);
+        }
+
+        @Override
+        protected boolean valid() {
+            return Global.getPlayer().getRank() > 0 
+                            && !Global.checkFlag(Flag.AiriDisabled) 
+                            && !Global.characterTypeInGame("Airi");
+        }
+
     }
 
-    private Modifier offer(Player player) {
-        if (Global.random(10) > 4) {
-            return new NoModifier();
-        }
-        Set<Modifier> modifiers = new HashSet<>(Global.getModifierPool());
-        modifiers.removeIf(mod -> !mod.isApplicable() || mod.name().equals("normal"));
-        return Global.pickRandom(modifiers.toArray(new Modifier[] {})).get();
-    }
-
-    @Override
-    public void respond(String response) {
-        String message = "";
-        List<KeyableButton> choice = new ArrayList<KeyableButton>();
-        if (response.startsWith("Start")) {
-            Global.setUpMatch(type);
-        } else if (response.startsWith("Not")) {
-            type = new NoModifier();
-            Global.setUpMatch(type);
-        } else if (response.startsWith("Do")) {
-            message += type.acceptance();
-            choice.add(new SceneButton("Start The Match"));
-            Global.gui().prompt(message, choice);
-        }
-    }
 }

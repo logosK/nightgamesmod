@@ -22,10 +22,11 @@ public class NoItemsModifier extends BaseModifier {
 
     @Override
     public String intro() {
-        return "<i>\"Tell me " + Global.getPlayer().getTrueName()
-                        + ", are you the sort of player who spends all his winnings on disposable toys and traps to give yourself the edge? You'd "
-                        + "probably be better off saving the money and relying more on your own abilities. If you can go the entire night without using any consumable items, I'll "
-                        + "toss you a $" + bonus() + " bonus.\"</i>";
+        return String.format("<i>\"Tell me %s, are you the sort of player who spends all your winnings on disposable toys and traps to give"
+                        + " yourself the edge? You'd probably be better off saving the money and relying more on your own "
+                        + "abilities. If you can go the entire night without using any consumable items, I'll toss you a $%d bonus.\"</i>",
+                        Global.getPlayer().getTrueName(),
+                        bonus());
     }
 
     @Override

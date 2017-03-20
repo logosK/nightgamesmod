@@ -42,7 +42,7 @@ public class IncubusEmbrace extends MaledomSexStance {
             bottom.add(c, statusBuilder.get());
         } else if (flag == null && bottom.hasBreasts()) {
             FondleBreasts fb = new FondleBreasts(top);
-            if (Skill.skillIsUsable(c, fb, bottom)) {
+            if (Skill.isUsableOn(c, fb, bottom)) {
                 fb.resolve(c, bottom);
             }
         }

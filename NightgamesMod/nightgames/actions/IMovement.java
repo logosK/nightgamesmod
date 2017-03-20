@@ -1,7 +1,9 @@
 package nightgames.actions;
 
+import nightgames.characters.Character;
+
 public interface IMovement {
 
-    String describe();
+    String describe(Character doer);
     
 }

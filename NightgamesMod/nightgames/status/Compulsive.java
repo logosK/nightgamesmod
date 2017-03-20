@@ -1,9 +1,9 @@
 package nightgames.status;
 
+import java.util.Optional;
+
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
-
-import java.util.Optional;
 
 public interface Compulsive {
 

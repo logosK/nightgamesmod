@@ -111,16 +111,21 @@ public class CombatantData implements Cloneable {
         return Collections.unmodifiableList(removedItems);
     }
     
+    public boolean hasStrategy() {
+        return strategy.isPresent();
+    }
+    
     public Optional<CombatStrategy> getStrategy() {
         return strategy;
     }
 
-    public void setStrategy(Combat c, Character self, CombatStrategy strategy) {
+    public CombatStrategy setStrategy(Combat c, Character self, CombatStrategy strategy) {
         this.strategy = Optional.ofNullable(strategy);
         this.strategyDuration = strategy.initialDuration(c, self);
         if (Global.isDebugOn(DebugFlags.DEBUG_STRATEGIES)) {
             System.out.printf("%s is now using %s\n", self.getTrueName(), strategy.getClass().getSimpleName());
         }
+        return this.strategy.get();
     }
 
     public void tick(Combat c) {

@@ -1,8 +1,8 @@
 package nightgames.stance;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
@@ -108,9 +108,9 @@ public class NursingHold extends AbstractFacingStance {
     }
 
     @Override
-    public Collection<Skill> availSkills(Combat c, Character self) {
+    public Optional<Collection<Skill>> allowedSkills(Combat c, Character self) {
         if (self != bottom) {
-            return Collections.emptySet();
+            return Optional.empty();
         } else {
             Collection<Skill> avail = new HashSet<Skill>();
             avail.add(new Suckle(bottom));
@@ -118,7 +118,7 @@ public class NursingHold extends AbstractFacingStance {
             avail.add(new Struggle(bottom));
             avail.add(new Nothing(bottom));
             avail.add(new Wait(bottom));
-            return avail;
+            return Optional.of(avail);
         }
     }
 

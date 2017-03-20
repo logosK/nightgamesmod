@@ -27,13 +27,13 @@ import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.mods.ArcaneMod;
 import nightgames.characters.body.mods.CyberneticMod;
+import nightgames.characters.body.mods.DemonicMod;
 import nightgames.characters.body.mods.DivineMod;
 import nightgames.characters.body.mods.FeralMod;
 import nightgames.characters.body.mods.FieryMod;
 import nightgames.characters.body.mods.GooeyMod;
 import nightgames.characters.body.mods.PartMod;
 import nightgames.characters.body.mods.PlantMod;
-import nightgames.characters.body.mods.DemonicMod;
 import nightgames.global.DebugFlags;
 import nightgames.global.Flag;
 import nightgames.global.Global;
@@ -958,7 +958,7 @@ public class Combat extends Observable implements Cloneable {
         while (!avail.isEmpty()) {
             Skill skill = avail.remove(avail.size() - 1)
                                .copy(self);
-            if (Skill.skillIsUsable(this, skill, other)) {
+            if (Skill.isUsableOn(this, skill, other)) {
                 write(other, Global.format(
                                 "<b>{other:NAME-POSSESSIVE} divine aura forces {self:subject} to forget what {self:pronoun} {self:action:were|was} doing and crawl to {other:direct-object} on {self:possessive} knees.</b>",
                                 self, other));
@@ -1214,7 +1214,7 @@ public class Combat extends Observable implements Cloneable {
     boolean resolveSkill(Skill skill, Character target) {
         boolean orgasmed = false;
         boolean madeContact = false;
-        if (Skill.skillIsUsable(this, skill, target)) {
+        if (Skill.isUsableOn(this, skill, target)) {
             boolean success;
             if (!target.human() || !target.is(Stsflag.blinded)) {
                 write(skill.user()
@@ -1546,10 +1546,10 @@ public class Combat extends Observable implements Cloneable {
         if (!p2.has(Trait.Pseudopod)) {
             Global.getMatch().getMatchData().getDataFor(p2).setArmManager(getCombatantData(p2).getManager());
         }
+        listen(l -> l.postEnd(winner));
         if (!ding && beingObserved) {
             Global.gui().endCombat();
         }
-        listen(l -> l.postEnd(winner));
     }
 
     private boolean doPostCombatScenes(NPC npc) {

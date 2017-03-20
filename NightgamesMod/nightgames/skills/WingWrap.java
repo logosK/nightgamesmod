@@ -54,7 +54,7 @@ public class WingWrap extends Skill {
                         && c.getStance()
                             .havingSex(c)) {
             SubmissiveHold hold = new SubmissiveHold(getSelf());
-            if (Skill.skillIsUsable(c, hold, target)) {
+            if (Skill.isUsableOn(c, hold, target)) {
                 c.write(getSelf(),
                                 Global.format("Taking full advantage of {other:name-possessive}"
                                                 + " surprise, {self:subject-action} uses more conventional means"

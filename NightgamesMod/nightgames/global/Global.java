@@ -96,14 +96,13 @@ import nightgames.characters.custom.JsonSourceNPCDataLoader;
 import nightgames.characters.custom.NPCData;
 import nightgames.combat.Combat;
 import nightgames.daytime.Daytime;
-import nightgames.ftc.FTCMatch;
 import nightgames.gui.GUI;
 import nightgames.gui.HeadlessGui;
 import nightgames.items.Item;
 import nightgames.items.clothing.Clothing;
 import nightgames.json.JsonUtils;
-import nightgames.global.Match;
-import nightgames.global.MatchType;
+import nightgames.match.Match;
+import nightgames.match.MatchType;
 import nightgames.modifier.CustomModifierLoader;
 import nightgames.modifier.Modifier;
 import nightgames.modifier.standard.FTCModifier;
@@ -169,6 +168,7 @@ public class Global {
     public static double xpRate = 1.0;
     public static ContextFactory factory;
     public static Context cx;
+    private static MatchType currentMatchType = MatchType.NORMAL;
     private static Character noneCharacter = new NPC("none", 1, null);
     private static HashMap<String, MatchAction> matchActions;
     private static final int LINEUP_SIZE = 5;
@@ -239,6 +239,18 @@ public class Global {
 
     public static boolean isDebugOn(DebugFlags flag) {
         return debug[flag.ordinal()] && debugSimulation == 0;
+    }
+    
+    public static void ifDebuggingPrintf(DebugFlags flag, String formatted, Object... args) {
+        if (isDebugOn(flag)) {
+            System.out.printf(formatted, args);
+        }
+    }
+    
+    public static void ifDebuggingPrintln(DebugFlags flag, String output) {
+        if (isDebugOn(flag)) {
+            System.out.println(output);
+        }
     }
 
     public static void newGame(String playerName, Optional<StartConfiguration> config, List<Trait> pickedTraits,
@@ -582,6 +594,9 @@ public class Global {
         getSkillPool().add(new KiShout(ch));
         getSkillPool().add(new PressurePoint(ch));
         getSkillPool().add(new Deepen(ch));
+        getSkillPool().add(new Focus.OnForeplay(ch));
+        getSkillPool().add(new Focus.OnSex(ch));
+        getSkillPool().add(new Focus.OnRecovery(ch));
 
         if (Global.isDebugOn(DebugFlags.DEBUG_SKILLS)) {
             getSkillPool().add(new SelfStun(ch));
@@ -787,14 +802,16 @@ public class Global {
     }
 
     public static void startNight() {
-        decideMatchType().buildPrematch(human);
+        currentMatchType = decideMatchType();
+        currentMatchType.runPrematch();
     }
 
     public static List<Character> getMatchParticipantsInAffectionOrder() {
         if (match == null) {
             return Collections.emptyList();
         }
-        return getInAffectionOrder(match.combatants.stream().filter(c -> !c.human()).collect(Collectors.toList()));
+        return getInAffectionOrder(match.getCombatants().stream()
+                        .filter(c -> !c.human()).collect(Collectors.toList()));
     }
 
     public static List<Character> getInAffectionOrder(List<Character> viableList) {
@@ -886,7 +903,7 @@ public class Global {
             withEffect.ifPresent(s -> Global.getPlayer().addNonCombat(s));
         });
         Global.gui().startMatch();
-        match.round();
+        match.start();
     }
 
     public static String gainSkills(Character c) {
@@ -1225,7 +1242,6 @@ public class Global {
         characterPool.put(eve.getCharacter().getType(), eve.getCharacter());
         characterPool.put(maya.getCharacter().getType(), maya.getCharacter());
         characterPool.put(yui.getCharacter().getType(), yui.getCharacter());
-        debugChars.add(reyka.getCharacter());
     }
     
     public static void loadWithDialog() {
@@ -1331,7 +1347,7 @@ public class Global {
         System.err.println("NPC \"" + name + "\" is not loaded.");
         return null;
     }
-
+    
     public static void main(String[] args) {
         hookLogwriter();
         for (String arg : args) {
@@ -1624,6 +1640,13 @@ public class Global {
             }
             return "";
         });
+        matchActions.put("reflexive", (self, first, second, third) -> {
+           if (self.useFemalePronouns()) {
+               return "herself";
+           } else {
+               return "himself";
+           }
+        });
     }
 
     public static String format(String format, Character self, Character target, Object... strings) {
@@ -1715,31 +1738,14 @@ public class Global {
     }
 
     public static MatchType decideMatchType() {
+        if (getPlayer().getLevel() >= 15 && random(10) < 2) {
+            return MatchType.TEAM;
+        }
         return MatchType.NORMAL;
-        /*
-         * TODO Lots of FTC bugs right now, will disable it for the time being.
-         * Enable again once some of the bugs are sorted out.
-        
-        if (checkFlag(Flag.NoFTC)) return MatchType.NORMAL;
-        
-        if (human.getLevel() < 15)
-            return MatchType.NORMAL;
-        if (!checkFlag(Flag.didFTC))
-            return MatchType.FTC;
-        return isDebugOn(DebugFlags.DEBUG_FTC) || Global.random(10) == 0 ? MatchType.FTC : MatchType.NORMAL;
-        */
     }
 
     private static Match buildMatch(Collection<Character> combatants, Modifier mod) {
-        if (mod.name().equals("ftc")) {
-            if (combatants.size() < LINEUP_SIZE) {
-                return new Match(combatants, new NoModifier());
-            }
-            flag(Flag.FTC);
-            return new FTCMatch(combatants, ((FTCModifier) mod).getPrey());
-        } else {
-            return new Match(combatants, mod);
-        }
+        return currentMatchType.buildMatch(combatants, mod);
     }
 
     public static HashSet<Character> getParticipants() {
@@ -1828,5 +1834,8 @@ public class Global {
     
     public static Optional<ButtslutQuest> getButtslutQuest() {
         return quests.stream().filter(q -> q instanceof ButtslutQuest).map(q -> (ButtslutQuest)q).findFirst();
+    }
+    public static boolean randomBool() {
+        return rng.nextBoolean();
     }
 }

@@ -50,19 +50,7 @@ public class BlackMarket extends Store {
         if (player.human()) {
             if (Global.checkFlag(Flag.blackMarketPlus)) {
                 if (!Global.checkFlag(Flag.metRin)) {
-                    Global.gui().message(
-                                    "You knock on the door to the black market. When Ridley answers, you tell him that you're here to see his premium goods on behalf of "
-                                                    + "Callisto. Ridley glances back into the room for a moment and then walks past you without saying anything. You stand there confused, until you see the "
-                                                    + "girl on the couch stand up and approach you with a smile. <i>\"Hello "
-                                                    + player.getTrueName()
-                                                    + ",\"</i> she says while extending her hand. <i>\"I'm Rin Callisto. You shouldn't "
-                                                    + "be surprised I know who you are, you've been putting on a good show lately.\"</i> You've seen her here before, but you've never taken a good look at her. She "
-                                                    + "has elegant features, shoulder length black hair, and looks a couple years older than you. She's very pretty, but you overlooked her because you assumed she "
-                                                    + "was Ridley's girlfriend. <i>\"Mike isn't the most pleasant company, but he's a good middleman. He keeps his mouth shut and he doesn't ask questions.\"</i> He must "
-                                                    + "not be reliable enough to earn her trust, otherwise she wouldn't feel the need to keep an eye on him all the time. <i>\"Aesop sold you my name, right? I'll have "
-                                                    + "to collect my share from him later. I have many items you won't find anywhere else; items that will give you an edge in the games. Not all of them are completely "
-                                                    + "safe, but I think you knew that when you came looking for the black market.\"</i>");
-                    Global.flag(Flag.metRin);
+                    meetRin();
                 } else if (choice.startsWith("Cursed Artifacts")) {
                     Global.gui().message(
                                     "You ask Rin about the assorted tomes and unpleasant looking idols she's laid out. <i>\"You should be careful with those, they're all "
@@ -151,6 +139,22 @@ public class BlackMarket extends Store {
             displayGoods();
             Global.gui().choose(this, "Leave");
         }
+    }
+    
+    private void meetRin() {
+        Global.gui().message(
+                        "You knock on the door to the black market. When Ridley answers, you tell him that you're here to see his premium goods on behalf of "
+                                        + "Callisto. Ridley glances back into the room for a moment and then walks past you without saying anything. You stand there confused, until you see the "
+                                        + "girl on the couch stand up and approach you with a smile. <i>\"Hello "
+                                        + player.getTrueName()
+                                        + ",\"</i> she says while extending her hand. <i>\"I'm Rin Callisto. You shouldn't "
+                                        + "be surprised I know who you are, you've been putting on a good show lately.\"</i> You've seen her here before, but you've never taken a good look at her. She "
+                                        + "has elegant features, shoulder length black hair, and looks a couple years older than you. She's very pretty, but you overlooked her because you assumed she "
+                                        + "was Ridley's girlfriend. <i>\"Mike isn't the most pleasant company, but he's a good middleman. He keeps his mouth shut and he doesn't ask questions.\"</i> He must "
+                                        + "not be reliable enough to earn her trust, otherwise she wouldn't feel the need to keep an eye on him all the time. <i>\"Aesop sold you my name, right? I'll have "
+                                        + "to collect my share from him later. I have many items you won't find anywhere else; items that will give you an edge in the games. Not all of them are completely "
+                                        + "safe, but I think you knew that when you came looking for the black market.\"</i>");
+        Global.flag(Flag.metRin);
     }
 
     @Override

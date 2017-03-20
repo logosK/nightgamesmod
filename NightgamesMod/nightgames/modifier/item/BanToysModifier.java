@@ -13,7 +13,7 @@ import nightgames.modifier.ModifierComponentLoader;
 public class BanToysModifier extends ItemModifier implements ModifierComponentLoader<ItemModifier> {
     private static final String name = "ban-toys";
 
-    static final Set<Item> TOYS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(Item.Dildo, Item.Dildo2,
+    public static final Set<Item> TOYS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(Item.Dildo, Item.Dildo2,
                     Item.Onahole, Item.Onahole2, Item.Tickler, Item.Tickler2, Item.Crop, Item.Crop2)));
 
     @Override

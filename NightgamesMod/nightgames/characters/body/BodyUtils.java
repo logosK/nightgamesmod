@@ -6,13 +6,13 @@ import java.util.Optional;
 
 import nightgames.characters.body.mods.ArcaneMod;
 import nightgames.characters.body.mods.CyberneticMod;
+import nightgames.characters.body.mods.DemonicMod;
 import nightgames.characters.body.mods.DivineMod;
 import nightgames.characters.body.mods.ErrorMod;
 import nightgames.characters.body.mods.FeralMod;
 import nightgames.characters.body.mods.FieryMod;
 import nightgames.characters.body.mods.GooeyMod;
 import nightgames.characters.body.mods.PartMod;
-import nightgames.characters.body.mods.DemonicMod;
 
 public class BodyUtils {
     public static Map<CockMod, PartMod> EQUIVALENT_MODS = new HashMap<>();

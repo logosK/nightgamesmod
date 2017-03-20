@@ -17,7 +17,7 @@ public class ReverseCowgirl extends FemdomSexStance {
             return "";
         } else {
             return String.format("%s is riding %s in Reverse Cowgirl position, facing %s feet.",
-                            top.subject(), bottom.nameDirectObject(), bottom.directObject());
+                            top.subject(), bottom.nameDirectObject(), bottom.possessiveAdjective());
         }
     }
 

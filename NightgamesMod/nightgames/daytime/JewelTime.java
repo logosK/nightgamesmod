@@ -7,7 +7,6 @@ import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Trait;
 import nightgames.characters.body.CockMod;
-import nightgames.characters.body.EarPart;
 import nightgames.characters.body.CockPart;
 import nightgames.characters.body.mods.FieryMod;
 import nightgames.characters.body.mods.SizeMod;
@@ -19,7 +18,6 @@ import nightgames.requirements.RequirementShortcuts;
 import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
-@SuppressWarnings("unused")
 public class JewelTime extends BaseNPCTime {
     public JewelTime(Character player) {
         super(player, Global.getNPC("Jewel"));

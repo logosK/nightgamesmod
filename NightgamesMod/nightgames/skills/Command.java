@@ -343,15 +343,20 @@ public class Command extends Skill {
                 getSelf().buildMojo(c, 5);
                 break;
             case MASTER_STRAPON:
-                c.write(getSelf(),
-                                String.format("%s affixes an impressive-looking strapon"
-                                                + " to %s crotch. At first %s a bit intimidated, but once %s"
+                String prefix = String.format(
+                                "%s affixes an impressive-looking strapon to %s crotch.",
+                                getSelf().getName(), getSelf().possessiveAdjective());
+                String postfix = String.format(
+                                " At first %s a bit intimidated, but once %s"
                                                 + " tells %s that %s the look of it, %s %s practically"
-                                                + " salivating.", getSelf().getName(), getSelf().possessiveAdjective(),
+                                                + " salivating.",
+                                                target.subjectAction("are", "is"),
+                                                getSelf().subject(),
                                                 target.directObject(),
-                                                target.subjectAction("are", "is"), 
-                                                getSelf().subject(), target.subjectAction("like"),
-                                                target.pronoun(), target.action("are", "is")));
+                                                target.subjectAction("like"),
+                                                target.pronoun(),
+                                                target.action("are", "is"));
+                c.write(getSelf(), prefix + postfix);
                 if (getSelf().has(Item.Strapon2)) {
                     c.write(getSelf(), "The phallic toy vibrates softly but insistently, "
                                     + "obviously designed to make the recepient squeal.");
