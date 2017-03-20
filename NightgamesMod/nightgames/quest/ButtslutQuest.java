@@ -86,7 +86,7 @@ public class ButtslutQuest extends Quest {
     //Eve:    For a cock in the player's ass, the chance of fetish formation is increased by 5%*points, and any cock fetish magnitude increases are increased by 0.01*points
     //Jewel:  Reduces the dominance of stances where the player is anally penetrated by 0.2*points
     //Kat:    Each turn while anally penetrated causes 3.0*points of your stats to turn into submissive (like corruption)
-    //Mara:   Increases anal sensitivity by 0.25*points
+    //Mara:   Increases anal sensitivity by 0.25*points. Also applies mind control status when you orgasm from anal, independent of points.
     //Reyka:  Receiving cum in ass increases lust by 30*points
     
     public int getStruggleDiffMod() {

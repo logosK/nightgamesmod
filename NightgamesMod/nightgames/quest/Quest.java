@@ -25,7 +25,7 @@ public abstract class Quest {
         this.name=name;
         this.numPointTypes=numPointTypes;
         this.points=new HashMap<String, int[]>();
-        System.out.println("2-arg constructor called");throw new RuntimeException();
+        //System.out.println("2-arg constructor called");throw new RuntimeException();
     }
     
     protected Quest(Map<String, int[]> points, String name, int numPointTypes) {

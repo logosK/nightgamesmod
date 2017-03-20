@@ -287,6 +287,19 @@ public class Global {
         quests=new ArrayList<Quest>();
         System.out.println("quests were: "+quests.toString());
         if (flags.contains("ButtslutQuesting") && !getButtslutQuest().isPresent()) {quests.add(new ButtslutQuest());}
+        if (flags.contains("ButtslutQuestingTesting") && getButtslutQuest().isPresent()) {
+            System.out.println("Adding five loss points to each (unlocked) character");
+            ButtslutQuest bsq = getButtslutQuest().get();
+            for(Character ch:players) {
+                if (ch instanceof Player) {continue;}
+                bsq.addPlayerLossPoint(ch);
+                bsq.addPlayerLossPoint(ch);
+                bsq.addPlayerLossPoint(ch);
+                bsq.addPlayerLossPoint(ch);
+                bsq.addPlayerLossPoint(ch);
+
+            }
+        }
         System.out.println("quests are: "+quests.toString());
 
         time = Time.NIGHT;

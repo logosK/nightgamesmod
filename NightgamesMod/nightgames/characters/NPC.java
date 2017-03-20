@@ -26,6 +26,7 @@ import nightgames.characters.custom.CommentSituation;
 import nightgames.characters.custom.RecruitmentData;
 import nightgames.combat.Combat;
 import nightgames.combat.CombatScene;
+import nightgames.combat.CombatantData;
 import nightgames.combat.Result;
 import nightgames.global.DebugFlags;
 import nightgames.global.Encs;
@@ -275,43 +276,50 @@ public class NPC extends Character {
         if (target.human() && Global.isDebugOn(DebugFlags.DEBUG_SKILL_CHOICES)) {
             pickSkillsWithGUI(c, target);
             return true;
-        } else {
-            // if the strategy is out of moves, try getting a new one.
-            Collection<Skill> possibleSkills = c.getCombatantData(this).getStrategy().get().nextSkills(c, this);
-            if (possibleSkills.isEmpty()) {
-                if (Global.isDebugOn(DebugFlags.DEBUG_STRATEGIES)) {
-                    System.out.printf("%s has no moves available for strategy %s, picking a new one\n", this.getTrueName(), c.getCombatantData(this).getStrategy().get().getClass().getSimpleName());
-                }
-                c.getCombatantData(this).setStrategy(c, this, pickStrategy(c));
-                possibleSkills = c.getCombatantData(this).getStrategy().get().nextSkills(c, this);
-            }
-            if (Global.isDebugOn(DebugFlags.DEBUG_STRATEGIES)) {
-                System.out.println("next skills: " +  possibleSkills);
-            }
-            // if there are still no moves, just use all available skills for this turn and try again next turn.
-            if (possibleSkills.isEmpty()) {
-                if (Global.isDebugOn(DebugFlags.DEBUG_STRATEGIES)) {
-                    System.out.printf("%s has no moves available for strategy %s\n", this.getTrueName(), c.getCombatantData(this).getStrategy().get().getClass().getSimpleName());
-                }
-                possibleSkills = getSkills();
-            } else {
-                if (Global.isDebugOn(DebugFlags.DEBUG_STRATEGIES)) {
-                    System.out.printf("%s is using strategy %s\n", this.getTrueName(), c.getCombatantData(this).getStrategy().get().getClass().getSimpleName());
-                }
-            }
-            HashSet<Skill> available = new HashSet<>();
-            for (Skill act : possibleSkills) {
-                if (Skill.isUsable(c, act) && cooldownAvailable(act)) {
-                    available.add(act);
-                }
-            }
-            Skill.filterAllowedSkills(c, available, this, target);
-            if (available.size() == 0) {
-                available.add(new Nothing(this));
-            }
-            c.act(this, ai.act(available, c), "");
-            return false;
         }
+        
+        CombatantData combatantData = c.getCombatantData(this);
+
+        // if there's no strategy, try getting a new one.
+        if (!combatantData.hasStrategy()) {
+            combatantData.setStrategy(c, this, pickStrategy(c));
+        }
+        CombatStrategy strategy = combatantData.getStrategy().get();
+        
+        // if the strategy is out of moves, try getting a new one.
+        Collection<Skill> possibleSkills = strategy.nextSkills(c, this);
+        if (possibleSkills.isEmpty()) {
+            Global.ifDebuggingPrintf(DebugFlags.DEBUG_STRATEGIES,
+                "%s has no moves available for strategy %s, picking a new one\n",
+                this.getTrueName(), strategy.getClass().getSimpleName());
+            strategy = combatantData.setStrategy(c, this, pickStrategy(c));
+            possibleSkills = strategy.nextSkills(c, this);
+        }
+        Global.ifDebuggingPrintln(DebugFlags.DEBUG_STRATEGIES, "next skills: " +  possibleSkills);
+
+        // if there are still no moves, just use all available skills for this turn and try again next turn.
+        if (possibleSkills.isEmpty()) {
+            Global.ifDebuggingPrintf(DebugFlags.DEBUG_STRATEGIES,
+                "%s has no moves available for strategy %s\n",
+                this.getTrueName(), strategy.getClass().getSimpleName());
+            possibleSkills = getSkills();
+        } else {
+            Global.ifDebuggingPrintf(DebugFlags.DEBUG_STRATEGIES,
+                            "%s is using strategy %s\n",
+                            this.getTrueName(), strategy.getClass().getSimpleName());
+        }
+        HashSet<Skill> available = new HashSet<>();
+        for (Skill act : possibleSkills) {
+            if (Skill.isUsable(c, act) && cooldownAvailable(act)) {
+                available.add(act);
+            }
+        }
+        Skill.filterAllowedSkills(c, available, this, target);
+        if (available.size() == 0) {
+            available.add(new Nothing(this));
+        }
+        c.act(this, ai.act(available, c), "");
+        return false;
     }
 
     /**

@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.Player;
 import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
@@ -258,6 +259,12 @@ public class MindControl extends Addiction {
                                         + " and forces your eyelids open with " + controller.directObject()+ " thumbs. ";
                         break;
                     case anal:
+                        if(affected instanceof Player && Global.getButtslutQuest().isPresent() && pos.inserted(controller)) {
+                            succeeded = true;
+                            description = "I need a description for how " + controller.getName() + " can mind control you without facing via anal sex. Maybe " + controller.directObject()
+                                            + " robo-dick has a subsonics generator or something, or maybe it's via drugged cum.";
+                            break;
+                        }
                         if (pos instanceof AnalCowgirl) {
                             succeeded = true;
                             description = "You turn your head away as you feel your orgasm coming on, wary of " + controller.getName() + "'s"

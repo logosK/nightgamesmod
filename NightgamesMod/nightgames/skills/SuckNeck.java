@@ -19,11 +19,8 @@ public class SuckNeck extends Skill {
 
     @Override
     public boolean usable(Combat c, Character target) {
-        return c.getStance().kiss(getSelf(), target) 
-                        || (getSelf().get(Attribute.Dark) >= 1 
-                            && c.getStance().dom(getSelf()) 
-                            && c.getStance().en == Stance.oralpin
-                            )
+        return (c.getStance().kiss(getSelf(), target) 
+                        || (getSelf().get(Attribute.Dark) >= 1 && c.getStance().dom(getSelf()) && c.getStance().en == Stance.oralpin))
                         && getSelf().canAct();
     }
 

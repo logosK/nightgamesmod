@@ -162,9 +162,9 @@ public class AssPart extends GenericBodyPart {
             c.write(opponent, Global.format(
                             "The foreign object rummaging around inside {self:name-possessive} ass feels so <i>right</i>. {self:SUBJECT} can't help moaning in time with the swelling pleasure.",
                                             self, opponent));
-            Optional<ButtslutQuest> bsq = Global.getButtslutQuest();
-            if (bsq.isPresent() && self==Global.getPlayer()) {bonus += bsq.get().applyReceiveBonusesAnal(c, opponent, target);}
         }
+        Optional<ButtslutQuest> bsq = Global.getButtslutQuest();
+        if (bsq.isPresent() && self==Global.getPlayer()) {bonus += bsq.get().applyReceiveBonusesAnal(c, opponent, target);}
         return bonus;
     }
 

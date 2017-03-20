@@ -94,7 +94,6 @@ import nightgames.status.Winded;
 import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.Addiction.Severity;
 import nightgames.status.addiction.AddictionType;
-import nightgames.status.EnemyButtslutTrainingStatus;
 
 public class Combat extends Observable implements Cloneable {
     private static final int NPC_TURN_LIMIT = 75;
@@ -574,7 +573,7 @@ public class Combat extends Observable implements Cloneable {
         Character mainOpponent = getOpponent(character);
         String buttslutCompletedFlag = Trait.buttslut.name() + "Completed";
         Boolean isButtSlutting = (character.has(Trait.buttslut) && !getCombatantData(character).getBooleanFlag(buttslutCompletedFlag)) || (character instanceof Player && Global.getButtslutQuest().isPresent() && Global.random(100) < 100*Global.getButtslutQuest().get().getAssPresentChance());
-        if (((mainOpponent.hasDick() && mainOpponent.crotchAvailable() && mainOpponent.getArousal().percent() > 20) || mainOpponent.has(Trait.strapped)) && isButtSlutting) {
+        if (((mainOpponent.hasDick() && mainOpponent.crotchAvailable() && mainOpponent.getArousal().percent() > 20) || mainOpponent.has(Trait.strapped)) && isButtSlutting && !stance.havingSex(this)) {
             write(character, Global.format("<b>Seeing the thick phallus in front of {self:reflective}, {self:subject} can't "
                             + "but help offer up {self:possessive} ass in hopes that {other:subject} will fill {self:possessive} rear door.</b>", character, mainOpponent));
             for (int i = 0; i < 5; i++) {
