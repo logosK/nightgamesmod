@@ -182,7 +182,7 @@ public class Slimed extends DurationStatus {
         return obj;
     }
 
-    public Status loadFromJson(JsonObject obj) {
+    public Status loadFromJson(JsonObject obj) {        //TODO: Is this implemented or not? - DSM
     	// TODO implement me
         return new Slimed(null, null, 0);
     }

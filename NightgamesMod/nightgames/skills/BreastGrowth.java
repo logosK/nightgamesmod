@@ -126,9 +126,9 @@ public class BreastGrowth extends Skill {
                             "%s moving and begins chanting. %s %s breasts grow hot, and they start expanding!"
                                             + " %s to hold them back with %s hands, but the growth continues untill they are a full cup size"
                                             + " bigger than before. The new sensations from %s substantially larger breasts make %s tremble.",
-                            getSelf().getName(), Global.capitalizeFirstLetter(target.subjectAction("feel")),
-                            target.possessiveAdjective(), Global.capitalizeFirstLetter(target.pronoun()),
-                            target.action("try", "tries"), target.possessiveAdjective(), target.directObject());
+                            getSelf().subjectAction("start"), Global.capitalizeFirstLetter(target.subjectAction("feel")),
+                            target.possessiveAdjective(), Global.capitalizeFirstLetter(target.subjectAction("try", "tries")),
+                            target.possessiveAdjective(), target.possessiveAdjective(), target.directObject());
             if (damage > 0) {
                 message += Global.capitalizeFirstLetter(target.subjectAction("realize"))
                                 + " the effects are permanent!";

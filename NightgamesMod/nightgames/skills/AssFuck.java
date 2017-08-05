@@ -30,7 +30,8 @@ public class AssFuck extends Fuck {
 
     @Override
     public float priorityMod(Combat c) {
-        return 0.0f + (getSelf().getMood() == Emotion.dominant ? 1.0f : 0) + (Global.getButtslutQuest().isPresent()?5:0);
+        return 0.0f + (getSelf().getMood() == Emotion.dominant ? 1.0f : 0)
+                        + (Global.getButtslutQuest().isPresent() ? 5 : 0);
     }
 
     @Override
@@ -231,7 +232,7 @@ public class AssFuck extends Fuck {
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return true;
     }
     

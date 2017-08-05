@@ -75,9 +75,17 @@ public class Porn extends Activity {
 
                 break;
             case angel1:
-                Global.gui().message(
-                                "When Angel invited you to watch a movie with her friends, you did not expect it to be porn. In retrospect, you probably should have. Caroline and Sarah have claimed comfortable looking arm chairs, while you, Angel and Mei are packed together on a small sofa. Mei grins at you suggestively. <i>\"If you need to whip it out and jerk off, we'll pretend not to notice.\"</i> That's kinda considerate of her, but it's probably not going to be an option. Angel already has her hand down your pants.");
-
+                String message = "When Angel invited you to watch a movie with her friends, you didn't expect it to be porn. In retrospect, you probably should have. "
+                                + "Caroline and Sarah have claimed comfortable looking arm chairs, while you, Angel and Mei are packed together on a small sofa. Mei "
+                                + "grins at you suggestively. ";
+                if (player.useFemalePronouns()) {
+                    message += "<i>\"If you need to drop your panties and rock out, we'll pretend not to notice.\"</i> ";
+                } else {
+                    message += "<i>\"If you need to whip it out and jerk off, we'll pretend not to notice.\"</i> ";
+                }
+                
+                message += "That's considerate of her, but it's probably not going to be an option. Angel already has her hand down your pants.";
+                Global.gui().message(message);
                 break;
             case reyka1:
                 Global.gui().message(

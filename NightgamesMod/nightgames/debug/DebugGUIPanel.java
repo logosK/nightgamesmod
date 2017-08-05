@@ -34,6 +34,13 @@ public class DebugGUIPanel extends JPanel {
     private static List<DebugCommand> consoleCommands = new ArrayList<>();
 
     {
+        
+        consoleCommands.add(new DebugCommand("help", (output, list) -> {
+            output.setText("Available commands are:all.(Command)\n(Charactername).setXp\n(Charactername).setMoney\n(Charactername).move\n(Charactername).addTrait\n(Charactername).removeTrait\n"
+                            + "(Charactername).addItem\n(Charactername).addAtt\n(Charactername).addAffection\n(Charactername).addAttraction\n(Charactername).ding\n(Charactername).list\n");
+        }));
+        
+        //TODO: What is the correct usage of this with a modifier?
         consoleCommands.add(new DebugCommand("all\\.(.*)", (output, list) -> {
             Global.getParticipants().stream().forEach(participant -> {
                 consoleCommands.stream().filter(cc -> cc.checkAndExecute(output, participant.getType() + "." + list.get(1))).findFirst();

@@ -74,6 +74,6 @@ public class Honeypot extends Skill {
         return Global.format("{self:SUBJECT-ACTION:take|takes} the time to entice {other:name-do}, "
                         + "rubbing {self:reflective} and putting on a show. "
                         + "{other:SUBJECT} takes the bait and approaches {self:direct-object}. With a sudden motion, {self:pronoun-action:capture|captures} "
-                        + "{other:direct-object} with {self:possessive} legs and {self:action:have|haves} {self:possessive} way with the poor follower.", getSelf(), target);
+                        + "{other:direct-object} with {self:possessive} legs and {self:action:have|has} {self:possessive} way with the poor follower.", getSelf(), target);
     }
 }

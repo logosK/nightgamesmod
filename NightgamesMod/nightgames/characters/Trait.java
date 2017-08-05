@@ -17,6 +17,9 @@ import nightgames.status.Stsflag;
 import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
+
+//TODO: Consider movine towards characters.CharTrait, which provides better handling and customization for traits. - DSM
+
 public enum Trait {
     sadist("Sadist", "Skilled at providing pleasure alongside pain",
                     (b, c, t) -> b.append(Global.capitalizeFirstLetter(
@@ -277,6 +280,7 @@ public enum Trait {
     madscientist("Mad Scientist", "May have gone overboard with her projects"),
     witch("Witch", "Learned to wield traditional arcane magic"),
     succubus("Succubus", "Embraced the dark powers that feed on mortal lust"),
+    incubus("Incubus", "Embraced the dark powers that feed on mortal lust"),
     demigoddess("Demigoddess", "Blessed by a deity of sexual pleasure, and on the road to ascension herself."),
     fighter("Fighter", "A combination of martial arts and ki"),
     slime("Slime", "An accident in the biology labs made her body a bit more... malleable."),
@@ -494,7 +498,7 @@ public enum Trait {
         } else {
             b.append("A large black strap-on dildo adorns " + c.nameOrPossessivePronoun() + " waists.");
         }
-    }), // currently wearing a strapon
+    }, null, null, true), // currently wearing a strapon
 
     event("event", "special character"),
     mindcontrolresistance("", "temporary resistance to mind games - hidden"),
@@ -513,6 +517,7 @@ public enum Trait {
     private String name;
     public Trait parent;
     public Status status;
+    private boolean hidden;
 
     public String getDesc() {
         return desc;
@@ -524,27 +529,33 @@ public enum Trait {
     }
 
     private Trait(String name, String description) {
-        this.name = name;
-        desc = description;
+        this(name, description, null, null, null, false);
+    }
+    
+    private Trait(String name, String description, boolean hidden) {
+        this(name, description, null, null, null, hidden);
     }
 
     private Trait(String name, String description, TraitDescription longDesc) {
-        this.name = name;
-        desc = description;
-        this.longDesc = longDesc;
+        this(name, description, longDesc, null, null, false);
     }
 
     private Trait(String name, String description, TraitDescription longDesc, Trait parent) {
+        this(name, description, longDesc, parent, null, false);
+    }
+
+    private Trait(String name, String description, Status status) {
+        this(name, description, null, null, status, false);
+    }
+    
+    private Trait(String name, String description, TraitDescription longDesc,
+                    Trait parent, Status status, boolean hidden) {
         this.name = name;
         desc = description;
         this.longDesc = longDesc;
         this.parent = parent;
-    }
-
-    private Trait(String name, String description, Status status) {
-        this.name = name;
-        desc = description;
         this.status = status;
+        this.hidden = hidden;
     }
 
     public boolean isFeat() {
@@ -562,6 +573,8 @@ public enum Trait {
         return OVERRIDES.containsKey(this) && OVERRIDES.get(this).stream().anyMatch(t -> ch.has(t));
     }
 
+    
+    //TODO: This data might as well be someplace in Global, as it's static, accessible from out side the class statically, and only changes upon data loading. - DSM
     public static Map<Trait, Resistance> resistances;
     public static Resistance nullResistance;
     public static final Map<Trait, Collection<Trait>> OVERRIDES;
@@ -669,6 +682,6 @@ public enum Trait {
         }
     }
     public boolean isVisible() {
-        return !(this==strapped || this==mindcontrolresistance || this==event || this==none || this==buttsluttraining);
+        return !hidden;
     }
 }

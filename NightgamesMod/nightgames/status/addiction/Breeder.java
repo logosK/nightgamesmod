@@ -15,9 +15,11 @@ import nightgames.status.Status;
 import nightgames.status.Stsflag;
 
 public class Breeder extends Addiction {
+       
     public Breeder(Character affected, Character cause, float magnitude) {
         super(affected, "Breeder", cause, magnitude);
     }
+    
 
     public Breeder(Character affected, Character cause) {
         this(affected, cause, .01f);
@@ -236,5 +238,23 @@ public class Breeder extends Addiction {
     @Override public Status loadFromJson(JsonObject obj) {
         return new Breeder(Global.noneCharacter(), Global.getCharacterByType(obj.get("cause").getAsString()),
                         (float) obj.get("magnitude").getAsInt());
+    }
+
+    @Override
+    protected void applyEffects(Character self) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    protected void removeEffects(Character self) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    protected void cleanseAddiction(Character self) {
+        // TODO Auto-generated method stub
+        
     }
 }

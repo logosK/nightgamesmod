@@ -97,8 +97,8 @@ public class ReverseMount extends AbstractBehindStance {
     }
     
     @Override
-    public int dominance() {
-        return 2;
+    public Position.Dominance dominance() {
+        return Position.Dominance.SLIGHT;
     }
 
     @Override

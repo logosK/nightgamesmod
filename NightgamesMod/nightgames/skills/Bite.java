@@ -39,7 +39,7 @@ public class Bite extends Skill {
         } else {
             c.write(getSelf(), "Kat grabs your head and pulls it down beside hers, then she twists and bites you!"
                             + " You think she's broken your skin, but you're not bleeding. A warmth spreads down"
-                            + " from your neck as Kay smiles at you coyly. <i>\"It, ah, feels so much better with a"
+                            + " from your neck as Kat smiles at you coyly. <i>\"It, ah, feels so much better with a"
                             + " little bit of animal instinct, nya?\"</i> You're not sure what she means, but"
                             + " you do realize you've sped up your thrusting and it does seem to feel even"
                             + " better than before.");            

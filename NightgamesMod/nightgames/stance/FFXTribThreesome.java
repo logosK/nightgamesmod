@@ -189,8 +189,8 @@ public class FFXTribThreesome extends Position {
     }
     
     @Override
-    public int dominance() {
-        return 2;
+    public Position.Dominance dominance() {
+        return Position.Dominance.SLIGHT;
     }
 
     @Override

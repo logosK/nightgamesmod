@@ -11,12 +11,12 @@ import nightgames.combat.Combat;
 import nightgames.global.Global;
 
 public class BehindFootjob extends AbstractBehindStance {
+    private boolean analPenetration;
+
     public BehindFootjob(Character top, Character bottom, boolean analPenetration) {
         super(top, bottom, Stance.behindfootjob);
         this.analPenetration=analPenetration;
     }
-    
-    private boolean analPenetration;
 
     @Override
     public String describe(Combat c) {
@@ -120,8 +120,8 @@ public class BehindFootjob extends AbstractBehindStance {
     }
     
     @Override
-    public int dominance() {
-        return analPenetration?6:4;
+    public Position.Dominance dominance() {
+        return analPenetration ? Position.Dominance.ABSURD : Position.Dominance.HIGH;
     }
     @Override
     public List<BodyPart> topParts(Combat c) {

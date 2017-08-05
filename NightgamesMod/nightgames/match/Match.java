@@ -64,7 +64,7 @@ public class Match {
     }
     
     public List<CombatListener> getListeners(Combat c) {
-        return Collections.singletonList(new DefaultMatchEndListener(c, this));
+        return Collections.singletonList(new DefaultMatchEndListener(c));
     }
     
     public final void start() {
@@ -173,7 +173,7 @@ public class Match {
 
     protected void afterTurn(Character combatant) {
         if (combatant.state == State.resupplying) {
-            mercy.get(combatant).clear();
+            mercy.values().forEach(l -> l.remove(combatant));
         }
     }
 
@@ -191,10 +191,11 @@ public class Match {
         }
     }
     
-    public boolean canFight(Character initiator, Character opponent) {
+    public boolean canFight(Character initiator, Character opponent) {      //FIXME: This method has same name as Area.canFight() and they are used in the same method. Change both - DSM
         return !mercy.get(initiator).contains(opponent);
     }
     
+    /**FIXME: Is this supposed to be always true?*/
     public boolean canEngage(Character initiator, Character opponent) {
         return true;
     }

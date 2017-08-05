@@ -152,12 +152,18 @@ public class DefaultEncounter implements Encounter {
                 } else {
                     ineligibleNpcCaughtMasturbating(npc);
                 }
-            } else if (p1 == human && !p1.eligible(p2)) {
+            } else if (p1 == human && p1.eligible(p2)) {
                 Global.gui().message("You encounter " + p2.getName() + ", but you still haven't recovered from your last fight.");
             } else if (p1 == human) {
                 Global.gui().message(String.format(
                                 "You find %s still naked from your last encounter, but %s's not fair game again until %s replaces %s clothes.",
                                 p2.getName(), p2.pronoun(), p2.pronoun(), p2.possessiveAdjective()));
+            } else if (!p1.eligible(p2)) {
+                Global.gui().message("You encounter " + p1.getName() + ", but you still haven't recovered from your last fight.");
+            } else {
+                Global.gui().message(String.format(
+                                "You find %s still naked from your last encounter, but %s's not fair game again until %s replaces %s clothes.",
+                                p1.getName(), p1.pronoun(), p1.pronoun(), p1.possessiveAdjective()));
             }
         }
         location.endEncounter();

@@ -36,7 +36,7 @@ public abstract class Focus extends Skill {
         if (getSelf().human() || !target.is(Stsflag.blinded)) {
             c.write(getSelf(), Global.format(message(c, target), getSelf(), target));
         }
-        getSelf().add(c, focus);
+        getSelf().add(c, focus.instance(getSelf(), target));
         return true;
     }
 

@@ -96,8 +96,8 @@ public class StandingOver extends AbstractFacingStance {
     }
 
     @Override
-    public int dominance() {
-        return 1;
+    public Position.Dominance dominance() {
+        return Position.Dominance.GIVE_AND_TAKE;
     }
     
     @Override

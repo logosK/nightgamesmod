@@ -14,20 +14,25 @@ public class FocussedForeplay extends FocussedBase {
 
     @Override
     public double sensitivity(double x, BodyPart withPart, BodyPart targetPart, Skill skill) {
-        if (withPart.isGenital() && targetPart.isGenital()) {
-            return 2;
+        if (withPart.isGenitalOrToy() && targetPart.isGenitalOrToy()) {
+            return 2.5;
         }
-        return -.4;
+        return -1;
         // The penalty for genital-on-genital contact is much greater than the resistance,
         // since it should be pretty easy to avoid most of the time.
     }
 
     @Override
     public double opponentSensitivity(double x, BodyPart withPart, BodyPart targetPart, Skill skill) {
-        if (withPart.isGenital() && targetPart.isGenital()) {
-            return -1.5;
+        if (withPart.isGenitalOrToy() && targetPart.isGenitalOrToy()) {
+            return -2.5;
         }
-        return .4;
+        return 1;
+    }
+    
+    @Override
+    public int gainmojo(int x) {
+        return (int) (-x * .75);
     }
 
     @Override

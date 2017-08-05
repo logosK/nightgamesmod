@@ -21,6 +21,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -96,6 +97,7 @@ import nightgames.characters.custom.JsonSourceNPCDataLoader;
 import nightgames.characters.custom.NPCData;
 import nightgames.combat.Combat;
 import nightgames.daytime.Daytime;
+import nightgames.debug.MatchTypePicker;
 import nightgames.gui.GUI;
 import nightgames.gui.HeadlessGui;
 import nightgames.items.Item;
@@ -141,10 +143,31 @@ import nightgames.trap.Trap;
 import nightgames.trap.Tripline;
 
 public class Global {
-    private static Random rng;
-    private static GUI gui;
-    private static Set<Skill> skillPool = new HashSet<>();
+    private static Random rng;                                      //Isn't the convention for static variables at this level is to put them in all caps? -DSM
+    private static GUI gui;    
+    public static Scene current;
+    public static Scene previous;
+    private static final int LINEUP_SIZE = 5;           
+    public static int debugSimulation = 0;
+    public static double moneyRate = 1.0;
+    public static double xpRate = 1.0;
+    public static final Path COMBAT_LOG_DIR = new File("combatlogs").toPath();
+    public static boolean debug[] = new boolean[DebugFlags.values().length];
+    public static ContextFactory factory;
+    public static Context cx;
+    
+    //EXTRACT TO TIMEKEEPING COMPONENT
+    public static Daytime day;                                    
+    protected static int date;
+    private static Time time;
+    private static Date jdate;
+
+   
+   
+    //THE FOLLOWING ITEMS ARE CANDIDATES FOR EXTRACTION TO A GAMEDATA CLASS - DSM 
+    public static MatchType currentMatchType = MatchType.NORMAL;
     private static Map<String, NPC> characterPool;
+    private static Set<Skill> skillPool = new HashSet<>();          //These central peices of data are not going to change. so they should be gathered and separated for better management. - DSM 
     private static Set<Action> actionPool;
     private static Set<Trap> trapPool;
     private static Set<Trait> featPool;
@@ -152,30 +175,19 @@ public class Global {
     private static Set<Character> players;
     private static Set<Character> debugChars;
     private static Set<Character> resting;
-    private static Set<String> flags;
+    private static Set<String> flags;                               //Global flags - 
     private static Map<String, Float> counters;
-    public static Player human;
-    private static Match match;
-    public static Daytime day;
-    protected static int date;
-    private static Time time;
-    private static Date jdate;
-    private static TraitTree traitRequirements;
-    public static Scene current;
-    public static boolean debug[] = new boolean[DebugFlags.values().length];
-    public static int debugSimulation = 0;
-    public static double moneyRate = 1.0;
-    public static double xpRate = 1.0;
-    public static ContextFactory factory;
-    public static Context cx;
-    private static MatchType currentMatchType = MatchType.NORMAL;
-    private static Character noneCharacter = new NPC("none", 1, null);
-    private static HashMap<String, MatchAction> matchActions;
-    private static final int LINEUP_SIZE = 5;
+    public static Player human;                                     //Useful for many reasons, redundant in a game where all elements are stored equally. There's many ways to get the player. - DSM 
+    private static Match match;                                     //Only a complete program flow restructure would change this, but many matches are going on as the player may be fighting - DSM
+    //public static Map<Trait, Resistance> RESISTANCEMAP;
+    //public static Resistance nullResistance;                      //Why is this required? 
+    //public static final Map<Trait, Collection<Trait>> OVERRIDES;  
+    private static TraitTree traitRequirements;                     //Traits can and probably should carry their own requirements with them. -DSM
+    private static HashMap<String, MatchAction> matchActions;           //Static Naming conventions -DSM
     private static List<Quest> quests = new ArrayList<Quest>();
-
-    public static final Path COMBAT_LOG_DIR = new File("combatlogs").toPath();
     
+     private static Character noneCharacter = new NPC("none", 1, null);     
+     
     static {
         hookLogwriter();rng = new Random();
         flags = new HashSet<>();
@@ -230,7 +242,11 @@ public class Global {
     }
 
     protected static void makeGUI(boolean headless) {
-        gui = headless ? new HeadlessGui() : new GUI();
+        gui = new GUI();
+    }
+    
+    private static void makeTestGUI() {
+        gui = new HeadlessGui();
     }
 
     public static boolean meetsRequirements(Character c, Trait t) {
@@ -253,11 +269,23 @@ public class Global {
         }
     }
 
+    /**Begins a new game, given the various conditions for start. Builds all required sets and members of the player and participating characters.
+     * 
+     * @param playerName
+     * The name of the player. More than likely grabbed from the new game screen GUI elements. 
+     * 
+     * @param config
+     * The starting configuration for the game. 
+     * 
+     * @param pickedTraits
+     * A list of traits that the player has picked at chargen.
+     * 
+     * */
     public static void newGame(String playerName, Optional<StartConfiguration> config, List<Trait> pickedTraits,
                     CharacterSex pickedGender, Map<Attribute, Integer> selectedAttributes) {
         Optional<PlayerConfiguration> playerConfig = config.map(c -> c.player);
-        Collection<String> cfgFlags = config.map(StartConfiguration::getFlags).orElse(new ArrayList<>());
         Collection<DebugFlags> cfgDebugFlags = config.map(StartConfiguration::getDebugFlags).orElse(new ArrayList<>());
+        Collection<String> cfgFlags = config.map(StartConfiguration::getFlags).orElse(new ArrayList<>());
         human = new Player(playerName, pickedGender, playerConfig, pickedTraits, selectedAttributes);
         if(human.has(Trait.largereserves)) {
             human.getWillpower().gain(20);
@@ -274,8 +302,7 @@ public class Global {
         players.addAll(characterPool.values().stream().filter(npc -> npc.isStartCharacter).collect(Collectors.toList()));
         if (!cfgFlags.isEmpty()) {
             flags = cfgFlags.stream().collect(Collectors.toSet());
-            System.out.println("flags: "+flags.toString());
-        }      
+        }
         Map<String, Boolean> configurationFlags = JsonUtils.mapFromJson(JsonUtils.rootJson(new InputStreamReader(ResourceLoader.getFileResourceAsStream("data/globalflags.json"))).getAsJsonObject(), String.class, Boolean.class);
         configurationFlags.forEach((flag, val) -> Global.setFlag(flag, val));
         
@@ -292,6 +319,7 @@ public class Global {
             ButtslutQuest bsq = getButtslutQuest().get();
             for(Character ch:players) {
                 if (ch instanceof Player) {continue;}
+                System.out.println(ch.getTrueName());
                 bsq.addPlayerLossPoint(ch);
                 bsq.addPlayerLossPoint(ch);
                 bsq.addPlayerLossPoint(ch);
@@ -340,12 +368,19 @@ public class Global {
     /**
      * WARNING DO NOT USE THIS IN ANY COMBAT RELATED CODE.
      * IT DOES NOT TAKE INTO ACCOUNT THAT THE PLAYER GETS CLONED. WARNING. WARNING.
+     * 
+     * NOTE: This is a "global accessor" to a private static, it's called across the project as a peice of vital data. 
+     * For this reason it's a piece that should be accessed more properly and without the danger originally posted. Very good example of something that can change. -DSM
+     * 
      * @return
      */
     public static Player getPlayer() {
         return human;
     }
 
+    /**Helper method that Builds the pool of skills. Called by newgame() and reserforLoad().
+     * 
+     * */
     public static void buildSkillPool(Character ch) {
         getSkillPool().clear();
         getSkillPool().add(new Slap(ch));
@@ -432,8 +467,8 @@ public class Global {
         getSkillPool().add(new NakedBloom(ch));
         getSkillPool().add(new ShrinkRay(ch));
         getSkillPool().add(new SpawnFaerie(ch, Ptype.fairyfem));
-        getSkillPool().add(new SpawnImp(ch, Ptype.impfem));
         getSkillPool().add(new SpawnFaerie(ch, Ptype.fairyherm));
+        getSkillPool().add(new SpawnImp(ch, Ptype.impfem));
         getSkillPool().add(new SpawnFaerie(ch, Ptype.fairymale));
         getSkillPool().add(new SpawnImp(ch, Ptype.impmale));
         getSkillPool().add(new SpawnFGoblin(ch, Ptype.fgoblin));
@@ -472,7 +507,6 @@ public class Global {
         getSkillPool().add(new Charm(ch));
         getSkillPool().add(new Tempt(ch));
         getSkillPool().add(new EyesOfTemptation(ch));
-        getSkillPool().add(new ManipulateFetish(ch));
         getSkillPool().add(new TailJob(ch));
         getSkillPool().add(new FaceSit(ch));
         getSkillPool().add(new Smother(ch));
@@ -515,7 +549,6 @@ public class Global {
         getSkillPool().add(new Invitation(ch));
         getSkillPool().add(new SubmissiveHold(ch));
         getSkillPool().add(new BreastGrowth(ch));
-        //getSkillPool().add(new BreastGrowthSuper(ch));
         getSkillPool().add(new CockGrowth(ch));
         getSkillPool().add(new BreastRay(ch));
         getSkillPool().add(new FootSmother(ch));
@@ -533,10 +566,8 @@ public class Global {
         getSkillPool().add(new LeechSeed(ch));
         getSkillPool().add(new Beg(ch));
         getSkillPool().add(new Cowardice(ch));
-        getSkillPool().add(new Kneel(ch));
         getSkillPool().add(new Dive(ch));
         getSkillPool().add(new Offer(ch));
-        getSkillPool().add(new OfferAss(ch));
         getSkillPool().add(new ShamefulDisplay(ch));
         getSkillPool().add(new Stumble(ch));
         getSkillPool().add(new TortoiseWrap(ch));
@@ -610,7 +641,11 @@ public class Global {
         getSkillPool().add(new Focus.OnForeplay(ch));
         getSkillPool().add(new Focus.OnSex(ch));
         getSkillPool().add(new Focus.OnRecovery(ch));
-
+        getSkillPool().add(new ManipulateFetish(ch));
+        //getSkillPool().add(new BreastGrowthSuper(ch));
+        getSkillPool().add(new Kneel(ch));
+        getSkillPool().add(new OfferAss(ch));
+        
         if (Global.isDebugOn(DebugFlags.DEBUG_SKILLS)) {
             getSkillPool().add(new SelfStun(ch));
         }
@@ -815,8 +850,13 @@ public class Global {
     }
 
     public static void startNight() {
-        currentMatchType = decideMatchType();
-        currentMatchType.runPrematch();
+        if (isDebugOn(DebugFlags.DEBUG_MATCHTYPES)) {
+            current = new MatchTypePicker();
+            current.respond("Start");
+        } else {
+            currentMatchType = decideMatchType();
+            currentMatchType.runPrematch();
+        }
     }
 
     public static List<Character> getMatchParticipantsInAffectionOrder() {
@@ -895,7 +935,7 @@ public class Global {
             if (!prey.human()) {
                 lineup.add(prey);
             }
-            lineup = pickCharacters(participants, lineup, 5);
+            lineup = pickCharacters(participants, lineup, LINEUP_SIZE);
             resting = new HashSet<>(players);
             resting.removeAll(lineup);
             match = buildMatch(lineup, matchmod);
@@ -966,6 +1006,7 @@ public class Global {
         return getNPCByType(type);
     }
 
+    /**Builds the main map of the game. This method also draws the map. */
     public static HashMap<String, Area> buildMap() {
         Area quad = new Area("Quad",
                         "You are in the <b>Quad</b> that sits in the center of the Dorm, the Dining Hall, the Engineering Building, and the Liberal Arts Building. There's "
@@ -1205,6 +1246,13 @@ public class Global {
         return startConfig.isPresent() ? startConfig.get().findNpcConfig(type) : Optional.empty();
     }
 
+    /**Rebuilds the character pool using the starting configuration. 
+     * 
+     * TODO: Refactor into function and unify with CustomNPC handling.
+     * 
+     * 
+     * 
+     * */
     public static void rebuildCharacterPool(Optional<StartConfiguration> startConfig) {
         characterPool = new HashMap<>();
         debugChars.clear();
@@ -1378,6 +1426,11 @@ public class Global {
         makeGUI(headless);
         gui.createCharacter();
     }
+    
+    public static void initForTesting() {
+        makeTestGUI();
+        gui.createCharacter();
+    }
 
     public static void hookLogwriter() {
         Thread.currentThread().setUncaughtExceptionHandler((t, e) -> {
@@ -1388,6 +1441,10 @@ public class Global {
         });
     }
     
+    /**Returns the introductory text. 
+     * 
+     * NOTE: This should probably be moved into something more modular. -DSM
+     * */
     public static String getIntro() {
         return "You don't really know why you're going to the Student Union in the middle of the night."
                         + " You'd have to be insane to accept the invitation you received this afternoon."
@@ -1459,6 +1516,35 @@ public class Global {
             return Optional.of(list.get(random(list.size())));
         }
     }
+    
+    
+    public static <T> Optional<T> pickWeighted(Map<T, Double> map) {
+        if (map.isEmpty()) {
+            return Optional.empty();
+        }
+    
+        // Normalize the weights so they sum to 1.0, sort them low->high,
+        // then partition the range [0, 1) such that values with greater
+        // weight get a larger 'section'. Finally, pick a random value in
+        // [0, 1) and see what partition it's in. Return the corresponding value.
+        
+        double totalWeight = map.values().stream().reduce(0.0, Double::sum);
+        Map<T, Double> normalized = new HashMap<>();
+        map.entrySet().forEach(e -> normalized.put(e.getKey(), e.getValue() / totalWeight));
+        List<Map.Entry<T, Double>> entries = new ArrayList<>(map.entrySet());
+        entries.sort(Comparator.comparing(Map.Entry::getValue));
+        
+        double threshold = rng.nextDouble();
+        double sumSoFar = 0.0;
+        for (Map.Entry<T, Double> ent : entries) {
+            if (ent.getValue() + sumSoFar >= threshold) {
+                return Optional.of(ent.getKey());
+            }
+            sumSoFar += ent.getValue();
+        }
+        
+        throw new RuntimeException("pickWeighted failed to pick a value");
+    }
 
     public static int getDate() {
         return date;
@@ -1468,6 +1554,11 @@ public class Global {
         String replace(Character self, String first, String second, String third);
     }
 
+    /**Builds the parser responsible for taking special tags and forming them into the correct english word.
+     * 
+     * 
+     * 
+     * */
     public static void buildParser() {
         matchActions = new HashMap<>();
         matchActions.put("possessive", (self, first, second, third) -> {
@@ -1662,6 +1753,8 @@ public class Global {
         });
     }
 
+    /**Returns a formatted string for use with the tag parsing system. 
+     * */
     public static String format(String format, Character self, Character target, Object... strings) {
         // pattern to find stuff like {word:otherword:finalword} in strings
         Pattern p = Pattern.compile("\\{((?:self)|(?:other)|(?:master))(?::([^:}]+))?(?::([^:}]+))?\\}");
@@ -1845,10 +1938,12 @@ public class Global {
         rng = FROZEN_RNG;
     }
     
-    public static Optional<ButtslutQuest> getButtslutQuest() {
-        return quests.stream().filter(q -> q instanceof ButtslutQuest).map(q -> (ButtslutQuest)q).findFirst();
-    }
     public static boolean randomBool() {
         return rng.nextBoolean();
+    }
+    
+    public static Optional<ButtslutQuest> getButtslutQuest() {
+        return quests.stream().filter(q -> q instanceof ButtslutQuest)
+                        .map(q -> (ButtslutQuest)q).findFirst();
     }
 }

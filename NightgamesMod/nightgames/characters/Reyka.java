@@ -116,125 +116,11 @@ public class Reyka extends BasePersonality {
         character.getGrowth().addTrait(55, Trait.desensitized2);
         character.getGrowth().addTrait(58, Trait.carnalvirtuoso);
 
-        character.addCombatScene(new CombatScene((c, self, other) -> self.getLevel() >= 12 
-                        && !Global.checkFlag(REYKA_DISABLING_FOCUS) && !Global.checkFlag(REYKA_SEDUCTION_FOCUS)
-                        , (c, self, other) -> Global.format("You had turned your back to Reyka after your fight."
-                                        + " Big mistake. Out of nowhere, {self:pronoun} crashes into"
-                                        + " you from behind with great force, knocking you down."
-                                        + " You quickly roll over, but Reyka binds your legs together at"
-                                        + " the knees and holds them close to {self:direct-object}. <i>\"My,"
-                                        + " {other:name}, I could get used to this.\"</i> Shocker. <i>\""
-                                        + "The question, then, is simple. Do I make </i>you<i> want this"
-                                        + " as well, or do I simply give you no choice in the matter?\"</i>", self, other), 
-                        Arrays.asList(
-                        new CombatSceneChoice("Seduction", (c, self, other) -> {
-                            c.write(Global.format("Well... If you can't stop {self:direct-object} anyway -"
-                                            + " and chances seem good you won't be able to, given present"
-                                            + " circumstances - then you might as well enjoy it, right?"
-                                            + " <i>\"How wise of you, {other:name}. This should come as no"
-                                            + " suprise, but succubi are </i>very<i> good at making cute"
-                                            + " {other:boy}s like you enjoy themselves. I shall bring all of"
-                                            + " that considerable talent to bear on you. I'd tell you to prepare"
-                                            + " yourself, but you can't.\"</i> Without another word, Reyka"
-                                            + " disentangles {self:reflective} from you and walks off, leaving"
-                                            + " you bewildered on the ground, staring after {self:direct-object}."
-                                            , self, other));
-                            useSeduction();
-                            return true;
-                        }),
-                        new CombatSceneChoice("Helplessness", (c, self, other) -> {
-                            c.write(Global.format("You're not about to just roll over and give up. Maybe you can"
-                                            + " win, maybe you can't, but you are sure as hell going to fight"
-                                            + " every step of the way. <i>\"Mmmm, excellent. I do like a challenge,"
-                                            + " {other:name}. It makes winning so much more satisfying. Make sure"
-                                            + " you train before we meet next, because I sure will.\"</i>"
-                                            + " {self:PRONOUN} wiggles {self:possessive} hips against you."
-                                            + " <i>\"In fact, you might want to get used to being in this position,"
-                                            + " I think you'll find yourself down there quite a lot.\" {self:PRONOUN}"
-                                            + " gives you a quick peck on your lips and flies off. After a few"
-                                            + " seconds, you get back up and ready to go. It might be a good"
-                                            + " idea to take {self:possessive} advice to heart...", self, other));
-                            useDisabling();
-                            return true;
-                        }),
-                        new CombatSceneChoice("What? You're just going to win! [Hard Mode]", (c, self, other) -> {
-                            c.write(Global.format("{self:PRONOUN} is talking like {self:pronoun}'s already won!"
-                                            + " You let {self:direct-object} know that you're confident you"
-                                            + " can take {self:direct-object} on. Almost instantly, a wide,"
-                                            + " elated grin appears on Reyka's face and you feel a suspicious wetness"
-                                            + " down below. <i>\"Oooh, {other:name}! You're getting me all hot!\"</i>"
-                                            + " Indeed, the grinding of {self:possessive} crotch against yours"
-                                            + " is getting quite enthusiastic. <i>\"I am </i>really<i> going to"
-                                            + " enjoy this. I want you to give it everything you've got, {other:name},"
-                                            + " that way there will be that much more for me to take! Oh, I just"
-                                            + " can't wait to see if you can back up your talk! You'd better"
-                                            + " not dissapoint me, {other:name}!\"</i>", self, other));
-                            useSeduction();
-                            useDisabling();
-                            return true;
-                        }))));
-
-        character.addCombatScene(new CombatScene((c, self, other) -> self.getLevel() >= 22
-                        && !Global.checkFlag(REYKA_DRAINING_FOCUS) && !Global.checkFlag(REYKA_CORRUPTION_FOCUS)
-                        && (Global.checkFlag(REYKA_DISABLING_FOCUS) || Global.checkFlag(REYKA_SEDUCTION_FOCUS))
-                        , (c, self, other) -> Global.format("After your fight, Reyka is staring at you"
-                                        + " appraisingly. <i>\"{other:name}, your progress lately has"
-                                        + " been impressive. I've been keeping a close eye on you -"
-                                        + " sometimes a </i>very<i> close eye - and I've determined"
-                                        + " that I could really use some your skills in the Games."
-                                        + " We could do that in one of two ways. Either you let me..."
-                                        + " tweak you a little bit to be more helpful, or I could just"
-                                        + " take some of it directly. Which would you prefer?\"</i>", self, other), 
-                         Arrays.asList(
-                         new CombatSceneChoice("Go team demon!", (c, self, other) -> {
-                             c.write(Global.format("Working with Reyka seems like a good deal. 'Tweaking'"
-                                             + " sounds a little worrisome, but you know that for all"
-                                             + " of {self:possessive} talk, Reyka isn't all that bad."
-                                             + " Or, at least, {self:pronoun} hasn't been. You inform"
-                                             + " {self:direct-object} of your decision. <i>\"How wonderful,"
-                                             + " {other:name}! You just do what you always do, I'll have"
-                                             + " to go perform a ritual. It will be pretty stressful, so"
-                                             + " I will need plenty of kisses from my new partner, yes?"
-                                             + " Now, if you'll excuse me, I need to go find a virgin or two"
-                                             + " for the ritual. Maybe three, just to be safe.\"</i> Right."
-                                             + " Not all that bad. Right?", self, other));
-                             useCorruption();
-                             return true;
-                         }),
-                         new CombatSceneChoice("'Tweaking' sounds really bad...", (c, self, other) -> {
-                             c.write(Global.format("You don't know what Reyka means by 'tweaking you',"
-                                             + " but you're pretty sure you don't <i>want</i> to know."
-                                             + " You turn down {self:possessive} offer. <i>\"A shame. I had"
-                                             + " hoped we could come to an understanding. In the end it doesn't"
-                                             + " really matter, though. If you thought I was good at 'borrowing'"
-                                             + " your strength before, wait until I find some clever ways around"
-                                             + " the restrictions the Benefactor imposed. Don't worry, though."
-                                             + " I'll replace every pebble of power I take with a mountain's"
-                                             + " worth of ecstasy.\"</i> {self:PRONOUN} blows you a kiss which"
-                                             + " impacts with physical force, and before you fully recover she's"
-                                             + " already walked off.", self, other));
-                             useDraining();
-                             return true;
-                         }),
-                         new CombatSceneChoice("Why not let Reyka help you, instead? [Hard Mode]", (c, self, other) -> {
-                             c.write(Global.format("<i>\"Hahaha! Oh, {other:name}, you really are quite charming,"
-                                             + " you know that? But very well, you do not wish to aid me. Then I"
-                                             + " will simply have to make you. I'm sure that after a little bit"
-                                             + " of that 'tweaking' I mentioned you will be much more"
-                                             + " amenable towards letting me borrow some of your talents."
-                                             + " Ah, the thrill of the hunt! %s I'll see you around, {other:name},"
-                                             + " that I can promise you\"</i> You think you might be in trouble..."
-                                             , self, other, Global.checkFlag(REYKA_DISABLING_FOCUS) &&
-                                             Global.checkFlag(REYKA_SEDUCTION_FOCUS) ? "First your complete "
-                                                             + "self-confidence, now this. You're shaping up"
-                                                             + " to be quite the worthy opponent!" : "Your"
-                                                             + " determination is getting be all worked up!"
-                                                             + " It's about time I got a proper rival!"));
-                             useCorruption();
-                             useDraining();
-                             return true;
-                         })
-                         )));
+        
+        this.addFirstFocusScene();      
+        this.addSecondFocusScene();     
+        
+     
     }
 
     private void useDisabling() {
@@ -380,16 +266,26 @@ public class Reyka extends BasePersonality {
         });
 
         character.addLine(CharacterLine.DESCRIBE_LINER, (c, self, other) -> {
-            return "Reyka the succubus stands before you, six feet tall with"
-                            + " the most stunningly beautiful body you have ever seen."
-                            + " Her long black hair enshrines her perfect face like a priceless"
-                            + " painting. Her arms are slim and end in long-fingered,"
-                            + " soft hands, nails polished shining red. Underneath, her long and"
-                            + " perfectly formed legs and delicate feet stand in an imposing posture."
-                            + " Behind her, you see a pair of relatively small but powerful-looking bat wings.<br/>"
-                            + " Her gaze speaks of indescribable pleasure, but your mind reminds you"
-                            + " of the cost of indulging in a succubus' body: Give her half a chance"
-                            + " and she will suck out your very soul.";
+            
+            if (self.get(Attribute.Divinity) > 15) { 
+               return "Reyka is no longer just a regular succubus - as if her being a succubus wasn't already scary enough: Standing before you is a dark goddess radiating a terrifying aura of unholy power. "
+                                + "Reyka remains tall in stature, but her alluring face and beautiful body now call to you to prostrate yourself before her and submit to her will. Her hands with their "
+                                + "red-polished nails now look as horribly cruel as they do enticing, gentle, and soft. Underneath, her long and perfectly formed legs and delicate feet stand in an "
+                                + "imposing posture. Behind her, you see a pair of magnificent looking bat-like wings, commanding you to submit to her embrace and worship her.<br/><br/>"
+                                + "Her gaze both captivates you and terrifies you - it's a gaze of indescribable pleasure and unknown power. She'll do worse than suck out your soul...far worse.";
+            } else {
+                 return "Reyka the succubus stands before you, six feet tall with"
+                                + " the most stunningly beautiful body you have ever seen."
+                                + " Her long black hair enshrines her perfect face like a priceless"
+                                + " painting. Her arms are slim and end in long-fingered,"
+                                + " soft hands, nails polished shining red. Underneath, her long and"
+                                + " perfectly formed legs and delicate feet stand in an imposing posture."
+                                + " Behind her, you see a pair of relatively small but powerful-looking bat wings.<br/>"
+                                + " Her gaze speaks of indescribable pleasure, but your mind reminds you"
+                                + " of the cost of indulging in a succubus' body: Give her half a chance"
+                                + " and she will suck out your very soul.";
+            }
+
         });
 
         character.addLine(CharacterLine.LEVEL_DRAIN_LINER, (c, self, other) -> {
@@ -630,5 +526,135 @@ public class Reyka extends BasePersonality {
         }
     }
     
+    /**Helper method to Add this character's first Combat focus scene 
+     * REYKA: Disable or Seduction
+     * 
+     * */
+    private void addFirstFocusScene(){
+        character.addCombatScene(new CombatScene((c, self, other) -> self.getLevel() >= 12 
+                        && !Global.checkFlag(REYKA_DISABLING_FOCUS) && !Global.checkFlag(REYKA_SEDUCTION_FOCUS)
+                        , (c, self, other) -> Global.format("You had turned your back to Reyka after your fight."
+                                        + " Big mistake. Out of nowhere, {self:pronoun} crashes into"
+                                        + " you from behind with great force, knocking you down."
+                                        + " You quickly roll over, but Reyka binds your legs together at"
+                                        + " the knees and holds them close to {self:direct-object}. <i>\"My,"
+                                        + " {other:name}, I could get used to this.\"</i> Shocker. <i>\""
+                                        + "The question, then, is simple. Do I make </i>you<i> want this"
+                                        + " as well, or do I simply give you no choice in the matter?\"</i>", self, other), 
+                        Arrays.asList(
+                        new CombatSceneChoice("Seduction", (c, self, other) -> {
+                            c.write(Global.format("Well... If you can't stop {self:direct-object} anyway -"
+                                            + " and chances seem good you won't be able to, given present"
+                                            + " circumstances - then you might as well enjoy it, right?"
+                                            + " <i>\"How wise of you, {other:name}. This should come as no"
+                                            + " suprise, but succubi are </i>very<i> good at making cute"
+                                            + " {other:boy}s like you enjoy themselves. I shall bring all of"
+                                            + " that considerable talent to bear on you. I'd tell you to prepare"
+                                            + " yourself, but you can't.\"</i> Without another word, Reyka"
+                                            + " disentangles {self:reflective} from you and walks off, leaving"
+                                            + " you bewildered on the ground, staring after {self:direct-object}."
+                                            , self, other));
+                            useSeduction();
+                            return true;
+                        }),
+                        new CombatSceneChoice("Helplessness", (c, self, other) -> {
+                            c.write(Global.format("You're not about to just roll over and give up. Maybe you can"
+                                            + " win, maybe you can't, but you are sure as hell going to fight"
+                                            + " every step of the way. <i>\"Mmmm, excellent. I do like a challenge,"
+                                            + " {other:name}. It makes winning so much more satisfying. Make sure"
+                                            + " you train before we meet next, because I sure will.\"</i>"
+                                            + " {self:PRONOUN} wiggles {self:possessive} hips against you."
+                                            + " <i>\"In fact, you might want to get used to being in this position,"
+                                            + " I think you'll find yourself down there quite a lot.\" {self:PRONOUN}"
+                                            + " gives you a quick peck on your lips and flies off. After a few"
+                                            + " seconds, you get back up and ready to go. It might be a good"
+                                            + " idea to take {self:possessive} advice to heart...", self, other));
+                            useDisabling();
+                            return true;
+                        }),
+                        new CombatSceneChoice("What? You're just going to win! [Hard Mode]", (c, self, other) -> {
+                            c.write(Global.format("{self:PRONOUN} is talking like {self:pronoun}'s already won!"
+                                            + " You let {self:direct-object} know that you're confident you"
+                                            + " can take {self:direct-object} on. Almost instantly, a wide,"
+                                            + " elated grin appears on Reyka's face and you feel a suspicious wetness"
+                                            + " down below. <i>\"Oooh, {other:name}! You're getting me all hot!\"</i>"
+                                            + " Indeed, the grinding of {self:possessive} crotch against yours"
+                                            + " is getting quite enthusiastic. <i>\"I am </i>really<i> going to"
+                                            + " enjoy this. I want you to give it everything you've got, {other:name},"
+                                            + " that way there will be that much more for me to take! Oh, I just"
+                                            + " can't wait to see if you can back up your talk! You'd better"
+                                            + " not dissapoint me, {other:name}!\"</i>", self, other));
+                            useSeduction();
+                            useDisabling();
+                            return true;
+                        }))));
+    }
     
+    /**Helper method to Add this character's second Combat focus scene 
+     * REYKA:  Drain or Corruption
+     * 
+     * */
+    private void addSecondFocusScene(){
+        character.addCombatScene(new CombatScene((c, self, other) -> self.getLevel() >= 22
+                        && !Global.checkFlag(REYKA_DRAINING_FOCUS) && !Global.checkFlag(REYKA_CORRUPTION_FOCUS)
+                        && (Global.checkFlag(REYKA_DISABLING_FOCUS) || Global.checkFlag(REYKA_SEDUCTION_FOCUS))
+                        , (c, self, other) -> Global.format("After your fight, Reyka is staring at you"
+                                        + " appraisingly. <i>\"{other:name}, your progress lately has"
+                                        + " been impressive. I've been keeping a close eye on you -"
+                                        + " sometimes a </i>very<i> close eye - and I've determined"
+                                        + " that I could really use some your skills in the Games."
+                                        + " We could do that in one of two ways. Either you let me..."
+                                        + " tweak you a little bit to be more helpful, or I could just"
+                                        + " take some of it directly. Which would you prefer?\"</i>", self, other), 
+                         Arrays.asList(
+                         new CombatSceneChoice("Go team demon!", (c, self, other) -> {
+                             c.write(Global.format("Working with Reyka seems like a good deal. 'Tweaking'"
+                                             + " sounds a little worrisome, but you know that for all"
+                                             + " of {self:possessive} talk, Reyka isn't all that bad."
+                                             + " Or, at least, {self:pronoun} hasn't been. You inform"
+                                             + " {self:direct-object} of your decision. <i>\"How wonderful,"
+                                             + " {other:name}! You just do what you always do, I'll have"
+                                             + " to go perform a ritual. It will be pretty stressful, so"
+                                             + " I will need plenty of kisses from my new partner, yes?"
+                                             + " Now, if you'll excuse me, I need to go find a virgin or two"
+                                             + " for the ritual. Maybe three, just to be safe.\"</i> Right."
+                                             + " Not all that bad. Right?", self, other));
+                             useCorruption();
+                             return true;
+                         }),
+                         new CombatSceneChoice("'Tweaking' sounds really bad...", (c, self, other) -> {
+                             c.write(Global.format("You don't know what Reyka means by 'tweaking you',"
+                                             + " but you're pretty sure you don't <i>want</i> to know."
+                                             + " You turn down {self:possessive} offer. <i>\"A shame. I had"
+                                             + " hoped we could come to an understanding. In the end it doesn't"
+                                             + " really matter, though. If you thought I was good at 'borrowing'"
+                                             + " your strength before, wait until I find some clever ways around"
+                                             + " the restrictions the Benefactor imposed. Don't worry, though."
+                                             + " I'll replace every pebble of power I take with a mountain's"
+                                             + " worth of ecstasy.\"</i> {self:PRONOUN} blows you a kiss which"
+                                             + " impacts with physical force, and before you fully recover she's"
+                                             + " already walked off.", self, other));
+                             useDraining();
+                             return true;
+                         }),
+                         new CombatSceneChoice("Why not let Reyka help you, instead? [Hard Mode]", (c, self, other) -> {
+                             c.write(Global.format("<i>\"Hahaha! Oh, {other:name}, you really are quite charming,"
+                                             + " you know that? But very well, you do not wish to aid me. Then I"
+                                             + " will simply have to make you. I'm sure that after a little bit"
+                                             + " of that 'tweaking' I mentioned you will be much more"
+                                             + " amenable towards letting me borrow some of your talents."
+                                             + " Ah, the thrill of the hunt! %s I'll see you around, {other:name},"
+                                             + " that I can promise you\"</i> You think you might be in trouble..."
+                                             , self, other, Global.checkFlag(REYKA_DISABLING_FOCUS) &&
+                                             Global.checkFlag(REYKA_SEDUCTION_FOCUS) ? "First your complete "
+                                                             + "self-confidence, now this. You're shaping up"
+                                                             + " to be quite the worthy opponent!" : "Your"
+                                                             + " determination is getting be all worked up!"
+                                                             + " It's about time I got a proper rival!"));
+                             useCorruption();
+                             useDraining();
+                             return true;
+                         })
+                         )));
+    }
 }

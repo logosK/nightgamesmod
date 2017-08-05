@@ -62,8 +62,8 @@ public class Edge extends Skill {
                         || target.roll(getSelf(), c, accuracy(c, target));
         if (!hit) {
             c.write(getSelf(), Global.format("{self:NAME-POSSESSIVE} hands descend towards"
-                            + "{other:name-possessive} {other:body-part:cock}, but "
-                            + "{other:pronoun} succeeds in keeping them well away.", getSelf(), target));
+                            + " {other:name-possessive} {other:body-part:cock}, but "
+                            + "{other:pronoun} "+target.action("succeed", "succeeds")+" in keeping them well away.", getSelf(), target));
             return false;
         } else if (target.getArousal().percent() < 100) {
             c.write(getSelf(), Global.format("{self:SUBJECT-ACTION:jerk|jerks} {other:name-possessive}"

@@ -38,8 +38,10 @@ public abstract class BaseNPCTime extends Activity {
         return knownFlag.isEmpty() || Global.checkFlag(knownFlag);
     }
 
-    List<TransformationOption> options;
+    /** All possible transformations that can be undertaken while during this NPC's time. */
+    List<TransformationOption> transformationOptions;
 
+    /** Override to pouplate transformationOptions */
     public abstract void buildTransformationPool();
 
     public List<Loot> getGiftables() {
@@ -49,8 +51,16 @@ public abstract class BaseNPCTime extends Activity {
     }
 
     public abstract void subVisit(String choice);
-
     public abstract void subVisitIntro(String choice);
+    
+    public abstract void doPlayGamesWith();
+    public abstract void doHaveSex();
+    public abstract void doSparring();
+    public abstract void doAddictionScene();
+    public abstract void doGivePresent();
+    
+    public abstract void doSpecialFunction1();
+    public abstract void doSpecialFunction2();
 
     public Optional<String> getAddictionOption() {
         return Optional.empty();
@@ -69,7 +79,7 @@ public abstract class BaseNPCTime extends Activity {
         Global.gui().clearCommand();
         List<Loot> giftables = getGiftables();
         Optional<TransformationOption> optionalOption =
-                        options.stream().filter(opt -> choice.equals(opt.option)).findFirst();
+                        transformationOptions.stream().filter(opt -> choice.equals(opt.option)).findFirst();
         Optional<Loot> optionalGiftOption = giftables.stream()
                         .filter(gift -> choice.equals(Global.capitalizeFirstLetter(gift.getName()))).findFirst();
 
@@ -115,7 +125,7 @@ public abstract class BaseNPCTime extends Activity {
             if (!transformationFlag.equals("")) {
                 Global.flag(transformationFlag);
             }
-            options.stream()
+            transformationOptions.stream()
                    .forEach(opt -> {
                 boolean allowed = true;
                 Global.gui().message(opt.option + ":");
@@ -148,7 +158,7 @@ public abstract class BaseNPCTime extends Activity {
                 Global.gui().choose(this, "Games");
                 Global.gui().choose(this, "Sparring");
                 Global.gui().choose(this, "Sex");
-                if (!options.isEmpty()) {
+                if (!transformationOptions.isEmpty()) {
                     Global.gui().choose(this, transformationOptionString);
                 }
                 if (npc.getAffection(player) > 30) {

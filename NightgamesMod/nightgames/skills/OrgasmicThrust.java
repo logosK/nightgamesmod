@@ -89,7 +89,7 @@ public class OrgasmicThrust extends Thrust {
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return true;
     }
 

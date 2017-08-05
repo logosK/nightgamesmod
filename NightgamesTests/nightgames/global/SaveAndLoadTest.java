@@ -21,7 +21,7 @@ public class SaveAndLoadTest {
     private Path savePath = new File("NightGamesTests/nightgames/global/test_save.ngs").toPath();
 
     @Before public void setUp() throws Exception {
-        new TestGlobal();
+        new Global();
     }
 
     @Test public void testLoadAndSave() throws Exception {

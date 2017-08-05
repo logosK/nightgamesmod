@@ -76,7 +76,7 @@ Foot Fetishist (Starting Weakness) - Gives a permanent foot fetish at 25% intens
 Frenzy Scent (Kat Pheromones focus) - Pheromones get a chance to cause Frenzied in the opponent.
 Immobile (unavailable) - Cannot move out of combat. Exclusive to Rosea. (Trees can have sex, but they cannot walk, apparently.)
 Feral Agility (Kat Speed focus) - Bonus to Cunning, evasion and counter chance while Feral.
-Feral Strength (Kay Power focus) - Bonus to Power and grip strength while Feral.
+Feral Strength (Kat Power focus) - Bonus to Power and grip strength while Feral.
 Free Spirit - Better at escaping pins, has a chance to resist mind control.
 Frenzying Juices - Bodily fluids have a chance of causing Frenzied.
 Genuflection (Angel Worship focus) - Instead of standing up, opponents will sometimes kneel.
@@ -126,7 +126,7 @@ Mimic Clothing (Airi Slime Queen + Parasite focus) - Clones can transform themse
 Mimic BodyPart (Airi Slime Queen + Mimicry focus) - Clones can transform themselves into body parts for the opponent.
 Mind Controller (Mara Addiction) - Allows Mara to 'addict' opponents by looking into their eyes as they cum. Thwarted by blindfolds.
 Mind Control Resistance (unavailable) - Temporary trait which gives players under Mara's control to resist attempts at mind control from others.
-Mindless Desire (Kat Frenzy focus) - Lowers opponents' charisma (and by extension, tempation damage) while Frenzied.
+Mindless Desire (Kat Frenzy focus) - Lowers opponents' charisma (and by extension, temptation damage) while Frenzied.
 Misdirection (Cassie daytime games) - Unlocks Diversion, which sacrifices an article of clothing in order to get behind the opponent.
 Mojo Master - Gives +20 max mojo. Pretty underwhelming, I think.
 Naive (Starting Weakness) - Chance not to get Cynical, which normally prevents the chaining of mental effects.
@@ -161,7 +161,7 @@ Powerful Hips - Can use dominant sex skills from the submissive position.
 Primal Heat (Kat Frenzy focus) - Bonus to seduction while Frenzied. (Scales with Animism.)
 Pro Heels - Eliminates the negative impacts of wearing heels. (easier to knock down, lower speed)
 Protective - Shields a pet's owner from harmful status effects. Unique to Caroline, one of Angel's friends.
-Pussy Handler - Bonus pleasure when targeting pussy,
+Pussy Handler - Bonus pleasure when targeting pussy.
 Quick Recovery - Recovers stamina more rapidly out of combat.
 Rapid Meiosis (Airi Slime Queen focus) - Creates clones upon orgasm.
 Raw Sexuality - Causes passive temptation damage to all parties in combat.
@@ -213,7 +213,7 @@ Sweet Lips (Cassie Mouth focus) - Adds temptation damage whenever oral skills ca
 Symbiosis (Airi Slime Carrier focus) - Slime Carrier can heal the character and build mojo for them. 
 Sympathetic - NPC's are more likely to help sympathetic characters in threeways.
 Tactician (Angel Followers focus) - Pets have +50% arousal and stamina.
-Takedown (Jewel Takedown foucs) - Tackle always hits, does increased damage and causes Winded when used against tired opponents (<20% stamina).
+Takedown (Jewel Takedown focus) - Tackle always hits, does increased damage and causes Winded when used against tired opponents (<20% stamina).
 Tease (Kat daytime games) - Gain mojo when evading attacks.
 Tempting Ass (Jewel Anal focus) - Gain a chance to cause Frenzied when the opponent has Ass Fuck available, and a chance to turn a regular Fuck into Ass Fuck.
 Tempting Tits (Cassie Breast focus) - Cause tempt damage to opponent when they can see your tits.
@@ -234,7 +234,7 @@ Unsatisfied (Kat Frenzy focus) - Becomes almost immune to arousal which is not c
 Unstable Genome (Airi Mimicry focus) - Gains Attributes when transforming.
 Untamed (Kat Power focus) - When using Wild Thrust or Wild Ride from a submissive position, has a chance to flip to the dominant position.
 Unwavering (Kat Power focus) - Will not get stunned when knocked down.
-Vaginal Tongue - Marker indicating the prescene of the said organ.
+Vaginal Tongue - Marker indicating the presence of the said organ.
 Valkyrie (unavailable) - Marker for the upgrade to Sarah, one of Angel's friends.
 Voracity (Airi Parasite focus) - Parasites will drain Stamina in order to grow faster.
 Witch (Cassie advanced class) - Marks Cassie's transition to a witch.

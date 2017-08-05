@@ -96,6 +96,11 @@ public class BreastSmothering extends AbstractFacingStance {
     }
     
     @Override
+    public Position.Dominance dominance() {
+        return Position.Dominance.ABSURD;
+    }
+    
+    @Override
     public void decay(Combat c) {
         time++;
         bottom.weaken(c, (int) top.modifyDamage(DamageType.temptation, bottom, 3));

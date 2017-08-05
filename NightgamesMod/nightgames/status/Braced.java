@@ -69,7 +69,7 @@ public class Braced extends DurationStatus {
         if (affected.canRespond()) {
             possibleStrings = Arrays.asList(
                         "Being wary now, {self:subject-action:manage} to conserve most of {self:possessive} stamina.",
-                        "Being more careful now, {self:subject-action:avoid} {self:action:manage} to conserve most of {self:possessive} stamina."
+                        "Being more careful now, {self:action:manage} to conserve most of {self:possessive} stamina."
                         );
         }
         c.write(affected, Global.format(Global.pickRandom(possibleStrings).get(), affected, affected));
@@ -81,8 +81,8 @@ public class Braced extends DurationStatus {
         List<String> possibleStrings = Arrays.asList("Since {self:subject-action:are} already down, there's not much to drain.");
         if (affected.canRespond()) {
             possibleStrings = Arrays.asList(
-                            "Being wary now, {self:subject-action:avoid} manages to hold on to most of {self:possessive} stamina.",
-                            "Being more careful now, {self:subject-action:avoid} manages to prevent most of the theft of {self:possessive} stamina."
+                            "Being wary now, {self:subject-action:manage} to hold on to most of {self:possessive} stamina.",
+                            "Being more careful now, {self:subject-action:manage} to prevent most of the theft of {self:possessive} stamina."
                             );
         }
         c.write(affected, Global.format(Global.pickRandom(possibleStrings).get(), affected, affected));

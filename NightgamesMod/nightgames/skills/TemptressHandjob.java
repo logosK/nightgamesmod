@@ -67,9 +67,9 @@ public class TemptressHandjob extends Handjob {
     public String deal(Combat c, int damage, Result modifier, Character target) {
         switch (modifier) {
             case miss:
-                return String.format("%s down to %s groin, but %s pulls %s hips back.",
+                return String.format("%s down to %s groin, but %s %s hips back.",
                                 getSelf().subjectAction("reach", "reaches"), target.nameOrPossessivePronoun(),
-                                target.pronoun(), target.possessiveAdjective());
+                                target.subjectAction("pull", "pulls"), target.possessiveAdjective());
             case weak:
                 return String.format("%s %s limp %s and %s it expertly, but it remains flaccid despite %s best efforts.",
                                 getSelf().subjectAction("grab"), target.nameOrPossessivePronoun(),

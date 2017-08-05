@@ -78,7 +78,8 @@ public class Tighten extends Thrust {
             target.body.pleasure(getSelf(), selfO, targetO, m[0], c, this);
         if (m[1] != 0)
             getSelf().body.pleasure(target, targetO, selfO, m[1], 0, c, false, this);
-        if (selfO.isType("ass") && Global.random(100) < 2 + getSelf().get(Attribute.Fetish)) {
+        if (selfO != null && selfO.isType("ass") 
+                        && Global.random(100) < 2 + getSelf().get(Attribute.Fetish)) {
             target.add(c, new BodyFetish(target, getSelf(), "ass", .25));
         }
         return true;
@@ -123,7 +124,7 @@ public class Tighten extends Thrust {
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return true;
     }
     

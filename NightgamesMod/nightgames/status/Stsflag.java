@@ -69,8 +69,6 @@ public enum Stsflag {
     disabling,
     pheromones,
     piercingOdor,
-    buttsluttraining,
-    buttslutificationReady,
     hypnovisor,
     slimed,
     disguised,
@@ -86,4 +84,6 @@ public enum Stsflag {
     permanent,
     mindgames, 
     focussed,
+    buttsluttraining,
+    buttslutificationReady,
 }

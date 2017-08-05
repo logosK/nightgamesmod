@@ -31,7 +31,7 @@ public class Blinded extends Status {
     
     @Override
     public String initialMessage(Combat c, Optional<Status> replacement) {
-        return Global.capitalizeFirstLetter(String.format("%s eyes are now blocked by %s", affected.nameOrPossessivePronoun(), cause));
+        return Global.capitalizeFirstLetter(String.format("%s eyes are now blocked by %s.", affected.nameOrPossessivePronoun(), cause));
     }
 
     @Override

@@ -104,6 +104,11 @@ public class TentacleRape extends Skill {
     }
 
     @Override
+    public Stage getStage() {
+        return Stage.FINISHER;
+    }
+    
+    @Override
     public String deal(Combat c, int damage, Result modifier, Character target) {
         if (modifier == Result.miss) {
             return "You use your " + tentacles.describe(getSelf()) + " to snare " + target.getName()

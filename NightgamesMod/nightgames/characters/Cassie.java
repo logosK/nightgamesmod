@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 
+import javax.print.attribute.standard.MediaSize.Other;
+
 import nightgames.actions.Action;
 import nightgames.actions.IMovement;
 import nightgames.actions.Movement;
@@ -29,6 +31,7 @@ import nightgames.start.NpcConfiguration;
 import nightgames.status.Energized;
 import nightgames.status.Stsflag;
 
+@SuppressWarnings("unused")
 public class Cassie extends BasePersonality {
     /**
      *
@@ -250,71 +253,10 @@ public class Cassie extends BasePersonality {
         character.getGrowth().bonusStamina = 1;
         character.getGrowth().bonusArousal = 3;
 
-        character.addCombatScene(new CombatScene((c, self, other) -> {
-            return self.getLevel() >= 10 && !Global.checkFlag(CASSIE_BREAST_FOCUS) && !Global.checkFlag(CASSIE_MOUTH_FOCUS);
-        }, (c, self, player) -> "Before leaving, " + character.getName() + " turns and asks you \"Hey " + player.getName() + ", what turns you on more? Just for the sakes of... science let's say. I noticed you spending a lot of time on my boobs... are you a tits " + player.guyOrGirl()+ "? Or do you prefer something more romantic? Maybe a kiss would do?\"",
-                Arrays.asList(
-                        new CombatSceneChoice("Stare at her breasts", (c, self, other) -> {
-                            c.write("Cassie catches your gaze with her eyes and lightly giggles. \"I knew it, " + c.getOpponent(character).boyOrGirl() + "s are all about boobs right? Hmm I wonder if I can use this to my advantage...\"");
-                            useBreastsFocus();
-                            return true;
-                        }),
-                        new CombatSceneChoice("Stare at her lips", (c, self, other) -> {
-                            c.write("Cassie watches you carefully and catches your gaze sliding towards her succulent pink lips. "
-                                            + "\"Oooooh, do you like how my mouth feels? I'm flattered! Maybe you like kissing? Or... perhaps something a bit more exciting?\"<br/>"
-                                            + "She giggles a bit when your flush reveals your dirty thoughts. \"It's okay " + other.getName() + ", I enjoy it too. Maybe I'll even try a bit harder with it!\"");
-                            useMouthFocus();
-                            return true;
-                        }),
-                        new CombatSceneChoice("Can't decide [Hard Mode]", (c, self, other) -> {
-                            c.write("You're not sure what turns you on more, her luscious succulent lips or her bountiful bosom. Faced with an impossible decision, you do the only thing you can. "
-                                            + "You gulp and avert your eyes. This doesn't escape Cassie's notice though, and she cackles excitedly, \"Can't decide eh? "
-                                            + "That's okay, I'll work hard on making both irresistible!\"");
-                            useMouthFocus();
-                            useBreastsFocus();
-                            character.getGrowth().extraAttributes += 1;
-                            // some compensation for the added difficulty. She gets 4 traits and 3 attribute points/level, and you only get 2 traits, but you are fighting more people than just her.
-                            Global.getPlayer().getGrowth().addTraitPoints(new int[]{1,57},Global.getPlayer());
-                            return true;
-                        })
-                    )
-                ));
-        character.addCombatScene(new CombatScene((c, self, other) -> {
-            return self.getLevel() >= 20 && !Global.checkFlag(CASSIE_SUBMISSIVE_FOCUS) && !Global.checkFlag(CASSIE_ENCHANTRESS_FOCUS)
-                            && (Global.checkFlag(CASSIE_BREAST_FOCUS) || Global.checkFlag(CASSIE_MOUTH_FOCUS));
-        }, (c, self, player) -> "After you two recover from your afterglow, Cassie turns towards you. \"You know, we've been competing in the games for a while now. I can't believe how much I've changed! "
-                        + "When we just started, I've only gone all the way with a " + c.getOpponent(character).boyOrGirl() + " once. I barely knew what to do even! Now though...\" Cassie gigles and starts tickling your spent "
-                        + "cock with an conjured arcane feather. \"Hey " + player.getName()+", what do you think? are you disappointed I turned out this way?\"",
-                Arrays.asList(
-                        new CombatSceneChoice("Liked her old submissiveness more", (c, self, other) -> {
-                            c.write("You reply that you love her new confidence, but you definitely did have a soft spot for her old self that loved to please."
-                                            + "<br/>"
-                                            + "Cassie smiles wryly, \"I thought so. I think I've been trying so hard that I've lost a bit of my true self. "
-                                            + "But you know, it doesn't have to be this way. I think I can try applying some of that in a better way.\" She stands up and gives you a quick kiss on the cheek. "
-                                            + "\"Thank you " +Global.getPlayer().getName() + ", you've really help me make up my mind. But the next time we fight, I definitely wont lose!\"");
-                            useSubmissiveBonus();
-                            return true;
-                        }),
-                        new CombatSceneChoice("Like her new assertive self more", (c, self, other) -> {
-                            c.write("You reply that you love her magic and new her confident self. Falling into her eyes is a real turn on for you. "
-                                            + "Cassie's eyes widen briefly before cracking into a wide smile, \""+ Global.getPlayer().getName() + ", I didn't realize you were a sub! "
-                                                            + "Do you like being helpless? "
-                                                            + "Does it excite you when you are under my control, doing my bidding? I think I can work with that...\"");
-                            useEnchantressBonus();
-                            return true;
-                        }),
-                        new CombatSceneChoice("Both are nice [Hard Mode]", (c, self, other) -> {
-                            c.write("You hesistate a bit when faced with the sudden question. Cassie looks at you expectantly, so in a moment of indecision, you reply that both sides of her are nice."
-                                            + "<br/>"
-                                            + "Cassie blushes and responds, \"Aww that's so sweet! I'll have to work hard to live up to your expectations then.\"");
-                            useSubmissiveBonus();
-                            character.getGrowth().addTrait(21, Trait.flexibleRole);
-                            useEnchantressBonus();
-                            character.getGrowth().extraAttributes += 1;
-                            return true;
-                        })
-                    )
-                ));
+        this.addFirstFocusScene();   
+               
+        this.addSecondFocusScene();   
+        
         preferredAttributes.add(c -> c.get(Attribute.Arcane) < 80 ? Optional.of(Attribute.Arcane) : Optional.empty());
 
         character.getGrowth().addTrait(0, Trait.softheart);
@@ -420,15 +362,20 @@ public class Cassie extends BasePersonality {
     @Override
     public String victory(Combat c, Result flag) {
         if (c.getOpponent(character) instanceof Player && Global.getButtslutQuest().isPresent() && c.getStance().anallyPenetratedBy(c, c.getOpponent(character), character)) {Global.getButtslutQuest().get().addPlayerLossPoint(character);}
-
-        if (c.getOpponent(character).getLastOrgasmPart() instanceof BreastsPart || c.getStance().vaginallyPenetrated(c,c.getOpponent(character))) dominance +=1;
-        if (c.getOpponent(character).getLastOrgasmPart() instanceof BreastsPart && c.getOpponent(character).body.getLargestBreasts().getSensitivity(c.getOpponent(character), character.body.getRandom("hands"))>5) {
+        if (c.getOpponent(character).getLastOrgasmPart() instanceof BreastsPart 
+                        || c.getStance().vaginallyPenetrated(c,c.getOpponent(character))) 
+            dominance +=1;
+        /*if (c.getOpponent(character).getLastOrgasmPart() instanceof BreastsPart 
+                        && c.getOpponent(character).body.getLargestBreasts()
+                            .getSensitivity(c.getOpponent(character), 
+                                            character.body.getRandom("hands")) > 5) {
             character.arousal.empty();
             return "incomplete, should be a series of scenes including one where Cassie makes the player lactate magicmilk that only affects themself and prevents breast size reduction"
                             + "and one where Cassie gives the player a bra that reduces breast sensitivity to reasonable levels while worn, but also makes them moo on orgasm, and vibrates while fighting Cassie";
-        } else if (c.getStance().anallyPenetrated(c,c.getOpponent(character))) {
+        } else */if (c.getStance().anallyPenetrated(c,c.getOpponent(character))) {
             character.arousal.empty();
             dominance+=1;
+            character.arousal.empty();
             return "Cassie bucks her hips against your ass wildly causing the strapon to rub hard against your prostate. Your arms and legs feel like jelly as she thrusts in again and again. "
                             + "You're almost shocked as you feel yourself on the edge of orgasm and you're certain you wouldn't be able to stop yourself if Cassie keeps this pace up. Above you Cassie moans "
                             + "loudly clearly in a world of her own. You don't think she even notices as the pleasure from your prostate overcomes you and you shoot your white flag of surrender on the "
@@ -600,7 +547,7 @@ public class Cassie extends BasePersonality {
 
     @Override
     public String defeat(Combat c, Result flag) {
-        if (c.getStance().vaginallyPenetrated(c, c.getOpponent(character))) dominance=Math.min(dominance-1,minDominance);
+        if (c.getStance().vaginallyPenetrated(c, c.getOpponent(character))) dominance=Math.max(dominance-1,minDominance);
         Character opponent = c.getOpponent(character);
         if (character.has(Trait.witch) && Global.random(3) == 0) {
             opponent.add(c, new Energized(opponent, 10));
@@ -822,4 +769,83 @@ public class Cassie extends BasePersonality {
                 return value >= 100;
         }
     }
+    
+    /**Helper method to Add this character's first Combat focus scene 
+     * CASSIE: Breast of Mouth
+     * 
+     * */
+    private void addFirstFocusScene(){
+        character.addCombatScene(new CombatScene((c, self, other) -> {
+            return self.getLevel() >= 10 && !Global.checkFlag(CASSIE_BREAST_FOCUS) && !Global.checkFlag(CASSIE_MOUTH_FOCUS);
+        }, (c, self, player) -> "Before leaving, " + character.getName() + " turns and asks you \"Hey " + player.getName() + ", what turns you on more? Just for the sakes of... science let's say. I noticed you spending a lot of time on my boobs... are you a tits " + player.guyOrGirl()+ "? Or do you prefer something more romantic? Maybe a kiss would do?\"",
+                Arrays.asList(
+                        new CombatSceneChoice("Stare at her breasts", (c, self, other) -> {
+                            c.write("Cassie catches your gaze with her eyes and lightly giggles. \"I knew it, " + c.getOpponent(character).boyOrGirl() + "s are all about boobs right? Hmm I wonder if I can use this to my advantage...\"");
+                            useBreastsFocus();
+                            return true;
+                        }),
+                        new CombatSceneChoice("Stare at her lips", (c, self, other) -> {
+                            c.write("Cassie watches you carefully and catches your gaze sliding towards her succulent pink lips. "
+                                            + "\"Oooooh, do you like how my mouth feels? I'm flattered! Maybe you like kissing? Or... perhaps something a bit more exciting?\"<br/>"
+                                            + "She giggles a bit when your flush reveals your dirty thoughts. \"It's okay " + other.getName() + ", I enjoy it too. Maybe I'll even try a bit harder with it!\"");
+                            useMouthFocus();
+                            return true;
+                        }),
+                        new CombatSceneChoice("Can't decide [Hard Mode]", (c, self, other) -> {
+                            c.write("You're not sure what turns you on more, her luscious succulent lips or her bountiful bosom. Faced with an impossible decision, you do the only thing you can. "
+                                            + "You gulp and avert your eyes. This doesn't escape Cassie's notice though, and she cackles excitedly, \"Can't decide eh? "
+                                            + "That's okay, I'll work hard on making both irresistible!\"");
+                            useMouthFocus();
+                            useBreastsFocus();
+                            character.getGrowth().extraAttributes += 1;
+                            // some compensation for the added difficulty. She gets 4 traits and 3 attribute points/level, and you only get 2 traits, but you are fighting more people than just her.
+                            Global.getPlayer().getGrowth().addTraitPoints(new int[]{1,57},Global.getPlayer());
+                            return true;
+                        })
+                    )
+                ));
+    }
+    /**Helper method to Add this character's second Combat focus scene 
+     * CASSIE: Submissive or enchantress
+     * 
+     * */
+    private void addSecondFocusScene(){
+        character.addCombatScene(new CombatScene((c, self, other) -> {
+            return self.getLevel() >= 20 && !Global.checkFlag(CASSIE_SUBMISSIVE_FOCUS) && !Global.checkFlag(CASSIE_ENCHANTRESS_FOCUS)
+                            && (Global.checkFlag(CASSIE_BREAST_FOCUS) || Global.checkFlag(CASSIE_MOUTH_FOCUS));
+        }, (c, self, player) -> "After you two recover from your afterglow, Cassie turns towards you. \"You know, we've been competing in the games for a while now. I can't believe how much I've changed! "
+                        + "When we just started, I've only gone all the way with a " + c.getOpponent(character).boyOrGirl() + " once. I barely knew what to do even! Now though...\" Cassie gigles and starts tickling your spent "
+                        + "cock with an conjured arcane feather. \"Hey " + player.getName()+", what do you think? are you disappointed I turned out this way?\"",
+                Arrays.asList(
+                        new CombatSceneChoice("Liked her old submissiveness more", (c, self, other) -> {
+                            c.write("You reply that you love her new confidence, but you definitely did have a soft spot for her old self that loved to please."
+                                            + "<br/>"
+                                            + "Cassie smiles wryly, \"I thought so. I think I've been trying so hard that I've lost a bit of my true self. "
+                                            + "But you know, it doesn't have to be this way. I think I can try applying some of that in a better way.\" She stands up and gives you a quick kiss on the cheek. "
+                                            + "\"Thank you " +Global.getPlayer().getName() + ", you've really help me make up my mind. But the next time we fight, I definitely wont lose!\"");
+                            useSubmissiveBonus();
+                            return true;
+                        }),
+                        new CombatSceneChoice("Like her new assertive self more", (c, self, other) -> {
+                            c.write("You reply that you love her magic and new her confident self. Falling into her eyes is a real turn on for you. "
+                                            + "Cassie's eyes widen briefly before cracking into a wide smile, \""+ Global.getPlayer().getName() + ", I didn't realize you were a sub! "
+                                                            + "Do you like being helpless? "
+                                                            + "Does it excite you when you are under my control, doing my bidding? I think I can work with that...\"");
+                            useEnchantressBonus();
+                            return true;
+                        }),
+                        new CombatSceneChoice("Both are nice [Hard Mode]", (c, self, other) -> {
+                            c.write("You hesistate a bit when faced with the sudden question. Cassie looks at you expectantly, so in a moment of indecision, you reply that both sides of her are nice."
+                                            + "<br/>"
+                                            + "Cassie blushes and responds, \"Aww that's so sweet! I'll have to work hard to live up to your expectations then.\"");
+                            useSubmissiveBonus();
+                            character.getGrowth().addTrait(21, Trait.flexibleRole);
+                            useEnchantressBonus();
+                            character.getGrowth().extraAttributes += 1;
+                            return true;
+                        })
+                    )
+                ));
+    }
+    
 }

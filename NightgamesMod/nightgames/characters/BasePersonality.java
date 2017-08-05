@@ -37,6 +37,9 @@ public abstract class BasePersonality implements Personality {
     protected List<PreferredAttribute> preferredAttributes;
     protected CockMod preferredCockMod;
     protected AiModifiers mods;
+    
+    protected int dominance=0;
+    protected int minDominance=0;
 
     protected BasePersonality(String name, boolean isStartCharacter) {
         // Make the built-in character
@@ -250,5 +253,13 @@ public abstract class BasePersonality implements Personality {
                          .isApplicable(c, character, c.getOpponent(character)))
            .forEach(e -> applicable.put(e.getKey(), e.getValue()));
         return applicable;
+    }
+    
+    public void handleQuests(Combat c) {
+        if (Global.getButtslutQuest().isPresent() 
+                        && c.getStance().anallyPenetratedBy(c, Global.getPlayer(),
+                                        character)) {
+            Global.getButtslutQuest().get().addPlayerLossPoint(character);
+        }
     }
 }

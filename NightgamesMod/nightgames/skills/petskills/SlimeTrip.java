@@ -61,7 +61,7 @@ public class SlimeTrip extends SimpleEnemySkill {
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return true;
     }
 }

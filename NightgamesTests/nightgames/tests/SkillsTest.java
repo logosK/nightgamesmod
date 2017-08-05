@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.json.simple.parser.ParseException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +18,6 @@ import nightgames.characters.Character;
 import nightgames.characters.CharacterSex;
 import nightgames.characters.NPC;
 import nightgames.characters.Personality;
-import nightgames.characters.Player;
 import nightgames.characters.custom.CustomNPC;
 import nightgames.characters.custom.JsonSourceNPCDataLoader;
 import nightgames.combat.Combat;
@@ -64,7 +62,7 @@ public class SkillsTest {
 
 	@Before
 	public void prepare() throws JsonParseException, IOException {
-		new Global();
+		Global.initForTesting();
 		Global.newGame("Dummy", Optional.empty(), Collections.emptyList(),
 	                    CharacterSex.male, Collections.emptyMap());
 		npcs1 = new ArrayList<Personality>();
@@ -92,6 +90,7 @@ public class SkillsTest {
 		stances.add(new AnalProne(npcs1.get(0).getCharacter(), npcs1.get(1).getCharacter()));
 		stances.add(new Behind(npcs1.get(0).getCharacter(), npcs1.get(1).getCharacter()));
 		stances.add(new BehindFootjob(npcs1.get(0).getCharacter(), npcs1.get(1).getCharacter(), false));
+        stances.add(new BehindFootjob(npcs1.get(0).getCharacter(), npcs1.get(1).getCharacter(), true));
 		stances.add(new CoiledSex(npcs1.get(0).getCharacter(), npcs1.get(1).getCharacter()));
 		stances.add(new Cowgirl(npcs1.get(0).getCharacter(), npcs1.get(1).getCharacter()));
 		stances.add(new Doggy(npcs1.get(0).getCharacter(), npcs1.get(1).getCharacter()));

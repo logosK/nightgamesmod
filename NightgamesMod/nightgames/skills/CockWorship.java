@@ -104,7 +104,7 @@ public class CockWorship extends Skill {
     public String receive(Combat c, int damage, Result modifier, Character target) {
         return Global.format(
                         "{self:subject} ecstatically crawls to {other:subject} on {self:possessive} knees and reverently cups {other:possessive} {other:body-part:cock}"
-                                        + "with {self:possessive} hands. {self:PRONOUN} carefully takes {other:possessive} member into {self:possessive} {self:body-part:mouth} and starts sucking on it "
+                                        + " with {self:possessive} hands. {self:PRONOUN} carefully takes {other:possessive} member into {self:possessive} {self:body-part:mouth} and starts sucking on it "
                                         + "like it was the most delicious popsicle made. Minutes pass and {self:subject} continues blowing {other:possessive} shaft while idly playing with "
                                         + "{self:reflective}. Feeling a bit too good, {other:subject-action:manage|manages} to push {self:name-do} away from {other:possessive} cock lest {self:pronoun} makes {other:direct-object} cum accidentally.",
                         getSelf(), target);
@@ -116,7 +116,7 @@ public class CockWorship extends Skill {
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return true;
     }
 }

@@ -126,7 +126,7 @@ public class Drain extends Skill {
             String base = "You put your powerful " + muscDesc + " muscles to work whilst" + " transfixing "
                             + target.getName() + "'s gaze with your own, goading " + target.possessiveAdjective()
                             + " energy into " + target.possessiveAdjective() + " cock."
-                            + " Soon it erupts from her into your " + partDesc + ", ";
+                            + " Soon it erupts from "+ target.directObject() + " into your " + partDesc + ", ";
             switch (damage) {
                 case 4:
                     return base + "and you can feel " + target.possessiveAdjective() + " strength pumping into you.";
@@ -144,7 +144,7 @@ public class Drain extends Skill {
                                     + target.possessiveAdjective() + " energy traversing the space between you.";
                 case 6:
                     return base + "far more powerfully than you even thought possible." + " You feel a fragment of "
-                                    + target.possessiveAdjective() + " soul break away from her and"
+                                    + target.possessiveAdjective() + " soul break away from "+target.directObject()+" and"
                                     + " gush into you, taking along a portion of " + target.possessiveAdjective()
                                     + " strength," + " skill and wits, merging with your own. You have clearly"
                                     + " won this fight, and a lot more than that.";
@@ -316,7 +316,7 @@ public class Drain extends Skill {
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return true;
     }
     

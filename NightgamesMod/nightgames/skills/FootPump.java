@@ -49,7 +49,7 @@ public class FootPump extends Skill {
         target.body.pleasure(getSelf(), getSelf().body.getRandom("feet"), target.body.getRandom("cock"), m, c, this);
         target.body.pleasure(getSelf(), getSelf().body.getRandom("hands"), target.body.getRandom("breasts"), m2, c, this);
         if (c.getStance().en != Stance.behindfootjob) {
-            c.setStance(new BehindFootjob(getSelf(), target, c.getStance().anallyPenetrated(c,target)));
+            c.setStance(new BehindFootjob(getSelf(), target, c.getStance().anallyPenetrated(c,target)), getSelf(), true);
         }
         if (Global.random(100) < 15 + 2 * getSelf().get(Attribute.Fetish)) {
             target.add(c, new BodyFetish(target, getSelf(), "feet", .25));
@@ -92,7 +92,7 @@ public class FootPump extends Skill {
         return "Pleasure your opponent with your feet";
     }
 
-    @Override public boolean makesContact() {
+    @Override public boolean makesContact(Combat c) {
         return true;
     }
 

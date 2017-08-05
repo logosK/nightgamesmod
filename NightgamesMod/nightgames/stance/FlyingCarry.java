@@ -133,7 +133,7 @@ public class FlyingCarry extends MaledomSexStance {
     }
     
     @Override
-    public int dominance() {
-        return 5;
+    public Position.Dominance dominance() {
+        return Position.Dominance.ABSURD;
     }
 }

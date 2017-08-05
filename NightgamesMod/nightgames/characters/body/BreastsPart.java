@@ -49,6 +49,7 @@ public class BreastsPart extends GenericBodyPart {
     @Override
     public double getHotness(Character self, Character opponent) {
         double hotness = super.getHotness(self, opponent);
+        
         Clothing top = self.getOutfit().getTopOfSlot(ClothingSlot.top);
         hotness += -.1 + Math.sqrt(getSize()) * .15 * self.getOutfit()
                                                 .getExposure(ClothingSlot.top);

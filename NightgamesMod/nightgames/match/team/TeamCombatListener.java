@@ -7,6 +7,7 @@ import java.util.Optional;
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.combat.CombatListener;
+import nightgames.global.Global;
 import nightgames.match.team.TeamMatch.Team;
 import nightgames.pet.CharacterPet;
 import nightgames.pet.Pet;
@@ -14,17 +15,16 @@ import nightgames.pet.PetCharacter;
 
 public class TeamCombatListener extends CombatListener {
 
-    private final TeamMatch match;
     private Map<Pet, Character> owners;
 
-    public TeamCombatListener(Combat c, TeamMatch match) {
+    public TeamCombatListener(Combat c) {
         super(c);
-        this.match = match;
         owners = new HashMap<>();
     }
 
     @Override
     public void preStart() {
+        TeamMatch match = (TeamMatch) Global.getMatch();
         Team team1 = match.teamOf.get(c.p1);
         Team team2 = match.teamOf.get(c.p2);
         assert team1.captain == c.p1;
@@ -39,6 +39,7 @@ public class TeamCombatListener extends CombatListener {
 
     @Override
     public void postEnd(Optional<Character> winner) {
+        TeamMatch match = (TeamMatch) Global.getMatch();
         if (winner.isPresent()) {
             match.score(winner.get(), 3,
                             Optional.of(" for defeating " + match.teamOf.get(c.getOpponent(winner.get())).name));

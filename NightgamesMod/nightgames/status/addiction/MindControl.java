@@ -84,7 +84,7 @@ public class MindControl extends Addiction {
                 return "<b>Your body tries to steer you towards " + cause.getName() + " all the time, and it's taking"
                         + " serious effort to resist.</b>";
             case MED:
-                return "<b>Keeping your body in line and away from " + cause.getName() + " is getting really difficult know,"
+                return "<b>Keeping your body in line and away from " + cause.getName() + " is getting really difficult, now,"
                         + " and it's a severe strain on your stamina.</b>";
             case NONE:
             default:
@@ -255,7 +255,7 @@ public class MindControl extends Addiction {
                         succeeded = true;
                         description = "You turn your head away as you feel your orgasm coming on, wary of " + controller.getName() + "'s"
                                         + " hypnotic eyes. " + Global.capitalizeFirstLetter(controller.pronoun()) + "'s"
-                                        + " not having it, though. " + controller.pronoun() + " grabs your head"
+                                        + " not having it, though. " + Global.capitalizeFirstLetter(controller.pronoun()) + " grabs your head"
                                         + " and forces your eyelids open with " + controller.directObject()+ " thumbs. ";
                         break;
                     case anal:
@@ -269,7 +269,7 @@ public class MindControl extends Addiction {
                             succeeded = true;
                             description = "You turn your head away as you feel your orgasm coming on, wary of " + controller.getName() + "'s"
                                             + " hypnotic eyes. " + Global.capitalizeFirstLetter(controller.pronoun()) + "'s"
-                                            + " not having it, though. " + controller.pronoun() + " grabs your head"
+                                            + " not having it, though. " + Global.capitalizeFirstLetter(controller.pronoun()) + " grabs your head"
                                             + " and forces your eyelids open with " + controller.directObject() + " thumbs. ";
                             break;
                         } else if (pos instanceof Anal) {
@@ -286,7 +286,7 @@ public class MindControl extends Addiction {
                         if (pos.dom(controller)) {
                             description = "You turn your head away as you feel your orgasm coming on, wary of " + controller.getName() + "'s"
                                             + " hypnotic eyes. " + Global.capitalizeFirstLetter(controller.pronoun()) + "'s"
-                                            + " not having it, though. " + controller.pronoun() + " twists your head back"
+                                            + " not having it, though. " + Global.capitalizeFirstLetter(controller.pronoun()) + " twists your head back"
                                             + " and forces your eyelids open with " + controller.directObject() + " thumbs. ";
                         } else {
                             description = "At the moment of your orgasm, " + controller.getName() + " pulls herself up by"
@@ -299,7 +299,7 @@ public class MindControl extends Addiction {
                             succeeded = true;
                             description = "You turn your head away as you feel your orgasm coming on, wary of " + controller.getName() + "'s"
                                             + " hypnotic eyes. " + Global.capitalizeFirstLetter(controller.pronoun()) + "'s"
-                                            + " not having it, though. " + controller.pronoun() + " grabs your head"
+                                            + " not having it, though. " + Global.capitalizeFirstLetter(controller.pronoun()) + " grabs your head"
                                             + " and forces your eyelids open with " + controller.directObject() + " thumbs. ";
                         } else {
                             succeeded = false;
@@ -487,5 +487,23 @@ public class MindControl extends Addiction {
             return null;
         }
 
+    }
+
+    @Override
+    protected void applyEffects(Character self) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    protected void removeEffects(Character self) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    protected void cleanseAddiction(Character self) {
+        // TODO Auto-generated method stub
+        
     }
 }

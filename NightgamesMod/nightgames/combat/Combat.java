@@ -79,6 +79,7 @@ import nightgames.status.Compulsive;
 import nightgames.status.Compulsive.Situation;
 import nightgames.status.CounterStatus;
 import nightgames.status.DivineCharge;
+import nightgames.status.EnemyButtslutTrainingStatus;
 import nightgames.status.Enthralled;
 import nightgames.status.Falling;
 import nightgames.status.Flatfooted;
@@ -98,6 +99,8 @@ import nightgames.status.addiction.AddictionType;
 public class Combat extends Observable implements Cloneable {
     private static final int NPC_TURN_LIMIT = 75;
     private static final double NPC_DRAW_ERROR_MARGIN = .15;
+    
+    /**Combat phases.*/
     private enum CombatPhase {
         START,
         PRETURN,
@@ -138,8 +141,8 @@ public class Combat extends Observable implements Cloneable {
     private List<CombatListener> listeners;
     
     String imagePath = "";
-    
-    private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new HashMap<String, HashMap<String, List<Integer>>>();
+
+private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new HashMap<String, HashMap<String, List<Integer>>>();
     
     // result: 0 = not actually a fight, 1=p1 win, 2=p2 win, 3=draw
     private static void registerCombatResult(Character p1, Character p2, int result) {
@@ -275,6 +278,8 @@ public class Combat extends Observable implements Cloneable {
     }
 
     public void go() {
+        Global.getMatch().getListeners(this).forEach(listeners::add);
+        listen(CombatListener::preStart);
         if (p1.mostlyNude() && !p2.mostlyNude()) {
             p1.emote(Emotion.nervous, 20);
         }
@@ -325,84 +330,11 @@ public class Combat extends Observable implements Cloneable {
 
     public void doVictory(Character victor, Character loser) {
         registerCombatResult(victor, loser, 1);
-        if (loser.hasDick() && victor.has(Trait.succubus)) {
-            victor.gain(Item.semen, 3);
-            if (loser.human()) {
-                write(victor, "<br/><b>As she leaves, you see all your scattered semen ooze out and gather into a orb in "
-                                + victor.nameOrPossessivePronoun() + " hands. "
-                                + "She casually drops your seed in some empty vials that appeared out of nowhere</b>");
-            } else if (victor.human()) {
-                write(victor, "<br/><b>" + loser.nameOrPossessivePronoun()
-                                + " scattered semen lazily oozes into a few magically conjured flasks. "
-                                + "To speed up the process, you milk " + loser.possessiveAdjective()
-                                + " out of the last drops " + loser.subject()
-                                + " had to offer. Yum, you just got some leftovers.</b>");
-            }
-        } else if (loser.hasDick() && (victor.human() || victor.has(Trait.madscientist))
-                        && victor.has(Item.EmptyBottle, 1)) {
-            // for now only the player and mara collects semen
-            write(victor, Global.format(
-                            "<br/><b>{self:SUBJECT-ACTION:manage|manages} to collect some of {other:name-possessive} scattered semen in an empty bottle</b>",
-                            victor, loser));
-            victor.consume(Item.EmptyBottle, 1, false);
-            victor.gain(Item.semen, 1);
-        }
-        if (checkBottleCollection(victor, loser, DivineMod.INSTANCE)) {
-            write(victor, Global.format(
-                            "<br/><b>{other:SUBJECT-ACTION:shoot|shoots} {self:name-do} a dirty look as {self:subject-action:move|moves} to collect some of {other:name-possessive} divine pussy juices in an empty bottle</b>",
-                            victor, loser));
-            victor.consume(Item.EmptyBottle, 1, false);
-            victor.gain(Item.HolyWater, 1);
-        }
-        if (checkBottleCollection(victor, loser, DemonicMod.INSTANCE)) {
-            write(victor, Global.format(
-                            "<br/><b>{other:SUBJECT-ACTION:shoot|shoots} {self:name-do} a dirty look as {self:subject-action:move|moves} to collect some of {other:name-possessive} demonic pussy juices in an empty bottle</b>",
-                            victor, loser));
-            victor.consume(Item.EmptyBottle, 1, false);
-            victor.gain(Item.ExtremeAphrodisiac, 1);
-        }
-        if (checkBottleCollection(victor, loser, PlantMod.INSTANCE)) {
-            write(victor, Global.format(
-                            "<br/><b>{other:SUBJECT-ACTION:shoot|shoots} {self:name-do} a dirty look as {self:subject-action:move|moves} to collect some of {other:possessive} nectar in an empty bottle</b>",
-                            victor, loser));
-            victor.consume(Item.EmptyBottle, 1, false);
-            victor.gain(Item.nectar, 3);
-        }
-        if (checkBottleCollection(victor, loser, CyberneticMod.INSTANCE)) {
-            write(victor, Global.format(
-                            "<br/><b>{other:SUBJECT-ACTION:shoot|shoots} {self:name-do} a dirty look as {self:subject-action:move|moves} to collect some of {other:possessive} artificial lubricant in an empty bottle</b>",
-                            victor, loser));
-            victor.consume(Item.EmptyBottle, 1, false);
-            victor.gain(Item.LubricatingOils, 1);
-        }
-        if (checkBottleCollection(victor, loser, ArcaneMod.INSTANCE)) {
-            write(victor, Global.format(
-                            "<br/><b>{other:SUBJECT-ACTION:shoot|shoots} {self:name-do} a dirty look as {self:subject-action:move|moves} to collect some of the floating mana wisps ejected from {other:possessive} orgasm in an empty bottle</b>",
-                            victor, loser));
-            victor.consume(Item.EmptyBottle, 1, false);
-            victor.gain(Item.RawAether, 1);
-        }
-        if (checkBottleCollection(victor, loser, FeralMod.INSTANCE)) {
-            write(victor, Global.format(
-                            "<br/><b>{other:SUBJECT-ACTION:shoot|shoots} {self:name-do} a dirty look as {self:subject-action:move|moves} to collect some of {other:possessive} musky juices in an empty bottle</b>",
-                            victor, loser));
-            victor.consume(Item.EmptyBottle, 1, false);
-            victor.gain(Item.FeralMusk, 1);
-        }
-        if (checkBottleCollection(victor, loser, GooeyMod.INSTANCE)) {
-            write(victor, Global.format(
-                            "<br/><b>{other:SUBJECT-ACTION:shoot|shoots} {self:name-do} a dirty look as {self:subject-action:move|moves} to collect some of {other:possessive} goo in an empty bottle</b>",
-                            victor, loser));
-            victor.consume(Item.EmptyBottle, 1, false);
-            victor.gain(Item.BioGel, 1);
-        }
-        if (checkBottleCollection(victor, loser, FieryMod.INSTANCE)) {
-            write(victor, Global.format(
-                            "<br/><b>{other:SUBJECT-ACTION:shoot|shoots} {self:name-do} a dirty look as {self:subject-action:move|moves} to collect some of {other:possessive} excitement in an empty bottle</b>",
-                            victor, loser));
-            victor.consume(Item.EmptyBottle, 1, false);
-            victor.gain(Item.MoltenDrippings, 1);
-        }
+              
+        //Collect Bottle-able substances. 
+        this.doBottleCollection(victor, loser); 
+        
+        //If they lost, Do a willpower gain.
         if (loser.human() && loser.getWillpower().max() < loser.getMaxWillpowerPossible()) {
             write("<br/>Ashamed at your loss, you resolve to win next time.");
             write("<br/><b>Gained 1 Willpower</b>.");
@@ -560,19 +492,20 @@ public class Combat extends Observable implements Cloneable {
             opponents.forEach(opponent -> opponent.weaken(this, opponent.getStamina().max() / 10));
         }
         String beguilingbreastCompletedFlag = Trait.beguilingbreasts.name() + "Completed";
-        if (character.has(Trait.beguilingbreasts) && character.body.getLargestBreasts().getSize() >= BreastsPart.dd.getSize() && !getCombatantData(character).getBooleanFlag(beguilingbreastCompletedFlag)
+        if (character.has(Trait.beguilingbreasts) && !getCombatantData(character).getBooleanFlag(beguilingbreastCompletedFlag)
                         && character.outfit.slotOpen(ClothingSlot.top)) {
             Character mainOpponent = getOpponent(character);
             write(character, Global.format("The instant {self:subject-action:lay|lays} {self:possessive} eyes on {other:name-possessive} bare breasts, {self:possessive} consciousness flies out of {self:possessive} mind. " +
-                            (character.canAct() ? "{other:SUBJECT-ACTION:giggle|giggles} a bit and cups her stupendous tits and gives them a little squeeze to which {self:subject} can only moan." : ""), 
-                            character, mainOpponent));
+                            (character.canAct() ? "{other:SUBJECT-ACTION:giggle|giggles} a bit and {other:action:cup} {other:possessive} {other:body-part:breasts}"
+                                                + "  and {other:action:give} them a little squeeze to which {self:subject} can only moan." : ""), 
+                            mainOpponent, character));
             opponents.forEach(opponent -> opponent.add(this, new Trance(opponent, 50)));
             getCombatantData(character).setBooleanFlag(beguilingbreastCompletedFlag, true);
         }
 
         Character mainOpponent = getOpponent(character);
         String buttslutCompletedFlag = Trait.buttslut.name() + "Completed";
-        Boolean isButtSlutting = (character.has(Trait.buttslut) && !getCombatantData(character).getBooleanFlag(buttslutCompletedFlag)) || (character instanceof Player && Global.getButtslutQuest().isPresent() && Global.random(100) < 100*Global.getButtslutQuest().get().getAssPresentChance());
+        boolean isButtSlutting = (character.has(Trait.buttslut) && !getCombatantData(character).getBooleanFlag(buttslutCompletedFlag)) || (character instanceof Player && Global.getButtslutQuest().isPresent() && Global.random(100) < 100*Global.getButtslutQuest().get().getAssPresentChance());
         if (((mainOpponent.hasDick() && mainOpponent.crotchAvailable() && mainOpponent.getArousal().percent() > 20) || mainOpponent.has(Trait.strapped)) && isButtSlutting && !stance.havingSex(this)) {
             write(character, Global.format("<b>Seeing the thick phallus in front of {self:reflective}, {self:subject} can't "
                             + "but help offer up {self:possessive} ass in hopes that {other:subject} will fill {self:possessive} rear door.</b>", character, mainOpponent));
@@ -584,8 +517,11 @@ public class Combat extends Observable implements Cloneable {
                     write(character, Global.format("{self:SUBJECT-ACTION:strip|strips} off {self:possessive} %s", character, mainOpponent, article.getName()));
                 }
             }
-            if (character.has(Trait.buttslut)) getCombatantData(character).setBooleanFlag(buttslutCompletedFlag, true);
-            //else {((EnemyButtslutTrainingStatus)character.getStatus(Stsflag.buttslutificationReady)).activate();}
+            if (character.has(Trait.buttslut)) {
+                getCombatantData(character).setBooleanFlag(buttslutCompletedFlag, true);
+            } else {
+                ((EnemyButtslutTrainingStatus)character.getStatus(Stsflag.buttslutificationReady)).activate();
+            }
             setStance(new Behind(mainOpponent, character));
         }
 
@@ -661,14 +597,14 @@ public class Combat extends Observable implements Cloneable {
     
     private void checkIndividualAuraEffects(Character self, Character other) {
         if (self.has(Trait.magicEyeEnthrall) && other.getArousal().percent() >= 50 && getStance().facing(other, self)
-                        && Global.random(20) == 0) {
+                        && !other.is(Stsflag.blinded) && Global.random(20) == 0) {
             write(self,
                             Global.format("<br/>{other:NAME-POSSESSIVE} eyes start glowing and captures both {self:name-possessive} gaze and consciousness.",
                                             other, self));
             other.add(this, new Enthralled(other, self, 2));
         }
         if (self.has(Trait.magicEyeTrance) && other.getArousal().percent() >= 50 && getStance().facing(other, self)
-                        && Global.random(10) == 0) {
+                        && !other.is(Stsflag.blinded) && Global.random(10) == 0) {
             write(self,
                             Global.format("<br/>{other:NAME-POSSESSIVE} eyes start glowing and send {self:subject} straight into a trance.",
                                             other, self));
@@ -676,7 +612,7 @@ public class Combat extends Observable implements Cloneable {
         }
 
         if (self.has(Trait.magicEyeFrenzy) && other.getArousal().percent() >= 50 && getStance().facing(other, self)
-                        && Global.random(10) == 0) {
+                        && !other.is(Stsflag.blinded) && Global.random(10) == 0) {
             write(self,
                             Global.format("<br/>{other:NAME-POSSESSIVE} eyes start glowing and send {self:subject} into a frenzy.",
                                             other, self));
@@ -684,19 +620,20 @@ public class Combat extends Observable implements Cloneable {
         }
 
         if (self.has(Trait.magicEyeArousal) && other.getArousal().percent() >= 50 && getStance().facing(other, self)
-                        && Global.random(5) == 0) {
+                        && !other.is(Stsflag.blinded) && Global.random(5) == 0) {
             write(self,
                             Global.format("<br/>{other:NAME-POSSESSIVE} eyes start glowing and {self:subject-action:feel|feels} a strong pleasure wherever {other:possessive} gaze lands. {self:SUBJECT-ACTION:are|is} literally being raped by {other:name-possessive} eyes!",
                                             other, self));
             other.temptNoSkillNoSource(this, self, self.get(Attribute.Seduction) / 2);
         }
 
-        if (getStance().facing(self, other) && other.breastsAvailable() && !self.has(Trait.temptingtits) && other.has(Trait.temptingtits)) {
-            write(self, Global.format("{self:SUBJECT-ACTION:can't avert|can't avert} {self:possessive} eyes from {other:NAME-POSSESSIVE} perfectly shaped tits sitting in front of {self:possessive} eyes.",
+        if (getStance().facing(self, other) && other.breastsAvailable() && !self.has(Trait.temptingtits) 
+                        && other.has(Trait.temptingtits) && !other.is(Stsflag.blinded)) {
+            write(self, Global.format("{self:SUBJECT-ACTION:can't avert|can't avert} {self:possessive} eyes from {other:name-possessive} perfectly shaped tits sitting in front of {self:possessive} eyes.",
                                             self, other));
             self.temptNoSkill(this, other, other.body.getRandomBreasts(), 10 + Math.max(0, other.get(Attribute.Seduction) / 3 - 7));
         } else if (getOpponent(self).has(Trait.temptingtits) && getStance().behind(other)) {
-            write(self, Global.format("{self:SUBJECT-ACTION:feel|feels} a heat in {self:possessive} groin as {other:name-possessive} enticing tits pressing against {self:possessive} back.",
+            write(self, Global.format("{self:SUBJECT-ACTION:feel|feels} a heat in {self:possessive} groin as {other:name-possessive} enticing tits press against {self:possessive} back.",
                             self, other));
             double selfTopExposure = self.outfit.getExposure(ClothingSlot.top);
             double otherTopExposure = other.outfit.getExposure(ClothingSlot.top);
@@ -772,8 +709,7 @@ public class Combat extends Observable implements Cloneable {
                     CombatPhase.P2_ACT_FIRST,
                     CombatPhase.P2_ACT_SECOND,
                     CombatPhase.UPKEEP,
-                    CombatPhase.LEVEL_DRAIN,
-                    CombatPhase.DETERMINE_SKILL_ORDER);
+                    CombatPhase.LEVEL_DRAIN);
 
     private CombatPhase determinePostCombatPhase() {
         CombatPhase nextPhase = CombatPhase.RESULTS_SCENE;
@@ -968,7 +904,8 @@ public class Combat extends Observable implements Cloneable {
     }
 
     private boolean rollWorship(Character self, Character other) {
-        if ((other.has(Trait.objectOfWorship) || self.is(Stsflag.lovestruck)) && (other.breastsAvailable() || other.crotchAvailable())) {
+        if (!other.isPet() && (other.has(Trait.objectOfWorship) || self.is(Stsflag.lovestruck))
+                        && (other.breastsAvailable() || other.crotchAvailable())) {
             double chance = Math.min(20, Math.max(5, other.get(Attribute.Divinity) + 10 - self.getLevel()));
             if (other.has(Trait.revered)) {
                 chance += 10;
@@ -984,7 +921,7 @@ public class Combat extends Observable implements Cloneable {
 
     private boolean rollAssWorship(Character self, Character opponent) {
         int chance = 0;
-        if (opponent.has(Trait.temptingass)) {
+        if (opponent.has(Trait.temptingass) && !opponent.isPet()) {
             chance += Math.max(0, Math.min(15, opponent.get(Attribute.Seduction) - self.get(Attribute.Seduction)));
             if (self.is(Stsflag.feral))
                 chance += 10;
@@ -1118,16 +1055,16 @@ public class Combat extends Observable implements Cloneable {
     }
     
     private void doStanceTick(Character self) {
-        double stanceDominance = getStance().getDominanceOfStance(this, self);
-        if (!(stanceDominance > 0)) {
+        int stanceDominance = getStance().getCurrentDominance(this, self).ordinal();
+        if (stanceDominance <= Position.Dominance.NEUTRAL.ordinal()) {
             return;
         }
 
         Character other = getStance().getPartner(this, self);
-        Addiction add = other.getAddiction(AddictionType.DOMINANCE).orElse(null);
+        Addiction add = other.getAddiction(AddictionType.DOMINANCE).orElse(null);       //FIXME: Causes trigger even though addiction has 0 magnitude.
         if (add != null && add.atLeast(Severity.MED) && !add.wasCausedBy(self)) {
             write(self, Global.format("{self:name} does {self:possessive} best to be dominant, but with the "
-                        + "way Jewel has been working {self:direct-object} over {self:pronoun-action:are} completely desensitized." , self, other));
+                        + "way "+ add.getCause().getName() + " has been working {self:direct-object} over {self:pronoun-action:are} completely desensitized." , self, other));
             return;
         }
 
@@ -1136,18 +1073,18 @@ public class Combat extends Observable implements Cloneable {
                             Global.format("{self:NAME-POSSESSIVE} cold gaze in {self:possessive} dominant position"
                                             + " makes {other:direct-object} shiver.",
                                             self, other));
-            other.loseWillpower(this, (int)stanceDominance, 0, false, " (SM Queen)");
+            other.loseWillpower(this, stanceDominance, 0, false, " (SM Queen)");
         } else if (getStance().time % 2 == 0 && getStance().time > 0) {
             if (other.has(Trait.indomitable)) {
                 write(self, Global.format("{other:SUBJECT}, typically being the dominant one,"
-                                + "{other:action:are|is} simply refusing to acknowledge {self:name-possessive}"
+                                + " {other:action:are|is} simply refusing to acknowledge {self:name-possessive}"
                                 + " current dominance.", self, other));
                 stanceDominance = Math.max(1, stanceDominance - 3);
             } else {
                 write(self, Global.format("{other:NAME-POSSESSIVE} compromising position takes a toll on {other:possessive} willpower.",
                                             self, other));
             }
-            other.loseWillpower(this, (int)stanceDominance, 0, false, " (Dominance)");
+            other.loseWillpower(this, stanceDominance, 0, false, " (Dominance)");
         }
         
         if (self.has(Trait.confidentdom) && Global.random(2) == 0) {
@@ -1219,7 +1156,7 @@ public class Combat extends Observable implements Cloneable {
                 write(skill.user()
                            .subjectAction("use ", "uses ") + skill.getLabel(this) + ".");
             }
-            if (skill.makesContact() && !getStance().dom(target) && target.canAct()
+            if (skill.makesContact(this) && !getStance().dom(target) && target.canAct()
                             && checkCounter(skill.user(), target, skill)) {
                 write("Countered!");
                 if (!resolveCrossCounter(skill, target, 25)) {
@@ -1227,7 +1164,7 @@ public class Combat extends Observable implements Cloneable {
                 }
                 madeContact = true;
                 success = false;
-            } else if (target.is(Stsflag.counter) && skill.makesContact()) {
+            } else if (target.is(Stsflag.counter) && skill.makesContact(this)) {
                 write("Countered!");
                 if (!resolveCrossCounter(skill, target, 50)) {
                     CounterStatus s = (CounterStatus) target.getStatus(Stsflag.counter);
@@ -1243,7 +1180,7 @@ public class Combat extends Observable implements Cloneable {
                 success = false;
             } else {
                 success = Skill.resolve(skill, this, target);
-                madeContact |= success && skill.makesContact();
+                madeContact |= success && skill.makesContact(this);
             }
             if (success) {
                 if (skill.getTags(this).contains(SkillTag.thrusting) && skill.user().has(Trait.Jackhammer) && Global.random(2) == 0) {
@@ -1494,6 +1431,7 @@ public class Combat extends Observable implements Cloneable {
             Global.gui().watchCombat(this);
             resumeNoClearFlag();
         }
+        listen(l -> l.postEnd(Optional.of(assist)));
     }
 
     /**
@@ -1794,8 +1732,9 @@ public class Combat extends Observable implements Cloneable {
         return Global.noneCharacter();
     }
 
-    public void writeSystemMessage(String battleString) {
-        if (Global.checkFlag(Flag.systemMessages)) {
+    public void writeSystemMessage(String battleString, boolean basic) {
+        if (Global.checkFlag(Flag.systemMessages) || basic 
+                        && Global.checkFlag(Flag.basicSystemMessages)) {
             write(battleString);
         }
     }
@@ -1871,6 +1810,16 @@ public class Combat extends Observable implements Cloneable {
             Thread.dumpStack();
             return;
         }
+        if (otherCombatants.contains(self)) {
+            write(String.format("<b>ERROR: Tried to add %s as a pet for %s,"
+                            + " but there is already a %s who is a pet for %s."
+                            + " Please report this as a bug. The extra pet will not"
+                            + " be added, and you can probably continue playing without"
+                            + " problems.</b>", self.getTrueName(), master.getTrueName(),
+                            self.getTrueName(), self.getSelf().owner().getTrueName()));
+            Thread.dumpStack();
+            return;
+        }
         if (master.has(Trait.leadership)) {
             int levelups = Math.max(5, master.getLevel() / 4);
             self.getSelf().setPower(self.getSelf().getPower() + levelups);
@@ -1911,4 +1860,85 @@ public class Combat extends Observable implements Cloneable {
     public void addListener(CombatListener listener) {
         listeners.add(listener);
     }
+    
+    /**Collects any substances gained in this victory into an empty bottle.*/
+    public void doBottleCollection(Character victor, Character loser){
+        
+        if (loser.hasDick() && victor.has(Trait.succubus)) {
+            victor.gain(Item.semen, 3);
+            if (loser.human()) {
+                write(victor, "<br/><b>As she leaves, you see all your scattered semen ooze out and gather into a orb in "
+                                + victor.nameOrPossessivePronoun() + " hands. "
+                                + "She casually drops your seed in some empty vials that appeared out of nowhere</b>");
+            } else if (victor.human()) {
+                write(victor, "<br/><b>" + loser.nameOrPossessivePronoun()
+                                + " scattered semen lazily oozes into a few magically conjured flasks. "
+                                + "To speed up the process, you milk " + loser.possessiveAdjective()
+                                + " out of the last drops " + loser.subject()
+                                + " had to offer. Yum, you just got some leftovers.</b>");
+            }
+        } else if (loser.hasDick() && (victor.human() || victor.has(Trait.madscientist)) && victor.has(Item.EmptyBottle, 1)) {
+            write(victor, Global.format("<br/><b>{self:SUBJECT-ACTION:manage|manages} to collect some of {other:name-possessive} scattered semen in an empty bottle</b>", victor, loser));
+            victor.consume(Item.EmptyBottle, 1, false);
+            victor.gain(Item.semen, 1);
+        }
+         
+        if (checkBottleCollection(victor, loser, DivineMod.INSTANCE)) {
+            write(victor, Global.format(
+                            "<br/><b>{other:SUBJECT-ACTION:shoot|shoots} {self:name-do} a dirty look as {self:subject-action:move|moves} to collect some of {other:name-possessive} divine pussy juices in an empty bottle</b>",
+                            victor, loser));
+            victor.consume(Item.EmptyBottle, 1, false);
+            victor.gain(Item.HolyWater, 1);
+        }
+        if (checkBottleCollection(victor, loser, DemonicMod.INSTANCE)) {
+            write(victor, Global.format(
+                            "<br/><b>{other:SUBJECT-ACTION:shoot|shoots} {self:name-do} a dirty look as {self:subject-action:move|moves} to collect some of {other:name-possessive} demonic pussy juices in an empty bottle</b>",
+                            victor, loser));
+            victor.consume(Item.EmptyBottle, 1, false);
+            victor.gain(Item.ExtremeAphrodisiac, 1);
+        }
+        if (checkBottleCollection(victor, loser, PlantMod.INSTANCE)) {
+            write(victor, Global.format(
+                            "<br/><b>{other:SUBJECT-ACTION:shoot|shoots} {self:name-do} a dirty look as {self:subject-action:move|moves} to collect some of {other:possessive} nectar in an empty bottle</b>",
+                            victor, loser));
+            victor.consume(Item.EmptyBottle, 1, false);
+            victor.gain(Item.nectar, 3);
+        }
+        if (checkBottleCollection(victor, loser, CyberneticMod.INSTANCE)) {
+            write(victor, Global.format(
+                            "<br/><b>{other:SUBJECT-ACTION:shoot|shoots} {self:name-do} a dirty look as {self:subject-action:move|moves} to collect some of {other:possessive} artificial lubricant in an empty bottle</b>",
+                            victor, loser));
+            victor.consume(Item.EmptyBottle, 1, false);
+            victor.gain(Item.LubricatingOils, 1);
+        }
+        if (checkBottleCollection(victor, loser, ArcaneMod.INSTANCE)) {
+            write(victor, Global.format(
+                            "<br/><b>{other:SUBJECT-ACTION:shoot|shoots} {self:name-do} a dirty look as {self:subject-action:move|moves} to collect some of the floating mana wisps ejected from {other:possessive} orgasm in an empty bottle</b>",
+                            victor, loser));
+            victor.consume(Item.EmptyBottle, 1, false);
+            victor.gain(Item.RawAether, 1);
+        }
+        if (checkBottleCollection(victor, loser, FeralMod.INSTANCE)) {
+            write(victor, Global.format(
+                            "<br/><b>{other:SUBJECT-ACTION:shoot|shoots} {self:name-do} a dirty look as {self:subject-action:move|moves} to collect some of {other:possessive} musky juices in an empty bottle</b>",
+                            victor, loser));
+            victor.consume(Item.EmptyBottle, 1, false);
+            victor.gain(Item.FeralMusk, 1);
+        }
+        if (checkBottleCollection(victor, loser, GooeyMod.INSTANCE)) {
+            write(victor, Global.format(
+                            "<br/><b>{other:SUBJECT-ACTION:shoot|shoots} {self:name-do} a dirty look as {self:subject-action:move|moves} to collect some of {other:possessive} goo in an empty bottle</b>",
+                            victor, loser));
+            victor.consume(Item.EmptyBottle, 1, false);
+            victor.gain(Item.BioGel, 1);
+        }
+        if (checkBottleCollection(victor, loser, FieryMod.INSTANCE)) {
+            write(victor, Global.format(
+                            "<br/><b>{other:SUBJECT-ACTION:shoot|shoots} {self:name-do} a dirty look as {self:subject-action:move|moves} to collect some of {other:possessive} excitement in an empty bottle</b>",
+                            victor, loser));
+            victor.consume(Item.EmptyBottle, 1, false);
+            victor.gain(Item.MoltenDrippings, 1);
+        }
+    }
+    
 }

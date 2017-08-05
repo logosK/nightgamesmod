@@ -50,6 +50,7 @@ public class EnthrallingTrap extends Trap {
                                 + " It would seem to be very easy to have your way with her now, but"
                                 + " who or whatever left that thing there will probably be thinking" + " the same.");
             }
+            //TODO: Currently, being Enthralled and moving to a new location doesn't use a turn of the effect, meaning that you still lose all those turns once you are in combat. 
             target.addNonCombat(new Enthralled(target, owner, 5 + getStrength() / 20));
             target.location().opportunity(target, this);
         }

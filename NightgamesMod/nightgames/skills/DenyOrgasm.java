@@ -56,13 +56,13 @@ public class DenyOrgasm extends Skill {
     public String deal(Combat c, int damage, Result modifier, Character target) {
         return "You give " + target.subject() + " a quick smirk and tighten yourself around "
                         + target.possessiveAdjective() + " cock, keeping " + target.possessiveAdjective()
-                        + " boiling cum from escaping";
+                        + " boiling cum from escaping.";
     }
 
     @Override
     public String receive(Combat c, int damage, Result modifier, Character target) {
         return getSelf().subject() + " gives " + target.subject() + " a quick smirk and tightens down on "
                         + target.possessiveAdjective() + " cock, keeping " + target.possessiveAdjective()
-                        + " boiling cum from escaping";
+                        + " boiling cum from escaping.";
     }
 }

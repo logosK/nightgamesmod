@@ -145,7 +145,7 @@ public interface BodyPart {
         }
     }
 
-    public Collection<? extends BodyPartMod> getMods();
+    public Collection<BodyPartMod> getMods();
 
     public static boolean hasType(Collection<BodyPart> parts, String type) {
         return parts.stream().anyMatch(part -> part.isType(type));
@@ -164,6 +164,11 @@ public interface BodyPart {
     public default boolean isGenital() {
         return genitalTypes.contains(getType());
     }
+    
+    public default boolean isGenitalOrToy() {
+        return isGenital() || isType("strapon");
+    }
+    
     public default double getFetishChance() {
         return 0.25;
     }

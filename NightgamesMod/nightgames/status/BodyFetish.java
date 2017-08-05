@@ -35,7 +35,7 @@ public class BodyFetish extends DurationStatus {
     public double magnitude;
 
     public BodyFetish(Character affected, Character origin, String part, double magnitude) {
-        super(Global.capitalizeFirstLetter(part) + " Fetish", affected, 10);
+        super(Global.capitalizeFirstLetter(part) + " Fetish", affected, 20);            //Increased Duration from 10->20 - DSM
         flag(Stsflag.bodyfetish);
         this.origin = origin;
         this.part = part;

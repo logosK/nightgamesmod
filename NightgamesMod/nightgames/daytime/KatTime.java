@@ -38,7 +38,7 @@ public class KatTime extends BaseNPCTime {
 
     @Override
     public void buildTransformationPool() {
-        options = new ArrayList<>();
+        transformationOptions = new ArrayList<>();
         {
             TransformationOption growCock = new TransformationOption();
             growCock.ingredients.put(Item.PriapusDraft, 3);
@@ -85,7 +85,7 @@ public class KatTime extends BaseNPCTime {
                 other.body.add(new CockPart().applyMod(new SizeMod(SizeMod.COCK_SIZE_BIG)).applyMod(CockMod.primal));
                 return true;
             };
-            options.add(growCock);
+            transformationOptions.add(growCock);
         }
         {
             TransformationOption removeCock = new TransformationOption();
@@ -98,7 +98,7 @@ public class KatTime extends BaseNPCTime {
                 other.body.removeAll("cock");
                 return true;
             };
-            options.add(removeCock);
+            transformationOptions.add(removeCock);
         }
         {
             TransformationOption primalCock = new ApplyPartModOption("cock", CockMod.primal);
@@ -107,7 +107,7 @@ public class KatTime extends BaseNPCTime {
             primalCock.ingredients.put(Item.Aphrodisiac, 25);
             primalCock.option = "Primal Cock";
             primalCock.scene = "[Placeholder]<br/>Kat uses her totemic magic to convert your penis into a primal cock.";
-            options.add(primalCock);
+            transformationOptions.add(primalCock);
         }
         {
             TransformationOption feralPussy = new ApplyPartModOption("pussy", FeralMod.INSTANCE);
@@ -116,7 +116,7 @@ public class KatTime extends BaseNPCTime {
             feralPussy.ingredients.put(Item.FemDraft, 10);
             feralPussy.option = "Feral Pussy";
             feralPussy.scene = "[Placeholder]<br/>Kat uses her totemic magic to convert your pussy into a feral one.";
-            options.add(feralPussy);
+            transformationOptions.add(feralPussy);
         }
         TransformationOption catTail = new TransformationOption();
         catTail.ingredients.put(Item.Rope, 10);
@@ -128,7 +128,7 @@ public class KatTime extends BaseNPCTime {
             self.body.addReplace(TailPart.cat, 1);
             return true;
         };
-        options.add(catTail);
+        transformationOptions.add(catTail);
         TransformationOption catEars = new TransformationOption();
         catEars.ingredients.put(Item.Rope, 10);
         catEars.ingredients.put(Item.Aphrodisiac, 25);
@@ -141,7 +141,7 @@ public class KatTime extends BaseNPCTime {
             self.body.addReplace(EarPart.cat, 1);
             return true;
         };
-        options.add(catEars);
+        transformationOptions.add(catEars);
     }
 
     @Override
@@ -494,5 +494,47 @@ public class KatTime extends BaseNPCTime {
         } else if (choice.equals("Leave")) {
             done(true);
         }
+    }
+
+    @Override
+    public void doPlayGamesWith() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doHaveSex() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doSparring() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doAddictionScene() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doGivePresent() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doSpecialFunction1() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doSpecialFunction2() {
+        // TODO Auto-generated method stub
+        
     }
 }

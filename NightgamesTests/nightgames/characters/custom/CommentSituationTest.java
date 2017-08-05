@@ -3,35 +3,19 @@ package nightgames.characters.custom;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import nightgames.Resources.ResourceLoader;
-import nightgames.actions.Movement;
-import nightgames.areas.Area;
-import nightgames.characters.BlankPersonality;
-import nightgames.characters.CharacterSex;
-import nightgames.characters.NPC;
-import nightgames.combat.Combat;
-import nightgames.global.Global;
-import nightgames.global.TestGlobal;
 import nightgames.json.JsonUtils;
 import org.hamcrest.core.*;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.File;
-import java.io.InputStreamReader;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * Tests for the CommentSituation class.

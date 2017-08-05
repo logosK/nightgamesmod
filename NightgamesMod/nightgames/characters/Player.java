@@ -190,6 +190,8 @@ public class Player extends Character {
         return true;
     }
 
+    /**Overridden abstract method for determining if this character is human - meaning the player. 
+     * TODO: Reccomend renaming to isHuman(), to make more meaningful name and easier to find.*/
     @Override
     public boolean human() {
         return true;

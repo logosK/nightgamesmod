@@ -87,7 +87,7 @@ public class PerfectTouch extends Skill {
                             + " before %s can get ahold of %s clothes.",
                             getSelf().subject(), target.nameDirectObject(),
                             target.pronoun(), target.action("catch"),
-                            target.possessiveAdjective(), getSelf().pronoun(),
+                            getSelf().possessiveAdjective(), getSelf().pronoun(),
                             target.possessiveAdjective());
         } else {
             return String.format("%s lunges towards %s, but dodges away without hitting %s. "
@@ -107,7 +107,7 @@ public class PerfectTouch extends Skill {
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return true;
     }
 }

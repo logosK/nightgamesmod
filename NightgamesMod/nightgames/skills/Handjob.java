@@ -132,7 +132,7 @@ public class Handjob extends Skill {
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return true;
     }
     

@@ -193,8 +193,8 @@ public class Engulfed extends Position {
     }
     
     @Override
-    public int dominance() {
-        return 5;
+    public Position.Dominance dominance() {
+        return Position.Dominance.ABSURD;
     }
     
     @Override

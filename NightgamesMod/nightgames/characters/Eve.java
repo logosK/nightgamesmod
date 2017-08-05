@@ -17,11 +17,18 @@ import nightgames.items.clothing.Clothing;
 import nightgames.start.NpcConfiguration;
 
 public class Eve extends BasePersonality {
-    /**
+    
+    /**TODO: Even needs portraits. 
      *
      */
     private static final long serialVersionUID = -8169646189131720872L;
 
+    
+    public static final String EVE_FIRSTTYPE1_FOCUS = "EveFirst1Focus";
+    public static final String EVE_FIRSTTYPE2_FOCUS = "EveFirst2Focus";
+    public static final String EVE_SECONDTYPE1_FOCUS = "EveSecond1Focus";
+    public static final String EVE_SECONDTYPE2_FOCUS = "EveSecond2Focus";
+    
     public Eve() {
         this(Optional.empty(), Optional.empty());
     }
@@ -189,7 +196,7 @@ public class Eve extends BasePersonality {
 
         character.addLine(CharacterLine.DESCRIBE_LINER, (c, self, other) -> {
             return "If there's one word to describe Eve's appearance, it would have to be 'wild'. Her face is quite pretty, though her eyes are an unnerving silver color. "
-                            + "She has bright purple hair gathered in a messy ponytail, a variety of tattoos decorating her extremely shapely body, and of couse it's "
+                            + "She has bright purple hair gathered in a messy ponytail, a variety of tattoos decorating her extremely shapely body, and of course it's "
                             + "impossible to miss the larger than average cock and balls hanging between between her legs.";
         });
     }
@@ -417,4 +424,20 @@ public class Eve extends BasePersonality {
                 return value >= 100;
         }
     }
+    
+    /**Helper method to Add this character's first Combat focus scene 
+     * EVE: 
+     * 
+     * */
+    private void addFirstFocusScene(){
+        
+    }
+    /**Helper method to Add this character's second Combat focus scene 
+     * EVE: 
+     * 
+     * */
+    private void addSecondFocusScene(){
+        
+    }
+    
 }

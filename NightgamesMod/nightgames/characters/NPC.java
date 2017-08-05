@@ -198,6 +198,7 @@ public class NPC extends Character {
         gainTrophy(c, target);
 
         target.defeated(this);
+        ai.handleQuests(c);
         c.write(ai.victory(c, flag));
         gainAttraction(target, 1);
         target.gainAttraction(this, 2);
@@ -474,6 +475,11 @@ public class NPC extends Character {
     public void detect() {
     }
 
+    
+    /**This method determines what happens when a character moves.
+     * 
+     * FIXME: Currently, characters may repeat encaounters. THis method, as well as Area.encounter() and NPC.Move and player.Move() might be mixing or looping.
+     * */
     @Override
     public void move() {
         Global.ifDebuggingPrintln(DebugFlags.DEBUG_SCENE,
@@ -561,6 +567,7 @@ public class NPC extends Character {
             }
         }
         available.removeIf(a -> a == null || !a.usable(this));
+        available.forEach(System.out::println);
         if (available.isEmpty()) {
             available.add(new Wait());
         }

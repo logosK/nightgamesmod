@@ -65,24 +65,27 @@ import nightgames.characters.Character;
 import nightgames.characters.CharacterSex;
 import nightgames.characters.NPC;
 import nightgames.characters.Trait;
-import nightgames.characters.body.BasicCockPart;
+import nightgames.characters.body.AssPart;
 import nightgames.characters.body.BodyPart;
+import nightgames.characters.body.BodyPartMod;
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.CockPart;
 import nightgames.characters.body.EarPart;
-import nightgames.characters.body.ModdedCockPart;
 import nightgames.characters.body.MouthPart;
 import nightgames.characters.body.PussyPart;
 import nightgames.characters.body.TailPart;
 import nightgames.characters.body.WingsPart;
+import nightgames.characters.body.mods.SizeMod;
 import nightgames.characters.custom.CustomNPC;
 import nightgames.characters.custom.JsonSourceNPCDataLoader;
 import nightgames.characters.custom.NPCData;
 import nightgames.characters.custom.effect.MoneyModEffect;
 import nightgames.creator.model.AiMod;
+import nightgames.creator.model.BodyPartType;
 import nightgames.creator.model.ItemAmount;
 import nightgames.creator.model.MouthType;
+import nightgames.creator.model.NamedBodyPart;
 import nightgames.creator.model.TraitBean;
 import nightgames.creator.req.CreatorRequirement;
 import nightgames.global.Global;
@@ -145,23 +148,6 @@ public class CreatorGui extends Application {
 	private TextField power, seduction, cunning, perception, speed, science, arcane, ki, dark, fetish, animism, bio,
 			divinity, willpower, medicine, technique, submissive, hypnosis, nymphomania, slime, ninjutsu, temporal;
 	private Map<String, TextField> attrMap;
-
-	@FXML
-	private ChoiceBox<BreastsPart> breasts;
-	@FXML
-	private ChoiceBox<BasicCockPart> cockSize;
-	@FXML
-	private ChoiceBox<CockMod> cockType;
-	@FXML
-	private ChoiceBox<PussyPart> pussy;
-	@FXML
-	private ChoiceBox<TailPart> tail;
-	@FXML
-	private ChoiceBox<EarPart> ears;
-	@FXML
-	private ChoiceBox<WingsPart> wings;
-	@FXML
-	private ChoiceBox<MouthType> mouth;
 	@FXML
 	private TextField hotness;
 
@@ -232,6 +218,22 @@ public class CreatorGui extends Application {
 	private AnchorPane verificationPane;
 	private VerificationList verification;
 
+
+	@FXML
+	private ChoiceBox<NamedBodyPart> bodyPartBox;
+	@FXML
+	private ChoiceBox<BodyPartType> bodyPartTypeBox;
+	@FXML
+	private Button bodyPartAdd, bodyPartRemove;
+	@FXML
+	private ListView<NamedBodyPart> bodyPartList;
+	@FXML
+	private ChoiceBox<BodyPartMod> bodyModBox;
+	@FXML
+	private Button bodyModAdd, bodyModRemove;
+	@FXML
+	private ListView<BodyPartMod> bodyModList;
+	
 	private ObjectProperty<NPC> currentChar = new SimpleObjectProperty<>();
 	private SceneStore store = new SceneStore();
 
@@ -285,40 +287,48 @@ public class CreatorGui extends Application {
 	}
 
 	private void setupBody() {
-		breasts.getItems().addAll(BreastsPart.values());
-		breasts.getSelectionModel().select(BreastsPart.c);
-
-		cockType.getItems().addAll(CockMod.values());
-		cockType.getItems().add(null);
-		cockType.getSelectionModel().select(null);
-
-		cockSize.getItems().addAll(BasicCockPart.values());
-		cockSize.getItems().add(null);
-		cockSize.getSelectionModel().select(null);
-		cockSize.getSelectionModel().selectedItemProperty().addListener((obs, old, nw) -> {
-			cockType.setDisable(nw == null);
-		});
-
-		pussy.getItems().addAll(PussyPart.values());
-		pussy.getItems().add(null);
-		pussy.getSelectionModel().select(PussyPart.normal);
 		hackNormalPussy();
-
-		ears.getItems().addAll(EarPart.values());
-		ears.getSelectionModel().select(EarPart.normal);
-
-		mouth.getItems().addAll(MouthType.values());
-		mouth.getSelectionModel().select(MouthType.normal);
-
-		tail.getItems().addAll(TailPart.values());
-		tail.getItems().add(null);
-		tail.getSelectionModel().select(null);
-
-		wings.getItems().addAll(WingsPart.values());
-		wings.getItems().add(null);
-		wings.getSelectionModel().select(null);
+		bodyPartTypeBox.getItems().addAll(BodyPartType.values());
+		bodyPartTypeBox.getSelectionModel().select(0);
+		bodyPartTypeBox.getSelectionModel().selectedItemProperty().addListener(
+				(obs, old, nw) -> fillPartBox(nw));
 	}
 
+	private void fillPartBox(BodyPartType type) {
+		bodyPartBox.getItems().clear();
+		switch (type) {
+		case ASS:
+			bodyPartBox.getItems().addAll(
+					new NamedBodyPart(new AssPart(), "Small Ass", new SizeMod(SizeMod.ASS_SIZE_SMALL)),
+					new NamedBodyPart(new AssPart(), "Normal Ass", new SizeMod(SizeMod.ASS_SIZE_NORMAL)),
+					new NamedBodyPart(new AssPart(), "Girlish Ass", new SizeMod(SizeMod.ASS_SIZE_GIRLISH)),
+					new NamedBodyPart(new AssPart(), "Flared Ass", new SizeMod(SizeMod.ASS_SIZE_FLARED)),
+					new NamedBodyPart(new AssPart(), "Large Ass", new SizeMod(SizeMod.ASS_SIZE_LARGE)),
+					new NamedBodyPart(new AssPart(), "Huge Ass", new SizeMod(SizeMod.ASS_SIZE_HUGE))
+					);
+			break;
+		case BREASTS:
+			
+			break;
+		case COCK:
+			break;
+		case EAR:
+			break;
+		case FACE:
+			break;
+		case MOUTH:
+			break;
+		case PUSSY:
+			break;
+		case TAIL:
+			break;
+		case TENTACLE:
+			break;
+		case WINGS:
+			break;
+		}
+	}
+	
 	private void setupAttrs() {
 		attrMap = new HashMap<>();
 		attrMap.put("power", power);

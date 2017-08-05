@@ -123,11 +123,11 @@ public class BreastSmother extends Skill {
         }
         else {
             b.append( "You rock " + target.getName() + "'s head between your "
-                            + getSelf().body.getRandomBreasts().fullDescribe(getSelf()) + " trying to force " + target.directObject() + " to gasp.");                           
+                            + getSelf().body.getRandomBreasts().fullDescribe(getSelf()) + " trying to force " + target.directObject() + " to gasp. ");                           
         }
         
         if (getSelf().has(Trait.temptingtits)) {
-            b.append(Global.capitalizeFirstLetter(target.possessiveAdjective()) + " can't help but groan in pleasure from having " + target.possessiveAdjective() + " face stuck between your perfect tits");                          
+            b.append(Global.capitalizeFirstLetter(target.pronoun()) + " can't help but groan in pleasure from having " + target.possessiveAdjective() + " face stuck between your perfect tits");                          
             if (getSelf().has(Trait.beguilingbreasts)) {
                 b.append(", and you smile as " + target.pronoun() + " snuggles deeper into your cleavage");
             } 
@@ -166,7 +166,7 @@ public class BreastSmother extends Skill {
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return true;
     }
 }

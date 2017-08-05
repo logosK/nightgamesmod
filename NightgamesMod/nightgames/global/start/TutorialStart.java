@@ -27,7 +27,7 @@ public class TutorialStart implements GameStarter, Scene {
                                       + " have the same idea you do. The two of you quickly stand "
                                       + "together, while Mara and Jewel do the same. Angel pairs with"
                                       + " Maya, for now. <i>\"Good. We will be changing up the pairs "
-                                      + "later on, but for now, let's get strated As I've explained,"
+                                      + "later on, but for now, let's get started. As I've explained,"
                                       + " to win, you are going to have to bring your opponent to "
                                       + "orgasm. Obviously, since sexfights are still sex, you don't"
                                       + " get to skip to the best part straight away; you need to"
@@ -262,10 +262,10 @@ public class TutorialStart implements GameStarter, Scene {
                       .prompt(fmt("Maya changes up the pairs again, and you will now be "
                                       + "'practicing' with Angel. Her and those glorious tits, that is. "
                                       + "It's quite a chore to pull your eyes away and focus on Maya. "
-                                      + "Angel notices for fascination and winks seductively at you. "
+                                      + "Angel notices your fascination and winks seductively at you. "
                                       + "<i>\"Ahem, {self:name}, you with us?\"</i> Maya acts annoyed, but you"
                                       + " hear thinly veiled amusement in her voice. <i>\"Good, as I was "
-                                      + "saying, you will be affected by any number of things in any ways"
+                                      + "saying, you will be affected by any number of things in many ways"
                                       + " during a fight. Maybe your opponent pulls a clever trick to"
                                       + " distract you, or you find some inner focus and can suddenly"
                                       + " concentrate better. Then there are the more exotic things, "
@@ -397,7 +397,7 @@ public class TutorialStart implements GameStarter, Scene {
             case "Let's Go!":
                 Global.gui()
                       .prompt(fmt("Well, this is going to be different. Not only are you about to fuck a stunning girl"
-                                      + " who you just met an hour ago - you we're not quite <i>that</i> popular "
+                                      + " who you just met an hour ago - you were not quite <i>that</i> popular "
                                       + "before - but you'll have an audience looking over your shoulder. Those "
                                       + "irregularities are easily offset by the look of Angel laying down in front "
                                       + "of you on her back and opening her legs to you. Your dick is definitely "
@@ -449,7 +449,7 @@ public class TutorialStart implements GameStarter, Scene {
             case "Piston":
                 Global.gui()
                       .prompt(fmt("You are not about to back away from such a challenge, and increase your pace."
-                                      + " You start playing with a nipples, and she responds by moving her hands"
+                                      + " You start playing with her nipples, and she responds by moving her hands"
                                       + " down to your ass, encouraging your thrusts. Angel's moans have grown"
                                       + " louder, and a couple of grunts escape your throat as well. You don't "
                                       + "know how close Angel is, but you're certainly getting there. Going for "
@@ -479,7 +479,7 @@ public class TutorialStart implements GameStarter, Scene {
                                       + "can go all night.}{self:if-female:you all recover from a fight's exertions"
                                       + " in record speed.} But I'm sure no one has a problem with that, right?\"</i> "
                                       + "Shrugging mentally, you open the can and chug down the caffeinated contents"
-                                      + " in one go. That... Was pretty awful. Angel seems to share your opinion, "
+                                      + " in one go. That... was pretty awful. Angel seems to share your opinion, "
                                       + "seeing how she has contorted her face into an expression which could almost"
                                       + " - almost - be construed as rather charmless. With a sudden, somewhat "
                                       + "queasy feeling, {self:if-female:your temporary dick draws back into your"

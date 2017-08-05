@@ -93,6 +93,10 @@ public abstract class Position implements Cloneable {
     public abstract boolean oral(Character c, Character target);
 
     public abstract boolean behind(Character c);
+    
+    /** @return The default dominance of the stance, as contrasted to the current dominance of
+     * the stance returned by getCurrentDominance(). */
+    public abstract Dominance dominance();
 
     public boolean getUp(Character c) {
         return mobile(c) && c == top;
@@ -365,36 +369,33 @@ public abstract class Position implements Cloneable {
     public double pheromoneMod(Character self) {
         return 1;
     }
-    
-    /**
-     * @return how dominant the dominant character is. positive for more dominant, negative for less.
-     */
-    public int dominance() {
-        return 0;
-    }
 
     public String name() {
         return getClass().getSimpleName();
     }
-
+    
+    /** Stances have a dominance rating that benefits the dominant character. */
+    public enum Dominance {
+        NEUTRAL, // e.g. the Neutral position
+        GIVE_AND_TAKE, // e.g. 69-ing
+        SLIGHT, // e.g. Tribadism and Mount
+        AVERAGE, // e.g. Missionary, Kneeling, Standing and other 'vanilla' positions
+        HIGH, // e.g. Anal and Pin
+        ABSURD // e.g. Engulfed, FlyingCarry, FaceSitting, Smothering
+    }
+    
     /**
-     * Stances have a dominance rating that benefits the dominant character, queried from Position.dominance().
-     * 0: Not dominant at all. Seen in the Neutral position.
-     * 1: Very give-and-take. Seen in the 69 position.
-     * 2: Slightly dominant. Found in the TribadismStance and Mount positions.
-     * 3: Average dominance. Missionary, Kneeling, Standing, and other "vanilla" positions all have this rating.
-     * 4: High dominance. Anal positions and Pin are examples of positions with this rating.
-     * 5: Absurd dominance. Exotic positions like Engulfed and FlyingCarry have this rating, as well as the more mundane FaceSitting and Smothering.
-     *
+     * @param c Combat the Character's engaged in
      * @param self The character whose traits are checked to modify the current stance's dominance score.
-     * @return The dominance of the current position, modified by one combatant's traits. Higher return values cause more willpower loss on each combat tick.
-     * If a character is not the dominant character of the position, their effective dominance is 0.
+     * @return The dominance of the current position, modified by one combatant's traits. Higher return values 
+     * cause more willpower loss on each combat tick. If a character is not the dominant character of the position,
+     * their effective dominance is NEUTRAL (0).
      */
-    public double getDominanceOfStance(Combat c, Character self) {
+    public Dominance getCurrentDominance(Combat c, Character self) {
         if (sub(self)) {
-            return 0;
+            return Dominance.NEUTRAL;
         }
-        int stanceDominance = dominance();
+        int stanceDominance = dominance().ordinal();
         // It is unexpected, but not catastrophic if a character is at once a natural dom and submissive.
         if (self.has(Trait.naturalTop)) {
             // Rescales stance dominance values from 0-1-2-3-4-5 to 0-2-3-5-6-8
@@ -405,8 +406,14 @@ public abstract class Position implements Cloneable {
             stanceDominance = Double.valueOf(Math.floor(stanceDominance * 0.6)).intValue();
         }
         Optional<ButtslutQuest> bsq = Global.getButtslutQuest();
-        if (bsq.isPresent() && this.anallyPenetrated(c, c.getOpponent(self)) && c.getOpponent(self)==Global.getPlayer()) {stanceDominance += bsq.get().getBonusDominance(this);}
-        return Math.max(0, stanceDominance);
+        if (bsq.isPresent() && this.anallyPenetrated(c, c.getOpponent(self)) 
+                        && c.getOpponent(self) == Global.getPlayer()) {
+            stanceDominance += bsq.get().getBonusDominance(this);
+        }
+        
+        // Rescale in case our calculation has gone beyond valid Dominance values
+        stanceDominance = Math.min(Dominance.values().length - 1, stanceDominance);
+        return stanceDominance < 0 ? Dominance.NEUTRAL : Dominance.values()[stanceDominance];
     }
 
     public boolean isBeingFaceSatBy(Combat c, Character self, Character target) {

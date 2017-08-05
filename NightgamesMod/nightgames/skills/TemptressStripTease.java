@@ -10,6 +10,7 @@ import nightgames.global.Global;
 import nightgames.stance.Stance;
 import nightgames.status.Alluring;
 import nightgames.status.Charmed;
+import nightgames.status.Stsflag;
 
 public class TemptressStripTease extends StripTease {
 
@@ -41,7 +42,8 @@ public class TemptressStripTease extends StripTease {
     @Override
     public boolean usable(Combat c, Character target) {
         return canStrip(c, target) && getSelf().canAct() && c.getStance().mobile(getSelf())
-                        && !c.getStance().prone(getSelf());
+                        && !c.getStance().prone(getSelf())
+                        && !c.getStance().connected(c);
     }
 
     @Override
@@ -60,6 +62,18 @@ public class TemptressStripTease extends StripTease {
         int technique = getSelf().get(Attribute.Technique);
         //assert technique > 0;
 
+        if (target.is(Stsflag.blinded)) {
+            if (getSelf().human()) {
+                c.write(getSelf(), deal(c, 0, Result.miss, target));
+            } else {
+                c.write(getSelf(), receive(c, 0, Result.miss, target));
+            }
+            if (!isDance(c)) {
+                getSelf().undress(c);
+            }
+            return false;
+        }
+        
         if (isDance(c)) {
             if (getSelf().human()) {
                 c.write(getSelf(), deal(c, 0, Result.weak, target));
@@ -96,7 +110,11 @@ public class TemptressStripTease extends StripTease {
 
     @Override
     public String receive(Combat c, int damage, Result modifier, Character target) {
-        if (isDance(c)) {
+        if (modifier == Result.miss) {
+            return Global.format("You hear a rustle of clothing from {other:name-possessive} general"
+                            + " direction, but you can't really make out what's going on. Maybe"
+                            + " {other:pronoun} is adjusing {other:possessive} clothes?", getSelf(), target);
+        } else if (isDance(c)) {
             return String.format("%s backs up a little and starts swinging"
                             + " her hips side to side. Curious as to what's going on, %s"
                             + " %s attacks and watch as she bends and curves, putting"
@@ -107,7 +125,7 @@ public class TemptressStripTease extends StripTease {
                             + " %s into her eyes as she gets back into a fighting stance.",
                             getSelf().subject(), target.subjectAction("cease"),
                             target.possessiveAdjective(), target.possessiveAdjective(),
-                            target.nameOrPossessivePronoun(), target.subjectAction("are", "is"),
+                            target.nameOrPossessivePronoun(), Global.capitalizeFirstLetter(target.subjectAction("are", "is")),
                             target.possessiveAdjective(), target.possessiveAdjective(), target.pronoun(),
                             target.action("gaze"));
         } else {
@@ -124,7 +142,12 @@ public class TemptressStripTease extends StripTease {
 
     @Override
     public String deal(Combat c, int damage, Result modifier, Character target) {
-        if (isDance(c)) {
+        if (modifier == Result.miss) {
+            return Global.format("You put your years of experience to use and perform an extremely sensual"
+                            + " strip tease for {other:subject}. {other:PRONOUN} would be utterly captivated,"
+                            + " if only {other:pronoun} were able to see you. Which {other:pronoun} is not."
+                            + " Maybe you should have though this through first...", getSelf(), target);
+        } else if (isDance(c)) {
             return "You slowly dance for " + target.getName() + ", showing off" + " your naked body.";
         } else {
             return "You seductively perform a short dance, shedding clothes as you do so. " + target.getName()

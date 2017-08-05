@@ -82,7 +82,7 @@ public class CommandOral extends PlayerCommand {
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return true;
     }
 }

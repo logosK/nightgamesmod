@@ -7,14 +7,14 @@ import nightgames.combat.Combat;
  * Test position. Top character is dominant.
  */
 public class TestPosition extends Position {
-    public int dominance;
+    public Dominance dominance;
 
-    public TestPosition(Character top, Character bottom, Stance stance, int dominance) {
+    public TestPosition(Character top, Character bottom, Stance stance, Dominance dominance) {
         super(top, bottom, stance);
         this.dominance = dominance;
     }
 
-    @Override public int dominance() {
+    @Override public Dominance dominance() {
         return dominance;
     }
 

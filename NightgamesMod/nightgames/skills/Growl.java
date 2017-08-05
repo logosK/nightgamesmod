@@ -8,7 +8,6 @@ import nightgames.combat.Result;
 import nightgames.global.Global;
 import nightgames.stance.Behind;
 import nightgames.stance.StandingOver;
-import nightgames.status.Charmed;
 import nightgames.status.Stsflag;
 import nightgames.status.addiction.AddictionType;
 

@@ -92,11 +92,11 @@ public class Grind extends Thrust {
             if (getLabel(c).equals(divineName)) {
                 // TODO divine for fucking someone
                 return Global.format(
-                                "{self:SUBJECT} grind {self:possessive} hips against {other:direct-object} without thrusting. {other:SUBJECT} trembles and gasps as the movement stimulates {other:possessive} clit and the walls of {other:possessive} {other:body-part:pussy}.",
+                                "{self:SUBJECT} grind {self:possessive} hips against {other:direct-object} without thrusting. {other:SUBJECT-ACTION:tremble and gasp|trembles and gasps} as the movement stimulates {other:possessive} clit and the walls of {other:possessive} {other:body-part:pussy}.",
                                 getSelf(), target);
             }
             return Global.format(
-                            "{self:SUBJECT} grind {self:possessive} hips against {other:direct-object} without thrusting. {other:SUBJECT} trembles and gasps as the movement stimulates {other:possessive} clit and the walls of {other:possessive} {other:body-part:pussy}.",
+                            "{self:SUBJECT} grind {self:possessive} hips against {other:direct-object} without thrusting. {other:SUBJECT-ACTION:tremble and gasp|trembles and gasps} as the movement stimulates {other:possessive} clit and the walls of {other:possessive} {other:body-part:pussy}.",
                             getSelf(), target);
         }
     }
@@ -125,7 +125,7 @@ public class Grind extends Thrust {
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return true;
     }
     

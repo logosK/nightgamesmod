@@ -51,7 +51,7 @@ public class GoblinMasochism extends SimpleEnemySkill {
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return false;
     }
 }

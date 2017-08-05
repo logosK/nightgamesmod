@@ -141,7 +141,7 @@ public class Collared extends Status implements Compulsive {
                                 + " into submission.", affected, owner);
             case PUNISH_PAIN:
                 return Global.format("The training collar around {self:name-possessive}"
-                                + "neck reacts to {self:possessive} aggression by sending"
+                                + " neck reacts to {self:possessive} aggression by sending"
                                 + " a powerful shock down {self:possessive} spine.", 
                                 affected, owner);
             case PREVENT_REMOVE_BOMB:

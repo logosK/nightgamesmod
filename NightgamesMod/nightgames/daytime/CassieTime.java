@@ -46,7 +46,7 @@ public class CassieTime extends BaseNPCTime {
 
     @Override
     public void buildTransformationPool() {
-        options = new ArrayList<>();
+        transformationOptions = new ArrayList<>();
         {
             TransformationOption growCock = new TransformationOption();
             growCock.ingredients.put(Item.PriapusDraft, 3);
@@ -57,7 +57,7 @@ public class CassieTime extends BaseNPCTime {
                 other.body.add(new CockPart().applyMod(new SizeMod(SizeMod.COCK_SIZE_BIG)).applyMod(CockMod.runic));
                 return true;
             };
-            options.add(growCock);
+            transformationOptions.add(growCock);
         }
         {
             TransformationOption removeCock = new TransformationOption();
@@ -69,7 +69,7 @@ public class CassieTime extends BaseNPCTime {
                 other.body.removeAll("cock");
                 return true;
             };
-            options.add(removeCock);
+            transformationOptions.add(removeCock);
         }
         {
             TransformationOption runicCock = new ApplyPartModOption("cock", CockMod.runic);
@@ -78,7 +78,7 @@ public class CassieTime extends BaseNPCTime {
             runicCock.ingredients.put(Item.FaeScroll, 1);
             runicCock.option = "Runic Cock";
             runicCock.scene = "[Placeholder]<br/>Cassie enchants your cock with the power of the fairies.";
-            options.add(runicCock);
+            transformationOptions.add(runicCock);
         }
         {
             TransformationOption arcanePussy = new ApplyPartModOption("pussy", ArcaneMod.INSTANCE);
@@ -87,7 +87,7 @@ public class CassieTime extends BaseNPCTime {
             arcanePussy.ingredients.put(Item.FaeScroll, 1);
             arcanePussy.option = "Arcane Pussy";
             arcanePussy.scene = "[Placeholder]<br/>Cassie draws intricate arcane tattoos on your pussy";
-            options.add(arcanePussy);
+            transformationOptions.add(arcanePussy);
         }
         {
             TransformationOption arcaneMouth = new ApplyPartModOption("mouth", ArcaneMod.INSTANCE);
@@ -98,7 +98,7 @@ public class CassieTime extends BaseNPCTime {
             }, "At least level 30");
             arcaneMouth.option = "Arcane Lipstick";
             arcaneMouth.scene = "[Placeholder]<br/>Cassie enchants a tube of lipstick and gives it to you.";
-            options.add(arcaneMouth);
+            transformationOptions.add(arcaneMouth);
         }
         {
             TransformationOption arcaneAss = new ApplyPartModOption("ass", ArcaneMod.INSTANCE);
@@ -109,7 +109,7 @@ public class CassieTime extends BaseNPCTime {
             }, "At least level 30");
             arcaneAss.option = "Runic Ass Tattoos";
             arcaneAss.scene = "[Placeholder]<br/>Cassie decorates your rosebud with some runic tattoos.";
-            options.add(arcaneAss);
+            transformationOptions.add(arcaneAss);
         }
         {
             TransformationOption mouthPussy = new ApplyPartModOption("mouth", SecondPussyMod.INSTANCE);
@@ -144,7 +144,7 @@ public class CassieTime extends BaseNPCTime {
                                             + "<br/>She begins to rub the now-drained dildo again against your newly formed mouth-pussy walls and tongue. "
                                             + "You blank out with the strange sensations that your organ transmits back to you, and Cassie takes the opportunity to mouth-fuck you to an almost-instantaneous climax."
                                             + "<br/>Cassie walks by you and gives you a quick kiss which almost makes you cum yet again, <i>\"I'm so looking forward to seeing what you do with that tonight!\"</i>";
-            options.add(mouthPussy);
+            transformationOptions.add(mouthPussy);
         }
     }
 
@@ -215,7 +215,9 @@ public class CassieTime extends BaseNPCTime {
             if (npc.has(Trait.magicmilk) && Global.getPlayer().getAddictionSeverity(AddictionType.MAGIC_MILK) != Severity.NONE) {
                 Global.gui().choose(this, "Ask for milk");
             }
-            if (player.get(Attribute.Arcane) > 10 && npc.get(Attribute.Arcane) >= 2*player.get(Attribute.Arcane)) {
+            if (player.get(Attribute.Arcane) > 10 && npc.get(Attribute.Arcane) 
+                            >= 2*player.get(Attribute.Arcane)
+                            && npc.hasDick()) {
                 Global.gui().choose(this, "Magic");
             }
         }
@@ -605,5 +607,47 @@ public class CassieTime extends BaseNPCTime {
     @Override
     public Optional<String> getAddictionOption() {
         return Global.getPlayer().checkAddiction(AddictionType.MAGIC_MILK) ? Optional.of("Ask for milk") : Optional.empty();
+    }
+
+    @Override
+    public void doPlayGamesWith() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doHaveSex() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doSparring() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doAddictionScene() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doGivePresent() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doSpecialFunction1() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doSpecialFunction2() {
+        // TODO Auto-generated method stub
+        
     }
 }

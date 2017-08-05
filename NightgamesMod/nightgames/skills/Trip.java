@@ -112,7 +112,7 @@ public class Trip extends Skill {
             return String.format(
                             "You reshape your hands into a sheet of slime and slide it towards %s."
                                             + " In the nick of time, %s jumps clear, landing safely back on %s feet.",
-                            target.getName(), target.pronoun(), target.possessivePronoun());
+                            target.getName(), target.pronoun(), target.possessiveAdjective());
         } else if (modifier == Result.item) {
             return String.format(
                             "%s %s a glowing bar hovering behind %s knees, and %s it towards %s. The bar pushes against %s knees, but %s %s to keep %s balance.",
@@ -168,7 +168,7 @@ public class Trip extends Skill {
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return true;
     }
 }

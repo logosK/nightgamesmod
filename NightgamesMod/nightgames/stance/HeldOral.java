@@ -52,7 +52,8 @@ public class HeldOral extends AbstractFacingStance {
 
     @Override
     public String image() {
-        if (bottom.hasDick() && bottom.hasPussy() && top.hasBreasts()/* && Global.checkFlag(Flag.isFuta)*/) {
+        if (bottom.hasDick() && bottom.hasPussy() && top.hasBreasts()
+                        /* && Global.checkFlag(Flag.isFuta)*/) {
             return "futa_oralhold_fh.jpg";
         } else if (bottom.hasDick()) {
             return "oralhold_fm.jpg";
@@ -147,8 +148,8 @@ public class HeldOral extends AbstractFacingStance {
     }
 
     @Override
-    public int dominance() {
-        return 3;
+    public Position.Dominance dominance() {
+        return Position.Dominance.AVERAGE;
     }
 
     @Override

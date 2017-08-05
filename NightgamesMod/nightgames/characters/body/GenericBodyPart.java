@@ -399,21 +399,27 @@ public class GenericBodyPart implements BodyPart {
         return part;
     }
 
-    public List<? extends PartMod> getMods() {
-        return mods;
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public List<BodyPartMod> getMods() {
+        return (List<BodyPartMod>) (List)mods;
     }
 
     protected List<PartMod> getPartMods() {
         return mods;
     }
+
+    @Override
+    public void receiveCum(Combat c, Character self, Character donor, BodyPart sourcePart) {
+        getMods().stream().forEach(mod -> ((PartMod)mod).receiveCum(c, self, this, donor, sourcePart));
+    }
     
+    @Override
     public double getFetishEffectiveness() {
         return sensitivity==0?0.25:1.0;
     }
+    
+    @Override
     public double getFetishChance() {
         return sensitivity==0?0.1:0.25;
-    }
-    public void receiveCum(Combat c, Character self, Character donor, BodyPart sourcePart) {
-        getMods().stream().forEach(mod -> mod.receiveCum(c, self, this, donor, sourcePart));
     }
 }

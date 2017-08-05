@@ -1,7 +1,5 @@
 package nightgames.characters.body;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import nightgames.characters.Attribute;
@@ -13,20 +11,19 @@ import nightgames.combat.Combat;
 import nightgames.global.Global;
 import nightgames.items.clothing.Clothing;
 import nightgames.items.clothing.ClothingSlot;
-import nightgames.pet.PetCharacter;
 import nightgames.quest.ButtslutQuest;
-import nightgames.status.Abuff;
 import nightgames.status.Drained;
 import nightgames.status.Stsflag;
 import nightgames.status.Trance;
 
 public class AssPart extends GenericBodyPart {
-    private double bonusSensitivity;
     public static AssPart generic = generateGeneric();
     public static AssPart generateGeneric() {
         return new AssPart();
     }
 
+    private double bonusSensitivity;
+    
     public AssPart(String desc, double hotness, double pleasure, double sensitivity) {
         super(desc, "", hotness, pleasure, sensitivity, false, "ass", "a ");
     }
@@ -162,9 +159,11 @@ public class AssPart extends GenericBodyPart {
             c.write(opponent, Global.format(
                             "The foreign object rummaging around inside {self:name-possessive} ass feels so <i>right</i>. {self:SUBJECT} can't help moaning in time with the swelling pleasure.",
                                             self, opponent));
+            Optional<ButtslutQuest> bsq = Global.getButtslutQuest();
+            if (bsq.isPresent() && self==Global.getPlayer()) {
+                bonus += bsq.get().applyReceiveBonusesAnal(c, opponent, target);
+            }
         }
-        Optional<ButtslutQuest> bsq = Global.getButtslutQuest();
-        if (bsq.isPresent() && self==Global.getPlayer()) {bonus += bsq.get().applyReceiveBonusesAnal(c, opponent, target);}
         return bonus;
     }
 

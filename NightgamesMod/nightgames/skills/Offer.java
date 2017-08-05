@@ -134,7 +134,7 @@ public class Offer extends Skill {
                                 Global.capitalizeFirstLetter(target.pronoun()));
             default: // special
                 return String.format(
-                                "You lay down on your back and spread your legs,"
+                                "You lay down on your back and spread your legs, "
                                                 + "offering your %s to %s while gazing up at %s powerful %s, hoping "
                                                 + "that %s will soon fill you with it.",
                                 getSelf().body.getRandomPussy().describe(getSelf()), target.getName(),

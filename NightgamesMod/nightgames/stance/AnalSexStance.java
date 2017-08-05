@@ -58,6 +58,11 @@ public abstract class AnalSexStance extends Position {
     public int distance() {
         return 1;
     }
+    
+    @Override
+    public Position.Dominance dominance() {
+        return Position.Dominance.HIGH;
+    }
 
     @Override
     public void struggle(Combat c, Character struggler) {

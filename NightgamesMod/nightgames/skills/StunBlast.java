@@ -89,7 +89,7 @@ public class StunBlast extends Skill {
                             target.pronoun(), target.action("cover"), target.possessiveAdjective());
         } else if (modifier == Result.special) {
             return Global.format("{self:SUBJECT} presses a button on {self:possessive} arm device,"
-                            + "and a bright flash suddenly travels along {self:possessive} connection to"
+                            + " and a bright flash suddenly travels along {self:possessive} connection to"
                             + " the toy which is still stuck to you. When it reaches you, a huge shock"
                             + " stuns your body, leaving you helpless on the ground while the toy"
                             + " still merrily churns away.."

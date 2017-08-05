@@ -203,7 +203,7 @@ public class LevelDrain extends Drain {
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return true;
     }
 }

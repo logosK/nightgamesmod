@@ -455,7 +455,6 @@ public class CreationGUI extends JPanel {
                 Global.xpRate = 3;
             }
         });
-
         verticalBox.add(ExpDescription);
         separator_1 = new JSeparator();
         verticalBox.add(separator_1);

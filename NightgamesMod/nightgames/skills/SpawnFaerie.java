@@ -7,8 +7,6 @@ import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
 import nightgames.pet.Fairy;
-import nightgames.pet.FairyFem;
-import nightgames.pet.FairyMale;
 import nightgames.pet.Ptype;
 
 public class SpawnFaerie extends Skill {

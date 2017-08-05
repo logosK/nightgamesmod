@@ -81,7 +81,7 @@ public class Nurple extends Skill {
     @Override
     public String getLabel(Combat c) {
         if (getSelf().has(Item.ShockGlove)) {
-            return "Shock breasts";
+            return "Shock Breasts";
         } else {
             return getName(c);
         }
@@ -119,7 +119,7 @@ public class Nurple extends Skill {
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return true;
     }
 }

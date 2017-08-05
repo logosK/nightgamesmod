@@ -22,8 +22,8 @@ public class HealRay extends ArmSkill {
         if (stamina && mojo) {
             msg += "and {self:pronoun} perks up. {self:PRONOUN-ACTION:seem|seems} less tired and much more"
                             + " confident than before.";
-            owner.heal(c, 10 + Global.random(20), "Heal Ray");
-            owner.buildMojo(c, 5 + Global.random(15), "Heal Ray");
+            owner.heal(c, 10 + Global.random(20), " (Heal Ray)");
+            owner.buildMojo(c, 5 + Global.random(15), " (Heal Ray)");
         } else if (stamina) {
             msg += "and it seems to eliminate some of {self:possessive} weariness.";
             owner.heal(c, 10 + Global.random(20), "Heal Ray");

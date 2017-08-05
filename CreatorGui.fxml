@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.shape.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.TextFlow?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="1000.0">
         <menus>
@@ -140,81 +140,7 @@
                                     <TextField fx:id="willpowerStart" prefHeight="25.0" prefWidth="35.0" text="40" />
                                  </children>
                               </HBox>
-                           </children></VBox>
-                        <VBox fx:id="bodyBox" layoutX="500.0" layoutY="371.0" prefHeight="357.0" prefWidth="484.0">
-                           <children>
-                              <HBox prefHeight="27.0" prefWidth="482.0" spacing="10.0">
-                                 <children>
-                                    <Label text="Breasts:">
-                                       <font>
-                                          <Font name="Segoe UI Bold" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <ChoiceBox fx:id="breasts" prefWidth="150.0" />
-                                 </children>
-                              </HBox>
-                              <HBox prefHeight="27.0" prefWidth="482.0" spacing="10.0">
-                                 <children>
-                                    <Label text="Cock:">
-                                       <font>
-                                          <Font name="Segoe UI Bold" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <ChoiceBox fx:id="cockSize" prefWidth="150.0" />
-                                    <ChoiceBox fx:id="cockType" prefWidth="150.0" />
-                                 </children>
-                              </HBox>
-                              <HBox prefHeight="27.0" prefWidth="482.0" spacing="10.0">
-                                 <children>
-                                    <Label text="Pussy:">
-                                       <font>
-                                          <Font name="Segoe UI Bold" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <ChoiceBox fx:id="pussy" prefWidth="150.0" />
-                                 </children>
-                              </HBox>
-                              <HBox prefHeight="27.0" prefWidth="482.0" spacing="10.0">
-                                 <children>
-                                    <Label text="Ears:">
-                                       <font>
-                                          <Font name="Segoe UI Bold" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <ChoiceBox fx:id="ears" prefWidth="150.0" />
-                                 </children>
-                              </HBox>
-                              <HBox prefHeight="27.0" prefWidth="482.0" spacing="10.0">
-                                 <children>
-                                    <Label text="Mouth:">
-                                       <font>
-                                          <Font name="Segoe UI Bold" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <ChoiceBox fx:id="mouth" prefWidth="150.0" />
-                                 </children>
-                              </HBox>
-                              <HBox prefHeight="27.0" prefWidth="482.0" spacing="10.0">
-                                 <children>
-                                    <Label text="Tail:">
-                                       <font>
-                                          <Font name="Segoe UI Bold" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <ChoiceBox fx:id="tail" prefWidth="150.0" />
-                                 </children>
-                              </HBox>
-                              <HBox prefHeight="27.0" prefWidth="482.0" spacing="10.0">
-                                 <children>
-                                    <Label prefHeight="18.0" prefWidth="48.0" text="Wings:">
-                                       <font>
-                                          <Font name="Segoe UI Bold" size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <ChoiceBox fx:id="wings" prefWidth="150.0" />
-                                 </children>
-                              </HBox>
-                              <HBox prefHeight="27.0" prefWidth="482.0" spacing="10.0">
+                              <HBox prefHeight="27.0" prefWidth="482.0" spacing="70.0">
                                  <children>
                                     <Label text="Hotness:">
                                        <font>
@@ -826,6 +752,49 @@
             <Tab fx:id="verificationTab" text="Verification">
               <content>
                 <AnchorPane fx:id="verificationPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+            <Tab text="Body">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="bodyPartRemove" layoutX="20.0" layoutY="457.0" mnemonicParsing="false" onAction="#removeBodyPart" text="Remove Part">
+                           <font>
+                              <Font name="Segoe UI Bold" size="14.0" />
+                           </font>
+                        </Button>
+                        <ListView id="bodyModList" fx:id="bodyModList" layoutX="20.0" layoutY="250.0" prefHeight="200.0" prefWidth="353.0" />
+                        <Label layoutX="20.0" layoutY="225.0" text="Mods">
+                           <font>
+                              <Font name="Segoe UI Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="20.0" layoutY="26.0" text="Parts">
+                           <font>
+                              <Font name="Segoe UI Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <ListView id="bodyPartList" fx:id="bodyPartList" layoutX="20.0" layoutY="47.0" prefHeight="164.0" prefWidth="353.0" />
+                        <ChoiceBox fx:id="bodyPartTypeBox" layoutX="69.0" layoutY="11.0" prefWidth="150.0" />
+                        <Button fx:id="bodyPartAdd" layoutX="373.0" layoutY="12.0" mnemonicParsing="false" onAction="#addBodyPart" text="Add Part">
+                           <font>
+                              <Font name="Segoe UI Bold" size="14.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="bodyModRemove" layoutX="144.0" layoutY="457.0" mnemonicParsing="false" onAction="#removeBodyMod" text="Remove Mod">
+                           <font>
+                              <Font name="Segoe UI Bold" size="14.0" />
+                           </font>
+                        </Button>
+                        <ChoiceBox id="bodyModBox" fx:id="bodyModBox" layoutX="125.0" layoutY="219.0" prefWidth="150.0" />
+                        <Button fx:id="bodyModAdd" layoutX="286.0" layoutY="221.0" mnemonicParsing="false" onAction="#addBodyMod" text="Add Mod">
+                           <font>
+                              <Font name="Segoe UI Bold" size="14.0" />
+                           </font>
+                        </Button>
+                        <ChoiceBox fx:id="bodyPartBox1" layoutX="219.0" layoutY="11.0" prefWidth="150.0" />
+                     </children>
+                  </AnchorPane>
               </content>
             </Tab>
         </tabs>

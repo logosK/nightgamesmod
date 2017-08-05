@@ -16,6 +16,13 @@ public class Defabricator extends Skill {
     }
 
     @Override
+    public float priorityMod(Combat c) {
+        // Maybe don't destroy clothing which is difficult for the opponent to remove;
+        // it's probably harming them by being there.
+        return c.getOpponent(getSelf()).stripDifficulty(getSelf()) > 0 ? -10 : 0;
+    }
+    
+    @Override
     public boolean requirements(Combat c, Character user, Character target) {
         return user.get(Attribute.Science) >= 18;
     }

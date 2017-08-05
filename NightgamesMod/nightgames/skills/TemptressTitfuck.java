@@ -113,18 +113,18 @@ public class TemptressTitfuck extends Paizuri {
                                 target.pronoun(), target.action("pull"));
             case weak:
                 return String.format(
-                                "%s %s up %s flaccid %s between %s %s, doing everything %s"
+                                "%s up %s flaccid %s between %s %s, doing everything %s"
                                                 + " can to get it hard, but %s %s back before %s can manage it.",
-                                getSelf().getName(),  getSelf().subjectAction("wrap"), target.nameOrPossessivePronoun(), target.body.getRandomCock().describe(target), 
-                                getSelf().pronoun(), getSelf().body.getLargestBreasts().describe(getSelf()),  
+                                getSelf().subjectAction("wrap"), target.nameOrPossessivePronoun(), target.body.getRandomCock().describe(target), 
+                                getSelf().possessiveAdjective(), getSelf().body.getLargestBreasts().describe(getSelf()),  
                                 getSelf().pronoun(), target.pronoun(), target.action("pull"), getSelf().pronoun());
             case special:
                 return String.format(
-                                "%s %s %s %s between her %s and %s them with intense pressure. %s %s hardens"
-                                                + " instantly, throbbing happily in it's new home.",
-                                 getSelf().pronoun(), getSelf().subjectAction("trap"), target.possessivePronoun(),
+                                "%s %s %s between her %s and %s them with intense pressure. %s %s hardens"
+                                                + " instantly, throbbing happily in its new home.",
+                                 getSelf().subjectAction("trap"), target.possessiveAdjective(),
                                 target.body.getRandomCock().describe(target), getSelf().body.getLargestBreasts().describe(getSelf()),
-                                getSelf().action("squeeze"), target.possessivePronoun(), target.body.getRandomCock().describe(target));
+                                getSelf().action("squeeze"), Global.capitalizeFirstLetter(target.possessiveAdjective()), target.body.getRandomCock().describe(target));
             default: // should be Result.normal
                 switch (damage) {
                     case 0:
@@ -135,7 +135,7 @@ public class TemptressTitfuck extends Paizuri {
                                         target.body.getRandomCock().describe(target), getSelf().body.getLargestBreasts().fullDescribe(getSelf()), target.directObject());
                     case 1:
                         return String.format("%s tongue loops around the head of %s hard %s "
-                                        + "and %s the shaft with her %s, constantly increasing  in intensity.",
+                                        + "and %s the shaft with her %s, constantly increasing in intensity.",
                                         getSelf().nameOrPossessivePronoun(),
                                         target.nameOrPossessivePronoun(), target.body.getRandomCock().describe(target),
                                         getSelf().action("milk"), getSelf().body.getLargestBreasts().fullDescribe(getSelf()));
@@ -145,7 +145,7 @@ public class TemptressTitfuck extends Paizuri {
                                         + "Overwhelmed from the pleasure, you grit %s teeth through a pleasure filled smile trying not to cum.",
                                         getSelf().nameOrPossessivePronoun(), getSelf().body.getLargestBreasts().describe(getSelf()),
                                         target.possessivePronoun(), target.body.getRandomCock().describe(target), getSelf().getName(),
-                                        getSelf().action("suck"), target.possessivePronoun(), target.possessivePronoun());
+                                        getSelf().action("suck"), target.possessiveAdjective(), target.possessiveAdjective());
                 }
         }
     }

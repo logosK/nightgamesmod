@@ -108,10 +108,14 @@ public abstract class Skill {
         skills.removeAll(filtered);
     }
 
+    /** Checks whether current conditions prevent this skill from being used, e.g. Charmed
+     * prevents the use of non-pleasure skills. */
     public static boolean isUsable(Combat c, Skill s) {
         return isUsableOn(c, s, null);
     }
 
+    /** Checks whether current conditions prevent this skill from being used, e.g. Charmed
+     * prevents the use of non-pleasure skills. */
     public static boolean isUsableOn(Combat c, Skill s, Character target) {
         if (target == null) {
             target = s.getDefaultTarget(c);
@@ -215,7 +219,7 @@ public abstract class Skill {
         return toString();
     }
 
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return false;
     }
 

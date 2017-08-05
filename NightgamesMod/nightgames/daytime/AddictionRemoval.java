@@ -61,7 +61,9 @@ public class AddictionRemoval extends Activity {
             player.money -= 15000;
             Global.gui().message("You dole out the mountain of cash and are taken to the back for your treatment."
                             + " When you emerge, you are completely free of your addiction.");
+            //FIXME: Currently doesn't work 100%. Many addiction features still stick after this is used. - DSM
             Global.getPlayer().removeStatusImmediately(Global.getPlayer().getStrongestAddiction().get());
+            //FIXME: If the strongest Addiction is 0 and from Airi - does it still return from the above line?
         } else if (choice.equals("Leave")) {
             done(true);
             return;

@@ -8,12 +8,10 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Panel;
-import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -24,14 +22,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -52,11 +48,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -76,23 +69,23 @@ import nightgames.characters.Character;
 import nightgames.characters.Meter;
 import nightgames.characters.Player;
 import nightgames.characters.Trait;
-import nightgames.characters.TraitTree;
 import nightgames.combat.Combat;
 import nightgames.combat.CombatSceneChoice;
 import nightgames.daytime.Activity;
 import nightgames.daytime.Store;
 import nightgames.debug.DebugGUIPanel;
-import nightgames.global.*;
+import nightgames.global.DebugFlags;
+import nightgames.global.Encs;
+import nightgames.global.Flag;
+import nightgames.global.Global;
+import nightgames.global.Time;
 import nightgames.items.Item;
 import nightgames.items.Loot;
-import nightgames.items.clothing.Clothing;
 import nightgames.match.Encounter;
 import nightgames.match.MatchType;
-import nightgames.match.Prematch;
 import nightgames.modifier.standard.NoModifier;
 import nightgames.skills.Skill;
 import nightgames.skills.TacticGroup;
-import nightgames.skills.Tactics;
 import nightgames.trap.Trap;
 import nightgames.utilities.DebugHelper;
 
@@ -137,8 +130,9 @@ public class GUI extends JFrame implements Observer {
     private JRadioButton rddumb;
     private JRadioButton rdeasy;
     private JRadioButton rdhard;
-    private JRadioButton rdMsgOn;
+    private JRadioButton rdMsgFull;
     private JRadioButton rdMsgOff;
+    private JRadioButton rdMsgBasic;
     private JRadioButton rdAutoNextOn;
     private JRadioButton rdAutoNextOff;
     private JRadioButton rdautosaveon;
@@ -147,9 +141,9 @@ public class GUI extends JFrame implements Observer {
     private JRadioButton rdporoff;
     private JRadioButton rdimgon;
     private JRadioButton rdimgoff;
-    private JButton rdfntsmall;
     private JButton rdfntnorm;
     private JButton rdfntlrg;
+    private JButton rdfntsmall;
     private JSlider malePrefSlider;
     private int width;
     private int height;
@@ -281,12 +275,18 @@ public class GUI extends JFrame implements Observer {
 
         JLabel systemMessageLabel = new JLabel("System Messages");
         ButtonGroup sysMsgG = new ButtonGroup();
-        rdMsgOn = new JRadioButton("On");
+        JPanel hackPanel = new JPanel();
+        hackPanel.setLayout(new GridLayout(1, 2, 0, 0));
+        rdMsgFull = new JRadioButton("Full");
+        rdMsgBasic = new JRadioButton("Basic");
         rdMsgOff = new JRadioButton("Off");
-        sysMsgG.add(rdMsgOn);
+        sysMsgG.add(rdMsgFull);
+        sysMsgG.add(rdMsgBasic);
         sysMsgG.add(rdMsgOff);
         optionsPanel.add(systemMessageLabel);
-        optionsPanel.add(rdMsgOn);
+        hackPanel.add(rdMsgFull);
+        hackPanel.add(rdMsgBasic);
+        optionsPanel.add(hackPanel);
         optionsPanel.add(rdMsgOff);
 
         JLabel autoNextLabel = new JLabel("Fast Combat Display");
@@ -411,7 +411,9 @@ public class GUI extends JFrame implements Observer {
         optionsPanel.add(malePrefSlider);
         mntmOptions.addActionListener(arg0 -> {
             if (Global.checkFlag(Flag.systemMessages)) {
-                rdMsgOn.setSelected(true);
+                rdMsgFull.setSelected(true);
+            } else if (Global.checkFlag(Flag.basicSystemMessages)) {
+                rdMsgBasic.setSelected(true);
             } else {
                 rdMsgOff.setSelected(true);
             }
@@ -450,6 +452,8 @@ public class GUI extends JFrame implements Observer {
             }
             if (Global.checkFlag(Flag.largefonts)) {
                 rdfntlrg.setSelected(true);
+            } else if (Global.checkFlag(Flag.smallfonts)){
+                rdfntsmall.setSelected(true);
             } else {
                 rdfntnorm.setSelected(true);
             }
@@ -467,7 +471,8 @@ public class GUI extends JFrame implements Observer {
             int result = JOptionPane.showConfirmDialog(GUI.this, optionsPanel, "Options", JOptionPane.OK_CANCEL_OPTION,
                             JOptionPane.INFORMATION_MESSAGE);
             if (result == JOptionPane.OK_OPTION) {
-                Global.setFlag(Flag.systemMessages, rdMsgOn.isSelected());
+                Global.setFlag(Flag.systemMessages, rdMsgFull.isSelected());
+                Global.setFlag(Flag.basicSystemMessages, rdMsgBasic.isSelected());
                 Global.setFlag(Flag.AutoNext, rdAutoNextOn.isSelected());
                 Global.setFlag(Flag.dumbmode, !rdnormal.isSelected());
                 Global.setFlag(Flag.hardmode, rdhard.isSelected());
@@ -486,20 +491,7 @@ public class GUI extends JFrame implements Observer {
                         imgPanel.remove(imgLabel);
                     }
                     imgPanel.repaint();
-                }/*
-                if (rdfntlrg.isSelected()) {
-                    Global.unflag(Flag.smallfonts);
-                    Global.flag(Flag.largefonts);
-                    fontsize = 6;
-                } else if (rdfntsmall.isSelected()) {
-                    Global.flag(Flag.smallfonts);
-                    Global.unflag(Flag.largefonts);
-                    fontsize = 4;
-                } else {
-                    Global.unflag(Flag.smallfonts);
-                    Global.unflag(Flag.largefonts);
-                    fontsize = 5;
-                }*/
+                }
             }
         });
 
@@ -537,7 +529,8 @@ public class GUI extends JFrame implements Observer {
                             + "Mara/Angel threesome scene by Onyxdime<br/>"
                             + "Footfetish expansion scenes by Sakruff<br/>"
                             + "Mod by Nergantre<br/>"
-                            + "A ton of testing by Bronzechair</html>"));
+                            + "A ton of testing by Bronzechair"
+                            + "Bugfixes, edits, and some Maya text by DarkSinfulMage</html>"));
             Object[] options = {"OK", "DEBUG"};
             Object[] okOnly = {"OK"};
             int results = JOptionPane.showOptionDialog(GUI.this, panel, "Credits", JOptionPane.DEFAULT_OPTION,
@@ -1288,7 +1281,7 @@ public class GUI extends JFrame implements Observer {
                 } else if (Global.day != null) {
                     Global.getDay().plan();
                 } else {
-                    MatchType.NORMAL.runPrematch();;
+                    MatchType.NORMAL.runPrematch();
                 }
             }
         }
@@ -1476,7 +1469,7 @@ public class GUI extends JFrame implements Observer {
         try {
             editorKit.insertHTML(doc, doc.getLength(),
                             "<font face='Georgia' color='white' size='" + descFontSize + "'>"
-                                            + player.getOutfit().describe(player) + "<br/>" + player.describeStatus() 
+                                            + player.getOutfit().describe(player) + "<br/>" + player.describeStatus()
                                             + (Global.getButtslutQuest().isPresent()?("<br/>" + Global.getButtslutQuest().get().getDescriptionFor(player)):"")
                                             + "</font><br/>",
                             0, 0, null);

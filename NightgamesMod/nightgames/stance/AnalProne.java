@@ -14,7 +14,7 @@ public class AnalProne extends AnalSexStance {
     @Override
     public String describe(Combat c) {
         if (top.human()) {
-            return String.format("You're holding %s legs over your shoulder while your cock in buried in %s's ass.",
+            return String.format("You're holding %s legs over your shoulder while your cock is buried in %s's ass.",
                             bottom.nameOrPossessivePronoun(), bottom.possessiveAdjective());
         } else if (top.has(Trait.strapped)) {
             return String.format("%s flat on %s back with %s feet over %s head while %s pegs %s with %s strapon dildo.",
@@ -143,10 +143,5 @@ public class AnalProne extends AnalSexStance {
         } else {
             return "pegging.jpg";
         }
-    }
-    
-    @Override
-    public int dominance() {
-        return 4;
     }
 }

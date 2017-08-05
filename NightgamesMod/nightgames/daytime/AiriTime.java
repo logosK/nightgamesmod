@@ -28,7 +28,7 @@ public class AiriTime extends BaseNPCTime {
 
     @Override
     public void buildTransformationPool() {
-        options = new ArrayList<>();
+        transformationOptions = new ArrayList<>();
         {
             TransformationOption growCock = new TransformationOption();
             growCock.addRequirement(RequirementShortcuts.rev(new NotRequirement(new BodyPartRequirement("cock"))), "Airi has no penis");
@@ -54,7 +54,7 @@ public class AiriTime extends BaseNPCTime {
                 other.body.add(new CockPart().applyMod(new SizeMod(SizeMod.COCK_SIZE_BIG)));
                 return true;
             };
-            options.add(growCock);
+            transformationOptions.add(growCock);
         }
         {
             TransformationOption removeCock = new TransformationOption();
@@ -86,7 +86,7 @@ public class AiriTime extends BaseNPCTime {
                 other.body.removeAll("cock");
                 return true;
             };
-            options.add(removeCock);
+            transformationOptions.add(removeCock);
         }
     }
 
@@ -281,5 +281,47 @@ public class AiriTime extends BaseNPCTime {
     @Override
     public Optional<String> getAddictionOption() {
         return Optional.empty();
+    }
+
+    @Override
+    public void doPlayGamesWith() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doHaveSex() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doSparring() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doAddictionScene() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doGivePresent() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doSpecialFunction1() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doSpecialFunction2() {
+        // TODO Auto-generated method stub
+        
     }
 }

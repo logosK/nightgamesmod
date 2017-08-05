@@ -173,7 +173,7 @@ public enum ToysPart implements BodyPart,BodyPartMod {
     }
 
     @Override
-    public Collection<? extends BodyPartMod> getMods() {
+    public Collection<BodyPartMod> getMods() {
         return Collections.singleton(this);
     }
 

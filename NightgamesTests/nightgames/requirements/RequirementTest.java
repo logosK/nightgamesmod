@@ -10,9 +10,9 @@ import nightgames.characters.body.mods.SizeMod;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
-import nightgames.global.TestGlobal;
 import nightgames.items.Item;
 import nightgames.items.clothing.Clothing;
+import nightgames.modifier.standard.NoModifier;
 import nightgames.stance.*;
 import nightgames.status.Alert;
 import nightgames.status.Stsflag;
@@ -47,7 +47,7 @@ public class RequirementTest {
 
     @BeforeClass public static void setUpClass() throws Exception {
         Clothing.buildClothingTable();
-        new TestGlobal();
+        Global.initForTesting();
         Global.newGame("TestPlayer", Optional.empty(), new ArrayList<>(), CharacterSex.asexual, new HashMap<>());
     }
 
@@ -55,6 +55,7 @@ public class RequirementTest {
         self = new BlankPersonality("SelfTestNPC").character;
         other = new BlankPersonality("OtherTestNPC").character;
         Area area = new Area("TestArea", "TestArea description", Movement.beer);
+        Global.setUpMatch(new NoModifier());
         combat = new Combat(self, other, area);
     }
 

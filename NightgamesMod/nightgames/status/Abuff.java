@@ -41,9 +41,9 @@ public class Abuff extends DurationStatus {
             newValue = this.value;
         }
         if (newValue < 0) {
-            return Global.format("{self:pronoun-action:feel|seems} %s{self:if-human: than before}{self:if-nonhuman: now}", affected, affected, modded.getLowerPhrase());
+            return Global.format("{self:pronoun-action:feel|seems} %s{self:if-human: than before}{self:if-nonhuman: now}.", affected, affected, modded.getLowerPhrase());
         } else {
-            return Global.format("{self:pronoun-action:feel|seems} %s{self:if-human: than before}{self:if-nonhuman: now}", affected, affected, modded.getRaisePhrase());
+            return Global.format("{self:pronoun-action:feel|seems} %s{self:if-human: than before}{self:if-nonhuman: now}.", affected, affected, modded.getRaisePhrase());
         }
     }
 

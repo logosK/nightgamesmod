@@ -112,7 +112,7 @@ public class Standing extends MaledomSexStance {
     }
     
     @Override
-    public int dominance() {
-        return 3;
+    public Position.Dominance dominance() {
+        return Position.Dominance.AVERAGE;
     }
 }

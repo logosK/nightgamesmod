@@ -137,14 +137,14 @@ public class WildThrust extends Thrust {
         if (c.getStance().penetratedBy(c, c.getStance().getPartner(c, getSelf()), getSelf())) {
             return "Wild Thrust";
         } else if (c.getStance().sub(getSelf())) {
-            return "Wil Grind";
+            return "Wild Grind";
         } else {
             return "Wild Ride";
         }
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return true;
     }
     

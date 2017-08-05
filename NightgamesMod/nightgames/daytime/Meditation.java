@@ -28,23 +28,7 @@ public class Meditation extends Activity {
         Global.gui().clearCommand();
         if (Global.checkFlag(Flag.dojo) && choice.equals("Start")) {
             if (!Global.checkFlag(Flag.metSuzume)) {
-                Global.gui().message(
-                                "You go to the Suzuki dojo to meet Suzume. She looks like she's trying to looks like project the air of a dignified martial arts master, but "
-                                                + "you can tell she's excited at the prospect of getting a student. <i>\"Aesop tells me you're interested in becoming my apprentice. Sorry I didn't offer to "
-                                                + "train you earlier, but Aesop was very insistent that I wait.\"</i> She walks past you and locks the dojo door. <i>\"We have some privacy, so take off your clothes "
-                                                + "and let me take a look at you.\"</i><br/><br/>You strip off your clothes, slightly embarrassed about the way she's staring at you. She runs her hands lightly over your "
-                                                + "arms, chest, and back. <i>\"Good musculature. I think you have some of potential.\"</i> She's trying to sound business-like, but there's a noticeable blush on her "
-                                                + "cheeks. You're also affected by her touch and your dick gradually becomes erect. Suzume looks down at your manhood and smiles. <i>\"Maybe a lot of potential... "
-                                                + "Ok, you can get dressed now, unless you need a hand.\"</i> You quickly put your pants back on and cover up your erection. Normal social standards may be more "
-                                                + "flexible here, but it's still probably not a good idea to request a handjob when you're already asking for training.<br/><br/><i>\"I'd be happy to have you as a student, "
-                                                + "but I can't train you for free. I don't charge for guided meditation because it's not a traditional dojo service, but you'll need to pay for each training "
-                                                + "session.\"</i> Her expression darkens as she bites her lip. <i>\"My father is not in good health and he can't take students. I need money to keep the dojo open, and "
-                                                + "I know you're making plenty in the games.\"</i>");
-                Global.flag(Flag.metSuzume);
-                Global.gui().choose(this, "Train: $" + 1000 * (player.get(Attribute.Ki) + 1));
-                Global.gui().choose(this, "Sharpen Senses");
-                Global.gui().choose(this, "Shut Out Sensation");
-                Global.gui().choose(this, "Leave");
+               meetSuzume();
             } else {
                 Global.gui().message(
                                 "You go to the Suzuki dojo and remove your shoes out of respect. Suzume (or Suzuki-shisho as she's instructed you to call her) give you a friendly "
@@ -90,28 +74,7 @@ public class Meditation extends Activity {
             }
         } else if (choice.equals("Sharpen Senses")) {
             if (Global.random(100) >= 50) {
-                Global.gui().message(
-                                "Suzume instructs you to sit in the middle of the dojo and close your eyes. <i>\"I'm going to count down from ten. With each number, you will feel your "
-                                                + "mind openning and you will be more receptive to my words. When I reach zero, imagine your mind as an empty vessel, ready to take in everything around you.\"</i> As she "
-                                                + "counts down, you can feel yourself slipping into a trance. You know you could pull back at any time, but that would defeat the entire purpose of this, so instead you "
-                                                + "let yourself go. <i>\"I want you to imagine a thick fog has surrounded you your entire life, shrouding the world and dulling your senses. When I snap my fingers now, the fog "
-                                                + "will clear and your senses will be sharper than ever before. You'll be able to see details you never would have been able to make out. You'll be able to hear a pin drop "
-                                                + "in a storm. The entire universe will rush in through your skin and you'll perceive it all.\"</i><br/><br/>Suzume snaps her fingers and instantly everything is different. Your eyes "
-                                                + "are still closed, but you feel like you can perceive the shape of the room around you. Suzume has been pacing behind you, but her footfalls were too light for you to notice. "
-                                                + "Now you can pinpoint her exact location and movement. You hear a rustle of cloth from her direction and realize she's taking off her socks. <i>\"We're going to give your heightened "
-                                                + "senses a little practice so you can adapt to them. Keep your eyes closed, but you can speak now. What am I doing?\"</i> When you reply that she's removing socks, you can somehow "
-                                                + "sense her smile. <i>\"Very good, what about now?\"</i> Another rustle; shirt and pants this time. Then bra. Finally you hear the whisper of her panties sliding down her legs. Even "
-                                                + "though you can't see her, you can perceive every move she makes as if she were performing a strip show. Your erection strains against your pants as you hear her nude form approach "
-                                                + "you. When she gets close, you can feel the warmth of her body heat and catch the faint scent of feminine arousal.<br/><br/><i>\"I want you to wake up completely, but keep your eyes forward. "
-                                                + "I'm a modest girl after all. You probably feel a bit like a superhero right now, but I'm going to demonstrate your new vulnerability.\"</i> She takes hold of your hand and caresses "
-                                                + "your palm, causing you to jump at the unexpected sensation. <i>\"Your sense of touch is turned up so high right now that your entire body is an erogenous zone. Any place I touch will "
-                                                + "feel the same as the head of your penis.\"</i> She brings your hand to her mouth and kisses the tip of your index finger. You can't help groaning as the pleasure is transmitted throughout "
-                                                + "your body. When she puts your finger in her mouth and begins to lick it, it does feel like she's giving you a blowjob. You manage to endure her 'fingerjob' for about thirty seconds "
-                                                + "before you hit your peak and cum in your pants. Suzume giggles when she realizes what happened. <i>\"I probably should have warned you to bring a change of underwear with you. Don't worry, "
-                                                + "your hypersensitivity will level out over the next hour or so. You'll be a bit more perceptive, but not like you are now.\"</i>");
-                if (player.getPure(Attribute.Perception) < 9) {
-                    player.modAttributeDontSaveData(Attribute.Perception, 1);
-                }
+                sharpenSensesSucceed();
             } else {
                 Global.gui().message(
                                 "Suzume instructs you to sit in the middle of the dojo and close your eyes. <i>\"I'm going to count down from ten. With each number, you will feel your "
@@ -130,20 +93,7 @@ public class Meditation extends Activity {
             Global.gui().choose(this, "Leave");
         } else if (choice.equals("Shut Out Sensation")) {
             if (Global.random(100) >= 50) {
-                Global.gui().message(
-                                "Suzume has you lie down on the cold, somewhat uncomfortable floor. <i>\"Now please close your eyes while I count down from ten. I want you to imagine a set of stairs and "
-                                                + "with at each count I want you to take one step down. As you descend, everything in the world will fade away except my voice.\"</i> She begins to count down and you imagine yourself "
-                                                + "walking down the stairs. By the time she finishes counting, you no longer feel the hard floor beneath you. There's no sensation and no ambient noise. The only thing that matters "
-                                                + "right now is Suzume's voice. <i>\"Your body is your fortress. Nothing can reach you until you allow it. Just keep out everything that doesn't matter.\"</i><br/><br/>Suzume stops talking and "
-                                                + "you find yourself alone in your mind. With no sounds to track the time, you aren't sure how long you're waiting before she speaks again. <i>\"How are you feeling right now? You can "
-                                                + "speak.\"</i> You tell her that you are feeling pretty numb, but it's hard to tell how effective the meditation is. You hear Suzume giggle quietly. <i>\"Stay calm, open your eyes, and look "
-                                                + "down.\"</i> You open your eyes and raise your head. Your pants and boxers are gone, and Suzume is gripping your balls tightly. This should be cause for alarm, but her command to 'stay calm' "
-                                                + "is working quite well. <i>\"Don't worry, I would never damage someone in my care. You would, however, be in a lot of discomfort if the suggestion wasn't working.\"</i> She releases your "
-                                                + "genitals, helps you to your feet, and hands you your missing clothes. <i>\"Your sensitivity should already be starting to return. You'll keep some of your endurance, but you'll probably "
-                                                + "feel it when someone undresses you.\"</i>");
-                if (player.getPure(Attribute.Perception) > 1) {
-                    player.modAttributeDontSaveData(Attribute.Perception, -1);
-                }
+                shutOutSensesSucceed();
             } else {
                 Global.gui().message(
                                 "Suzume has you lie down on the cold, somewhat uncomfortable floor. <i>\"Now please close your eyes while I count down from ten. I want you to imagine a set of stairs and "
@@ -184,6 +134,111 @@ public class Meditation extends Activity {
             npc.modAttributeDontSaveData(Attribute.Perception, 1);
         } else if (r == 2 && npc.getPure(Attribute.Perception) > 1) {
             npc.modAttributeDontSaveData(Attribute.Perception, -1);
+        }
+    }
+    
+    private void meetSuzume() {
+        String message = "You go to the Suzuki dojo to meet Suzume. She looks like she's trying to looks like project the air of a dignified martial arts master, but "
+                        + "you can tell she's excited at the prospect of getting a student. <i>\"Aesop tells me you're interested in becoming my apprentice. Sorry I didn't offer to "
+                        + "train you earlier, but Aesop was very insistent that I wait.\"</i> She walks past you and locks the dojo door. <i>\"We have some privacy, so take off your clothes "
+                        + "and let me take a look at you.\"</i><br/><br/>You strip off your clothes, slightly embarrassed about the way she's staring at you. She runs her hands lightly over your "
+                        + "arms, chest, and back. <i>\"Good musculature. I think you have some of potential.\"</i> She's trying to sound business-like, but there's a noticeable blush on her "
+                        + "cheeks. ";
+        
+        if (player.hasDick()) {
+            message += "You're also affected by her touch and your dick gradually becomes erect. Suzume looks down at your manhood and smiles. <i>\"Maybe a lot of potential... "
+                            + "Ok, you can get dressed now, unless you need a hand.\"</i> You quickly put your pants back on and cover up your erection. ";
+        } else if (player.hasBreasts()) {
+            message += "You're also affected by her touch and your nipples gradually harden. Suzume looks down at your breasts smiles. <i>\"Maybe a lot of potential... "
+                            + "Ok, you can get dressed now, unless you need a hand.\"</i> You dress quickly, covering yourself. ";
+        } else {
+            message += "You're also affected by her touch and your cheecks flush with arousal and embarrassment. Suzume gives you a knowing smile. <i>\"Maybe a lot of potential... "
+                            + "Ok, you can get dressed now, unless you need a hand.\"</i> You dress quickly, covering yourself. ";
+        }
+        
+        message += "Normal social standards may be more "
+                        + "flexible here, but it's still probably not a good idea to go drooling after your teacher when you're already asking for training."
+                        + "<br/><br/><i>\"I'd be happy to have you as a student, but I can't train you for free. I don't charge for guided meditation because it's not a traditional dojo service, but you'll need to pay for each training "
+                        + "session.\"</i> Her expression darkens as she bites her lip. <i>\"My father is not in good health and he can't take students. I need money to keep the dojo open, and "
+                        + "I know you're making plenty in the games.\"</i>";
+        
+        Global.gui().message(message);
+        Global.flag(Flag.metSuzume);
+        Global.gui().choose(this, "Train: $" + 1000 * (player.get(Attribute.Ki) + 1));
+        Global.gui().choose(this, "Sharpen Senses");
+        Global.gui().choose(this, "Shut Out Sensation");
+        Global.gui().choose(this, "Leave");
+    }
+    
+    private void sharpenSensesSucceed() {
+        String message = "Suzume instructs you to sit in the middle of the dojo and close your eyes. <i>\"I'm going to count down from ten. With each number, you will feel your "
+                                        + "mind openning and you will be more receptive to my words. When I reach zero, imagine your mind as an empty vessel, ready to take in everything around you.\"</i> As she "
+                                        + "counts down, you can feel yourself slipping into a trance. You know you could pull back at any time, but that would defeat the entire purpose of this, so instead you "
+                                        + "let yourself go. <i>\"I want you to imagine a thick fog has surrounded you your entire life, shrouding the world and dulling your senses. When I snap my fingers now, the fog "
+                                        + "will clear and your senses will be sharper than ever before. You'll be able to see details you never would have been able to make out. You'll be able to hear a pin drop "
+                                        + "in a storm. The entire universe will rush in through your skin and you'll perceive it all.\"</i><br/><br/>Suzume snaps her fingers and instantly everything is different. Your eyes "
+                                        + "are still closed, but you feel like you can perceive the shape of the room around you. Suzume has been pacing behind you, but her footfalls were too light for you to notice. "
+                                        + "Now you can pinpoint her exact location and movement. You hear a rustle of cloth from her direction and realize she's taking off her socks. <i>\"We're going to give your heightened "
+                                        + "senses a little practice so you can adapt to them. Keep your eyes closed, but you can speak now. What am I doing?\"</i> When you reply that she's removing socks, you can somehow "
+                                        + "sense her smile. <i>\"Very good, what about now?\"</i> Another rustle; shirt and pants this time. Then bra. Finally you hear the whisper of her panties sliding down her legs. Even "
+                                        + "though you can't see her, you can perceive every move she makes as if she were performing a strip show. Your erection strains against your pants as you hear her nude form approach "
+                                        + "you. When she gets close, you can feel the warmth of her body heat and catch the faint scent of feminine arousal.<br/><br/><i>\"I want you to wake up completely, but keep your eyes forward. "
+                                        + "I'm a modest girl after all. You probably feel a bit like a superhero right now, but I'm going to demonstrate your new vulnerability.\"</i> She takes hold of your hand and caresses "
+                                        + "your palm, causing you to jump at the unexpected sensation. ";
+        if (player.hasDick()) {
+            message += "<i>\"Your sense of touch is turned up so high right now that your entire body is an erogenous zone. Any place I touch will "
+                                        + "feel the same as the head of your penis.\"</i> She brings your hand to her mouth and kisses the tip of your index finger. You can't help groaning as the pleasure is transmitted throughout "
+                                        + "your body. When she puts your finger in her mouth and begins to lick it, it does feel like she's giving you a blowjob. You manage to endure her 'fingerjob' for about thirty seconds "
+                                        + "before you hit your peak and cum in your pants. Suzume giggles when she realizes what happened. <i>\"I probably should have warned you to bring a change of underwear with you. Don't worry, "
+                                        + "your hypersensitivity will level out over the next hour or so. You'll be a bit more perceptive, but not like you are now.\"</i>";
+        } else if (player.hasPussy()) {
+            message += "<i>\"Your sense of touch is turned up so high right now that your entire body is an erogenous zone. Any place I touch will "
+                            + "feel like I'm stroking your clit.\"</i> She brings your hand to her mouth and licks the soft skin where two of your fingers meet. "
+                            + "You can't help groaning as the pleasure is transmitted throughout your body. When she extends her tongue and pushes against the cleft "
+                            + "of your fingers, it does feel like she's eating you out. You manage to endure her ministrations for about thirty seconds "
+                            + "before you shudder and let out a wordless sound of arousal as you climax. Suzume giggles when she realizes what happened. "
+                            + "<i>\"I probably should have warned you to bring a change of underwear with you. Don't worry, your hypersensitivity will "
+                            + "level out over the next hour or so. You'll be a bit more perceptive, but not like you are now.\"</i>";
+        } else {
+            message += "<i>\"Your sense of touch is turned up so high right now that your entire body is an erogenous zone.\"</i> She gives the hollow "
+                            + "of your neck a soft kiss, and you can't help groaning as the pleasure is transmitted throughout your body. When she extends "
+                            + "her tongue and licks gently, you let out a strangled moan. You manage to endure her ministrations for about thirty seconds "
+                            + "before you shudder and let out a wordless sound of arousal as you climax. Suzume giggles when she realizes what happened. "
+                            + "<i>\"I probably should have warned you to bring a change of underwear with you. Don't worry, your hypersensitivity will "
+                            + "level out over the next hour or so. You'll be a bit more perceptive, but not like you are now.\"</i>";
+        }
+        Global.gui().message(message);
+        if (player.getPure(Attribute.Perception) < 9) {
+            player.modAttributeDontSaveData(Attribute.Perception, 1);
+        }
+    }
+    
+    private void shutOutSensesSucceed() { 
+        String message = "Suzume has you lie down on the cold, somewhat uncomfortable floor. <i>\"Now please close your eyes while I count down from ten. "
+                        + "I want you to imagine a set of stairs and with at each count I want you to take one step down. As you descend, everything in "
+                        + "the world will fade away except my voice.\"</i> She begins to count down and you imagine yourself walking down the stairs. By "
+                        + "the time she finishes counting, you no longer feel the hard floor beneath you. There's no sensation and no ambient noise. The "
+                        + "only thing that matters right now is Suzume's voice. <i>\"Your body is your fortress. Nothing can reach you until you allow it. "
+                        + "Just keep out everything that doesn't matter.\"</i><br/><br/>Suzume stops talking and you find yourself alone in your mind. With "
+                        + "no sounds to track the time, you aren't sure how long you're waiting before she speaks again. <i>\"How are you feeling right "
+                        + "now? You can speak.\"</i> You tell her that you are feeling pretty numb, but it's hard to tell how effective the meditation is. "
+                        + "You hear Suzume giggle quietly. <i>\"Stay calm, open your eyes, and look down.\"</i> You open your eyes and raise your head. ";
+        
+        if (player.hasBalls()) {
+            message += "Your pants and boxers are gone, and Suzume is gripping your balls tightly. ";
+        } else if (player.hasBreasts()) {
+            message += "Your top is gone, and Suzume is gripping your nipples tightly. ";
+        } else {
+            message += "Suzume is crouched right in front of you, gripping your nose tightly. ";
+        }
+        
+        message += "This should be cause for alarm, but her command to 'stay calm' is working quite well. <i>\"Don't worry, I would never damage someone "
+                        + "in my care. You would, however, be in a lot of discomfort if the suggestion wasn't working.\"</i> She releases you, helps you "
+                        + "to your feet, and hands you your missing clothes. <i>\"Your sensitivity should already be starting to return. You'll keep some "
+                        + "of your endurance, but you'll probably feel it when someone undresses you.\"</i>";
+        Global.gui().message(message);
+        if (player.getPure(Attribute.Perception) > 1) {
+            player.modAttributeDontSaveData(Attribute.Perception, -1);
         }
     }
 

@@ -16,7 +16,6 @@ import nightgames.combat.Combat;
 import nightgames.combat.CombatScene;
 import nightgames.combat.CombatSceneChoice;
 import nightgames.combat.Result;
-import nightgames.global.Flag;
 import nightgames.global.Global;
 import nightgames.items.Item;
 import nightgames.items.clothing.Clothing;
@@ -134,6 +133,10 @@ public class Kat extends BasePersonality {
         character.getGrowth().arousal = 7;
         character.getGrowth().bonusStamina = 1;
         character.getGrowth().bonusArousal = 2;
+        
+        
+        this.addFirstFocusScene();      //TODO: Add below combatscene block to this method.
+        
         character.addCombatScene(new CombatScene((c, self, other) -> {
             return self.getLevel() >= 13 && !Global.checkFlag(KAT_POWER_FOCUS) && !Global.checkFlag(KAT_SPEED_FOCUS);
         }, (c, self, player) -> Global.format("Exhilarated after the fight, Kat pounces on you once again. "
@@ -180,6 +183,10 @@ public class Kat extends BasePersonality {
                         })
                     )
                 ));
+        
+        
+        this.addSecondFocusScene();      //TODO: Add below combatscene block to this method.
+        
         character.addCombatScene(new CombatScene((c, self, other) -> {
             return self.getLevel() >= 22 && !Global.checkFlag(KAT_FRENZY_FOCUS) && !Global.checkFlag(KAT_PHEROMONE_FOCUS)
                             && (Global.checkFlag(KAT_POWER_FOCUS) || Global.checkFlag(KAT_SPEED_FOCUS));
@@ -409,9 +416,9 @@ public class Kat extends BasePersonality {
         } else if (c.getStance().vaginallyPenetrated(c,character)) {
            opponent.add(c, Pheromones.getWith(character, opponent, 5, 10));
             return "She pounces at you, pushing you onto your back and holds you down with the weight of her body. A cute mew of a smile crosses her face, and her tongue sticks "
-                            + "out slightly from between her lips. She is riding your cock in a regular rhythm now, not worried as she knows you are much closer to your climax than her.<p>"
-                            + "As you gasp and wriggle, trying to escape from a loss she reaches out and gently scratching and tickling your nipples.<p>"
-                            + "<i>\"Nyahaha!\"</i> she giggles, toying with your body as a cat would toy with a mouse it caught.<p>"
+                            + "out slightly from between her lips. She is riding your cock in a regular rhythm now, not worried as she knows you are much closer to your climax than her.<br/><br/>"
+                            + "As you gasp and wriggle, trying to escape from a loss she reaches out and gently scratching and tickling your nipples.<br/><br/>"
+                            + "<i>\"Nyahaha!\"</i> she giggles, toying with your body as a cat would toy with a mouse it caught.<br/><br/>"
                             + "The added sensation of having your nipples molested is enough to drive you over the edge and you feel your cock begin pulsating inside of her tight cunt. "
                             + "You grunt a couple of times as her phermones prolong the contractions of your climax. When the cum has finally been drunk from your cock by her tight love "
                             + "hole she gasps and lets you slip out.<br/><br/>"
@@ -638,4 +645,22 @@ public class Kat extends BasePersonality {
             }
         }
     }
+    
+    /**Helper method to Add this character's first Combat focus scene 
+     * KAT: Power or speed
+     * 
+     * */
+    private void addFirstFocusScene(){
+        
+    }
+    
+    /**Helper method to Add this character's second Combat focus scene 
+     * KAT: Frenzy or Pheremone. 
+     * 
+     * */
+    private void addSecondFocusScene(){
+        
+    }
+    
+    
 }

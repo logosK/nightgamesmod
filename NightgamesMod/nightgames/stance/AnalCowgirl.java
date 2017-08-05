@@ -135,9 +135,4 @@ public class AnalCowgirl extends AnalSexStance {
         }
         return new Anal(bottom, top);
     }
-    
-    @Override
-    public int dominance() {
-        return 4;
-    }
 }

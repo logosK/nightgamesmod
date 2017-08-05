@@ -79,6 +79,11 @@ public class Neutral extends Position {
     public boolean behind(Character c) {
         return false;
     }
+    
+    @Override
+    public Position.Dominance dominance() {
+        return Position.Dominance.NEUTRAL;
+    }
 
     @Override
     public Position insertRandomDom(Combat c, Character dom) {

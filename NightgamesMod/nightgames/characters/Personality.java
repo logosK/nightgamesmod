@@ -79,4 +79,6 @@ public interface Personality extends Serializable {
 
     void applyBasicStats(Character self);
     void applyStrategy(NPC self);
+    
+    void handleQuests(Combat c);
 }

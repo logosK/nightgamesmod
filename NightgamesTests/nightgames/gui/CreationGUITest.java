@@ -3,7 +3,6 @@ package nightgames.gui;
 import nightgames.characters.Attribute;
 import nightgames.characters.Trait;
 import nightgames.global.Global;
-import nightgames.global.TestGlobal;
 import org.hamcrest.core.IsCollectionContaining;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +18,7 @@ import static org.junit.Assert.*;
  */
 public class CreationGUITest {
     @Before public void setUp() throws Exception {
-        new TestGlobal();
+        Global.initForTesting();
     }
 
     @Test public void testSelectPlayerStats() throws Exception {

@@ -1,11 +1,14 @@
 package nightgames.characters;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.custom.CharacterLine;
 import nightgames.combat.Combat;
+import nightgames.combat.CombatScene;
+import nightgames.combat.CombatSceneChoice;
 import nightgames.combat.Result;
 import nightgames.global.Flag;
 import nightgames.global.Global;
@@ -19,6 +22,16 @@ public class Maya extends BasePersonality {
 
     private static final long serialVersionUID = 447375506153223682L;
 
+    /* FIXME: Maya's image maya_dom is not named correctly. It should be maya_dominant
+     * 
+     * */
+    
+    public static final String MAYA_FIRSTTYPE1_FOCUS = "MayaFirst1Focus";
+    public static final String MAYA_FIRSTTYPE2_FOCUS = "MayaFirst2Focus";
+    public static final String MAYA_SECONDTYPE1_FOCUS = "MayaSecond1Focus";
+    public static final String MAYA_SECONDTYPE2_FOCUS = "MayaSecond2Focus";
+    
+    
     public Maya(int playerLevel) {
         this(playerLevel, Optional.empty(), Optional.empty());
     }
@@ -72,6 +85,10 @@ public class Maya extends BasePersonality {
         character.getGrowth().willpower = 2.0f;
         character.getGrowth().bonusStamina = 2;
         character.getGrowth().bonusArousal = 5;
+
+        this.addFirstFocusScene();     
+        this.addSecondFocusScene();   
+
         character.getGrowth().addTrait(0, Trait.darkpromises);
         character.getGrowth().addTrait(0, Trait.tongueTraining1);
         character.getGrowth().addTrait(0, Trait.tongueTraining2);
@@ -124,7 +141,10 @@ public class Maya extends BasePersonality {
             return "Maya gives you a look of gentle disapproval. <i>\"You aren't putting up much of a fight, are you? Aren't you a little overeager to cum?\"</i>";
         });
         character.addLine(CharacterLine.NIGHT_LINER, (c, self, other) -> {
-            return "";
+            //TODO: Maya might someday be able to play regularly, so this line will need multiple versions once that happens. For now, she plays monthly and is out of the player's league as an alumni. - DSM
+            return "Maya approaches you after the night is over and puts her hand on your shoulder to get your attention. She sighs in a satisfied manner and gives you a subtle smile and a farewell. "
+                            + "\"<i>Well, I'll see you next month. You're doing okay. Keep it up.</i>\" Maya fixes her glasses and puts out her hand for a handshake. You awkwardly shake her hand and she departs. "
+                            + "You're left wondering what the hell that was about.";
         });
 
         character.addLine(CharacterLine.TEMPT_LINER, (c, self, other) -> {
@@ -149,6 +169,35 @@ public class Maya extends BasePersonality {
                             + "light catches them in a way that makes you think there might "
                             + "be something dangerous inside.";
         });
+        
+        
+        character.addLine(CharacterLine.LEVEL_DRAIN_LINER, (c, self, other) -> {
+            String part = Global.pickRandom(c.getStance().getPartsFor(c, self, other)).map(bp -> bp.describe(self)).orElse("pussy");
+            if (other.getLevel() < self.getLevel() - 5) {
+                if (c.getStance().vaginallyPenetratedBy(c, other, self)) {
+                    return "Maya works you with a wide smile on her face while you cum uncontrollably into her pussy; your experience and training leaving you yet again while she softly chuckles at you. "
+                                    + "\"<i>Oh, {other:name}...You're such a small fry at this point that it's just too easy, but taking your strength and experience really scratches my itch!</i>\"";
+                } else if (c.getStance().anallyPenetratedBy(c, other, self)) {
+                    return "Maya works you with a wide smile on her face while you cum uncontrollably into her nightmarish backdoor; you feel it drawing you experience and training right out of you while she softly chuckles at you. "
+                                    + "\"<i>Oh, {other:name}...You're such a small fry at this point that it's just too easy, but taking your strength and experience really scratches my itch!</i>\"";
+                } else {
+                    return "Maya presses her demonic cock deep into you while you cum uncontrollably around it. You feel it drawing more of your experience and training out of your very soul while she softly chuckles at you. "
+                                    + "\"<i>Oh, {other:name}...You're such a small fry at this point that it's just too easy, but taking your strength and experience really scratches my itch!</i>\"";
+                }
+            } else if (other.getLevel() >= self.getLevel()) {
+                if (c.getStance().inserted(other)) {
+                    return "Maya tenses up and yelps on top of you as your power and experience snap off and flow into her. She turns her face to your cumming visage and cracks a cruel and smug-looking smile before giving you three more good squeezes. "
+                                    + "\"<i>You like giving it up to us, don't you? I knew you'd be a good addition. You can keep thanking me Just. Like. This!</i>\"";
+                } else {
+                    return "Maya tenses up and yelps on top of you as your power and experience snap off and flow into her. She turns her face to your cumming visage and cracks a cruel and smug-looking smile before giving you three more good squeezes. "
+                                    + "\"<i>You like giving it up to us, don't you? I knew you'd be a good addition. You can keep thanking me Just. Like. This!</i>\"";
+                }
+            } else {
+                return "Maya stiffens up in rapture as bits and pieces of your soul break off from you and are absorbed by her demonic " + part + " "
+                                + "\"<i>Ohhh-yeah, {other:name}, that's good. Shakes the rust right off. Want to do that again, stud?</i>\"";
+            }
+        });
+        
     }
 
     @Override
@@ -387,5 +436,95 @@ public class Maya extends BasePersonality {
                         + "'s face to bring her out of the trance and the girl looks down at your defeated form in confusion. <i>\"Thank you for your cooperation. Now we can "
                         + "continue our fight without interruption.\"</i>";
     }
+    
+    
+    /**Helper method to Add this character's first Combat focus scene 
+     * MAYA: 
+     * 
+     * */
+    private void addFirstFocusScene(){
+        character.addCombatScene(new CombatScene(
+                        (c, self, other) -> self.getLevel() >= 40 && !Global.checkFlag(MAYA_FIRSTTYPE1_FOCUS) && !Global.checkFlag(MAYA_FIRSTTYPE2_FOCUS),
+                        (c, self, other) -> Global.format(
+                                        "[Placeholder] You see {self:name} in some sort of setup scenario. She asks you a question relevant to her advancement."
+                                        + "\n\n \"<i>You know what? I was thinking - Now that I'm playing again, I could focus on THIS or THAT. What do you think?</i>\"",
+                                        self, other),
+                        Arrays.asList(new CombatSceneChoice("Hypnotic Powers", (c, self, other) -> {
+                            c.write(Global.format(
+                                            "[Placeholder] You tell {self:direct-object} that you'd prefer the first thing. She responds in a manner befitting such a choice.",
+                                            self, other,
+                                            other.hasDick() ? "[Placeholder] {self:PRONOUN} does something tease-y to your {other:body-part:cock} in response to choosing the first choice."
+                                                            : "[Placeholder] {self:PRONOUN} does something tease-y to your {other:body-part:pussy}"
+                                                                            + " in response to choosing the first choice."));
+                            useFirstType1();
+                            return true;
+                        }), new CombatSceneChoice("TYPE2", (c, self, other) -> {
+                            c.write(Global.format(
+                                            "[Placeholder] You tell {self:direct-object} that you'd prefer the second thing. She responds in a manner befitting such a choice.", self, other));
+                            useFirstType2();
+                            return true;
+                        }), new CombatSceneChoice("Why not do both? [Hard Mode]", (c, self, other) -> {
+                            c.write(Global.format(
+                                            "[Placeholder] You tell {self:name} not to hold back on account of her experience. Her response suggest she's about to get much tougher.", self, other));
+                            useFirstType2();
+                            useFirstType1();
+                            character.getGrowth().extraAttributes += 1;
+                            Global.getPlayer()
+                                  .getGrowth().addTraitPoints(new int[] {12, 39}, Global.getPlayer());
+                            return true;
+                        }))));
 
+    }
+    
+  
+    
+    /**Helper method to Add this character's second Combat focus scene 
+     * MAYA:  
+     * 
+     * */
+    private void addSecondFocusScene(){
+        character.addCombatScene(new CombatScene(
+                        (c, self, other) -> self.getLevel() >= 50 && !Global.checkFlag(MAYA_FIRSTTYPE1_FOCUS) && !Global.checkFlag(MAYA_FIRSTTYPE2_FOCUS),
+                        (c, self, other) -> Global.format(
+                                        "[Placeholder] You see {self:name} consider how strong the competition is now. She wonders if she should really cut loose and go full power, but how?",
+                                        self, other),
+                        Arrays.asList(new CombatSceneChoice("TYPE1", (c, self, other) -> {
+                            c.write(Global.format(
+                                            "[Placeholder] You tell {self:name} that she should make full use of her WHATEVER. She agrees, and shows off a little.",
+                                            self, other));
+                            useSecondType1();
+                            return true;
+                        }), new CombatSceneChoice("Embrace the Curse", (c, self, other) -> {
+                            c.write(Global.format(
+                                            "[Placeholder] You tell {self:name} that she should make full use of her Cursed nature. She agrees, and shows off a little.",
+                                            self, other));
+                            useSecondType2();
+                            return true;
+                        }), new CombatSceneChoice("Tell her she's washed up. [Hard Mode]",
+                                        (c, self, other) -> {
+                                            c.write(Global.format(
+                                                            "You joke at {self:name}, telling her that she's washed up. You have a laugh, but her face and eyes and narrow into a dangerous look that could kill a thousand soldiers. You've definitely crossed some kind of line. "
+                                                            + "<i>\"Washed up, you say? I've had enough of your mouth {other:name}; you're about to find out what happens when an alumni gets <b>serious</b>. Thankfully, The Benefactor will protect you. <b>You're going to need it.</b>",
+                                                            self, other, character.useFemalePronouns() ? "ess" : ""));
+                                            useSecondType1();
+                                            useSecondType2();
+                                            character.getGrowth().extraAttributes += 1;
+                                            Global.getPlayer().getGrowth().addTraitPoints(new int[] {21, 48}, Global.getPlayer());
+                                            return true;
+                                        }))));
+    }
+    
+    private void useFirstType1(){
+        
+    }
+    private void useFirstType2(){
+        
+    }
+    
+    private void useSecondType1(){
+        
+    }
+    private void useSecondType2(){
+        
+    }
 }

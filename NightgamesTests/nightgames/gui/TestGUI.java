@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
-import nightgames.combat.IEncounter;
+import nightgames.match.Encounter;
 import nightgames.skills.Skill;
 
 public class TestGUI extends GUI {
@@ -16,6 +16,7 @@ public class TestGUI extends GUI {
     private static final long serialVersionUID = 1739250786661411957L;
 
     public TestGUI() {
+        
     }
 
     @Override public void setVisible(boolean visible) {
@@ -51,7 +52,7 @@ public class TestGUI extends GUI {
     public void next(Combat combat) {}
 
     @Override
-    public void promptAmbush(IEncounter enc, Character target) {}
+    public void promptAmbush(Encounter enc, Character target) {}
 
     @Override
     public void update(Observable arg0, Object arg1) {}

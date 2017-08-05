@@ -2,6 +2,7 @@ package nightgames.stance;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.body.BreastsPart;
 import nightgames.combat.Combat;
 import nightgames.global.Flag;
 import nightgames.global.Global;
@@ -25,7 +26,8 @@ public class Missionary extends MaledomSexStance {
 
     @Override
     public String image() {
-        if(top.hasBreasts()) return "futa_missionary.jpg";
+        if(top.body.getRandomBreasts().getSize() > BreastsPart.flat.getSize())
+            return "futa_missionary.jpg";
         return "missionary.jpg";
     }
 
@@ -106,7 +108,7 @@ public class Missionary extends MaledomSexStance {
     }
     
     @Override
-    public int dominance() {
-        return 3;
+    public Position.Dominance dominance() {
+        return Position.Dominance.AVERAGE;
     }
 }

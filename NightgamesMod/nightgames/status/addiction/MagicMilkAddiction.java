@@ -285,10 +285,28 @@ public class MagicMilkAddiction extends Addiction {
                         + " boobs are great to look at, but couldn't you be a bit more careful?"
                         + " Now I'm not at liberty to tell you how I know this, but you'll have noticed that "
                         + "you're likely to find yourself unwilling to keep fighting if you allow this thing"
-                        + " to grow too bad. At first it'll only be when directly confronted with " + cause.directObject() + " directly,"
+                        + " to grow too bad. At first it'll only be when directly confronted with " + cause.directObject() + ","
                         + " but if you don't drink for long enough, well, you won't do very well. That said, it"
                         + " does at least mean you won't be affected by any weaker addictive substances, so you've"
                         + " got that going for you.";
+    }
+
+    @Override
+    protected void applyEffects(Character self) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    protected void removeEffects(Character self) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    protected void cleanseAddiction(Character self) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

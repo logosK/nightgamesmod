@@ -41,7 +41,7 @@ public class TeamMatch extends Match {
 
     @Override
     public List<CombatListener> getListeners(Combat c) {
-        return Collections.singletonList(new TeamCombatListener(c, this));
+        return Collections.singletonList(new TeamCombatListener(c));
     }
 
     @Override
@@ -184,8 +184,9 @@ public class TeamMatch extends Match {
 
     @Override
     public boolean canFight(Character initiator, Character opponent) {
-        return isCaptain(initiator) && isCaptain(opponent) && !teamOf.get(initiator)
-                                                                     .hasMercy(teamOf.get(opponent));
+        return isCaptain(initiator) && isCaptain(opponent) 
+               && !teamOf.get(initiator).hasMercy(teamOf.get(opponent))
+               && !teamOf.get(opponent).hasMercy(teamOf.get(initiator));
     }
 
     @Override
@@ -196,6 +197,7 @@ public class TeamMatch extends Match {
     @Override
     protected void beforeAllTurns() {
         map.values().forEach(a -> a.env.clear());
+        teams.values().forEach(Team::tickMercy);
     }
 
     @Override

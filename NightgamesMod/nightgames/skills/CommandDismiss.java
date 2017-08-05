@@ -3,6 +3,8 @@ package nightgames.skills;
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
+import nightgames.global.Global;
+import nightgames.match.MatchType;
 import nightgames.pet.PetCharacter;
 
 public class CommandDismiss extends PlayerCommand {
@@ -13,7 +15,8 @@ public class CommandDismiss extends PlayerCommand {
 
     @Override
     public boolean usable(Combat c, Character target) {
-        return super.usable(c, target) && !c.getPetsFor(target).isEmpty();
+        return super.usable(c, target) && !c.getPetsFor(target).isEmpty()
+                        && Global.getMatch().getType() != MatchType.TEAM;
     }
 
     @Override

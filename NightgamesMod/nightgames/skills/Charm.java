@@ -33,8 +33,8 @@ public class Charm extends Skill {
         if (isPurr(c)) {
             return resolvePurr(c, target);
         }
-        if (target.human() && target.is(Stsflag.blinded)) {
-            printBlinded(c);
+        if (target.is(Stsflag.blinded)) {
+            writeOutput(c, Result.item, target);
             return false;
         }
         if (target.roll(getSelf(), c, accuracy(c, target))) {
@@ -114,6 +114,10 @@ public class Charm extends Skill {
                 message += "\nSome of your apparent arousal seems to have affected her, her breath seems shallower than before.";
             }
             return message;
+        } else if (modifier == Result.item) {
+            return Global.format("You put on a bit of a show for {other:name}, but since"
+                            + " {other:pronoun} is unable to see it, your efforts are wasted.", 
+                            getSelf(), target);
         } else {
             return getSelf().getName() + " flashes a dazzling smile at "+target.nameDirectObject()+", charming " + target.directObject() + " instantly";
         }
@@ -144,6 +148,10 @@ public class Charm extends Skill {
                                 target.possessiveAdjective());
             }
             return message;
+        } else if (modifier == Result.item) {
+            return Global.format("{self:SUBJECT} must be doing something,"
+                            + " but blinded as you are you don't have a clue as to what"
+                            + " it might be.", getSelf(), target);
         } else {
             return getSelf().getName() + " flashes a dazzling smile at "+target.nameDirectObject()+", charming " + target.directObject() + " instantly.";
         }

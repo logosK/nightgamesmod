@@ -47,7 +47,7 @@ public class JewelTime extends BaseNPCTime {
 
     @Override
     public void buildTransformationPool() {
-        options = new ArrayList<>();
+        transformationOptions = new ArrayList<>();
         {
             TransformationOption growCock = new TransformationOption();
             growCock.ingredients.put(Item.PriapusDraft, 3);
@@ -58,7 +58,7 @@ public class JewelTime extends BaseNPCTime {
                 other.body.add(new CockPart().applyMod(new SizeMod(SizeMod.COCK_SIZE_BIG)).applyMod(CockMod.enlightened));
                 return true;
             };
-            options.add(growCock);
+            transformationOptions.add(growCock);
         }
         {
             TransformationOption removeCock = new TransformationOption();
@@ -70,7 +70,7 @@ public class JewelTime extends BaseNPCTime {
                 other.body.removeAll("cock");
                 return true;
             };
-            options.add(removeCock);
+            transformationOptions.add(removeCock);
         }
         {
             TransformationOption enlightenedCock = new ApplyPartModOption("cock", CockMod.enlightened);
@@ -79,7 +79,7 @@ public class JewelTime extends BaseNPCTime {
             enlightenedCock.ingredients.put(Item.JuggernautJuice, 10);
             enlightenedCock.option = "Enlightened Cock";
             enlightenedCock.scene = "[Placeholder]<br/>Jewel shows you how to focus your spiritual energy into your cock.";
-            options.add(enlightenedCock);
+            transformationOptions.add(enlightenedCock);
         }
         {
             TransformationOption fieryPussy = new ApplyPartModOption("pussy", FieryMod.INSTANCE);
@@ -88,7 +88,7 @@ public class JewelTime extends BaseNPCTime {
             fieryPussy.ingredients.put(Item.JuggernautJuice, 10);
             fieryPussy.option = "Fiery Pussy";
             fieryPussy.scene = "[Placeholder]<br/>Jewel trains you so you can concentrate your ki inside your cunt.";
-            options.add(fieryPussy);
+            transformationOptions.add(fieryPussy);
         }
         {
             TransformationOption moltenAss = new ApplyPartModOption("ass", FieryMod.INSTANCE);
@@ -100,7 +100,7 @@ public class JewelTime extends BaseNPCTime {
             }, "At least level 30");
             moltenAss.option = "Molten Ass";
             moltenAss.scene = "[Placeholder]<br/>Jewel trains you so you can concentrate your ki inside your ass.";
-            options.add(moltenAss);
+            transformationOptions.add(moltenAss);
         }
         {
             TransformationOption retraining = new TransformationOption();
@@ -119,7 +119,7 @@ public class JewelTime extends BaseNPCTime {
                 }
                 return true;
             };
-            options.add(retraining);
+            transformationOptions.add(retraining);
         }
     }
 
@@ -403,5 +403,47 @@ public class JewelTime extends BaseNPCTime {
     public Optional<String> getAddictionOption() {
         return Global.getPlayer()
                      .checkAddiction(AddictionType.DOMINANCE) ? Optional.of("Ask about Dominance") : Optional.empty();
+    }
+
+    @Override
+    public void doPlayGamesWith() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doHaveSex() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doSparring() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doAddictionScene() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doGivePresent() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doSpecialFunction1() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void doSpecialFunction2() {
+        // TODO Auto-generated method stub
+        
     }
 }

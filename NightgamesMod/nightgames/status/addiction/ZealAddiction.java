@@ -131,7 +131,7 @@ public class ZealAddiction extends Addiction {
         switch (getSeverity()) {
             case HIGH:
                 return "<b>Your mind is completely preoccupied by " + cause.getName() + ". You didn't worship today!"
-                                + " Will " + cause.directObject() + " be angry? What will you do if " + cause.pronoun()
+                                + " Will " + cause.pronoun() + " be angry? What will you do if " + cause.pronoun()     //TODO: cause.DiectObject() =  Will "her" be angry?
                                 + " is? You aren't going to be able to focus on much else tonight.</b>";
             case MED:
                 return "<b>You are terribly nervous at the thought of having to face " + cause.getName()
@@ -278,6 +278,24 @@ public class ZealAddiction extends Addiction {
                         + " get rid of it will probably throw you off your game for a while. Not good, man. I"
                         + " suppose you can draw some spiritual strength from your newfound faith, many people"
                         + " seem to do so, but is that worth it?";
+    }
+
+    @Override
+    protected void applyEffects(Character self) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    protected void removeEffects(Character self) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    protected void cleanseAddiction(Character self) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

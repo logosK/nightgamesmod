@@ -30,8 +30,8 @@ public class Diversion extends Skill {
     }
 
     @Override
-    public int getMojoBuilt(Combat c) {
-        return 25;
+    public int getMojoCost(Combat c) {
+        return 15;
     }
 
     @Override

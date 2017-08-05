@@ -2,6 +2,7 @@ package nightgames.actions;
 
 import nightgames.characters.Character;
 import nightgames.global.Global;
+import nightgames.match.MatchType;
 import nightgames.trap.Trap;
 
 public class SetTrap extends Action {
@@ -19,7 +20,9 @@ public class SetTrap extends Action {
     @Override
     public boolean usable(Character user) {
         return trap.recipe(user) && !user.location().open() && trap.requirements(user)
-                        && user.location().env.size() < 5 && !user.bound() && !user.location().isTrapped();
+                        && user.location().env.size() < 5 && !user.bound() 
+                        && !user.location().isTrapped() 
+                        && Global.getMatch().getType() != MatchType.TEAM;
     }
 
     @Override

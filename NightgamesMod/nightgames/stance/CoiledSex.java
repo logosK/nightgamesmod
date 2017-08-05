@@ -94,7 +94,7 @@ public class CoiledSex extends FemdomSexStance {
     }
     
     @Override
-    public int dominance() {
-        return 4;
+    public Position.Dominance dominance() {
+        return Position.Dominance.HIGH;
     }
 }

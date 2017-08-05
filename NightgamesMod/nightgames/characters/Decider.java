@@ -30,6 +30,20 @@ public class Decider {
         }
     }
 
+    /**Creates an ArrayList of weightd Skills to aid in the decisionmaking process. It goes through all available skills and sorts them into lists. 
+     * 
+     * The method then checks the character's current mood and assigns weights based upon skill type.
+     * 
+     * @param available
+     * 
+     * @param C
+     * 
+     * @param character
+     * 
+     * @return
+     * Returns an ArrayList of weightedSkills.
+     * 
+     * */
     public static ArrayList<WeightedSkill> parseSkills(HashSet<Skill> available, Combat c, NPC character) {
         HashSet<Skill> damage = new HashSet<Skill>();
         HashSet<Skill> pleasure = new HashSet<Skill>();
@@ -66,6 +80,8 @@ public class Decider {
             }
         }
         switch (character.mood) {
+            
+            //Characters that are confident will gain position, strip and debuff the other guy - they do things equally.
             case confident:
                 // i can do whatever i want
                 addAllSkillsWithPriority(priority, position, 1.0f);
@@ -77,6 +93,7 @@ public class Decider {
                 addAllSkillsWithPriority(priority, summoning, .5f);
                 addAllSkillsWithPriority(priority, misc, 1f);
                 break;
+            //Characters that are angry will prioritize doing damage and gaining position.
             case angry:
                 addAllSkillsWithPriority(priority, damage, 2.5f);
                 addAllSkillsWithPriority(priority, position, 2.0f);
@@ -86,6 +103,7 @@ public class Decider {
                 addAllSkillsWithPriority(priority, misc, 1f);
                 addAllSkillsWithPriority(priority, summoning, 0f);
                 break;
+            //Characters that are nervous prioritize summoning, debuffing, and recovering from bad situations.
             case nervous:
                 addAllSkillsWithPriority(priority, summoning, 2.0f);
                 addAllSkillsWithPriority(priority, debuff, 2.0f);
@@ -96,6 +114,7 @@ public class Decider {
                 addAllSkillsWithPriority(priority, pleasure, 0.0f);
                 addAllSkillsWithPriority(priority, misc, 1f);
                 break;
+            //characters that are desperate will prioritize calming down and recovering.
             case desperate:
                 // and probably a bit confused
                 addAllSkillsWithPriority(priority, calming, 4.0f);
@@ -107,6 +126,7 @@ public class Decider {
                 addAllSkillsWithPriority(priority, pleasure, 1.0f);
                 addAllSkillsWithPriority(priority, fucking, 1.0f);
                 break;
+            //characters that are horny will prioritize fucking and stripping, doing pleasure and gaining position.
             case horny:
                 addAllSkillsWithPriority(priority, fucking, 5.0f);
                 addAllSkillsWithPriority(priority, stripping, 1.0f);
@@ -115,6 +135,7 @@ public class Decider {
                 addAllSkillsWithPriority(priority, debuff, 0f);
                 addAllSkillsWithPriority(priority, misc, 1f);
                 break;
+            //Characters that feel dominant will prioritize gaining and keeping dominant positions and fucking and stripping.
             case dominant:
                 addAllSkillsWithPriority(priority, position, 3.0f);
                 addAllSkillsWithPriority(priority, fucking, 2.0f);
@@ -131,6 +152,8 @@ public class Decider {
          */ return priority;
     }
 
+    
+    /**This method parses the actions available to the character and returns an action.*/
     public static Action parseMoves(Collection<Action> available, Collection<IMovement> radar, NPC character) {
         HashSet<Action> enemy = new HashSet<Action>();
         HashSet<Action> onlyWhenSafe = new HashSet<Action>();
@@ -212,6 +235,7 @@ public class Decider {
         return actions[Global.random(actions.length)];
     }
 
+    /**This method determines what a character decides to do during the day.*/
     public static void visit(Character self) {
         if (Global.checkCharacterDisabledFlag(self)) {
             return;
@@ -241,6 +265,7 @@ public class Decider {
         }
     }
 
+    /**Decides which weightedskill a summoned pet uses*/
     public static WeightedSkill prioritizePet(PetCharacter self, Character target, List<Skill> plist, Combat c) {
         List<WeightedSkill> weightedList = plist.stream().map(skill -> new WeightedSkill(1.0, skill)).collect(Collectors.toList());
         return prioritizePetWithWeights(self, target, weightedList, c);
@@ -306,6 +331,7 @@ public class Decider {
         return moveList.get(moveList.size() - 1);
     }
 
+    
     public static Skill prioritizeNew(Character self, List<WeightedSkill> plist, Combat c) {
         if (plist.isEmpty()) {
             return null;

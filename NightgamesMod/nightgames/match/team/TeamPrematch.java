@@ -33,7 +33,7 @@ public class TeamPrematch extends Prematch {
         private FirstTeamMatchEvent() {
             super("You received a text earlier in the day saying you'd need to be at the meeting spot"
                             + " in the Student Union a little earlier than usual, as there would be"
-                            + " some announcements. When you arrive, everyone else has already gathered. "
+                            + " some announcements. When you arrive, everyone else has already gathered. <i>\""
                             + Global.getPlayer().getTrueName() + ", good, now we can begin. We are going to"
                             + " do things a little differently tonight. Instead of having a rapacious"
                             + " free-for-all, you are going to have to work together this time. I'm going"
@@ -46,7 +46,7 @@ public class TeamPrematch extends Prematch {
                             + " the winning team gets three points, or both get one in case of a draw."
                             + " At the end of the night, everyone gets paid according to the amount"
                             + " of points their teams scored. I'll try to balance the teams in terms"
-                            + " of skill, but no promises there. Now, any further questions?", 
+                            + " of skill, but no promises there. Now, any further questions?\"</i>", 
                             new NoModifier(), Arrays.asList(new SceneButton(START_MATCH_CHOICE)));
         }
         

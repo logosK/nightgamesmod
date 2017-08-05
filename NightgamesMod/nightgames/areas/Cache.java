@@ -1,6 +1,11 @@
 package nightgames.areas;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
@@ -12,6 +17,87 @@ import nightgames.items.Loot;
 import nightgames.items.clothing.Clothing;
 
 public class Cache implements Deployable {
+    
+    private static final List<RewardType> REWARDS = Arrays.asList(
+                    new RewardType(13, 1.0, Item.Sprayer, 
+                                           Item.Sprayer, 
+                                           Item.Sprayer,
+                                           Item.Tripwire,
+                                           Item.Tripwire,
+                                           Item.Talisman),
+                    new RewardType(12, 1.0, Item.SPotion,
+                                           Item.SPotion,
+                                           Item.Totem,
+                                           Item.Aphrodisiac),
+                    new RewardType(11, 1.0, Item.Rope,
+                                           Item.Rope,
+                                           Item.Rope,
+                                           Item.Rope,
+                                           Item.Tripwire),
+                    new RewardType(10, 1.0, Item.SPotion,
+                                           Item.SPotion,
+                                           Item.Totem,
+                                           Item.Lubricant,
+                                           Item.Talisman),
+                    new RewardType(9, 1.0,  Item.Handcuffs,
+                                           Item.Handcuffs,
+                                           Item.DisSol),
+                    new RewardType(8, 1.0,  Clothing.getByID("cup")),
+                    new RewardType(7, 1.0,  Item.SPotion,
+                                           Item.SPotion,
+                                           Item.Talisman),
+                    new RewardType(6, 1.0,  Item.SPotion,
+                                           Item.SPotion,
+                                           Item.Talisman),
+                    new RewardType(5, 1.0,  Item.Totem,
+                                           Item.Handcuffs,
+                                           Item.FaeScroll),
+                    new RewardType(4, 1.0,  Item.SPotion,
+                                           Item.Aphrodisiac,
+                                           Item.Sprayer,
+                                           Item.Talisman),
+                    new RewardType(3, 1.0,  Item.SPotion,
+                                           Item.Lubricant,
+                                           Item.Lubricant),
+                    new RewardType(2, 1.0,  Item.Rope,
+                                           Item.Rope,
+                                           Item.Sedative,
+                                           Item.Talisman),
+                    new RewardType(1, 1.0,  Item.Aphrodisiac,
+                                           Item.Aphrodisiac),
+                    new RewardType(1, 1.0,  Item.FaeScroll,
+                                           Item.Talisman),
+                    new RewardType(1, 1.0,  Item.DisSol,
+                                           Item.Sprayer,
+                                           Item.Tripwire,
+                                           Item.Talisman),
+                    new RewardType(1, 1.0,  Item.Totem,
+                                           Item.Talisman),
+                    new RewardType(1, 1.0,  Item.Lubricant,
+                                           Item.Aphrodisiac),
+                    new RewardType(1, 1.0,  Item.Tripwire,
+                                           Item.Tripwire,
+                                           Item.Rope,
+                                           Item.Talisman),
+                    new RewardType(1, 1.0,  Item.SPotion),
+                    new RewardType(1, 1.0,  Item.Aphrodisiac),
+                    new RewardType(1, 1.0,  Item.Lubricant,
+                                           Item.DisSol,
+                                           Item.Talisman),
+                    new RewardType(1, 1.0,  Item.Beer,
+                                           Item.Beer,
+                                           Item.Beer),
+                    new RewardType(1, 1.0,  Item.Tripwire,
+                                           Item.ZipTie),
+                    new RewardType(1, 1.0,  Item.FaeScroll,
+                                           Item.Talisman),
+                    new RewardType(1, 1.0,  Item.Aphrodisiac,
+                                           Item.Totem,
+                                           Item.DisSol,
+                                           Item.SPotion,
+                                           Item.Handcuffs)
+    );
+    
     private int dc;
     private int level;
     private Attribute test;
@@ -162,134 +248,26 @@ public class Cache implements Deployable {
     }
 
     public void calcReward(int level) {
-        int value = level + Global.random(10);
-        switch (value) {
-            case 23:
-                reward.add(Item.Sprayer);
-                reward.add(Item.Sprayer);
-                reward.add(Item.Sprayer);
-                reward.add(Item.Tripwire);
-                reward.add(Item.Tripwire);
-                reward.add(Item.Talisman);
-            case 22:
-                reward.add(Item.SPotion);
-                reward.add(Item.SPotion);
-                reward.add(Item.Totem);
-                reward.add(Item.Aphrodisiac);
-                break;
-            case 21:
-                reward.add(Item.Rope);
-                reward.add(Item.Rope);
-                reward.add(Item.Rope);
-                reward.add(Item.Rope);
-                reward.add(Item.Tripwire);
-                break;
-            case 20:
-                reward.add(Item.Totem);
-                reward.add(Item.SPotion);
-                reward.add(Item.SPotion);
-                reward.add(Item.Lubricant);
-                reward.add(Item.Talisman);
-                break;
-            case 19:
-                reward.add(Item.Handcuffs);
-                reward.add(Item.Handcuffs);
-                reward.add(Item.DisSol);
-                break;
-            case 18:
-                reward.add(Clothing.getByID("cup"));
-                break;
-            case 17:
-                reward.add(Item.SPotion);
-                reward.add(Item.SPotion);
-                reward.add(Item.Talisman);
-                break;
-            case 16:
-                reward.add(Item.Totem);
-                reward.add(Item.Handcuffs);
-                reward.add(Item.FaeScroll);
-                break;
-            case 15:
-                reward.add(Item.SPotion);
-                reward.add(Item.Aphrodisiac);
-                reward.add(Item.Sprayer);
-                reward.add(Item.Talisman);
-                break;
-            case 14:
-                reward.add(Item.Lubricant);
-                reward.add(Item.Lubricant);
-                reward.add(Item.SPotion);
-                break;
-            case 13:
-                reward.add(Item.Rope);
-                reward.add(Item.Rope);
-                reward.add(Item.Sedative);
-                reward.add(Item.Talisman);
-                break;
-            case 12:
-                reward.add(Item.Aphrodisiac);
-                reward.add(Item.Aphrodisiac);
-                break;
-            case 11:
-                reward.add(Item.FaeScroll);
-                reward.add(Item.Talisman);
-                break;
-            case 10:
-                reward.add(Item.DisSol);
-                reward.add(Item.Tripwire);
-                reward.add(Item.Sprayer);
-                reward.add(Item.Talisman);
-                break;
-            case 9:
-                reward.add(Item.Totem);
-                reward.add(Item.Talisman);
-                break;
-            case 8:
-                reward.add(Item.Aphrodisiac);
-                reward.add(Item.Lubricant);
-                break;
-            case 7:
-                reward.add(Item.Tripwire);
-                reward.add(Item.Tripwire);
-                reward.add(Item.Phone);
-                reward.add(Item.Talisman);
-                break;
-            case 6:
-                reward.add(Item.SPotion);
-                break;
-            case 5:
-                reward.add(Item.Aphrodisiac);
-                break;
-            case 4:
-                reward.add(Item.Lubricant);
-                reward.add(Item.DisSol);
-                reward.add(Item.Talisman);
-                break;
-            case 3:
-                reward.add(Item.Beer);
-                reward.add(Item.Beer);
-                reward.add(Item.Beer);
-                break;
-            case 2:
-                reward.add(Item.ZipTie);
-                reward.add(Item.Tripwire);
-                break;
-            case 1:
-                reward.add(Item.FaeScroll);
-                reward.add(Item.Talisman);
-                break;
-            default:
-                reward.add(Item.Aphrodisiac);
-                reward.add(Item.Totem);
-                reward.add(Item.DisSol);
-                reward.add(Item.SPotion);
-                reward.add(Item.Handcuffs);
-        }
+        Map<RewardType, Double> weighted = REWARDS.stream().filter(r -> level >= r.minLevel)
+                        .collect(Collectors.toMap(Function.identity(), r -> r.weight));
+        reward.addAll(Global.pickWeighted(weighted).get().items);
     }
 
     @Override
     public Character owner() {
         // TODO Auto-generated method stub
         return null;
+    }
+    
+    private static class RewardType {
+        List<Loot> items;
+        int minLevel;
+        double weight;
+        public RewardType(int minLevel, double weight, Loot...items) {
+            super();
+            this.items = Arrays.asList(items);
+            this.minLevel = minLevel;
+            this.weight = weight;
+        }
     }
 }

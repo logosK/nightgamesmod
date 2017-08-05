@@ -128,7 +128,7 @@ public class SpiralThrust extends Thrust {
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return true;
     }
     

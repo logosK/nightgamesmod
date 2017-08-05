@@ -9,7 +9,6 @@ import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
 import nightgames.nskills.tags.SkillTag;
-import nightgames.stance.Pin;
 import nightgames.status.Compulsive;
 import nightgames.status.Compulsive.Situation;
 
@@ -48,7 +47,6 @@ public class Reversal extends Skill {
         if (target.roll(getSelf(), c, accuracy(c, target))) {
             writeOutput(c, Result.normal, target);
             c.setStance(c.getStance().reverse(c,true));
-
             target.emote(Emotion.nervous, 10);
             getSelf().emote(Emotion.dominant, 10);
         } else {
@@ -89,9 +87,9 @@ public class Reversal extends Skill {
     public String deal(Combat c, int damage, Result modifier, Character target) {
         if (modifier == Result.miss) {
             return "You try to get on top of " + target.getName()
-                            + ", but she's apparently more ready for it than you realized.";
+                            + ", but "+ target.pronoun()+ "'s apparently more ready for it than you realized.";
         } else {
-            return "You take advantage of " + target.getName() + "'s distraction and put her in a pin.";
+            return "You take advantage of " + target.getName() + "'s distraction and put " + target.directObject() + " in a pin.";
         }
     }
 
@@ -114,7 +112,7 @@ public class Reversal extends Skill {
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return true;
     }
 }

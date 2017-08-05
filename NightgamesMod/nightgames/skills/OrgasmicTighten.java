@@ -101,7 +101,7 @@ public class OrgasmicTighten extends Tighten {
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return true;
     }
     

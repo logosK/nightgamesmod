@@ -61,7 +61,7 @@ public class CustomSkill extends Skill {
     }
 
     @Override
-    public boolean makesContact() {
+    public boolean makesContact(Combat c) {
         return data.makesContact;
     }
 

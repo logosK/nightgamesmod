@@ -46,7 +46,7 @@ public class XHFDaisyChainThreesome extends MaledomSexStance {
     @Override
     public void checkOngoing(Combat c) {
         if (!c.getOtherCombatants().contains(domSexCharacter)) {
-            c.write(bottom, Global.format("With the disappearance of {self:name-do}, {master:subject-action:continue} to ride {self:name-do} in a reverse cowgirl position.", domSexCharacter, bottom));
+            c.write(bottom, Global.format("With the disappearance of {self:name-do}, {master:subject-action:continue} to ride {other:name-do} in a reverse cowgirl position.", domSexCharacter, bottom));
             c.setStance(new ReverseCowgirl(top, bottom));
         }
     }
@@ -196,8 +196,8 @@ public class XHFDaisyChainThreesome extends MaledomSexStance {
     }
     
     @Override
-    public int dominance() {
-        return 4;
+    public Position.Dominance dominance() {
+        return Position.Dominance.HIGH;
     }
 
     @Override

@@ -80,7 +80,7 @@ public class CockMod extends PartMod {
             String message = "";
             if (target.moddedPartCountsAs(opponent, DemonicMod.INSTANCE)) {
                 message += String.format(
-                                "The fae energies inside %s %s radiate outward and into %s, causing %s %s to grow much more sensitve.",
+                                "The fae energies inside %s %s radiate outward and into %s, causing %s %s to grow much more sensitive. ",
                                 self.nameOrPossessivePronoun(), part.describe(self), opponent.nameOrPossessivePronoun(),
                                 opponent.possessiveAdjective(), target.describe(opponent));
                 bonus += damage * 0.5; // +50% damage
@@ -248,7 +248,7 @@ public class CockMod extends PartMod {
                     c.write(self, message);
                 }
             } else {
-                if (target.moddedPartCountsAs(opponent, CyberneticMod.INSTANCE)) {
+                if (!target.moddedPartCountsAs(opponent, CyberneticMod.INSTANCE)) {
                     c.write(self, String.format(
                                     "Sensing %s moment of passion, %s %s greedily draws upon the rampant flows of orgasmic energy within %s, transferring the power back into %s.",
                                     opponent.nameOrPossessivePronoun(), self.nameOrPossessivePronoun(),
@@ -264,7 +264,8 @@ public class CockMod extends PartMod {
         }
     }
 
-    public void tickHolding(Combat c, Character self, Character opponent, BodyPart otherOrgan, CockPart part) {
+    @Override
+    public void tickHolding(Combat c, Character self, Character opponent, BodyPart otherOrgan, BodyPart part) {
         if (this.equals(primal)) {
             c.write(self, String.format("Raw sexual energy flows from %s %s into %s %s, enflaming %s lust",
                             self.nameOrPossessivePronoun(), part.describe(self), opponent.nameOrPossessivePronoun(),

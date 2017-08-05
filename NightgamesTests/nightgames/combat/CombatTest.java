@@ -7,8 +7,8 @@ import nightgames.characters.CharacterSex;
 import nightgames.characters.NPC;
 import nightgames.characters.Trait;
 import nightgames.global.Global;
-import nightgames.global.TestGlobal;
 import nightgames.modifier.standard.NoModifier;
+import nightgames.stance.Position;
 import nightgames.stance.Stance;
 import nightgames.stance.TestPosition;
 import org.junit.Before;
@@ -27,7 +27,7 @@ import static org.junit.Assert.*;
  */
 public class CombatTest {
     @BeforeClass public static void setUpClass() throws Exception {
-        new TestGlobal();
+        Global.initForTesting();
         Global.newGame("TestPlayer", Optional.empty(), new ArrayList<>(), CharacterSex.asexual, new HashMap<>());
         Global.setUpMatch(new NoModifier());
     }
@@ -45,56 +45,41 @@ public class CombatTest {
 
     @Test public void getDominanceOfStanceNoTraits() throws Exception {
         // Neutral position. No dominance involved, so neither character should lose willpower.
-        combat.setStance(new TestPosition(self, other, Stance.neutral, 0));
-        assertThat(combat.getStance().getDominanceOfStance(self), equalTo(0));
-        assertThat(combat.getStance().getDominanceOfStance(other), equalTo(0));
+        combat.setStance(new TestPosition(self, other, Stance.neutral, Position.Dominance.NEUTRAL));
+        assertThat(combat.getStance().getCurrentDominance(combat, self), equalTo(Position.Dominance.NEUTRAL));
+        assertThat(combat.getStance().getCurrentDominance(combat, other), equalTo(Position.Dominance.NEUTRAL));
 
         // Self is dominant. Other should lose willpower but self should not.
-        combat.setStance(new TestPosition(self, other, Stance.engulfed, 5));
-        assertThat(combat.getStance().getDominanceOfStance(self), equalTo(5));
-        assertThat(combat.getStance().getDominanceOfStance(other), equalTo(0));
-
-        // Negative position dominance. Not a valid dominance value, but we'll accept it and treat it like a neutral position.
-        combat.setStance(new TestPosition(self, other, Stance.coiled, -5));
-        assertThat(combat.getStance().getDominanceOfStance(self), equalTo(0));
-        assertThat(combat.getStance().getDominanceOfStance(other), equalTo(0));
+        combat.setStance(new TestPosition(self, other, Stance.engulfed, Position.Dominance.ABSURD));
+        assertThat(combat.getStance().getCurrentDominance(combat, self), equalTo(Position.Dominance.ABSURD));
+        assertThat(combat.getStance().getCurrentDominance(combat, other), equalTo(Position.Dominance.NEUTRAL));
     }
 
 
     @Test public void getDominanceOfStanceSmqueen() throws Exception {
         self.add(Trait.smqueen);
         // Neutral position. No dominance involved, so neither character should lose willpower, regardless of traits.
-        combat.setStance(new TestPosition(self, other, Stance.neutral, 0));
-        assertThat(combat.getStance().getDominanceOfStance(self), equalTo(0));
-        assertThat(combat.getStance().getDominanceOfStance(other), equalTo(0));
+        combat.setStance(new TestPosition(self, other, Stance.neutral, Position.Dominance.NEUTRAL));
+        assertThat(combat.getStance().getCurrentDominance(combat, self), equalTo(Position.Dominance.NEUTRAL));
+        assertThat(combat.getStance().getCurrentDominance(combat, other), equalTo(Position.Dominance.NEUTRAL));
 
         // Self is dominant. Other should lose willpower but self should not. Trait increases effective stance dominance.
-        combat.setStance(new TestPosition(self, other, Stance.engulfed, 5));
-        assertThat(combat.getStance().getDominanceOfStance(self), equalTo(5));
-        assertThat(combat.getStance().getDominanceOfStance(other), equalTo(0));
-
-        // Negative position dominance. Not a valid dominance value, but we'll accept it and treat it like a neutral position.
-        combat.setStance(new TestPosition(self, other, Stance.coiled, -5));
-        assertThat(combat.getStance().getDominanceOfStance(self), equalTo(0));
-        assertThat(combat.getStance().getDominanceOfStance(other), equalTo(0));
+        combat.setStance(new TestPosition(self, other, Stance.engulfed, Position.Dominance.ABSURD));
+        assertThat(combat.getStance().getCurrentDominance(combat, self), equalTo(Position.Dominance.ABSURD));
+        assertThat(combat.getStance().getCurrentDominance(combat, other), equalTo(Position.Dominance.NEUTRAL));
     }
 
 
     @Test public void getDominanceOfStanceSubmissive() throws Exception {
         self.add(Trait.submissive);
         // Neutral position. No dominance involved, so neither character should lose willpower, regardless of traits.
-        combat.setStance(new TestPosition(self, other, Stance.neutral, 0));
-        assertThat(combat.getStance().getDominanceOfStance(self), equalTo(0));
-        assertThat(combat.getStance().getDominanceOfStance(other), equalTo(0));
+        combat.setStance(new TestPosition(self, other, Stance.neutral, Position.Dominance.NEUTRAL));
+        assertThat(combat.getStance().getCurrentDominance(combat, self), equalTo(Position.Dominance.NEUTRAL));
+        assertThat(combat.getStance().getCurrentDominance(combat, other), equalTo(Position.Dominance.NEUTRAL));
 
         // Self is dominant. Other should lose willpower but self should not. Trait decreases effective stance dominance.
-        combat.setStance(new TestPosition(self, other, Stance.engulfed, 5));
-        assertThat(combat.getStance().getDominanceOfStance(self), equalTo(3));
-        assertThat(combat.getStance().getDominanceOfStance(other), equalTo(0));
-
-        // Negative position dominance. Not a valid dominance value, but we'll accept it and treat it like a neutral position.
-        combat.setStance(new TestPosition(self, other, Stance.coiled, -5));
-        assertThat(combat.getStance().getDominanceOfStance(self), equalTo(0));
-        assertThat(combat.getStance().getDominanceOfStance(other), equalTo(0));
+        combat.setStance(new TestPosition(self, other, Stance.engulfed, Position.Dominance.ABSURD));
+        assertThat(combat.getStance().getCurrentDominance(combat, self), equalTo(Position.Dominance.AVERAGE));
+        assertThat(combat.getStance().getCurrentDominance(combat, other), equalTo(Position.Dominance.NEUTRAL));
     }
 }

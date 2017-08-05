@@ -62,7 +62,7 @@ public class Dominate extends Skill {
 
     @Override
     public String deal(Combat c, int damage, Result modifier, Character target) {
-        return "You take a deep breathe, gathering dark energy into your lungs. You expend the power to command "
+        return "You take a deep breath, gathering dark energy into your lungs. You expend the power to command "
                         + target.getName() + " to submit. The demonic command renders her "
                         + "unable to resist and she drops to floor, spreading her legs open to you. As you approach, she comes to her senses and quickly closes her legs. Looks like her "
                         + "will is still intact.";

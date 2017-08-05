@@ -183,7 +183,7 @@ public class AssJob extends Skill {
                                 getSelf().possessiveAdjective(), target.possessiveAdjective(), target.directObject());
                 if (getSelf().crotchAvailable() && target.crotchAvailable()) {
                     res += String.format("%s %s slides between %s mounds as if it belongs there.",
-                                    target.possessiveAdjective(), target.body.getRandomCock().describe(target), 
+                                    Global.capitalizeFirstLetter(target.possessiveAdjective()), target.body.getRandomCock().describe(target), 
                                     getSelf().possessiveAdjective());
                 } else {
                     res += String.format(

@@ -51,7 +51,7 @@ public class NpcConfigurationTest {
                         IsMapContaining.hasEntry(Attribute.Arcane, 2)));
         assertThat(mergedConfig.body.map(body -> body.type).orElse(Optional.empty()),
                         equalTo(Optional.of(BodyConfiguration.Archetype.ANGEL)));
-        assertThat(mergedConfig.xp.orElse(0), equalTo(50));
+        assertThat(mergedConfig.xp.orElse(0), equalTo(5));
         assertThat(mergedConfig.level.orElse(0), equalTo(5));
         assertThat(mergedConfig.money.orElse(0), equalTo(5000));
     }
@@ -69,7 +69,7 @@ public class NpcConfigurationTest {
                         IsMapContaining.hasEntry(equalTo(Attribute.Arcane), greaterThanOrEqualTo(2)),
                         IsMapContaining.hasEntry(equalTo(Attribute.Perception), greaterThanOrEqualTo(6)),
                         IsMapContaining.hasEntry(equalTo(Attribute.Speed), greaterThanOrEqualTo(5)))));
-        assertThat(angel.character.xp, equalTo(50));
+        assertThat(angel.character.xp, equalTo(5));
         assertThat(angel.character.level, equalTo(5));
         assertThat(angel.character.money, equalTo(5000));
     }

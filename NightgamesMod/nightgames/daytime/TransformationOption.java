@@ -14,7 +14,7 @@ import nightgames.requirements.RequirementWithDescription;
 
 public class TransformationOption {
     String option;
-    Map<Item, Integer> ingredients;
+    Map<Item, Integer> ingredients; // Necessary ingredients for this transformation to occur
     List<RequirementWithDescription> requirements;
     String scene;
     CustomEffect effect;

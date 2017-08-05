@@ -68,7 +68,7 @@ public class SuccubusNurse extends Skill {
                                         : "{other:PRONOUN-ACTION:clamp|clamps}"
                                                         + " {other:possessive} lips shut, but it's no use as"
                                                         + " {self:subject-action:pry|pries} open {other:possessive} mouth"
-                                                        + " and {self:action:insert|inserts} {self:possessive} nipple.",
+                                                        + " and {self:action:insert|inserts} {self:possessive} nipple",
                         getSelf().has(Trait.Pacification)
                                         ? "making {other:direct-object} feel strangely" + " calm and passive inside"
                                         : "feeling strangely erotic"));

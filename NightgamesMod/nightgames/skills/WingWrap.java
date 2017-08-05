@@ -106,7 +106,7 @@ public class WingWrap extends Skill {
             }
         }
         if (getSelf().has(Trait.VampireWings) && target.outfit.slotEmpty(ClothingSlot.top)) {
-            desc += "As the material of the wings settle on {other:name-possessive} skin,"
+            desc += " As the material of the wings settle on {other:name-possessive} skin,"
                             + " they begin to drain {other:direct-object} of {other:possessive}" + " Power!";
         }
         return Global.format(desc, getSelf(), target);
