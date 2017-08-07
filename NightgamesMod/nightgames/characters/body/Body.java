@@ -1327,7 +1327,7 @@ public class Body implements Cloneable {
             c.write(Global.format(
                             "<br><b>{other:NAME-POSSESSIVE} boiling semen takes its toll on {self:name-possessive} stamina, rendering {self:direct-object} limp and compliant.</b>",
                             character, opponent));
-            character.drain(c, opponent, character.getStamina().max()/3+20);
+            character.drain(c, opponent, (character.getStamina().max()/3+20)*(character.getLevel()>=47?2:1));
         }
         if (character instanceof Player && part.getType().equals("ass") && Global.getButtslutQuest().isPresent()) {
             character.arouse(Global.getButtslutQuest().get().getAnalCreampieLust(), c);

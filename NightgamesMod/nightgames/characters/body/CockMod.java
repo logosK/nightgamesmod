@@ -15,6 +15,7 @@ import nightgames.characters.body.mods.FeralMod;
 import nightgames.characters.body.mods.FieryMod;
 import nightgames.characters.body.mods.PartMod;
 import nightgames.combat.Combat;
+import nightgames.global.Flag;
 import nightgames.global.Global;
 import nightgames.pet.PetCharacter;
 import nightgames.skills.damage.DamageType;
@@ -43,6 +44,7 @@ public class CockMod extends PartMod {
 
     private CockMod(String name, double hotness, double pleasure, double sensitivity) {
         super(name, hotness, pleasure, sensitivity, 0);
+        if(name.equals("incubus") && Global.checkFlag(Flag.NPCFemalePronounsOnly)) name="demonic";//Personal preference, not sure if there's a best way to handle this
     }
 
     // public constructor for adapter

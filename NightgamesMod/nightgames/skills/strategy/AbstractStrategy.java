@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
-import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.Skill;
 
 public abstract class AbstractStrategy implements CombatStrategy {

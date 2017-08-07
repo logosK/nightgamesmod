@@ -2,6 +2,7 @@ package nightgames.characters.body;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
+import nightgames.characters.Player;
 import nightgames.characters.Trait;
 import nightgames.characters.body.mods.SizeMod;
 import nightgames.combat.Combat;
@@ -119,7 +120,7 @@ public class BreastsPart extends GenericBodyPart {
     public double applyReceiveBonuses(Character self, Character opponent, BodyPart target, double damage, Combat c) {
         double bonus = super.applyReceiveBonuses(self, opponent, target, damage, c);
         if (self.has(Trait.lactating) && target.isType("mouth")) {
-            if (self.has(Trait.magicmilk)) {
+            if (self.has(Trait.magicmilk) && opponent instanceof Player) {
                 float addictionLevel;
                 Addiction addiction;
                 opponent.addict(c, AddictionType.MAGIC_MILK, self, Addiction.LOW_INCREASE);

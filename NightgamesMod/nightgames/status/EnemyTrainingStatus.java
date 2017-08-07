@@ -20,6 +20,7 @@ public abstract class EnemyTrainingStatus extends Status {
     
     public void tick(Combat c) {
         trainingLevel -= 0.01;
+        if (trainingLevel<0)trainingLevel=0;
     }
 
     public String initialMessage(Combat c, boolean replaced) {

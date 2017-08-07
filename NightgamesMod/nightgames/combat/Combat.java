@@ -24,7 +24,6 @@ import nightgames.characters.State;
 import nightgames.characters.Trait;
 import nightgames.characters.body.Body;
 import nightgames.characters.body.BodyPart;
-import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.mods.ArcaneMod;
 import nightgames.characters.body.mods.CyberneticMod;
 import nightgames.characters.body.mods.DemonicMod;
@@ -53,6 +52,7 @@ import nightgames.skills.Command;
 import nightgames.skills.ConcedePosition;
 import nightgames.skills.FootWorship;
 import nightgames.skills.Grind;
+import nightgames.skills.Nothing;
 import nightgames.skills.PetInitiatedThreesome;
 import nightgames.skills.Piston;
 import nightgames.skills.PussyGrind;
@@ -79,7 +79,6 @@ import nightgames.status.Compulsive;
 import nightgames.status.Compulsive.Situation;
 import nightgames.status.CounterStatus;
 import nightgames.status.DivineCharge;
-import nightgames.status.EnemyButtslutTrainingStatus;
 import nightgames.status.Enthralled;
 import nightgames.status.Falling;
 import nightgames.status.Flatfooted;
@@ -506,7 +505,7 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
         Character mainOpponent = getOpponent(character);
         String buttslutCompletedFlag = Trait.buttslut.name() + "Completed";
         boolean isButtSlutting = (character.has(Trait.buttslut) && !getCombatantData(character).getBooleanFlag(buttslutCompletedFlag)) || (character instanceof Player && Global.getButtslutQuest().isPresent() && Global.random(100) < 100*Global.getButtslutQuest().get().getAssPresentChance());
-        if (((mainOpponent.hasDick() && mainOpponent.crotchAvailable() && mainOpponent.getArousal().percent() > 20) || mainOpponent.has(Trait.strapped)) && isButtSlutting && !stance.havingSex(this)) {
+        if (((mainOpponent.hasDick() && mainOpponent.crotchAvailable() && mainOpponent.getArousal().percent() > 20) || mainOpponent.has(Trait.strapped)) && isButtSlutting && stance instanceof Neutral) {
             write(character, Global.format("<b>Seeing the thick phallus in front of {self:reflective}, {self:subject} can't "
                             + "but help offer up {self:possessive} ass in hopes that {other:subject} will fill {self:possessive} rear door.</b>", character, mainOpponent));
             for (int i = 0; i < 5; i++) {
@@ -520,7 +519,8 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
             if (character.has(Trait.buttslut)) {
                 getCombatantData(character).setBooleanFlag(buttslutCompletedFlag, true);
             } else {
-                ((EnemyButtslutTrainingStatus)character.getStatus(Stsflag.buttslutificationReady)).activate();
+                /*if(!character.is(Stsflag.buttslutificationReady)) character.addNonCombat(new EnemyButtslutTrainingStatus(character));
+                ((EnemyButtslutTrainingStatus)character.getStatus(Stsflag.buttslutificationReady)).activate();*/
             }
             setStance(new Behind(mainOpponent, character));
         }
@@ -696,6 +696,7 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
     private static final List<CombatPhase> SKIPPABLE_PHASES = 
                     Arrays.asList(
                     CombatPhase.PET_ACTIONS,
+                    CombatPhase.DETERMINE_SKILL_ORDER,
                     CombatPhase.P1_ACT_FIRST,
                     CombatPhase.P1_ACT_SECOND,
                     CombatPhase.P2_ACT_FIRST,
@@ -704,6 +705,7 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
     private static final List<CombatPhase> FAST_COMBAT_SKIPPABLE_PHASES = 
                     Arrays.asList(
                     CombatPhase.PET_ACTIONS,
+                    CombatPhase.DETERMINE_SKILL_ORDER,
                     CombatPhase.P1_ACT_FIRST,
                     CombatPhase.P1_ACT_SECOND,
                     CombatPhase.P2_ACT_FIRST,
@@ -1238,9 +1240,14 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
 	private boolean checkOrgasm(Character user, Character target, Skill skill) {
         return target.orgasmed || user.orgasmed;
     }
-
+	
+	private static final List<String> escapeActions=Arrays.asList("Struggle","Escape","Pull Out");
     protected CombatPhase determineSkillOrder() {
         listen(CombatListener::preActions);
+        if(escapeActions.containsAll(Arrays.asList(p1act.getName(),p2act.getName()))) {
+            p1act=new Nothing(p1);p2act=new Nothing(p2);stance=new Neutral(p1,p2);
+            if(p1 instanceof Player || p2 instanceof Player) {message=p1.getName()+" and "+p2.getName()+" jump apart, both apparently trying to escape at the same time.";}
+        }
         if (p1.init() + p1act.speed() >= p2.init() + p2act.speed()) {
             return CombatPhase.P1_ACT_FIRST;
         } else {

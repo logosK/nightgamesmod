@@ -40,6 +40,7 @@ public class EnemyButtslutTrainingStatus extends Status {
     }
     
     public void activate() {
+        assert pendingActivation;
         pendingActivation = false;
         trainingLevel += 1;
         if (trainingLevel <= 5) affected.mod(Attribute.Submissive, 1);

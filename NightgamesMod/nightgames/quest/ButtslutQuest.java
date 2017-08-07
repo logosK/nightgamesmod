@@ -30,7 +30,7 @@ public class ButtslutQuest extends Quest {
     private static final double FETISH_CHANCE_BONUS_PER_POINT11 = 0.05;
     private static final double FETISH_BONUS_MAGNITUDE_PER_POINT111 = 0.01; //doubles standard fetish gain at 5 points
     private static final double BONUS_DOMINANCE_PER_POINT12 = 0.2;
-    private static final double STATS_CONVERTED_TO_SUB_PER_POINT13 = 3.0;
+    private static final double STATS_CONVERTED_TO_SUB_PER_POINT13 = 2.0;
     private static final int MAX_SUBCONVERT_AMOUNT = 1000000;
     private static final double BONUS_SENS_PER_POINT14 = 0.25;
     private static final double ANAL_CREAMPIE_LUST_PER_POINT15 = 30.0;
@@ -50,12 +50,14 @@ public class ButtslutQuest extends Quest {
     }
     
     public String getDescriptionFor(Character who) {
-        if (!(who instanceof Player)) {return "";}
+        if (who != null && !(who instanceof Player)) {return "";}
         return "You have gained stats: \n" + Arrays.stream(new Integer[]{0,1,2,3,4,5,6,7}).filter(i -> getPointsForOfType(Global.getPlayer(),i)>0)
                         .map(i -> ("\n"+WHICH_ATTR[i].name()+": +"+(getPointsForOfType(Global.getPlayer(),i)))).collect(Collectors.joining()) 
                         + " and been trained: \n" + Arrays.stream(new Integer[]{8,9,10,11,12,13,14,15}).filter(i -> getPointsForOfType(Global.getPlayer(),i)>0)
                         .map(i -> ("\n by "+Global.getNPCByType(WHICH_CHARACTER[i-8].getSimpleName()).getTrueName()+": +"+(getPointsForOfType(Global.getPlayer(),i))+" times.")).collect(Collectors.joining()) ;
     }
+    
+    public String toString() {return getDescriptionFor(null);}
     
     public void addPlayerLossPoint(Character lostTo) {
         if (!(lostTo instanceof NPC)) {throw new RuntimeException("Player-only loss event called for non-player fighting player");}

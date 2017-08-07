@@ -129,7 +129,7 @@ public class AssFuck extends Fuck {
         Optional<ButtslutQuest> bsq = Global.getButtslutQuest();
         if (bsq.isPresent() && target==Global.getPlayer()) {
             dur += bsq.get().getEnthrallDurationOnPenetration();
-            target.add(c, new Enthralled(getSelf(), target, dur));
+            target.add(c, new Enthralled(target, getSelf(), dur));
         } else {target.add(c, new Flatfooted(target, dur));}
         
         if (getSelf().has(Trait.analFanatic) && getSelf().hasDick()) {

@@ -20,6 +20,11 @@ public class OrgasmicTighten extends Tighten {
     public boolean requirements(Combat c, Character user, Character target) {
         return false;
     }
+    
+    @Override
+    public boolean usable(Combat c, Character target) {
+        return getSelfOrgan(c,target)!=null;
+    }
 
     @Override
     public BodyPart getSelfOrgan(Combat c, Character target) {

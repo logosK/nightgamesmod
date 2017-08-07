@@ -19,7 +19,7 @@ public class OfferAss extends Skill {
 
     @Override
     public boolean requirements(Combat c, Character user, Character target) {
-        return getSelf().getPure(Attribute.Submissive) >= 10 && getSelf().has(Trait.oiledass) && getSelf().hasPussy();
+        return getSelf().getPure(Attribute.Submissive) >= 10 && getSelf().has(Trait.oiledass);
     }
 
     @Override

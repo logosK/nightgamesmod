@@ -11,11 +11,7 @@ import javafx.scene.control.TextField;
 import nightgames.characters.Attribute;
 import nightgames.characters.Emotion;
 import nightgames.characters.Trait;
-import nightgames.characters.body.BasicCockPart;
-import nightgames.characters.body.BreastsPart;
-import nightgames.characters.body.CockMod;
 import nightgames.characters.body.EarPart;
-import nightgames.characters.body.PussyPart;
 import nightgames.characters.body.TailPart;
 import nightgames.characters.body.WingsPart;
 import nightgames.combat.Result;
@@ -71,10 +67,10 @@ public enum RequirementArgument {
 	private static ChoiceBox<String> bodyPartChoice() {
 		ChoiceBox<String> cb = new ChoiceBox<>();
 		ObservableList<String> items = FXCollections.observableArrayList();
-		items.addAll(enumNames(BasicCockPart.class).stream().map(s -> "Cock: " + s).toArray(String[]::new));
-		items.addAll(enumNames(CockMod.class).stream().map(s -> "Cock: " + s).toArray(String[]::new));
-		items.addAll(enumNames(PussyPart.class).stream().map(s -> "Pussy: " + s).toArray(String[]::new));
-		items.addAll(enumNames(BreastsPart.class).stream().map(s -> "Breasts: " + s).toArray(String[]::new));
+//		items.addAll(enumNames(BasicCockPart.class).stream().map(s -> "Cock: " + s).toArray(String[]::new));
+//		items.addAll(enumNames(CockMod.class).stream().map(s -> "Cock: " + s).toArray(String[]::new));
+//		items.addAll(enumNames(PussyPart.class).stream().map(s -> "Pussy: " + s).toArray(String[]::new));
+//		items.addAll(enumNames(BreastsPart.class).stream().map(s -> "Breasts: " + s).toArray(String[]::new));
 		items.addAll(enumNames(EarPart.class).stream().map(s -> "Ears: " + s).toArray(String[]::new));
 		items.addAll(enumNames(TailPart.class).stream().map(s -> "Tail: " + s).toArray(String[]::new));
 		items.addAll(enumNames(WingsPart.class).stream().map(s -> "Wings: " + s).toArray(String[]::new));

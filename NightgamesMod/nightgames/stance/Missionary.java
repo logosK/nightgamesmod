@@ -4,7 +4,6 @@ import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.body.BreastsPart;
 import nightgames.combat.Combat;
-import nightgames.global.Flag;
 import nightgames.global.Global;
 
 public class Missionary extends MaledomSexStance {

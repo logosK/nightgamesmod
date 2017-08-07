@@ -51,8 +51,8 @@ public class Taunt extends Skill {
             target.loseWillpower(c, willpowerLoss, 0, false, " (Biting Words)");
         }
         if (getSelf().has(Trait.commandingvoice) && Global.random(3) == 0) {
-            c.write(getSelf(), Global.format("{other:SUBJECT-ACTION:speak|speaks} with such unquestionable"
-                            + " authority that {self:subject-action:don't|doesn't} even consider not obeying."
+            c.write(getSelf(), Global.format("{self:SUBJECT-ACTION:speak|speaks} with such unquestionable"
+                            + " authority that {other:subject-action:don't|doesn't} even consider not obeying."
                             , getSelf(), target));
             target.add(c, new Enthralled(target, getSelf(), 1, false));
         } else if (getSelf().has(Trait.MelodiousInflection) && !target.is(Stsflag.charmed) && Global.random(3) == 0) {

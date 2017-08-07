@@ -128,7 +128,7 @@ public class AssPart extends GenericBodyPart {
             c.write(self, Global.format(
                             "{self:NAME-POSSESSIVE} " + fullDescribe(self)
                                             + " churns against {other:name-possessive} cock, "
-                                            + "seemingly with a mind of its own. {self:POSSESSIVE} internal muscles feel like a hot fleshy hand inside her asshole, jerking {other:possessive} shaft.",
+                                            + "seemingly with a mind of its own. {self:POSSESSIVE} internal muscles feel like a hot fleshy hand inside {self:POSSESSIVE} asshole, jerking {other:possessive} shaft.",
                             self, opponent));
             opponent.body.pleasure(self, this, otherOrgan, 10, c);
         }
@@ -156,13 +156,11 @@ public class AssPart extends GenericBodyPart {
                                                 self, opponent));
                 self.add(c, new Trance(self, 3, false));
             }
-            c.write(opponent, Global.format(
-                            "The foreign object rummaging around inside {self:name-possessive} ass feels so <i>right</i>. {self:SUBJECT} can't help moaning in time with the swelling pleasure.",
-                                            self, opponent));
-            Optional<ButtslutQuest> bsq = Global.getButtslutQuest();
-            if (bsq.isPresent() && self==Global.getPlayer()) {
-                bonus += bsq.get().applyReceiveBonusesAnal(c, opponent, target);
-            }
+        }
+        Optional<ButtslutQuest> bsq = Global.getButtslutQuest();
+        if (bsq.isPresent() && self==Global.getPlayer()) {
+            c.write(opponent, Global.format("The foreign object rummaging around inside {self:name-possessive} ass feels so <i>right</i>. {self:SUBJECT} can't help moaning in time with the swelling pleasure.",self, opponent));
+            bonus += bsq.get().applyReceiveBonusesAnal(c, opponent, target);
         }
         return bonus;
     }

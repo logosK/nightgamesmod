@@ -365,8 +365,6 @@ public class Mara extends BasePersonality {
     public String victory(Combat c, Result flag) {
         Character target = c.getOpponent(character);
         character.arousal.empty();
-        if (c.getOpponent(character) instanceof Player && Global.getButtslutQuest().isPresent() && c.getStance().anallyPenetratedBy(c, c.getOpponent(character), character)) {Global.getButtslutQuest().get().addPlayerLossPoint(character);}
-
         if (c.getStance().anallyPenetrated(c, target)) {
             return "The sensations coming from your prostate are too much as your arms give out below you. Mara doesn't let up either, grinding the head of the strap on over your "
                             + "prostate. <i>\"I've read that the prostate is the male equivalent of a g-spot,\"</i> she pants as she continues her assault on your ass. <i>\"I'd like to see if I can "
@@ -396,7 +394,7 @@ public class Mara extends BasePersonality {
                             + "owner, 30% dominatrix, and 50% exultant mad scientist, Mara resumes pounding at your pussy and your first orgam comes within a second, and feels "
                             + "like it will never stop. Your last thought falls apart half-formed as the patterns on Mara's irises push everything else out of your brain.";
         }
-        if (character.has(Trait.madscientist) && character.has(Item.Lubricant)) {
+        if (character.has(Trait.madscientist) && character.has(Item.Lubricant) && target.hasDick()) {
             target.add(c, new Oiled(target));
             return "You've fallen completely into Mara's hands now. Her nimble fingers dance over your dick and balls, playing you like an instrument. You grit your teeth and "
                             + "try to endure her touch until you can finger her to orgasm. It's a lost cause though, and you groan as you inevitably feel your pleasure building to a peak. Just before "
@@ -420,8 +418,7 @@ public class Mara extends BasePersonality {
                             + "involuntarily, but she manages to maintain both the kiss and her grip on your cock. The intense stimulation blows away your endurance and your head goes blank as you "
                             + "cover her hands with your seed. Mara breaks the kiss and leaves you completely exhausted.";
         }
-        if (c.getStance()
-             .vaginallyPenetrated(c, character)) {
+        if (c.getStance().vaginallyPenetrated(c, character)) {
             if (character.has(Item.ShockGlove) && Global.random(2) == 0) {
                 return "You've got Mara just where you want her. Your arms are wrapped around her, holding her in place as you thrust your cock into her tight pussy over and over. Her moans are getting louder and louder, and you can feel her breath "
                                 + "quickening. You're getting close to cumming, but she's definitely closer. She returns your embrace, squeezing her body against yours, stroking your back with her hands. Her hands creep down to grasp your buttocks. "

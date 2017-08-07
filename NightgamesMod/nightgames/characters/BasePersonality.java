@@ -104,6 +104,7 @@ public abstract class BasePersonality implements Personality {
                 // day 10, this would be (10 + sqrt(10) * 5) * .7 = 18 affection lead to max
                 // day 60, this would be (10 + sqrt(70) * 5) * .7 = 36 affection lead to max
                 double chanceToDoDaytime = .25 + (addiction.getMagnitude() / 2) + Global.clamp((affectionDelta / (10 + Math.sqrt(Global.getDate()) * 5)), -.7, .7);
+                if(Global.isDebugOn(DebugFlags.DEBUG_AFFECTION)) {System.out.println("For addiction "+addiction.toString()+" the affectiondelta is "+affectionDelta+" so the chance to do daytime is "+chanceToDoDaytime);}
                 if (Global.randomdouble() < chanceToDoDaytime) {
                     addiction.aggravate(null, Addiction.MED_INCREASE);
                     addiction.flagDaytime();

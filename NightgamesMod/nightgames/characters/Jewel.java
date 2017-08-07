@@ -102,7 +102,8 @@ public class Jewel extends BasePersonality {
         
         growth.addTrait(11, Trait.polecontrol);
         growth.addTrait(25, Trait.assmaster);
-        growth.addTrait(37, Trait.analFanatic);  
+        growth.addTrait(37, Trait.analFanatic);
+        //at level 47, heatedsemen gets a strong buff
     }
 
     private void usePhysical() {
@@ -828,7 +829,7 @@ public class Jewel extends BasePersonality {
                                                             + "to be putting a lot more effort into the games. If you want to keep up, you'll probably have to step up your own efforts as well.");
                                             useAnal();
                                             useMartial();
-                                           //growth.extraAttributes += 1;
+                                            character.getGrowth().extraAttributes += 1;
                                             // some compensation for the added difficulty. She gets 4 traits and 3 attribute points/level, and you only get 2 traits, but you are fighting more people than just her.
                                             Global.getPlayer()
                                                   .getGrowth()

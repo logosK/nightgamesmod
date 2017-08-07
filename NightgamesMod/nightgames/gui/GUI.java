@@ -452,9 +452,9 @@ public class GUI extends JFrame implements Observer {
             }
             if (Global.checkFlag(Flag.largefonts)) {
                 rdfntlrg.setSelected(true);
-            } else if (Global.checkFlag(Flag.smallfonts)){
+            } /*else if (Global.checkFlag(Flag.smallfonts)){
                 rdfntsmall.setSelected(true);
-            } else {
+            }*/ else {
                 rdfntnorm.setSelected(true);
             }
             if (Global.checkFlag(Flag.NPCFemalePronounsOnly)) {

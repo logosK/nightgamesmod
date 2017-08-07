@@ -26,6 +26,7 @@ import nightgames.characters.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.CombatListener;
 import nightgames.global.Challenge;
+import nightgames.global.DebugFlags;
 import nightgames.global.Flag;
 import nightgames.global.Global;
 import nightgames.match.defaults.DefaultEncounter;
@@ -161,6 +162,7 @@ public class Match {
         }
         time++;
         dropOffTime++;
+        if (Global.isDebugOn(DebugFlags.DEBUG_LOCATIONS)) {combatants.forEach(character->System.out.println(character.getTrueName()+" is at the "+character.location().name));}
     }
 
     protected void beforeAllTurns() {
@@ -175,6 +177,7 @@ public class Match {
         if (combatant.state == State.resupplying) {
             mercy.values().forEach(l -> l.remove(combatant));
         }
+        mercy.put(combatant, new ArrayList<Character>());
     }
 
     public void score(Character combatant, int amt) {
@@ -339,7 +342,6 @@ public class Match {
                 maxaffection = rival.getAffection(player);
             }
         }
-
         /*
          * if (maxaffection >= 15 && closest != null) { closest.afterParty(); } else { Global.gui().message("You walk back to your dorm and get yourself cleaned up."); }
          */

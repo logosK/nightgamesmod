@@ -65,27 +65,14 @@ import nightgames.characters.Character;
 import nightgames.characters.CharacterSex;
 import nightgames.characters.NPC;
 import nightgames.characters.Trait;
-import nightgames.characters.body.AssPart;
-import nightgames.characters.body.BodyPart;
 import nightgames.characters.body.BodyPartMod;
-import nightgames.characters.body.BreastsPart;
-import nightgames.characters.body.CockMod;
-import nightgames.characters.body.CockPart;
-import nightgames.characters.body.EarPart;
-import nightgames.characters.body.MouthPart;
 import nightgames.characters.body.PussyPart;
-import nightgames.characters.body.TailPart;
-import nightgames.characters.body.WingsPart;
-import nightgames.characters.body.mods.SizeMod;
 import nightgames.characters.custom.CustomNPC;
 import nightgames.characters.custom.JsonSourceNPCDataLoader;
 import nightgames.characters.custom.NPCData;
 import nightgames.characters.custom.effect.MoneyModEffect;
 import nightgames.creator.model.AiMod;
-import nightgames.creator.model.BodyPartType;
 import nightgames.creator.model.ItemAmount;
-import nightgames.creator.model.MouthType;
-import nightgames.creator.model.NamedBodyPart;
 import nightgames.creator.model.TraitBean;
 import nightgames.creator.req.CreatorRequirement;
 import nightgames.global.Global;
@@ -219,14 +206,14 @@ public class CreatorGui extends Application {
 	private VerificationList verification;
 
 
-	@FXML
-	private ChoiceBox<NamedBodyPart> bodyPartBox;
-	@FXML
-	private ChoiceBox<BodyPartType> bodyPartTypeBox;
+//	@FXML
+//	private ChoiceBox<NamedBodyPart> bodyPartBox;
+//	@FXML
+//	private ChoiceBox<BodyPartType> bodyPartTypeBox;
 	@FXML
 	private Button bodyPartAdd, bodyPartRemove;
-	@FXML
-	private ListView<NamedBodyPart> bodyPartList;
+//	@FXML
+//	private ListView<NamedBodyPart> bodyPartList;
 	@FXML
 	private ChoiceBox<BodyPartMod> bodyModBox;
 	@FXML
@@ -288,13 +275,13 @@ public class CreatorGui extends Application {
 
 	private void setupBody() {
 		hackNormalPussy();
-		bodyPartTypeBox.getItems().addAll(BodyPartType.values());
-		bodyPartTypeBox.getSelectionModel().select(0);
-		bodyPartTypeBox.getSelectionModel().selectedItemProperty().addListener(
-				(obs, old, nw) -> fillPartBox(nw));
+//		bodyPartTypeBox.getItems().addAll(BodyPartType.values());
+//		bodyPartTypeBox.getSelectionModel().select(0);
+//		bodyPartTypeBox.getSelectionModel().selectedItemProperty().addListener(
+//				(obs, old, nw) -> fillPartBox(nw));
 	}
 
-	private void fillPartBox(BodyPartType type) {
+/*	private void fillPartBox(BodyPartType type) {
 		bodyPartBox.getItems().clear();
 		switch (type) {
 		case ASS:
@@ -328,7 +315,7 @@ public class CreatorGui extends Application {
 			break;
 		}
 	}
-	
+	*/
 	private void setupAttrs() {
 		attrMap = new HashMap<>();
 		attrMap.put("power", power);
@@ -654,8 +641,8 @@ public class CreatorGui extends Application {
 
 		attrMap.entrySet().forEach(e -> e.getValue()
 				.setText("" + ch.getPure(Attribute.valueOf(Global.capitalizeFirstLetter(e.getKey())))));
-		breasts.getSelectionModel().select(ch.body.getRandomBreasts());
-
+//		breasts.getSelectionModel().select(ch.body.getRandomBreasts());
+/*
 		CockPart cock = ch.body.getRandomCock();
 		BasicCockPart size;
 		CockMod mod;
@@ -682,7 +669,7 @@ public class CreatorGui extends Application {
 		tail.getSelectionModel().select((TailPart) ch.body.getRandom("tail"));
 		wings.getSelectionModel().select(ch.body.getRandomWings());
 		hotness.setText(Math.round(ch.body.getHotness(ch)) + "");
-
+*/
 		Collection<Trait> startTraits = ch.getTraits();
 		this.startTraits.getItems().clear();
 		this.startTraits.getItems().addAll(startTraits);
@@ -814,7 +801,7 @@ public class CreatorGui extends Application {
 		growth.add("preferredAttributes", new JsonArray());
 		stats.add("growth", growth);
 		root.add("stats", stats);
-
+/*
 		JsonObject body = new JsonObject();
 		JsonArray parts = new JsonArray();
 		JsonObject breasts = new JsonObject();
@@ -874,7 +861,7 @@ public class CreatorGui extends Application {
 		body.add("parts", parts);
 		body.addProperty("hotness", Double.parseDouble(hotness.getText()));
 		root.add("body", body);
-
+*/
 		JsonObject items = new JsonObject();
 		JsonArray initial = new JsonArray();
 		startItemList.getItems().stream().map(ia -> {
@@ -1127,14 +1114,13 @@ public class CreatorGui extends Application {
 		try {
 			Field field = PussyPart.class.getDeclaredField("desc");
 			field.setAccessible(true);
-			field.set(PussyPart.normal, "normal");
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+//			field.set(PussyPart.normal, "normal");
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static void main(String[] args) {
-		// TODO: init
 		Global.newGame("", Optional.empty(), Collections.emptyList(), CharacterSex.male, Collections.emptyMap());
 		Global.rebuildCharacterPool(Optional.empty());
 		launch(args);

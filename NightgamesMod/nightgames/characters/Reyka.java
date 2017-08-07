@@ -147,7 +147,7 @@ public class Reyka extends BasePersonality {
         character.getGrowth().addTrait(40, Trait.LastingCorruption);
         if (Global.checkFlag(REYKA_DISABLING_FOCUS)) {
             character.getGrowth().addTrait(52, Trait.TotalSubjugation);
-        } else if (Global.checkFlag(REYKA_SEDUCTION_FOCUS)) {
+        } if (Global.checkFlag(REYKA_SEDUCTION_FOCUS)) {
             character.getGrowth().addTrait(52, Trait.Subversion);
         }
     }
@@ -159,7 +159,7 @@ public class Reyka extends BasePersonality {
         character.getGrowth().addTrait(40, Trait.BottomlessPit);
         if (Global.checkFlag(REYKA_DISABLING_FOCUS)) {
             character.getGrowth().addTrait(52, Trait.SpecificSapping);
-        } else if (Global.checkFlag(REYKA_SEDUCTION_FOCUS)) {
+        } if (Global.checkFlag(REYKA_SEDUCTION_FOCUS)) {
             character.getGrowth().addTrait(52, Trait.WillingSacrifice);
         }
     }
@@ -313,10 +313,8 @@ public class Reyka extends BasePersonality {
     @Override
     public String victory(Combat c, Result flag) {
         Character opponent = character.equals(c.p1) ? c.p2 : c.p1;
-        if (c.getOpponent(character) instanceof Player && Global.getButtslutQuest().isPresent() && c.getStance().anallyPenetratedBy(c, c.getOpponent(character), character)) {Global.getButtslutQuest().get().addPlayerLossPoint(character);}
-
         if (c.getStance().anallyPenetrated(c, opponent)) {
-            return "Reyka alternates between long hard thrusts and sensual grinding to keep you from getting used to the stimulation, and the pleasure it is "
+            String outp= "Reyka alternates between long hard thrusts and sensual grinding to keep you from getting used to the stimulation, and the pleasure it is "
                             + "inflicting on you stops you from mustering the resolve to fight back. <i>\"I do love a good bit of pegging.\"</i> Reyka comments as she begins "
                             + "to gently rock the head of the strapon over your prostate, leaving you breathing hard as your mouth hangs open. <i>\"There's a special "
                             + "pleasure in making a " + opponent.boyOrGirl() + " a little butt slave.\"</i> Her words shock you and cause your resistance to slip a little. <i>\"Hmmm?\"</i> She purrs <i>\"Would "
@@ -325,9 +323,14 @@ public class Reyka extends BasePersonality {
                             + "still owe me a meal.\"</i> She smirks in a way that makes your eyes flash quickly left to right, looking for an escape route. Reyka is too quick "
                             + "however and soon you find yourself pinned with your still hard cock buried deep in her pussy.<br/><br/>She rides you until you cum again and she "
                             + "has cum twice herself. She stands up and begins collecting her clothes and her spoils as the victor. She turns to you. <i>\"The offer still "
-                            + "stands; you'd make a great sub if you're ever interested in broadening your sexual horizons. Open minded men are hard to find.\"</i> She admits "
-                            + "smiling. You shake your head; you don't think that sort of thing would really suit you. Her smile deflates some but she nods her head and "
-                            + "turns to go. <i>\"Let me know if that ever changes, I'd definitely enjoy opening your mind,\"</i> she calls over her shoulder as she leaves.";
+                            + "stands; you'd make a great sub if you're ever interested in broadening your sexual horizons. Open minded "+opponent.boyOrGirl()+"s are hard to find.\"</i> She admits smiling. ";
+            if(opponent.get(Attribute.Submissive)*2 < opponent.level) {outp+="You shake your head; you don't think that sort of thing would really suit you. Her smile deflates some but she nods her head and "
+                            + "turns to go. <i>\"Let me know if that ever changes, I'd definitely enjoy opening your mind,\"</i> she calls over her shoulder as she leaves.";}
+            else {outp+="You blush and look away. Reyka's smile expands until it almost seems to extend beyond the boundaries of her face. She licks her lips, looking at you with a predatory air, "
+                            + "before stepping forward so that her crotch is right in front of your seated face. She reaches down and ruffles your hair, saying <i>\"If you're ever feeling"
+                            + " adventurous, come and see me. I'll make sure you'll have a good time.\"</i> She walks forward to leave, pushing you over from her crotch hitting your face. You watch "
+                            + "her go, shivering at the thought of what she might mean by \"a good time\".";}
+            return outp;
         }
         character.arousal.empty();
         return "With a final cry of defeat (and pleasure) you erupt under Reyka's"
@@ -586,6 +589,8 @@ public class Reyka extends BasePersonality {
                                             + " not dissapoint me, {other:name}!\"</i>", self, other));
                             useSeduction();
                             useDisabling();
+                            character.getGrowth().extraAttributes += 1;
+                            Global.getPlayer().getGrowth().addTraitPoints(new int[]{12,19},Global.getPlayer());
                             return true;
                         }))));
     }
@@ -653,6 +658,8 @@ public class Reyka extends BasePersonality {
                                                              + " It's about time I got a proper rival!"));
                              useCorruption();
                              useDraining();
+                             character.getGrowth().extraAttributes += 1;
+                             Global.getPlayer().getGrowth().addTraitPoints(new int[]{40,52},Global.getPlayer());
                              return true;
                          })
                          )));

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nightgames.characters.Character;
+import nightgames.global.DebugFlags;
 import nightgames.global.Flag;
 import nightgames.global.Global;
 import nightgames.gui.KeyableButton;
@@ -50,6 +51,7 @@ public class DefaultPostmatch extends Postmatch {
                 maxaffection = rival.getAffection(player);
             }
         }
+        if(Global.isDebugOn(DebugFlags.DEBUG_AFFECTION)) {System.out.println("maxaffection is "+maxaffection+" for "+closest.getTrueName());}
 
         if (maxaffection >= 15 && closest != null) {
             closest.afterParty();

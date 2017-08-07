@@ -88,7 +88,7 @@ public class Grind extends Thrust {
                                             + getSelfOrgan(c, target).fullDescribe(getSelf())
                                             + ", stimulating {other:possessive} entire manhood and bringing {other:direct-object} closer to climax.",
                             getSelf(), target);
-        } else {
+        } else if (c.getStance().vaginallyPenetratedBy(c, target, getSelf())) {
             if (getLabel(c).equals(divineName)) {
                 // TODO divine for fucking someone
                 return Global.format(
@@ -98,8 +98,21 @@ public class Grind extends Thrust {
             return Global.format(
                             "{self:SUBJECT} grind {self:possessive} hips against {other:direct-object} without thrusting. {other:SUBJECT-ACTION:tremble and gasp|trembles and gasps} as the movement stimulates {other:possessive} clit and the walls of {other:possessive} {other:body-part:pussy}.",
                             getSelf(), target);
+        } else if (c.getStance().anallyPenetratedBy(c, target, getSelf())) {
+            if (getLabel(c).equals(divineName)) {
+                // TODO divine for fucking someone
+                return Global.format(
+                                "{self:SUBJECT} grind {self:possessive} hips against {other:direct-object} without thrusting. {other:SUBJECT-ACTION:tremble and gasp|trembles and gasps} as the movement stimulates {other:possessive} prostate and the walls of {other:possessive} {other:body-part:ass}.",
+                                getSelf(), target);
+            }
+            return Global.format(
+                            "{self:SUBJECT} grind {self:possessive} hips against {other:direct-object} without thrusting. {other:SUBJECT-ACTION:tremble and gasp|trembles and gasps} as the movement stimulates {other:possessive} prostate and the walls of {other:possessive} {other:body-part:ass}.",
+                            getSelf(), target);
+        } else {
+            System.out.println("Something weird is going on in Grind: "+c.getStance().toString());
+            return "ERROR";
         }
-    }
+     }
 
     @Override
     public String receive(Combat c, int damage, Result modifier, Character attacker) {

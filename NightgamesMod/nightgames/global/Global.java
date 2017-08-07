@@ -239,6 +239,15 @@ public class Global {
         buildFeatPool();
         buildSkillPool(noneCharacter);
         buildModifierPool();
+        
+        debug[DebugFlags.DEBUG_ADDICTION.ordinal()]=true;
+        debug[DebugFlags.DEBUG_LOCATIONS.ordinal()]=true;
+        debug[DebugFlags.DEBUG_PET.ordinal()]=true;
+        debug[DebugFlags.DEBUG_DAMAGE.ordinal()]=true;
+        debug[DebugFlags.DEBUG_STRATEGIES.ordinal()]=true;
+        debug[DebugFlags.DEBUG_SKILLS.ordinal()]=true;
+        debug[DebugFlags.DEBUG_AFFECTION.ordinal()]=true;
+
     }
 
     protected static void makeGUI(boolean headless) {
@@ -1373,6 +1382,7 @@ public class Global {
                         c -> characterPool.put(c.getType(), (NPC) c));
         flags.addAll(data.flags);
         counters.putAll(data.counters);
+        quests = new ArrayList<Quest>();
         quests.addAll(data.quests);
         date = data.date;
         time = data.time;

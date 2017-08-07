@@ -289,7 +289,9 @@ public abstract class Character extends Observable implements Cloneable {
 
     /**Returns the name of this character, presumably at the Character level. 
      * 
-     * FIXME: presumably this.name, but it always helps to be explicit. This could be an accessor instead, which would be helpful and more conventional - DSM
+   //  *FIXME: presumably this.name, but it always helps to be explicit. This could be an accessor instead, which would be helpful and more conventional - DSM
+     * 
+     * This returns a character's actual name, as distinct from the name they display (i.e. if they are Airi disguising herself), which is accessed by getName()
      * 
      * @return 
      * returning the name at this Character level
@@ -1662,7 +1664,7 @@ public abstract class Character extends Observable implements Cloneable {
             }
         }
         if (done) {
-            if (!message.isEmpty()) {
+            if (message != null && !message.isEmpty()) {
                 message = Global.capitalizeFirstLetter(message);
                 if (c != null) {
                     if (!c.getOpponent(this).human() || !c.getOpponent(this).is(Stsflag.blinded)) {
@@ -2159,7 +2161,7 @@ public abstract class Character extends Observable implements Cloneable {
                 thrustCopy.resolve(c, opponent);
             }
         }
-        if (this != opponent && times == totalTimes && canRespond()) {          //FIXME: Explicitly Parentesize for clear order of operations. - DSM
+        if (this != opponent && times == totalTimes && canRespond()) {          //FIXME: Explicitly Parenthesize for clear order of operations. - DSM
             c.write(this, orgasmLiner);
             c.write(opponent, opponentOrgasmLiner);
         }
@@ -3210,7 +3212,7 @@ public abstract class Character extends Observable implements Cloneable {
             x += 1;
         }
 
-        if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {
+        if (Global.isDebugOn(DebugFlags.DEBUG_AFFECTION)) {
             System.out.printf("%s gained %d affection for %s\n", getTrueName(), x, other.getTrueName());
         }
         if (affections.containsKey(other.getType())) {
@@ -4553,6 +4555,7 @@ public abstract class Character extends Observable implements Cloneable {
             if (dbg) {
                 System.out.printf("Skipping %s addiction on %s because it's not supported for NPCs", type.name(), getType());
             }
+            return;
         }
         Optional<Addiction> addiction = getAddiction(type);
         if (addiction.isPresent() && Objects.equals(addiction.map(Addiction::getCause).orElse(null), cause)) {

@@ -161,8 +161,13 @@ public class CassieTime extends BaseNPCTime {
             Global.gui().choose(this, "Games");
             Global.gui().choose(this, "Sparring");
             Global.gui().choose(this, "Sex");
-            if (npc.has(Trait.magicmilk) && Global.getPlayer().checkAddiction(AddictionType.MAGIC_MILK)) {
+            if (npc.has(Trait.magicmilk) && Global.getPlayer().getAddictionSeverity(AddictionType.MAGIC_MILK) != Severity.NONE) {
                 Global.gui().choose(this, "Ask for milk");
+            }
+            if (player.get(Attribute.Arcane) > 10 && npc.get(Attribute.Arcane) 
+                            >= 2*player.get(Attribute.Arcane)
+                            && npc.hasDick()) {
+                Global.gui().choose(this, "Magic");
             }
         } else if (Global.getPlayer().checkAddiction(AddictionType.MAGIC_MILK)) {
             Global.gui().message(
@@ -212,14 +217,6 @@ public class CassieTime extends BaseNPCTime {
             Global.gui().choose(this, "Games");
             Global.gui().choose(this, "Sparring");
             Global.gui().choose(this, "Sex");
-            if (npc.has(Trait.magicmilk) && Global.getPlayer().getAddictionSeverity(AddictionType.MAGIC_MILK) != Severity.NONE) {
-                Global.gui().choose(this, "Ask for milk");
-            }
-            if (player.get(Attribute.Arcane) > 10 && npc.get(Attribute.Arcane) 
-                            >= 2*player.get(Attribute.Arcane)
-                            && npc.hasDick()) {
-                Global.gui().choose(this, "Magic");
-            }
         }
         Global.gui().choose(this, "Leave");
     }

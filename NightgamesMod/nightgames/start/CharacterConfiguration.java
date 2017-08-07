@@ -148,10 +148,8 @@ public abstract class CharacterConfiguration {
             modMeters(base, l * 2); // multiplication to compensate for missed daytime gains
         });
         xp.ifPresent(x -> base.gainXPPure(x));
-        Map<Attribute, Integer> start = new HashMap<>(base.att);
-        Map<Attribute, Integer> deltaAtts = attributes.keySet()
-                        .stream()
-                        .collect(Collectors.toMap(Function.identity(), key -> attributes.get(key) - start.getOrDefault(key, 0)));
+//        Map<Attribute, Integer> start = new HashMap<>(base.att);
+//        Map<Attribute, Integer> deltaAtts = attributes.keySet().stream().collect(Collectors.toMap(Function.identity(), key -> attributes.get(key) - start.getOrDefault(key, 0)));
         level.ifPresent(desiredLevel -> {
             Map<Integer, Map<Attribute, Integer>> attributeLevelPlan = calculateAttributeLevelPlan(base, desiredLevel, attributes);
             System.out.println(attributeLevelPlan);

@@ -3,7 +3,6 @@ package nightgames.stance;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
-import nightgames.global.Flag;
 import nightgames.global.Global;
 
 public class Cowgirl extends FemdomSexStance {

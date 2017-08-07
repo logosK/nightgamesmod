@@ -361,7 +361,6 @@ public class Cassie extends BasePersonality {
 
     @Override
     public String victory(Combat c, Result flag) {
-        if (c.getOpponent(character) instanceof Player && Global.getButtslutQuest().isPresent() && c.getStance().anallyPenetratedBy(c, c.getOpponent(character), character)) {Global.getButtslutQuest().get().addPlayerLossPoint(character);}
         if (c.getOpponent(character).getLastOrgasmPart() instanceof BreastsPart 
                         || c.getStance().vaginallyPenetrated(c,c.getOpponent(character))) 
             dominance +=1;
@@ -842,6 +841,7 @@ public class Cassie extends BasePersonality {
                             character.getGrowth().addTrait(21, Trait.flexibleRole);
                             useEnchantressBonus();
                             character.getGrowth().extraAttributes += 1;
+                            Global.getPlayer().getGrowth().addTraitPoints(new int[]{21,61},Global.getPlayer());
                             return true;
                         })
                     )

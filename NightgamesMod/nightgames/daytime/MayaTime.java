@@ -213,7 +213,7 @@ public class MayaTime extends BaseNPCTime {
                         Optional.of("Confront about control") : Optional.empty();
     }
     
-    private void choiceTraitBolster(){}
+    //private void choiceTraitBolster(){}
 
     @Override
     public void doPlayGamesWith() {

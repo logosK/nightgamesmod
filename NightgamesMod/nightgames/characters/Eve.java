@@ -106,6 +106,11 @@ public class Eve extends BasePersonality {
         character.getGrowth().addTrait(50, Trait.sexTraining3);
         character.getGrowth().addTrait(53, Trait.limbTraining3);
         character.getGrowth().addTrait(56, Trait.desensitized2);
+        
+        this.addFirstFocusScene(); 
+        
+        this.addSecondFocusScene(); 
+        
     }
 
     @Override
@@ -204,8 +209,6 @@ public class Eve extends BasePersonality {
     @Override
     public String victory(Combat c, Result flag) {
         character.arousal.empty();
-        if (c.getOpponent(character) instanceof Player && Global.getButtslutQuest().isPresent() && c.getStance().anallyPenetratedBy(c, c.getOpponent(character), character)) {Global.getButtslutQuest().get().addPlayerLossPoint(character);}
-
         if (c.getStance().anallyPenetratedBy(c, c.getOpponent(character), character)) {
             return "As Eve pounds you mercilessly in the ass, your body is overwhelmed"
                             + " by the strange sensations radiating from your insides. <i>\"How"

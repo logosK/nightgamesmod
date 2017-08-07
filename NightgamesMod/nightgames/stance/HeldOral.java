@@ -8,7 +8,6 @@ import java.util.Optional;
 import nightgames.characters.Character;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
-import nightgames.global.Flag;
 import nightgames.global.Global;
 
 public class HeldOral extends AbstractFacingStance {
