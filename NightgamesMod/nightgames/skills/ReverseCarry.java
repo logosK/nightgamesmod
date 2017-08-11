@@ -2,7 +2,6 @@ package nightgames.skills;
 
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -44,9 +43,8 @@ public class ReverseCarry extends Carry {
             }
             int m = 5 + Global.random(5);
             int otherm = m;
-            if (getSelf().has(Trait.insertion)) {
-                otherm += Math.min(getSelf().get(Attribute.Seduction) / 4, 40);
-            }
+            m += getSelf().doInsertionBonuses(c, getSelf(), target, this, getSelfOrgan(), getTargetOrgan(target));
+            otherm += target.doInsertionBonuses(c, getSelf(), target, this, getSelfOrgan(), getTargetOrgan(target));
             c.setStance(new Jumped(getSelf(), target), getSelf(), getSelf().canMakeOwnDecision());
             target.body.pleasure(getSelf(), getSelfOrgan(), getTargetOrgan(target), otherm, c, this);
             getSelf().body.pleasure(target, getTargetOrgan(target), getSelfOrgan(), m, c, this);
@@ -92,11 +90,11 @@ public class ReverseCarry extends Carry {
             return String.format("%sleaps into %s arms and impales %s on %s cock. "
                             + "%s wraps %s legs around %s torso and %s quickly %s %s so %s doesn't "
                             + "fall and injure %s or %s.", subject, target.nameOrPossessivePronoun(),
-                            getSelf().reflectivePronoun(), target.possessiveAdjective(),
+                            getSelf().reflexivePronoun(), target.possessiveAdjective(),
                             getSelf().subject(), getSelf().possessiveAdjective(), target.nameOrPossessivePronoun(),
                             target.pronoun(), target.action("support"), getSelf().pronoun(),
                             getSelf().pronoun(),
-                            getSelf().reflectivePronoun(), target.directObject());
+                            getSelf().reflexivePronoun(), target.directObject());
         }
     }
 

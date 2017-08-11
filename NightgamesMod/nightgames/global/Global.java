@@ -245,8 +245,11 @@ public class Global {
         debug[DebugFlags.DEBUG_PET.ordinal()]=true;
         debug[DebugFlags.DEBUG_DAMAGE.ordinal()]=true;
         debug[DebugFlags.DEBUG_STRATEGIES.ordinal()]=true;
-        debug[DebugFlags.DEBUG_SKILLS.ordinal()]=true;
+        //debug[DebugFlags.DEBUG_SKILLS.ordinal()]=true;
         debug[DebugFlags.DEBUG_AFFECTION.ordinal()]=true;
+        debug[DebugFlags.DEBUG_DOMINANCE.ordinal()]=true;
+        debug[DebugFlags.DEBUG_BUTTSLUT.ordinal()]=true;
+
 
     }
 
@@ -799,7 +802,8 @@ public class Global {
     
     public static void endNight() {
         double level = 0;
-        int maxLevelTracker = 0;
+        int maxLeve = 0;
+        int maxLeve2 = 0;
 
         for (Character player : players) {
             player.getStamina().fill();
@@ -808,21 +812,27 @@ public class Global {
             player.change();
             level += player.getLevel();
             if (!player.has(Trait.unnaturalgrowth) && !player.has(Trait.naturalgrowth)) {
-                maxLevelTracker = Math.max(player.getLevel(), maxLevelTracker);
+                maxLeve = Math.max(player.getLevel(), maxLeve);
             }
+            maxLeve2 = Math.max(player.getLevel(), maxLeve2);
         }
-        final int maxLevel = maxLevelTracker / players.size();
+        final int maxLevel=maxLeve;
+        final int maxLevel2=maxLeve2;
         players.stream().filter(c -> c.has(Trait.naturalgrowth)).filter(c -> c.getLevel() < maxLevel + 2).forEach(c -> {
             while (c.getLevel() < maxLevel + 2) {
                 c.ding(null);
             }
         });
-        players.stream().filter(c -> c.has(Trait.unnaturalgrowth)).filter(c -> c.getLevel() < maxLevel + 5)
-                        .forEach(c -> {
-                            while (c.getLevel() < maxLevel + 5) {
-                                c.ding(null);
-                            }
-                        });
+        players.stream().filter(c -> c.has(Trait.unnaturalgrowth)).filter(c -> c.getLevel() < maxLevel + 5).forEach(c -> {
+            while (c.getLevel() < maxLevel + 5) {
+                c.ding(null);
+            }
+        });
+        players.stream().filter(c -> c.has(Trait.selfstudy)).filter(c -> c.getLevel() < maxLevel2 - 2).forEach(c -> {
+            while (c.getLevel() < maxLevel2 - 2) {
+                c.ding(null);
+            }
+        });
 
         level /= players.size();
 
@@ -1685,7 +1695,7 @@ public class Global {
         });
         matchActions.put("reflective", (self, first, second, third) -> {
             if (self != null) {
-                return self.reflectivePronoun();
+                return self.reflexivePronoun();
             }
             return "";
         });

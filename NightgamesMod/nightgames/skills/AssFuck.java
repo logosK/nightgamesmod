@@ -112,9 +112,8 @@ public class AssFuck extends Fuck {
             c.setStance(new AnalProne(getSelf(), target), getSelf(), voluntary);
         }
         int otherm = m;
-        if (getSelf().has(Trait.insertion)) {
-            otherm += Math.min(getSelf().get(Attribute.Seduction) / 4, 40);
-        }
+        otherm += target.doInsertionBonuses(c, getSelf(), target, this, getSelfOrgan(), getTargetOrgan(target));
+        m += getSelf().doInsertionBonuses(c, getSelf(), target, this, getSelfOrgan(), getTargetOrgan(target));
         target.body.pleasure(getSelf(), getSelfOrgan(), getTargetOrgan(target), otherm, c, this);
         if (!getSelf().has(Trait.strapped)) {
             getSelf().body.pleasure(target, getTargetOrgan(target), getSelfOrgan(), m / 2, c, this);
@@ -199,7 +198,7 @@ public class AssFuck extends Fuck {
                                     target.directObject());
                 } else {
                     return String.format("%s lubes up %s strap-on, positions %s behind %s, and shoves it into %s ass.", 
-                                    getSelf().getName(), getSelf().possessiveAdjective(), getSelf().reflectivePronoun(), 
+                                    getSelf().getName(), getSelf().possessiveAdjective(), getSelf().reflexivePronoun(), 
                                     target.nameDirectObject(), target.possessiveAdjective());
                 }
             } else {

@@ -146,6 +146,10 @@ public abstract class Addiction extends Status {
     protected abstract String describeCombatIncrease();
 
     protected abstract String describeCombatDecrease();
+    
+    protected String describeOverflowWillLoss() {
+        return affected.pronoun()+" "+affected.action("find")+" "+affected.reflexivePronoun()+" giving in to "+cause.getTrueName();
+    }
 
     public abstract String informantsOverview();
 
@@ -222,7 +226,8 @@ public abstract class Addiction extends Status {
 
     public void aggravate(Combat c, float amt) {
         Severity old = getSeverity();
-        magnitude = clamp(magnitude + amt);
+//        magnitude = clamp(magnitude + amt);
+        magnitude = clampWithOverflowWillpowerDamage(c, magnitude + amt);
         if (getSeverity() != old) {
             Global.writeIfCombat(c, cause, Global.format(describeIncrease(), affected, cause));
         }
@@ -238,7 +243,8 @@ public abstract class Addiction extends Status {
 
     public void aggravateCombat(Combat c, float amt) {
         Severity old = getCombatSeverity();
-        combatMagnitude = clamp(combatMagnitude + amt);
+//        combatMagnitude = clamp(combatMagnitude + amt);
+        combatMagnitude = clampWithOverflowWillpowerDamage(c, combatMagnitude + amt);
         if (getSeverity() != old) {
             Global.writeIfCombat(c, cause, Global.format(describeCombatIncrease(), affected, cause));
         }
@@ -258,6 +264,15 @@ public abstract class Addiction extends Status {
         if (amt > 1.f)
             return 1.f;
         return amt;
+    }
+    
+    private float clampWithOverflowWillpowerDamage(Combat c, float amt) {
+        if (amt<0.f) return 0.f;
+        if (amt<1.f) return amt;
+        int willLossAmt=(int)(201*(amt-1.f));
+        affected.loseWillpower(c, willLossAmt, 0, false, " ("+name+")");
+        Global.writeIfCombat(c, cause, Global.format(describeOverflowWillLoss(), affected, cause));
+        return 1.f;
     }
     
     public final boolean isAddiction() {

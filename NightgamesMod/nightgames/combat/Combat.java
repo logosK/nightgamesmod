@@ -46,6 +46,7 @@ import nightgames.pet.PetCharacter;
 import nightgames.pet.arms.ArmManager;
 import nightgames.skills.Anilingus;
 import nightgames.skills.AssFuck;
+import nightgames.skills.Beg;
 import nightgames.skills.BreastWorship;
 import nightgames.skills.CockWorship;
 import nightgames.skills.Command;
@@ -902,7 +903,8 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
                 return Optional.of(skill);
             }
         }
-        return Optional.ofNullable(null);
+        return Optional.of(new Beg(other));
+        //return Optional.ofNullable(null);
     }
 
     private boolean rollWorship(Character self, Character other) {
@@ -1061,12 +1063,13 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
         if (stanceDominance <= Position.Dominance.NEUTRAL.ordinal()) {
             return;
         }
+        if(Global.isDebugOn(DebugFlags.DEBUG_DOMINANCE)) {getStance().displayDominanceModifiers(this, self);}
 
         Character other = getStance().getPartner(this, self);
         Addiction add = other.getAddiction(AddictionType.DOMINANCE).orElse(null);       //FIXME: Causes trigger even though addiction has 0 magnitude.
         if (add != null && add.atLeast(Severity.MED) && !add.wasCausedBy(self)) {
             write(self, Global.format("{self:name} does {self:possessive} best to be dominant, but with the "
-                        + "way "+ add.getCause().getName() + " has been working {self:direct-object} over {self:pronoun-action:are} completely desensitized." , self, other));
+                        + "way "+ add.getCause().getName() + " has been working {other:direct-object} over {other:pronoun-action:are} completely desensitized." , self, other));
             return;
         }
 
@@ -1086,6 +1089,7 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
                 write(self, Global.format("{other:NAME-POSSESSIVE} compromising position takes a toll on {other:possessive} willpower.",
                                             self, other));
             }
+            if(other.has(Trait.proudSubmissive)) stanceDominance/=2;
             other.loseWillpower(this, stanceDominance, 0, false, " (Dominance)");
         }
         
@@ -1946,6 +1950,14 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
             victor.consume(Item.EmptyBottle, 1, false);
             victor.gain(Item.MoltenDrippings, 1);
         }
+    }
+    
+    public boolean isPresent(String p) {
+        if ( p1.getType().equals(p) || p2.getType().equals(p)) return true;
+        for(PetCharacter petchar:otherCombatants) {
+            if(petchar.getType()==p) return true;
+        }
+        return false;
     }
     
 }

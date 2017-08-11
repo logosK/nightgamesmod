@@ -606,7 +606,7 @@ public class GUI extends JFrame implements Observer {
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         textPane.setForeground(GUIColors.textColorLight);
         textPane.setBackground(GUIColors.bgLight);
-        textPane.setPreferredSize(new Dimension(width, 400));
+        textPane.setPreferredSize(new Dimension(width, 500));
         textPane.setEditable(false);
         textPane.setContentType("text/html");
         textScroll.setViewportView(textPane);
@@ -1241,7 +1241,7 @@ public class GUI extends JFrame implements Observer {
             combat.pause();
         }
         Player player = Global.human;
-        if (player.availableAttributePoints > 0) {
+        if (player.availableAttributePoints >= 1) {
             Global.writeIfCombatUpdateImmediately(combat, player, player.availableAttributePoints + " Attribute Points remain.\n");
             clearCommand();
             for (Attribute att : player.att.keySet()) {

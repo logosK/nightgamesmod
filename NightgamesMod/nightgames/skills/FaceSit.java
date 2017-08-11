@@ -198,8 +198,8 @@ public class FaceSit extends Skill {
                                 target.subjectAction("feel"), getSelf().nameOrPossessivePronoun(), 
                                 target.possessiveAdjective(),
                                 Global.capitalizeFirstLetter(target.pronoun()), 
-                                Global.capitalizeFirstLetter(target.pronoun()), 
-                                getSelf().nameDirectObject(), target.action("don't", "doesn't"));
+                                getSelf().nameDirectObject(),
+                                Global.capitalizeFirstLetter(target.pronoun()), target.action("don't", "doesn't"));
             } else if (modifier == Result.strong) {
                 return String.format("%s straddles %s face and presses %s pussy against %s mouth. %s "
                                 + "%s mouth and start to lick %s freely offered muff, but %s just smiles "

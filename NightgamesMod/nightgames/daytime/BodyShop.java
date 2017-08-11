@@ -440,7 +440,8 @@ public class BodyShop extends Activity {
             @Override
             boolean available(Character buyer) {
                 CockPart target = buyer.body.getCockBelow(SizeMod.COCK_SIZE_MASSIVE);
-                return target != null;
+                if(buyer.has(Trait.smallcock)) target = buyer.body.getCockBelow(SizeMod.COCK_SIZE_SMALL);
+                return (target != null);
             }
 
             @Override

@@ -550,7 +550,7 @@ public class CreationGUI extends JPanel {
             sexBox.setSelectedItem(cfg.chosenPlayerGender());
         }
         Map<Attribute, Integer> cfgAttributes = cfg.playerAttributes();
-        int points = cfg.availableAttributePoints();
+        int points = (int)(cfg.availableAttributePoints());
         power = cfgAttributes.getOrDefault(Attribute.Power, 3);
         seduction = cfgAttributes.getOrDefault(Attribute.Seduction, 3);
         cunning = cfgAttributes.getOrDefault(Attribute.Cunning, 3);

@@ -76,6 +76,8 @@ public class TraitTree {
                 reqs.add(c -> !c.has(Trait.valueOf(val.trim())));
             } else if (qName.equals("BreastsReq")) {
                 reqs.add(c -> c.body.getLargestBreasts().getSize() >= Integer.valueOf(val.trim()));
+            } else if (qName.equals("CockSmallerReq")) {
+                reqs.add(c -> c.hasDick() && c.body.getLargestCock().getSize() <= Integer.valueOf(val.trim()));
             } else if (qName.equals("AttributeReq")) {
                 final Attribute attribute = att;
                 reqs.add(c -> c.getPure(attribute) > Integer.valueOf(val.trim()));

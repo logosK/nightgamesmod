@@ -25,7 +25,7 @@ public class Cowardice extends Skill {
 
     @Override
     public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && target.canAct() && c.getStance().en == Stance.neutral;
+        return getSelf().canAct() && (target.canAct()||target.isHypnotized()) && c.getStance().en == Stance.neutral;
     }
 
     @Override

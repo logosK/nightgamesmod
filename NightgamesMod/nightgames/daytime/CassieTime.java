@@ -27,6 +27,7 @@ public class CassieTime extends BaseNPCTime {
         knownFlag = "CassieKnown";
         giftedString = "\"Awww thanks!\"";
         giftString = "\"A present? You shouldn't have!\"";
+        trainingString="Magic";
         transformationOptionString = "Enchantments";
         transformationIntro = "[Placeholder]<br/>Cassie tells you she could perhaps enchant some of your body.";
         loveIntro = "You and Cassie lay together in her bed while she casts spells above you. Every twitch of her fingers brings a new burst of light and color. She weaves "
@@ -558,8 +559,8 @@ public class CassieTime extends BaseNPCTime {
             player.mod(Attribute.Arcane, 1);
             Global.gui().message("Cassie is definitely more knowledgable about magic than you are- and she's willing to give you a few pointers.");
             if (!(Global.checkFlag("CassieEnchantressFocus") && npc.hasDick())) return;//This may become part of a miniquest in future and depend on those flags. Someone else might want to write a fem version
-            player.mod(Attribute.Arcane, 1);
             player.mod(Attribute.Submissive, 1);
+            npc.mod(Attribute.Arcane, 1);
             Boolean mf = player.body.guessCharacterSex().considersItselfFeminine();
             Global.gui().message("\"You know, "+player.getName()+", I think some of this would be easier to explain if I could demonstrate it. Would you mind my using you as an object for some of the human-"
                             + "targeting spells?\"<br/><br/>The slight smile on her face doesn't seem that foreboding (though it certainly indicates she hopes you'll say yes), you've learned a lot so far "
@@ -595,10 +596,18 @@ public class CassieTime extends BaseNPCTime {
                             + "some way to make this up to "+(mf?"her":"him")+"... if I figure out how to make it harder to notice someone else's teasing or attractiveness, that would probably help "
                             + (mf?"her":"him")+" in the games... I'll have to work on figuring out if I can do that with my level of skill.\"");
             //this should interact somehow with an oral cockslut thing that works like buttslut.
+            Global.gui().choose(this, "Leave");
+            npc.gainAffection(player, 1);
+            player.gainAffection(npc, 1);
         } else if (choice.equals("Leave")) {
             Global.modCounter(Flag.CassieLoneliness, -2);
             done(true);
         }
+    }
+    
+    @Override
+    public boolean meetsTrainingRequirements() {
+        return (player.get(Attribute.Arcane) > 10 && npc.get(Attribute.Arcane) >= 2*player.get(Attribute.Arcane) && npc.hasDick());
     }
     
     @Override

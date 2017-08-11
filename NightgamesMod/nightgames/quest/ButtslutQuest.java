@@ -29,7 +29,7 @@ public class ButtslutQuest extends Quest {
     private static final double ENTHRALL_DURATION_PER_POINT10 = 1.0;
     private static final double FETISH_CHANCE_BONUS_PER_POINT11 = 0.05;
     private static final double FETISH_BONUS_MAGNITUDE_PER_POINT111 = 0.01; //doubles standard fetish gain at 5 points
-    private static final double BONUS_DOMINANCE_PER_POINT12 = 0.2;
+    private static final double BONUS_DOMINANCE_PER_POINT12 = 0.4;
     private static final double STATS_CONVERTED_TO_SUB_PER_POINT13 = 2.0;
     private static final int MAX_SUBCONVERT_AMOUNT = 1000000;
     private static final double BONUS_SENS_PER_POINT14 = 0.25;
@@ -116,7 +116,7 @@ public class ButtslutQuest extends Quest {
     }
     
     public double applyReceiveBonusesAnal(Combat c, Character opponent, BodyPart ass) {
-        if (Global.isDebugOn(DebugFlags.DEBUG_SCENE)) {System.out.println("Doing attribute conversion");}
+        if (Global.isDebugOn(DebugFlags.DEBUG_BUTTSLUT)) {System.out.println("Doing attribute conversion");}
         //attribute converting text copied from Corruption
         int strength = (int) (getPointsForOfType(Global.getPlayer(),13) * STATS_CONVERTED_TO_SUB_PER_POINT13);
         Map<Attribute, Integer> buffs = new HashMap<>();

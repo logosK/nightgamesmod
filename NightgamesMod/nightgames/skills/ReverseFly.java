@@ -1,9 +1,7 @@
 package nightgames.skills;
 
-import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Emotion;
-import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
@@ -54,9 +52,8 @@ public class ReverseFly extends Fly {
 
             int m = 5 + Global.random(5);
             int otherm = m;
-            if (getSelf().has(Trait.insertion)) {
-                otherm += Math.min(getSelf().get(Attribute.Seduction) / 4, 40);
-            }
+            m += getSelf().doInsertionBonuses(c, getSelf(), target, this, getSelfOrgan(), getTargetOrgan(target));
+            otherm += target.doInsertionBonuses(c, getSelf(), target, this, getSelfOrgan(), getTargetOrgan(target));
             c.setStance(new FlyingCowgirl(getSelf(), target), getSelf(), getSelf().canMakeOwnDecision());
             target.body.pleasure(getSelf(), getSelfOrgan(), getTargetOrgan(target), otherm, c, this);
             getSelf().body.pleasure(target, getTargetOrgan(target), getSelfOrgan(), m, c, this);

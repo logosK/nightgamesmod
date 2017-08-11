@@ -20,6 +20,7 @@ import nightgames.combat.CombatScene;
 import nightgames.combat.CombatSceneChoice;
 import nightgames.combat.CombatantData;
 import nightgames.combat.Result;
+import nightgames.global.DebugFlags;
 import nightgames.global.Global;
 import nightgames.items.Item;
 import nightgames.items.clothing.Clothing;
@@ -457,6 +458,7 @@ public class Airi extends BasePersonality {
             }
             if (unmasked && self.has(Trait.ThePrestige) && c.getStance().distance() < 2) {
                 c.write(self, Global.format("<b>Taking advantage of {other:name-possessive} bewilderment, {self:subject-action:swoop} {self:possessive} slime onto {other:possessive} hapless form, swiftly engulfing it in {self:possessive} amorphous body.</b><br/>", self, opponent));
+                if(Global.isDebugOn(DebugFlags.DEBUG_DOMINANCE)) System.out.println("activating auto-engulf with self "+self.getName()+", target "+opponent.getName()+", and combatopponent "+c.getOpponent(self).getName());
                 c.setStance(new Engulfed(self, opponent));
             }
             self.moodSwing(c);

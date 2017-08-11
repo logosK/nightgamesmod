@@ -25,6 +25,7 @@ public abstract class BaseNPCTime extends Activity {
     String loveIntro = "[Placeholder]<br/>LoveIntro";
     String transformationIntro = "[Placeholder]<br/>TransformationIntro";
     String transformationFlag = "";
+    String trainingString="training";
     Trait advTrait = null;
 
     public BaseNPCTime(Character player, NPC npc) {
@@ -158,6 +159,9 @@ public abstract class BaseNPCTime extends Activity {
                 Global.gui().choose(this, "Games");
                 Global.gui().choose(this, "Sparring");
                 Global.gui().choose(this, "Sex");
+                if(meetsTrainingRequirements()) {
+                    Global.gui().choose(this, trainingString);
+                }
                 if (!transformationOptions.isEmpty()) {
                     Global.gui().choose(this, transformationOptionString);
                 }
@@ -182,6 +186,10 @@ public abstract class BaseNPCTime extends Activity {
         }
     }
 
+    public boolean meetsTrainingRequirements() {
+        return false;
+    }
+    
     @Override
     public void shop(Character paramCharacter, int paramInt) {
         paramCharacter.gainAffection(npc, 1);

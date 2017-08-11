@@ -165,7 +165,7 @@ public class MindControl extends Addiction {
     @Override
     public void tick(Combat c) {
         super.tick(c);
-        if (!affected.is(Stsflag.enthralled) && Global.randomdouble() < magnitude / 3) {
+        if (!affected.is(Stsflag.enthralled) && Global.randomdouble() < magnitude / 3 && (c==null || c.isPresent(cause.getType()))) {
             affected.addlist.add(new Enthralled(affected, cause, 3));
             Global.writeIfCombat(c, cause, cause.getName() + "'s constant urging overcomes your defences, washing away all of your resistance.");
         }

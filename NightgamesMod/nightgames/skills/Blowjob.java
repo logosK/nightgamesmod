@@ -9,6 +9,7 @@ import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
 import nightgames.nskills.tags.SkillTag;
+import nightgames.stance.FaceSitting;
 import nightgames.stance.ReverseMount;
 import nightgames.stance.SixNine;
 
@@ -26,7 +27,7 @@ public class Blowjob extends Skill {
 
     @Override
     public boolean usable(Combat c, Character target) {
-        boolean canUse = !c.getStance().isBeingFaceSatBy(c, getSelf(), target) && getSelf().canAct();
+        boolean canUse = (!c.getStance().isBeingFaceSatBy(c, getSelf(), target) || ((FaceSitting)c.getStance()).usingCock) && getSelf().canAct();
         return ((target.crotchAvailable() && target.hasDick() && c.getStance().oral(getSelf(), target)
                         && c.getStance().front(getSelf()) && canUse)
                         || (getSelf().canRespond() && isVaginal(c, target)));
@@ -215,7 +216,7 @@ public class Blowjob extends Skill {
             m += String.format("<br/>Unfortunately for %s, as %s mouth fucks %s cock %s sensitive"
                             + " modifier mouth pussy sends spasms of pleasure into %s as well.", 
                             getSelf().directObject(), getSelf().subject(), target.nameOrPossessivePronoun(),
-                            getSelf().possessiveAdjective(), getSelf().reflectivePronoun());
+                            getSelf().possessiveAdjective(), getSelf().reflexivePronoun());
         }
         return m;
     }

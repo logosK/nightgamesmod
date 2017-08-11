@@ -365,8 +365,10 @@ public class Mara extends BasePersonality {
     public String victory(Combat c, Result flag) {
         Character target = c.getOpponent(character);
         character.arousal.empty();
+        
         if (c.getStance().anallyPenetrated(c, target)) {
-            return "The sensations coming from your prostate are too much as your arms give out below you. Mara doesn't let up either, grinding the head of the strap on over your "
+            if (!Global.getButtslutQuest().isPresent() || Global.random(5)>Global.getPlayer().body.getRandomAss().getBonusSensitivity()) {
+                return "The sensations coming from your prostate are too much as your arms give out below you. Mara doesn't let up either, grinding the head of the strap on over your "
                             + "prostate. <i>\"I've read that the prostate is the male equivalent of a g-spot,\"</i> she pants as she continues her assault on your ass. <i>\"I'd like to see if I can "
                             + "make you come without stimulating your penis.\"</i> she continues. You don't really listen as your brain is about to short circuit and your dick is about to give "
                             + "up the ghost. One final thrust from Mara sends you over the edge and you shudder as you come hard. <i>\"Looks like men really can come from prostate stimulation alone.\"</i> "
@@ -374,6 +376,16 @@ public class Mara extends BasePersonality {
                             + "mind numbing orgasm you just went through. <i>\"Once again you never disappoint.\"</i> she smiles down to you as she slowly lowers herself onto you. <i>\"Hope you "
                             + "know how to give as well as take.\"</i> She jokes as she begins to work up a steady rhythm. Not to be outdone you quickly shift yourself and begin to thrust into her "
                             + "earnestly, intent on showing just how well you can 'give'. Soon Mara is collapsed on top of you breathing hard and her eyes unfocused. You stand and take your leave. You may have lost the battle but the war is far from over.";
+            }
+            return "The sensations coming from your prostate are too much as your arms give out below you. Mara doesn't let up either, grinding the head of the strap on over your "
+            + "prostate. <i>\"I've read that the prostate is the male equivalent of a g-spot,\"</i> she pants as she continues her assault on your ass. <i>\"I'd like to see if I can "
+            + "make you come without stimulating your penis.\"</i> she continues. You don't really listen as your brain is about to short circuit and your dick is about to give "
+            + "up the ghost. One final thrust from Mara sends you over the edge and you shudder as you come hard. <i>\"Looks like men really can come from prostate stimulation alone.\"</i> "
+            + "Mara states, apparently more interested in the biology of the act than anything else. Mara turns you over revealing that your dick is still hard despite the "
+            + "mind numbing orgasm you just went through. <i>\"Once again you never disappoint.\"</i> she smiles down to you as she slowly lowers herself onto you. <i>\"Hope you "
+            + "know how to give as well as take.\"</i> She jokes as she begins to work up a steady rhythm. Not to be outdone you quickly shift yourself and begin to thrust into her "
+            + "earnestly, intent on showing just how well you can 'give'. Soon Mara is collapsed on top of you breathing hard and her eyes unfocused. You stand and take your leave. You may have lost the battle but the war is far from over.";
+
         }
         if (character.has(Trait.madscientist) && c.getStance().vaginallyPenetrated(c,target)) {
             if (target instanceof Player) Global.getPlayer().addict(c, AddictionType.MIND_CONTROL, character, Addiction.HIGH_INCREASE);
@@ -628,7 +640,7 @@ public class Mara extends BasePersonality {
                             target.possessiveAdjective(), target.possessiveAdjective(),
                             Global.capitalizeFirstLetter(target.possessiveAdjective()), target.getName(),
                             target.possessiveAdjective(), target.directObject(), target.pronoun(),
-                            Global.capitalizeFirstLetter(target.possessiveAdjective()));
+                            Global.capitalizeFirstLetter(target.directObject()));
         }
         return "Mara approaches " + target.getName()
                         + " like a panther claiming its prey. She runs her fingers down the length of " + target.getName()

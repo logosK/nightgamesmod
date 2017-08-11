@@ -15,7 +15,6 @@ import nightgames.items.Item;
 import nightgames.requirements.BodyPartRequirement;
 import nightgames.requirements.NotRequirement;
 import nightgames.requirements.RequirementShortcuts;
-import nightgames.status.Stsflag;
 import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
@@ -207,7 +206,7 @@ public class MaraTime extends BaseNPCTime {
                 Global.gui().message("Mara has some fun making you do embarassing things in public, and then takes"
                                 + " you home so you can put on a good show of jacking off for her. At the end, "
                                 + "she reinforces her control over you. This is a placeholder.");
-            } else if (!player.hasStatus(Stsflag.buttsluttraining)) {
+            } else if (!Global.getButtslutQuest().isPresent() || Global.randomBool()) {
                 Global.gui()
                       .message("<i>\"Haha, yes! Great isn't it? Hands up!\"</i> You try to resist, "
                                       + "but this close and this direct it's no use. You let her know you're not happy about all this. <i>\"He, "

@@ -158,8 +158,11 @@ public class GenericBodyPart implements BodyPart {
         pleasureMod *= pleasureBonus;
         if (type.equals("hands") || type.equals("feet")) {
             pleasureMod += self.has(Trait.limbTraining1) ? .5 : 0;
-            pleasureMod += self.has(Trait.limbTraining2) ? .7 : 0;
-            pleasureMod += self.has(Trait.limbTraining3) ? .7 : 0;
+            pleasureMod += self.has(Trait.limbTraining2) ? .5 : 0;
+            pleasureMod += self.has(Trait.limbTraining3) ? .5 : 0;
+            pleasureMod += self.has(Trait.limbTraining4) ? .5 : 0;
+            pleasureMod += self.has(Trait.limbTraining5) ? .5 : 0;
+            pleasureMod += self.has(Trait.limbTraining6) ? .5 : 0;
             pleasureMod += self.has(Trait.dexterous) ? .4 : 0;
         }
         if (type.equals("hands")) {

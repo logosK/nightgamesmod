@@ -772,7 +772,7 @@ public class Player extends Character {
     }
 
     @Override
-    public String reflectivePronoun() {
+    public String reflexivePronoun() {
         return "yourself";
     }
 

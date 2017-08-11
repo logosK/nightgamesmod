@@ -61,7 +61,7 @@ public class DemonicMod extends PartMod {
             if (target.moddedPartCountsAs(opponent, CockMod.enlightened)) {
                 c.write(self, String.format(
                                 "Since %s had focused so much of %s in %s %s, there is much more for %s to take.",
-                                opponent.subject(), opponent.reflectivePronoun(), opponent.possessiveAdjective(),
+                                opponent.subject(), opponent.reflexivePronoun(), opponent.possessiveAdjective(),
                                 target.describe(opponent), self.subject()));
                 strength = Global.random(20, 31);
             } else {

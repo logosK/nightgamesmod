@@ -175,4 +175,8 @@ public interface BodyPart {
     public default double getFetishEffectiveness() {
         return 1.0;
     }
+    
+    public default boolean isInsertable() {
+        return false;
+    }
 }

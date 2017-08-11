@@ -134,8 +134,11 @@ public class MouthPart extends GenericBodyPart {
     public double getPleasure(Character self, BodyPart target) {
         double pleasureMod = super.getPleasure(self, target);
         pleasureMod += self.has(Trait.tongueTraining1) ? .5 : 0;
-        pleasureMod += self.has(Trait.tongueTraining2) ? .7 : 0;
-        pleasureMod += self.has(Trait.tongueTraining3) ? .9 : 0;
+        pleasureMod += self.has(Trait.tongueTraining2) ? .6 : 0;
+        pleasureMod += self.has(Trait.tongueTraining3) ? .7 : 0;
+        pleasureMod += self.has(Trait.tongueTraining4) ? .8 : 0;
+        pleasureMod += self.has(Trait.tongueTraining5) ? .9 : 0;
+        pleasureMod += self.has(Trait.tongueTraining6) ? 1. : 0;
         return pleasureMod;
     }
 

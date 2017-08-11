@@ -14,4 +14,8 @@ public class StraponPart extends GenericBodyPart {
     public static boolean isStrapon(BodyPart part) {
         return part != null && part.isType("strapon");
     }
+    
+    public boolean isInsertable() {
+        return true;
+    }
 }

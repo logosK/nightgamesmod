@@ -105,7 +105,7 @@ public class CockMod extends PartMod {
         } else if (this.equals(incubus)) {
             String message = String.format("%s demonic appendage latches onto %s will, trying to draw it into %s.",
                             self.nameOrPossessivePronoun(), opponent.nameOrPossessivePronoun(),
-                            self.reflectivePronoun());
+                            self.reflexivePronoun());
             int amtDrained;
             if (target.moddedPartCountsAs(opponent, FeralMod.INSTANCE)) {
                 message += String.format(" %s %s gladly gives it up, eager for more pleasure.",

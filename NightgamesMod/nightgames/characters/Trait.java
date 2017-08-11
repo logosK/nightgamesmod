@@ -24,6 +24,7 @@ public enum Trait {
     sadist("Sadist", "Skilled at providing pleasure alongside pain",
                     (b, c, t) -> b.append(Global.capitalizeFirstLetter(
                                     String.format("%s sneers in an unsettling way.", c.subject())))),
+    masochist("Masochist","Hurting a masochist is arousing for everyone."),
     bitingwords("Biting Words", "Knows how to rub salt in the wound."),
     smqueen("SM Queen", "A natural dom."),
 
@@ -137,6 +138,7 @@ public enum Trait {
     frenzyingjuices("Frenzying juices", "Frenzying juices"),
     lacedjuices("Laced Juices", "Intoxicating bodily fluids"), // opponents take temptation when using oral skills
     addictivefluids("Addictive Fluids", "Addictive bodily fluids"), // opponents can only use oral skills if available
+    frenzyingholes("Frenzying holes", "When someone penetrates you they will become frenzied"),
     temptingtits("Tempting Tits", "Perfectly shaped and oh-so-tempting."),
     beguilingbreasts("Beguiling Breasts", "Glamourous breasts can put you in trance"), // the first time in a fight that you see bare breasts you are entranced
     lactating("Lactating", "Breasts produces milk", new TraitDescription() {
@@ -156,6 +158,7 @@ public enum Trait {
     sedativecream("Sedative Cream", "Lactate that weakens the drinker"), // the first time in a fight that you see bare breasts you are entranced
     PheromonedMilk("Pheromoned Milk", "Milk can cause drinker to go into heat"),
     Illusionist("Illusionist", "Arcane doubles as Hypnotism"),
+    smallcock("Small Cock","You have a pretty small cock, making it easier to pull out of opponents"),
 
     defthands("Deft hands", "They know where to go"), // hands damage upgrade
     nimbletoes("Nimble toes", "Good both in the street and in the bed."), // feet damage upgrade
@@ -194,6 +197,7 @@ public enum Trait {
     masterheels("Heels Master", "Master at moving in heels, resists knockdowns"), // graceful when wearing heels
     naturalgrowth("Natural Growth", "Always keeps up on levels"), // levels up to highest level + 2 after each night
     unnaturalgrowth("Unnatural Growth", "Always keeps up on levels"), // levels up to highest level + 5 after each night
+    selfstudy("Self Study","Doesn't wind up far behind"),//levels up to highest level - 2 after each night
     devoteeFervor("Devotee Fervor", "Pets can sometimes act twice"),
     congregation("Congregation", "Doubles the amount of allowed pets"),
     sexualDynamo("Sexual Dynamo", "Gain mojo when pleasured, gain seduction when cumming"),
@@ -207,18 +211,31 @@ public enum Trait {
     apostles("Apostles", "Endless followers"),
 
     // training perks
-    analTraining1("Anal Training 1", "Refined ass control."),
-    analTraining2("Anal Training 2", "Perfected ass control."),
-    analTraining3("Anal Training 3", "Godly ass control."),
-    sexTraining1("Sex Training 1", "Refined sex techniques."),
-    sexTraining2("Sex Training 2", "Perfected sex techniques."),
-    sexTraining3("Sex Training 3", "Godly sex techniques."),
-    tongueTraining1("Tongue Training 1", "Refined tongue control."),
-    tongueTraining2("Tongue Training 2", "Perfected tongue control."),
-    tongueTraining3("Tongue Training 3", "Godly tongue control."),
-    limbTraining1("Hands&Feet Training 1", "Refined hands and feet control."),
-    limbTraining2("Hands&Feet Training 2", "Perfected hands and feet control."),
-    limbTraining3("Hands&Feet Training 3", "Godly hands and feet control."),
+    analTraining1("Anal Training 1", "Practiced ass control."),
+    analTraining2("Anal Training 2", "Refined ass control."),
+    analTraining3("Anal Training 3", "Skilled ass control."),
+    analTraining4("Anal Training 4", "Excellent ass control."),
+    analTraining5("Anal Training 5", "Perfected ass control."),
+    analTraining6("Anal Training 6", "Godly ass control."),
+    sexTraining1("Sex Training 1", "Practiced sex techniques."),
+    sexTraining2("Sex Training 2", "Refined sex techniques."),
+    sexTraining3("Sex Training 3", "Skilled sex techniques."),
+    sexTraining4("Sex Training 4", "Excellent sex techniques."),
+    sexTraining5("Sex Training 5", "Perfected sex techniques."),
+    sexTraining6("Sex Training 6", "Godly sex techniques."),
+    tongueTraining1("Tongue Training 1", "Practiced tongue control."),
+    tongueTraining2("Tongue Training 2", "Refined tongue control."),
+    tongueTraining3("Tongue Training 3", "Skilled tongue control."),
+    tongueTraining4("Tongue Training 4", "Excellent tongue control."),
+    tongueTraining5("Tongue Training 5", "Perfected tongue control."),
+    tongueTraining6("Tongue Training 6", "Godly tongue control."),
+    limbTraining1("Hands&Feet Training 1", "Practiced hands and feet control."),
+    limbTraining2("Hands&Feet Training 2", "Refined hands and feet control."),
+    limbTraining3("Hands&Feet Training 3", "Skilled hands and feet control."),
+    limbTraining4("Hands&Feet Training 4", "Excellent hands and feet control."),
+    limbTraining5("Hands&Feet Training 5", "Perfected hands and feet control."),
+    limbTraining6("Hands&Feet Training 6", "Godly hands and feet control."),
+
 
     // resistances
     freeSpirit("Free Spirit", "Better at escaping pins and resisting mind control"),
@@ -236,6 +253,7 @@ public enum Trait {
     submissive("Submissive", "Enjoys being the sub."),
     flexibleRole("Flexible Roles", "Also good on top."), // Cassie gets this when she takes both specializations to remove the submissive negatives
     naturalTop("Natural Top", "Being the dom comes easy."),
+    proudSubmissive("Proud Submissive", "Enjoys being the sub, and is proud of that."),
     obsequiousAppeal("Obsequious Appeal", "So tempting when on the bottom."),
     catstongue("Cat's Tongue", "Rough but sensual."),
     opportunist("Opportunist", "Always ready to stuff someone's backside."),
@@ -588,6 +606,12 @@ public enum Trait {
             }
             return "";
         });
+        resistances.put(masochist, (combat, c, s) -> {
+            if (s.flags().contains(Stsflag.masochism)) {
+                return "Already a masochist";
+            }
+            return "";
+        });
         resistances.put(Trait.freeSpirit, (combat, c, s) -> {
             // 30% to resist enthrall and bound
             if ((s.flags().contains(Stsflag.enthralled) || s.flags().contains(Stsflag.bound))
@@ -663,14 +687,26 @@ public enum Trait {
            return "";
         });
         Map<Trait, Collection<Trait>> o = new HashMap<>();
-        override(o, tongueTraining1, tongueTraining2, tongueTraining3);
-        override(o, tongueTraining2, tongueTraining3);
-        override(o, sexTraining1, sexTraining2, sexTraining3);
-        override(o, sexTraining2, sexTraining3);
-        override(o, limbTraining1, limbTraining2, limbTraining3);
-        override(o, limbTraining2, limbTraining3);
-        override(o, analTraining1, analTraining2, analTraining3);
-        override(o, analTraining2, analTraining3);
+        override(o, tongueTraining1, tongueTraining2, tongueTraining3, tongueTraining4, tongueTraining5, tongueTraining6);
+        override(o, tongueTraining2, tongueTraining3, tongueTraining4, tongueTraining5, tongueTraining6);
+        override(o, tongueTraining3, tongueTraining4, tongueTraining5, tongueTraining6);
+        override(o, tongueTraining4, tongueTraining5, tongueTraining6);
+        override(o, tongueTraining5, tongueTraining6);
+        override(o, sexTraining1, sexTraining2, sexTraining3, sexTraining4, sexTraining5, sexTraining6);
+        override(o, sexTraining2, sexTraining3, sexTraining4, sexTraining5, sexTraining6);
+        override(o, sexTraining3, sexTraining4, sexTraining5, sexTraining6);
+        override(o, sexTraining4, sexTraining5, sexTraining6);
+        override(o, sexTraining5, sexTraining6);
+        override(o, limbTraining1, limbTraining2, limbTraining3, limbTraining4, limbTraining5, limbTraining6);
+        override(o, limbTraining2, limbTraining3, limbTraining4, limbTraining5, limbTraining6);
+        override(o, limbTraining3, limbTraining4, limbTraining5, limbTraining6);
+        override(o, limbTraining4, limbTraining5, limbTraining6);
+        override(o, limbTraining5, limbTraining6);
+        override(o, analTraining1, analTraining2, analTraining3, analTraining4, analTraining5, analTraining6);
+        override(o, analTraining2, analTraining3, analTraining4, analTraining5, analTraining6);
+        override(o, analTraining3, analTraining4, analTraining5, analTraining6);
+        override(o, analTraining4, analTraining5, analTraining6);
+        override(o, analTraining5, analTraining6);
         OVERRIDES = Collections.unmodifiableMap(o);
     }
 

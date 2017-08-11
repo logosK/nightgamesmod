@@ -1,6 +1,5 @@
 package nightgames.skills;
 
-import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
@@ -157,9 +156,9 @@ public class Fuck extends Skill {
                 c.setStance(c.getStance().insert(c, getSelf(), getSelf()), getSelf(), getSelf().canMakeOwnDecision());
             }
             int otherm = m;
-            if (getSelf().has(Trait.insertion)) {
-                otherm += Math.min(getSelf().get(Attribute.Seduction) / 4, 40);
-            }
+            otherm += target.doInsertionBonuses(c, getSelf(), target, this, getSelfOrgan(), getTargetOrgan(target));
+            m += getSelf().doInsertionBonuses(c, getSelf(), target, this, getSelfOrgan(), getTargetOrgan(target));
+            
             target.body.pleasure(getSelf(), selfO, targetO, otherm, c, this);
             getSelf().body.pleasure(target, targetO, selfO, m, c, this);
         } else {

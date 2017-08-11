@@ -645,18 +645,27 @@ public class Body implements Cloneable {
             perceptionBonus *= 1 + (opponent.body.getCharismaBonus(c, character) - 1) / 2;
         }
         double baseBonusDamage = bonus;
+        if(Global.isDebugOn(DebugFlags.DEBUG_DAMAGE)) {System.out.println("Base arousal damage: "+bonus);}
+        if(Global.isDebugOn(DebugFlags.DEBUG_DAMAGE)) {System.out.println("Base magnitude: "+magnitude);}
         if (opponent != null) {
-            baseBonusDamage += with.applyBonuses(opponent, character, target, magnitude, c);
-            baseBonusDamage += target.applyReceiveBonuses(character, opponent, with, magnitude, c);
+            double withbonus=with.applyBonuses(opponent, character, target, magnitude, c);
+            baseBonusDamage += withbonus;
+            if(Global.isDebugOn(DebugFlags.DEBUG_DAMAGE)) {System.out.println("with part: "+with.canonicalDescription()+" for bonus "+withbonus);}
+            double targetbonus = target.applyReceiveBonuses(character, opponent, with, magnitude, c);
+            baseBonusDamage += targetbonus;
+            if(Global.isDebugOn(DebugFlags.DEBUG_DAMAGE)) {System.out.println("target part: "+target.canonicalDescription()+" for bonus "+targetbonus);}
+
             if (!sub) {
                 for (BodyPart p : opponent.body.getCurrentParts()) {
                     baseBonusDamage += p.applySubBonuses(opponent, character, with, target, magnitude, c);
+                    //if(Global.isDebugOn(DebugFlags.DEBUG_DAMAGE)) {System.out.println("sub bonus for "+p.canonicalDescription()+": "+p.applySubBonuses(opponent, character, with, target, magnitude, c));}
                 }
             }
             // double the base damage if the opponent is submissive and in a
             // submissive stance
             if (c.getStance().sub(opponent) && opponent.has(Trait.submissive) && target.isErogenous()) {
                 baseBonusDamage += baseBonusDamage + magnitude;
+                if(Global.isDebugOn(DebugFlags.DEBUG_DAMAGE)) {System.out.println("bonus from submissive trait: "+baseBonusDamage+magnitude);}
             } else if (c.getStance().dom(opponent) && opponent.has(Trait.submissive) && !opponent.has(Trait.flexibleRole) && target.isErogenous()) {
                 baseBonusDamage -= (baseBonusDamage + magnitude) * 1. / 3.;
             }
@@ -673,6 +682,8 @@ public class Body implements Cloneable {
             perceptionBonus += fetishBonus;
             // if a fetish is present, the chance of it intensifying is 4 times the chance of a new fetish occurring of that type with fetishtrainer
             if(Global.random(100) > 4*100*with.getFetishChance()) {character.add(c, new BodyFetish(character, opponent, with.getType(), .05));}
+            if(Global.isDebugOn(DebugFlags.DEBUG_DAMAGE)) {System.out.println("fetish bonus: "+fetishBonus);}
+
         }
         double base = baseBonusDamage + magnitude;
 
@@ -705,6 +716,7 @@ public class Body implements Cloneable {
             float mag = character.getAddiction(AddictionType.DOMINANCE).get().getMagnitude();
             Position.Dominance stanceDominance = c.getStance().getCurrentDominance(c, opponent);
             dominance = mag * (stanceDominance.ordinal() / 5.0);
+            if(Global.isDebugOn(DebugFlags.DEBUG_ADDICTION)) {System.out.println("Bonus damage from dominance addiction: "+dominance);}
         }
         perceptionBonus += dominance;
 

@@ -66,7 +66,7 @@ public class StartConfiguration {
         return player.allowsMoreTraits();
     }
 
-    public int availableAttributePoints() {
+    public double availableAttributePoints() {
         return player.getAttributePoints();
     }
 

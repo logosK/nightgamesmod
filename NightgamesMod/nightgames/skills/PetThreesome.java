@@ -1,11 +1,10 @@
 package nightgames.skills;
 
-import nightgames.characters.Attribute;
 import nightgames.characters.Character;
-import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
+import nightgames.global.DebugFlags;
 import nightgames.global.Global;
 import nightgames.items.clothing.ClothingSlot;
 import nightgames.nskills.tags.SkillTag;
@@ -27,6 +26,7 @@ public class PetThreesome extends Skill {
 
     @Override
     public float priorityMod(Combat c) {
+        if(Global.isDebugOn(DebugFlags.DEBUG_PET)) return 60.f;
         return 6.0f;
     }
 
@@ -89,6 +89,7 @@ public class PetThreesome extends Skill {
             c.write("Something really weird happened here, [ERROR]");
             return false;
         }
+        if(Global.isDebugOn(DebugFlags.DEBUG_PET)) System.out.println("Threesome initiated with pet "+fucker.getName()+", master "+master.getName()+", target "+target.getName()+", selfO "+selfO.describe(target)+", targetO "+targetO.describe(target));
         for (int i = 0; i < 10; i++) {
             if (fucker.clothingFuckable(selfO) || fucker.strip(ClothingSlot.bottom, c) == null) {
                 break;
@@ -137,7 +138,7 @@ public class PetThreesome extends Skill {
                                 + "Taking advantage of {other:possessive} surprise %s {other:name-possessive} "
                                 + "hard cock into %s, ending up in a erotic daisy-chain.", fucker, 
                                 target, master.subjectAction("are", "is"), master.subjectAction("slip"),
-                                master.reflectivePronoun()));
+                                master.reflexivePronoun()));
                 c.setStance(new XHFDaisyChainThreesome(fucker, master, target), getSelf(), true);
                 target.body.pleasure(master, master.body.getRandomPussy(), target.body.getRandomCock(), otherm, 0, c, false, this);
                 master.body.pleasure(target, target.body.getRandomCock(), master.body.getRandomPussy(), m, 0, c, false, this);
@@ -168,9 +169,8 @@ public class PetThreesome extends Skill {
                     c.setStance(new MFMSpitroastThreesome(fucker, master, target), getSelf(), true);
                 }
             }
-            if (fucker.has(Trait.insertion)) {
-                otherm += Math.min(fucker.get(Attribute.Seduction) / 4, 40);
-            }
+            otherm += target.doInsertionBonuses(c, getSelf(), target, this, selfO, getTargetOrgan(target));
+            m += getSelf().doInsertionBonuses(c, getSelf(), target, this, selfO, getTargetOrgan(target));
             target.body.pleasure(fucker, selfO, targetO, otherm, c, this);
             fucker.body.pleasure(target, targetO, selfO, m, c, this);
         } else {

@@ -69,8 +69,11 @@ public class AssPart extends GenericBodyPart {
     public double getPleasure(Character self, BodyPart target) {
         double pleasureMod = super.getPleasure(self, target);
         pleasureMod += self.has(Trait.analTraining1) ? .5 : 0;
-        pleasureMod += self.has(Trait.analTraining2) ? .7 : 0;
-        pleasureMod += self.has(Trait.analTraining3) ? .7 : 0;
+        pleasureMod += self.has(Trait.analTraining2) ? .5 : 0;
+        pleasureMod += self.has(Trait.analTraining3) ? .5 : 0;
+        pleasureMod += self.has(Trait.analTraining4) ? .5 : 0;
+        pleasureMod += self.has(Trait.analTraining5) ? .5 : 0;
+        pleasureMod += self.has(Trait.analTraining6) ? .5 : 0;
         return pleasureMod;
     }
 

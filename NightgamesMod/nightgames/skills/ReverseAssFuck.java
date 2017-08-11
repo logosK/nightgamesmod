@@ -78,9 +78,8 @@ public class ReverseAssFuck extends Fuck {
         writeOutput(c, Result.normal, target);
 
         int otherm = m;
-        if (getSelf().has(Trait.insertion)) {
-            otherm += Math.min(getSelf().get(Attribute.Seduction) / 4, 40);
-        }
+        otherm += target.doInsertionBonuses(c, getSelf(), target, this, getSelfOrgan(), getTargetOrgan(target));
+        m += getSelf().doInsertionBonuses(c, getSelf(), target, this, getSelfOrgan(), getTargetOrgan(target));
         target.body.pleasure(getSelf(), getSelfOrgan(), getTargetOrgan(target), otherm, c, this);
         getSelf().body.pleasure(target, getTargetOrgan(target), getSelfOrgan(), m, c, this);
         c.setStance(new AnalCowgirl(getSelf(), target), getSelf(), getSelf().canMakeOwnDecision());

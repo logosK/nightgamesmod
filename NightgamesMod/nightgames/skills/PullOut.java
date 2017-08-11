@@ -64,6 +64,9 @@ public class PullOut extends Skill {
         if (target.has(Trait.stronghold)) {
             baseDifficulty += 5;
         }
+        if (getSelf().has(Trait.smallcock) && c.getStance().inserted(getSelf())) {
+            baseDifficulty -= 10;
+        }
         int powerMod = Math.min(20, Math.max(5, target.get(Attribute.Power) - getSelf().get(Attribute.Power)));
         if (target.is(Stsflag.enthralled) || target.is(Stsflag.trance) 
                         || target.is(Stsflag.lovestruck)) {
@@ -145,7 +148,7 @@ public class PullOut extends Skill {
                         } else {
                             c.write(getSelf(), String.format("%s tries to pull %s off of %s, but with "
                                             + "a gentle pull of %s hands, %s collapses back on top of %s.",
-                                            getSelf().subject(), getSelf().reflectivePronoun(),
+                                            getSelf().subject(), getSelf().reflexivePronoun(),
                                             target.nameDirectObject(), target.possessiveAdjective(),
                                             getSelf().pronoun(), target.directObject()));
                         }
@@ -159,7 +162,7 @@ public class PullOut extends Skill {
                         } else {
                             c.write(getSelf(), String.format("%s tries to pull %s out of %s %s, but %s down "
                                             + "hard on %s cock, and prevent %s from pulling out.", getSelf().subject(),
-                                            getSelf().reflectivePronoun(), target.possessiveAdjective(), partString,
+                                            getSelf().reflexivePronoun(), target.possessiveAdjective(), partString,
                                             target.subjectAction("pull"), target.possessiveAdjective(),
                                             getSelf().directObject()));
                         }

@@ -52,9 +52,8 @@ public class Carry extends Fuck {
             }
             int m = 5 + Global.random(5);
             int otherm = m;
-            if (getSelf().has(Trait.insertion)) {
-                otherm += Math.min(getSelf().get(Attribute.Seduction) / 4, 40);
-            }
+            otherm += target.doInsertionBonuses(c, getSelf(), target, this, getSelfOrgan(), getTargetOrgan(target));
+            m += getSelf().doInsertionBonuses(c, getSelf(), target, this, getSelfOrgan(), getTargetOrgan(target));
             c.setStance(new Standing(getSelf(), target), getSelf(), getSelf().canMakeOwnDecision());
             target.body.pleasure(getSelf(), getSelfOrgan(), getTargetOrgan(target), otherm, c, this);
             getSelf().body.pleasure(target, getTargetOrgan(target), getSelfOrgan(), m, c, this);

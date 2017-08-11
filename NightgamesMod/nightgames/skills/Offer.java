@@ -3,6 +3,7 @@ package nightgames.skills;
 import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Trait;
+import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
@@ -51,36 +52,37 @@ public class Offer extends Skill {
             }
             return false;
         }
+        BodyPart selfO = null;
+        BodyPart targetO = null;
         if (target.hasDick() || target.has(Trait.strapped)) {
             if (getSelf().hasPussy()) {
                 // offer pussy to dick/strapon
+                selfO=getSelf().body.getRandomPussy();
+                targetO=target.body.getRandomInsertable();
                 writeOutput(c, Result.special, target);
                 c.setStance(new Missionary(target, getSelf()), target, true);
-                getSelf().body.pleasure(target, target.body.getRandomCock(), getSelf().body.getRandomPussy(),
-                                Global.random(5) + getSelf().get(Attribute.Perception), c, this);
-                target.body.pleasure(getSelf(), getSelf().body.getRandomPussy(), target.body.getRandomCock(),
-                                Global.random(5) + getSelf().get(Attribute.Perception), c, this);
-
             } else {
                 // offer ass to dick/strapon
                 writeOutput(c, Result.anal, target);
                 c.setStance(new Anal(target, getSelf()), target, true);
-                getSelf().body.pleasure(target, target.body.getRandomInsertable(), getSelf().body.getRandomAss(),
-                                Global.random(5) + getSelf().get(Attribute.Perception), c, this);
-                if (!target.has(Trait.strapped)) {
-                    target.body.pleasure(getSelf(), getSelf().body.getRandomAss(), target.body.getRandomCock(),
-                                    Global.random(5) + getSelf().get(Attribute.Perception), c, this);
-                }
+                selfO = getSelf().body.getRandomAss();
+                targetO = target.body.getRandomInsertable();
             }
+            getSelf().body.pleasure(target, targetO, selfO,
+                            Global.random(5) + getSelf().get(Attribute.Perception) + getSelf().doInsertionBonuses(c, getSelf(), target, this, selfO, targetO), c, this);
+            target.body.pleasure(getSelf(), selfO, targetO,
+                            Global.random(5) + getSelf().get(Attribute.Perception) + target.doInsertionBonuses(c, getSelf(), target, this, selfO, targetO), c, this);
         } else {
             assert getSelf().hasDick() && target.hasPussy();
             // Offer cock to female
             writeOutput(c, Result.normal, target);
             c.setStance(new Cowgirl(target, getSelf()), target, true);
-            getSelf().body.pleasure(target, target.body.getRandomPussy(), getSelf().body.getRandomCock(),
-                            Global.random(5) + getSelf().get(Attribute.Perception), c, this);
-            target.body.pleasure(getSelf(), getSelf().body.getRandomCock(), target.body.getRandomPussy(),
-                            Global.random(5) + getSelf().get(Attribute.Perception), c, this);
+            targetO=target.body.getRandomPussy();
+            selfO=getSelf().body.getRandomCock();
+            getSelf().body.pleasure(target, targetO, selfO,
+                            Global.random(5) + getSelf().get(Attribute.Perception) + getSelf().doInsertionBonuses(c, getSelf(), target, this, selfO, targetO), c, this);
+            target.body.pleasure(getSelf(), selfO, targetO,
+                            Global.random(5) + getSelf().get(Attribute.Perception) + target.doInsertionBonuses(c, getSelf(), target, this, selfO, targetO), c, this);
         }
 
         if (getSelf().checkAddiction(AddictionType.MIND_CONTROL, target)) {
@@ -174,7 +176,7 @@ public class Offer extends Skill {
                                                 + " to mount %s, enveloping the hard shaft in %s %s.",
                                 getSelf().getName(), getSelf().possessiveAdjective(), getSelf().possessiveAdjective(),
                                 getSelf().body.getRandomCock().describe(getSelf()), target.nameOrPossessivePronoun(),
-                                Global.capitalizeFirstLetter(target.subjectAction("admit")), target.reflectivePronoun(),
+                                Global.capitalizeFirstLetter(target.subjectAction("admit")), target.reflexivePronoun(),
                                 target.action("proceed"), getSelf().directObject(), target.possessiveAdjective(),
                                 target.body.getRandomPussy().describe(target));
             case anal:

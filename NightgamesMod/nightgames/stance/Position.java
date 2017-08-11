@@ -13,6 +13,7 @@ import nightgames.characters.Trait;
 import nightgames.characters.body.Body;
 import nightgames.characters.body.BodyPart;
 import nightgames.combat.Combat;
+import nightgames.global.DebugFlags;
 import nightgames.global.Global;
 import nightgames.quest.ButtslutQuest;
 import nightgames.skills.Skill;
@@ -396,6 +397,12 @@ public abstract class Position implements Cloneable {
             return Dominance.NEUTRAL;
         }
         int stanceDominance = dominance().ordinal();
+                
+        Optional<ButtslutQuest> bsq = Global.getButtslutQuest();
+        if (bsq.isPresent() && this.anallyPenetrated(c, c.getOpponent(self)) && c.getOpponent(self) == Global.getPlayer()) {
+            stanceDominance += bsq.get().getBonusDominance(this);
+        }
+        
         // It is unexpected, but not catastrophic if a character is at once a natural dom and submissive.
         if (self.has(Trait.naturalTop)) {
             // Rescales stance dominance values from 0-1-2-3-4-5 to 0-2-3-5-6-8
@@ -405,15 +412,50 @@ public abstract class Position implements Cloneable {
             // Rescales stance dominance values from 0-1-2-3-4-5 to 0-0-1-1-2-3
             stanceDominance = Double.valueOf(Math.floor(stanceDominance * 0.6)).intValue();
         }
-        Optional<ButtslutQuest> bsq = Global.getButtslutQuest();
-        if (bsq.isPresent() && this.anallyPenetrated(c, c.getOpponent(self)) 
-                        && c.getOpponent(self) == Global.getPlayer()) {
-            stanceDominance += bsq.get().getBonusDominance(this);
+        if (self.has(Trait.proudSubmissive)) {
+            // Rescales stance dominance values further from 0-0-1-1-2-3 to 0-0-0-0-1-1
+            stanceDominance = Double.valueOf(Math.floor(stanceDominance * 0.6)).intValue();
         }
         
         // Rescale in case our calculation has gone beyond valid Dominance values
         stanceDominance = Math.min(Dominance.values().length - 1, stanceDominance);
         return stanceDominance < 0 ? Dominance.NEUTRAL : Dominance.values()[stanceDominance];
+    }
+    
+    public void displayDominanceModifiers(Combat c, Character self) {
+        if (sub(self)) {
+            return;
+        }
+        int stanceDominance = dominance().ordinal();
+        
+        if (Global.isDebugOn(DebugFlags.DEBUG_DOMINANCE)) {System.out.print("Default dominance is "+stanceDominance);}
+        
+        Optional<ButtslutQuest> bsq = Global.getButtslutQuest();
+        if (bsq.isPresent() && this.anallyPenetrated(c, c.getOpponent(self)) && c.getOpponent(self) == Global.getPlayer()) {
+            stanceDominance += bsq.get().getBonusDominance(this);
+            if (Global.isDebugOn(DebugFlags.DEBUG_DOMINANCE)) {System.out.print("dominance after buttslut modification is "+stanceDominance);}
+        }
+        
+        // It is unexpected, but not catastrophic if a character is at once a natural dom and submissive.
+        if (self.has(Trait.naturalTop)) {
+            // Rescales stance dominance values from 0-1-2-3-4-5 to 0-2-3-5-6-8
+            stanceDominance = Double.valueOf(Math.ceil(stanceDominance * 1.5)).intValue();
+            if (Global.isDebugOn(DebugFlags.DEBUG_DOMINANCE)) {System.out.print("dominance after naturaltop modification is "+stanceDominance);}
+        }
+        if (self.has(Trait.submissive)) {
+            // Rescales stance dominance values from 0-1-2-3-4-5 to 0-0-1-1-2-3
+            stanceDominance = Double.valueOf(Math.floor(stanceDominance * 0.6)).intValue();
+            if (Global.isDebugOn(DebugFlags.DEBUG_DOMINANCE)) {System.out.print("dominance after submissive modification is "+stanceDominance);}
+        }
+        if (self.has(Trait.proudSubmissive)) {
+            // Rescales stance dominance values further from 0-0-1-1-2-3 to 0-0-0-0-1-1
+            stanceDominance = Double.valueOf(Math.floor(stanceDominance * 0.6)).intValue();
+            if (Global.isDebugOn(DebugFlags.DEBUG_DOMINANCE)) {System.out.print("dominance after proudsubmissive modification is "+stanceDominance);}
+        }
+        
+        // Rescale in case our calculation has gone beyond valid Dominance values
+        stanceDominance = Math.min(Dominance.values().length - 1, stanceDominance);
+        System.out.println();
     }
 
     public boolean isBeingFaceSatBy(Combat c, Character self, Character target) {

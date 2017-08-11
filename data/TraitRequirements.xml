@@ -29,6 +29,15 @@
 		</Requirements>
 	</Trait>
 	<Trait>
+		<Name>masochist</Name>
+		<Requirements>
+			<AttributeReq type="Fetish">15</AttributeReq>
+			<AttributeReq type="Submissive">30</AttributeReq>
+			<LevelReq>25</LevelReq>
+			<TraitReq>responsive</TraitReq>
+		</Requirements>
+	</Trait>
+	<Trait>
 		<Name>asshandler</Name>
 		<Requirements>
 			<AttributeReq type="Fetish">20</AttributeReq>
@@ -115,6 +124,14 @@
 			<AttributeReq type="Arcane">10</AttributeReq>
 			<AttributeReq type="Dark">10</AttributeReq>
 			<LevelReq>20</LevelReq>
+		</Requirements>
+	</Trait>
+	<Trait>
+		<Name>frenzyingholes</Name>
+		<Requirements>
+			<AttributeReq type="Submissive">20</AttributeReq>
+			<AttributeReq type="Dark">20</AttributeReq>
+			<LevelReq>30</LevelReq>
 		</Requirements>
 	</Trait>
 	<Trait>
@@ -255,7 +272,10 @@
 		<Requirements>
 			<AttributeReq type="Seduction">90</AttributeReq>
 			<TraitReq>insertion</TraitReq>
-			<TraitReq>shameless</TraitReq>
+			<OrReq>
+				<TraitReq>shameless</TraitReq>
+				<AttributeReq type="Submissive">20</AttributeReq>
+			</OrReq>
 			<TraitReq>sexTraining3</TraitReq>
 			<LevelReq>55</LevelReq>
 		</Requirements>
@@ -339,6 +359,15 @@
 			<AttributeReq type="Submissive">5</AttributeReq>
 			<TraitReq>responsive</TraitReq>
 			<LevelReq>10</LevelReq>
+		</Requirements>
+	</Trait>
+	<Trait>
+		<Name>proudSubmissive</Name>
+		<Requirements>
+			<AttributeReq type="Seduction">30</AttributeReq>
+			<AttributeReq type="Submissive">20</AttributeReq>
+			<TraitReq>submissive</TraitReq>
+			<LevelReq>20</LevelReq>
 		</Requirements>
 	</Trait>
 	<Trait>
@@ -506,6 +535,12 @@
 		</Requirements>
 	</Trait>
 	<Trait>
+		<Name>smallcock</Name>
+		<Requirements>
+			<CockSmallerReq>5</CockSmallerReq>
+		</Requirements>
+	</Trait>
+	<Trait>
 		<Name>temptingtits</Name>
 		<Requirements>
 			<AttributeReq type="Seduction">50</AttributeReq>
@@ -558,6 +593,27 @@
 		</Requirements>
 	</Trait>
 	<Trait>
+		<Name>sexTraining4</Name>
+		<Requirements>
+				<TraitReq>sexTraining3</TraitReq>
+				<LevelReq>35</LevelReq>
+		</Requirements>
+	</Trait>
+	<Trait>
+		<Name>sexTraining5</Name>
+		<Requirements>
+				<TraitReq>sexTraining4</TraitReq>
+				<LevelReq>45</LevelReq>
+		</Requirements>
+	</Trait>
+	<Trait>
+		<Name>sexTraining6</Name>
+		<Requirements>
+				<TraitReq>sexTraining5</TraitReq>
+				<LevelReq>55</LevelReq>
+		</Requirements>
+	</Trait>
+	<Trait>
 		<Name>analTraining1</Name>
 		<Requirements>
 				<BodypartReq>ass</BodypartReq>
@@ -578,6 +634,30 @@
 				<BodypartReq>ass</BodypartReq>
 				<TraitReq>analTraining2</TraitReq>
 				<LevelReq>25</LevelReq>
+		</Requirements>
+	</Trait>
+	<Trait>
+		<Name>analTraining4</Name>
+		<Requirements>
+				<BodypartReq>ass</BodypartReq>
+				<TraitReq>analTraining3</TraitReq>
+				<LevelReq>35</LevelReq>
+		</Requirements>
+	</Trait>
+	<Trait>
+		<Name>analTraining5</Name>
+		<Requirements>
+				<BodypartReq>ass</BodypartReq>
+				<TraitReq>analTraining4</TraitReq>
+				<LevelReq>45</LevelReq>
+		</Requirements>
+	</Trait>
+	<Trait>
+		<Name>analTraining6</Name>
+		<Requirements>
+				<BodypartReq>ass</BodypartReq>
+				<TraitReq>analTraining5</TraitReq>
+				<LevelReq>55</LevelReq>
 		</Requirements>
 	</Trait>
 	<Trait>
@@ -604,6 +684,30 @@
 		</Requirements>
 	</Trait>
 	<Trait>
+		<Name>tongueTraining4</Name>
+		<Requirements>
+				<BodypartReq>mouth</BodypartReq>
+				<TraitReq>tongueTraining3</TraitReq>
+				<LevelReq>35</LevelReq>
+		</Requirements>
+	</Trait>
+	<Trait>
+		<Name>tongueTraining5</Name>
+		<Requirements>
+				<BodypartReq>mouth</BodypartReq>
+				<TraitReq>tongueTraining4</TraitReq>
+				<LevelReq>45</LevelReq>
+		</Requirements>
+	</Trait>
+	<Trait>
+		<Name>tongueTraining6</Name>
+		<Requirements>
+				<BodypartReq>mouth</BodypartReq>
+				<TraitReq>tongueTraining5</TraitReq>
+				<LevelReq>55</LevelReq>
+		</Requirements>
+	</Trait>
+	<Trait>
 		<Name>limbTraining1</Name>
 		<Requirements>
 				<LevelReq>2</LevelReq>
@@ -621,6 +725,27 @@
 		<Requirements>
 				<TraitReq>limbTraining2</TraitReq>
 				<LevelReq>22</LevelReq>
+		</Requirements>
+	</Trait>
+	<Trait>
+		<Name>limbTraining4</Name>
+		<Requirements>
+				<TraitReq>limbTraining3</TraitReq>
+				<LevelReq>32</LevelReq>
+		</Requirements>
+	</Trait>
+	<Trait>
+		<Name>limbTraining5</Name>
+		<Requirements>
+				<TraitReq>limbTraining4</TraitReq>
+				<LevelReq>42</LevelReq>
+		</Requirements>
+	</Trait>
+	<Trait>
+		<Name>limbTraining6</Name>
+		<Requirements>
+				<TraitReq>limbTraining5</TraitReq>
+				<LevelReq>52</LevelReq>
 		</Requirements>
 	</Trait>
 	<Trait>

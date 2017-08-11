@@ -114,6 +114,10 @@ public class MFMSpitroastThreesome extends MaledomSexStance {
 
     @Override
     public String image() {
+        if(top.hasBreasts() && domSexCharacter.hasBreasts() && bottom.hasBreasts()) {
+            if(Global.randomBool()) return "ThreesomeHFHSpitroast.jpg";
+            return "ThreesomeHFHSpitroast2.png";
+        }
         return "ThreesomeMFMSpitroast.jpg";
     }
 

@@ -9,13 +9,13 @@ import nightgames.json.JsonUtils;
 public class PlayerConfiguration extends CharacterConfiguration {
 
     private boolean allowsMoreTraits;
-    private int attributePoints;
+    private double attributePoints;
 
     boolean allowsMoreTraits() {
         return allowsMoreTraits;
     }
 
-    int getAttributePoints() {
+    double getAttributePoints() {
         return attributePoints;
     }
 
@@ -27,7 +27,7 @@ public class PlayerConfiguration extends CharacterConfiguration {
         PlayerConfiguration cfg = new PlayerConfiguration();
         cfg.parseCommon(obj);
         cfg.allowsMoreTraits = JsonUtils.getOptional(obj, "trait_choice").map(JsonElement::getAsBoolean).orElse(true);
-        cfg.attributePoints = JsonUtils.getOptional(obj, "attribute_points").map(JsonElement::getAsInt).orElse(11);
+        cfg.attributePoints = JsonUtils.getOptional(obj, "attribute_points").map(JsonElement::getAsDouble).orElse(11.);
         return cfg;
     }
 }

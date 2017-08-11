@@ -81,8 +81,11 @@ public class PussyPart extends GenericBodyPart {
     public double getPleasure(Character self, BodyPart target) {
         double pleasureMod = super.getPleasure(self, target);
         pleasureMod += self.has(Trait.sexTraining1) ? .5 : 0;
-        pleasureMod += self.has(Trait.sexTraining2) ? .7 : 0;
-        pleasureMod += self.has(Trait.sexTraining3) ? .7 : 0;
+        pleasureMod += self.has(Trait.sexTraining2) ? .5 : 0;
+        pleasureMod += self.has(Trait.sexTraining3) ? .5 : 0;
+        pleasureMod += self.has(Trait.sexTraining4) ? .5 : 0;
+        pleasureMod += self.has(Trait.sexTraining5) ? .5 : 0;
+        pleasureMod += self.has(Trait.sexTraining6) ? .5 : 0;
         return pleasureMod;
     }
 

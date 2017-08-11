@@ -4,6 +4,7 @@ import nightgames.characters.Attribute;
 import nightgames.characters.Character;
 import nightgames.characters.Trait;
 import nightgames.characters.body.BodyPart;
+import nightgames.characters.body.StraponPart;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
@@ -35,6 +36,14 @@ public class FaceFuck extends Skill {
         return "Force your opponent to orally pleasure you.";
     }
 
+    public BodyPart getSelfOrgan() {
+        BodyPart res = getSelf().body.getRandomCock();
+        if (res == null && getSelf().has(Trait.strapped)) {
+            res = StraponPart.generic;
+        }
+        return res;
+    }
+    
     @Override
     public boolean resolve(Combat c, Character target) {
         Result res = Result.normal;
@@ -67,11 +76,14 @@ public class FaceFuck extends Skill {
         }
         target.add(c, new Shamed(target));
 
+        selfDamage += getSelf().doInsertionBonuses(c, getSelf(), target, this, getSelfOrgan(), targetMouth);
+        targetDamage += target.doInsertionBonuses(c, getSelf(), target, this, getSelfOrgan(), targetMouth);
+        
         if (selfDamage > 0) {
-            getSelf().body.pleasure(target, targetMouth, getSelf().body.getRandom("cock"), selfDamage, c, this);
+            getSelf().body.pleasure(target, targetMouth, getSelfOrgan(), selfDamage, c, this);
         }
         if (targetDamage > 0) {
-            target.body.pleasure(target, getSelf().body.getRandomInsertable(), targetMouth, targetDamage, c, this);
+            target.body.pleasure(target, getSelfOrgan(), targetMouth, targetDamage, c, this);
         }
         if (Global.random(100) < 5 + 2 * getSelf().get(Attribute.Fetish) && !getSelf().has(Trait.strapped)) {
             target.add(c, new BodyFetish(target, getSelf(), "cock", .25));
@@ -154,7 +166,7 @@ public class FaceFuck extends Skill {
                             getSelf().subject(), target.nameOrPossessivePronoun(), getSelf().possessiveAdjective(),
                             getSelf().body.getRandomCock().describe(getSelf()), target.subjectAction("are", "is"),
                             getSelf().subject(), getSelf().possessiveAdjective(), target.possessiveAdjective(),
-                            target.nameOrPossessivePronoun(), getSelf().subject(), getSelf().reflectivePronoun(),
+                            target.nameOrPossessivePronoun(), getSelf().subject(), getSelf().reflexivePronoun(),
                             getSelf().possessiveAdjective());
         } else {
             m = String.format("%s forces %s mouth open and shoves %s %s into it. %s "

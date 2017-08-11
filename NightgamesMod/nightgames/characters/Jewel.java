@@ -509,7 +509,7 @@ public class Jewel extends BasePersonality {
                                 + "heat is nearly unbearable. Because of this, you don't know whether to tell Jewel to stop or beg her to keep going.<br/><br/>"
                                 + "It's probably a moot point anyway as Jewel is in her own world above you, slamming her length in and out of your overheated canal and soon you begin to notice her "
                                 + "breathing becoming more ragged and her pace reaching a crescendo.<br/><br/>"
-                                + "With a mewl of pleasure Jewel climaxes above you, bringing herself fully inside as she does so. The sensation of her superheated dick pumping cum that feels almost boiling hot into you is too much "
+                                + "With a sigh of pleasure Jewel climaxes above you, bringing herself fully inside as she does so. The sensation of her superheated dick pumping cum that feels almost boiling hot into you is too much "
                                 + "and you find yourself coming once again.<br/><br/>";
             }
             message += "After you both catch your breath, Jewel stands and extracts you from herself. You can't help the groan of discomfort that escapes you when your privates are exposed to "

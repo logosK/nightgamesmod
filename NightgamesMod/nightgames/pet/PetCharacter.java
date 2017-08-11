@@ -52,6 +52,9 @@ public class PetCharacter extends Character {
                     Trait.analTraining1,
                     Trait.analTraining2,
                     Trait.analTraining3,
+                    Trait.analTraining4,
+                    Trait.analTraining5,
+                    Trait.analTraining6,
                     Trait.anatomyknowledge,
                     Trait.asshandler,
                     Trait.assmaster,
@@ -75,6 +78,9 @@ public class PetCharacter extends Character {
                     Trait.limbTraining1,
                     Trait.limbTraining2,
                     Trait.limbTraining3,
+                    Trait.limbTraining4,
+                    Trait.limbTraining5,
+                    Trait.limbTraining6,
                     Trait.mojoMaster,
                     Trait.naturalTop,
                     Trait.nimbletoes,
@@ -93,6 +99,9 @@ public class PetCharacter extends Character {
                     Trait.sexTraining1,
                     Trait.sexTraining2,
                     Trait.sexTraining3,
+                    Trait.sexTraining4,
+                    Trait.sexTraining5,
+                    Trait.sexTraining6,
                     Trait.soulsucker,
                     Trait.spiral,
                     Trait.submissive,
@@ -104,6 +113,9 @@ public class PetCharacter extends Character {
                     Trait.tongueTraining1,
                     Trait.tongueTraining2,
                     Trait.tongueTraining3,
+                    Trait.tongueTraining4,
+                    Trait.tongueTraining5,
+                    Trait.tongueTraining6,
                     Trait.tight);
     public PetCharacter(Pet self, String name, String type, Growth growth, int level) {
         super(name, 1);
@@ -286,7 +298,8 @@ public class PetCharacter extends Character {
     
     @Override
     protected void resolveOrgasm(Combat c, Character opponent, BodyPart selfPart, BodyPart opponentPart, int times, int totalTimes) {
-        super.resolveOrgasm(c, opponent, selfPart, opponentPart, times, totalTimes);
+        super.resolveOrgasm(c, c.getOpponent(getSelf().owner), selfPart, opponentPart, times, totalTimes);
+        opponent=c.getOpponent(getSelf().owner);
         if (getSelf().owner().has(Trait.StickyFinale)) {
             c.write(this, Global.format("The force of {self:name-possessive} orgasm causes {self:direct-object} to shudder and explode in a rain of slime, completely covering {other:name-do} with the sticky substance.", this, opponent));
             opponent.add(c, new Slimed(opponent, getSelf().owner(), Global.random(5, 11)));

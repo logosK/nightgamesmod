@@ -9,7 +9,6 @@ import nightgames.characters.Character;
 import nightgames.characters.Emotion;
 import nightgames.characters.Trait;
 import nightgames.combat.Combat;
-import nightgames.global.Flag;
 import nightgames.global.Global;
 import nightgames.skills.Anilingus;
 import nightgames.skills.Blowjob;
@@ -25,11 +24,19 @@ import nightgames.status.Drained;
 public class FaceSitting extends AbstractBehindStance {
     FaceSitting(Character top, Character bottom, Stance en) {
         super(top, bottom, en);
+        if(top.hasDick() && !top.hasPussy()) usingCock=true;
+        if(top.hasDick() && top.hasPussy()) usingCock=Global.randomBool();
+        if(!top.hasDick() && top.hasPussy()) usingCock=false;
     }
     public FaceSitting(Character top, Character bottom) {
         super(top, bottom, Stance.facesitting);
+        if(top.hasDick() && !top.hasPussy()) usingCock=true;
+        if(top.hasDick() && top.hasPussy()) usingCock=Global.randomBool();
+        if(!top.hasDick() && top.hasPussy()) usingCock=false;
     }
-
+    
+    public boolean usingCock;
+    
     @Override
     public String describe(Combat c) {
         return Global.capitalizeFirstLetter(top.subjectAction("are", "is")) + " sitting on "
@@ -53,8 +60,7 @@ public class FaceSitting extends AbstractBehindStance {
             return "facesitting_m.jpg";
         }
         if (top.hasPussy() && bottom.hasBreasts()) {
-            if (top.hasDick() && Global.checkFlag(Flag.isFuta) && Math.random()>0.5) {return "futa_facesitting_h.jpg";}
-            return "facesitting_ff.jpg";
+            return usingCock?"facesitting_h.jpg":"facesitting_ff.jpg";
         }
         return "facesitting.jpg";
     }

@@ -119,6 +119,7 @@ Magic Eye Frenzy (Cassie Enchantress focus) - Randomly causes Frenzied.
 Magic Milk (Cassie addiction, unlocked through Breast focus) - Causes Cassie's milk to be super addictive.
 MagLocks (Mara General Tech focus) - Unlocks MagLocks, which can bind/immobilize targets at the cost of batteries per turn.
 Mandate of Heaven (Angel Worship+Nymphomania focus) - Causes Object of Worship to trigger more often if Angel uses temptation skills.
+Masochist - Reduces damage taken, causes lust gain when taking damage (overrides masochist buff), returns lust damage to enemy when taking damage
 Masquerade (Airi Mimicry focus) - Improves quaility of mimicry.
 Heels Master (listed as masterheels) - Gives a 1 in 3 chance of resisting knockdowns while wearing heels.
 Mental Fortress (Jewel Mental focus) - Gets a chance to resist mind-controlling effects.
@@ -161,6 +162,7 @@ Powerful Hips - Can use dominant sex skills from the submissive position.
 Primal Heat (Kat Frenzy focus) - Bonus to seduction while Frenzied. (Scales with Animism.)
 Pro Heels - Eliminates the negative impacts of wearing heels. (easier to knock down, lower speed)
 Protective - Shields a pet's owner from harmful status effects. Unique to Caroline, one of Angel's friends.
+Proud Submissive - Reduces willpower loss suffered when in submisive positions, but further reduces willpower damage from being dominant and also causes passive arousal gain while dominated.
 Pussy Handler - Bonus pleasure when targeting pussy.
 Quick Recovery - Recovers stamina more rapidly out of combat.
 Rapid Meiosis (Airi Slime Queen focus) - Creates clones upon orgasm.
@@ -191,6 +193,7 @@ Slime Carrier (Airi Slime Carrier focus) - Instead of transforming into a slime,
 Slime Royalty (Airi Slime Queen focus) - Can create clones of themselves.
 Slimification - Turns into a slime when cumming with lowered willpower.
 SM Queen - Effectively doubles willpower loss from stance dominance.
+Small Cock - Caps cock size at 'small' and makes it easier to pull out.
 Sneaky - Better at hiding out of combat.
 Soft Hearted - Should block some violent skills, but doesn't.
 Soul Sucker - Lip-to-skin contact drains willpower as mojo.
