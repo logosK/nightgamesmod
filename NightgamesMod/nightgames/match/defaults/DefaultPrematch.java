@@ -133,7 +133,7 @@ public class DefaultPrematch extends Prematch {
         @Override
         protected boolean valid() {
             return Global.getPlayer()
-                         .getRank() > 0 && Global.getDate() % 30 == 0;
+                         .getRank() > 0 && Global.getDate() % 15 == 0;
         }
 
     }

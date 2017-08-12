@@ -674,6 +674,7 @@ public class Body implements Cloneable {
         if (character.has(Trait.NaturalHeat) && character.is(Stsflag.frenzied)) {
             baseBonusDamage -= (baseBonusDamage + magnitude) / 2;
         }
+        if(opponent==null && Global.isDebugOn(DebugFlags.DEBUG_ADDICTION)) System.out.println("pleasure from masturbation, reached pre-fetish");
 
         Optional<BodyFetish> fetish = getFetish(with.getType());
         if (fetish.isPresent()) {
@@ -710,7 +711,7 @@ public class Body implements Cloneable {
             }
             unsatisfied = true;
         }
-
+        if(opponent==null && Global.isDebugOn(DebugFlags.DEBUG_ADDICTION)) System.out.println("pleasure from masturbation, reached pre-dom");
         double dominance = 0.0;
         if (character.checkAddiction(AddictionType.DOMINANCE, opponent) && c.getStance().dom(opponent)) {
             float mag = character.getAddiction(AddictionType.DOMINANCE).get().getMagnitude();
@@ -734,6 +735,7 @@ public class Body implements Cloneable {
             stageMultiplier = skill.getStage().multiplierFor(character);
         }
         multiplier = Math.max(0, multiplier + stageMultiplier) * staleness;
+        if(opponent==null && Global.isDebugOn(DebugFlags.DEBUG_ADDICTION)) System.out.println("pleasure from masturbation, reached pre-dam");
 
         double damage = base * multiplier;
         double perceptionlessDamage = base * (multiplier - (perceptionBonus - 1));
@@ -818,6 +820,8 @@ public class Body implements Cloneable {
         if (staleMove && skill.user().human()) {
             c.write(opponent, Global.format("This seems to be a getting bit boring for {other:direct-object}... Maybe it's time to switch it up?", opponent, character));
         }
+        if(opponent==null && Global.isDebugOn(DebugFlags.DEBUG_ADDICTION)) System.out.println("pleasure from masturbation, reached pre-moretraits");
+
         double percentPleasure = 100.0 * result / character.getArousal().max();
         if (character.has(Trait.sexualDynamo) && percentPleasure >= 5 && Global.random(4) == 0) {
             c.write(character, Global.format("Sexual pleasure seems only to feed {self:name-possessive} ", character, opponent));
@@ -851,6 +855,8 @@ public class Body implements Cloneable {
         }
         lastPleasuredBy = with;
         lastPleasured = target;
+        if(opponent==null && Global.isDebugOn(DebugFlags.DEBUG_ADDICTION)) System.out.println("pleasure from masturbation, reached end");
+
         return result;
     }
 

@@ -648,7 +648,7 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
             if (voiceCount >= 1) {
                 if (!self.human()) {
                     write(self,
-                                    Global.format("{other:SUBJECT} winks at you and verbalizes a few choice words that pass straight through your mental barriers.",
+                                    Global.format("{other:SUBJECT} winks at "+getOpponent(other)+" and verbalizes a few choice words that pass straight through "+getOpponent(other).possessiveAdjective()+" mental barriers.",
                                                     other, self));
                 } else {
                     write(self,

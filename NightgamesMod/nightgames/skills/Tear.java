@@ -29,8 +29,8 @@ public class Tear extends Skill {
     public boolean usable(Combat c, Character target) {
         boolean notMedical = getSelf().get(Attribute.Power) >= 32 || getSelf().get(Attribute.Animism) >= 12;
         return ((c.getStance().reachTop(getSelf()) && !target.breastsAvailable())
-                        || ((c.getStance().reachBottom(getSelf()) && !target.crotchAvailable()))) && getSelf().canAct()
-                        && (notMedical || getSelf().has(Item.MedicalSupplies, 1));
+                        || ((c.getStance().reachBottom(getSelf()) && !target.crotchAvailable() && !target.has(ClothingTrait.harpoonDildo) && !target.has(ClothingTrait.harpoonOnahole)))) 
+                        && getSelf().canAct() && (notMedical || getSelf().has(Item.MedicalSupplies, 1));
     }
 
     @Override

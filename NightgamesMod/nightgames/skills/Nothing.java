@@ -1,8 +1,20 @@
 package nightgames.skills;
 
+import java.util.ArrayList;
+
 import nightgames.characters.Character;
 import nightgames.combat.Combat;
 import nightgames.combat.Result;
+import nightgames.status.BodyFetish;
+import nightgames.status.Compulsion;
+import nightgames.status.Enthralled;
+import nightgames.status.Flatfooted;
+import nightgames.status.FluidAddiction;
+import nightgames.status.Plasticized;
+import nightgames.status.Status;
+import nightgames.status.Stunned;
+import nightgames.status.Trance;
+import nightgames.status.Winded;
 
 public class Nothing extends Skill {
 
@@ -21,6 +33,21 @@ public class Nothing extends Skill {
             deal(c, 0, Result.normal, target);
         } else {
             receive(c, 0, Result.normal, target);
+        }
+        boolean legitreason=false;
+        ArrayList<BodyFetish> fetishes = new ArrayList<BodyFetish>();
+        for (Status s : getSelf().status) {
+            if (s instanceof BodyFetish) {
+                fetishes.add((BodyFetish)s);
+            }
+            if (s instanceof Flatfooted || s instanceof Trance || s instanceof Enthralled || s instanceof Winded || s instanceof Compulsion || s instanceof Plasticized || s instanceof Stunned || s instanceof FluidAddiction) {
+                legitreason=true;
+            }
+        }
+        if(!legitreason) {
+            for(BodyFetish bf:fetishes) {
+                if(bf.magnitude>0.75) bf.magnitude-=0.25;
+            }
         }
         return true;
     }

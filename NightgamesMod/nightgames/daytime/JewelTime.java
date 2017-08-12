@@ -224,7 +224,7 @@ public class JewelTime extends BaseNPCTime {
                                   + " to enjoy it. Jewel grinds on your face until the fire in your balls finally dies "
                                   + "down. \"Why aren't you whimpering anymore? I guess if you're not going to do that, "
                                   + "you have no use for any air.\" Pulling her panties aside, she sits down right over your"
-                                  + " mouth and nose. \"You'd best show some enthousiasm if you want another breath!\" You "
+                                  + " mouth and nose. \"You'd best show some enthusiasm if you want another breath!\" You "
                                   + "do. You suck on her lips and circle your tongue around whatever it can reach. Despite "
                                   + "the fact that you're doing the best you can, Jewel does not stop. After half a minute "
                                   + "you are getting quite desperate, but it's not until the last moment that Jewel rises "
