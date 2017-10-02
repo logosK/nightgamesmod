@@ -30,7 +30,7 @@ public class Decider {
         }
     }
 
-    /**Creates an ArrayList of weightd Skills to aid in the decisionmaking process. It goes through all available skills and sorts them into lists. 
+    /**Creates an ArrayList of weighted Skills to aid in the decisionmaking process. It goes through all available skills and sorts them into lists. 
      * 
      * The method then checks the character's current mood and assigns weights based upon skill type.
      * 
@@ -331,7 +331,7 @@ public class Decider {
         return moveList.get(moveList.size() - 1);
     }
 
-    
+    //TODO: Document this method. 
     public static Skill prioritizeNew(Character self, List<WeightedSkill> plist, Combat c) {
         if (plist.isEmpty()) {
             return null;
@@ -410,6 +410,7 @@ public class Decider {
         });
     }
 
+    //TODO: Document this method.
     private static double rateMove(Character self, Skill skill, Combat c, double selfFit, double otherFit) {
         // Clone ourselves a new combat... This should clone our characters, too
         if (Global.isDebugOn(DebugFlags.DEBUG_SKILLS_RATING) && (c.p1.human() || c.p2.human())) {
@@ -424,6 +425,7 @@ public class Decider {
         });
     }
 
+    //TODO: Document this method
     private static Character getCopyFromCombat(Combat c, Combat clonedCombat, Character self) {
         if (c.p1 == self) {
             return clonedCombat.p1;
@@ -436,10 +438,14 @@ public class Decider {
         }
     }
 
+    
     public static double rateAction(Character skillUser, Combat c, double selfFit, double otherFit, CustomEffect effect) {
         return rateActionWithObserver(skillUser, skillUser, c.getOpponent(skillUser), c, selfFit, otherFit, effect);
     }
 
+    /**Clones the combat and returns a rating.
+     * TODO: Document this method properly.
+     * */
     public static double rateActionWithObserver(Character skillUser, Character fitnessObserver, Character target,
                     Combat c, double selfFit, double otherFit, CustomEffect effect) {
         // Clone ourselves a new combat... This should clone our characters, too

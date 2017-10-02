@@ -1,5 +1,6 @@
 package nightgames.characters;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import nightgames.characters.body.BreastsPart;
@@ -10,6 +11,8 @@ import nightgames.characters.body.PussyPart;
 import nightgames.characters.body.mods.SizeMod;
 import nightgames.characters.custom.CharacterLine;
 import nightgames.combat.Combat;
+import nightgames.combat.CombatScene;
+import nightgames.combat.CombatSceneChoice;
 import nightgames.combat.Result;
 import nightgames.global.Global;
 import nightgames.items.Item;
@@ -26,8 +29,10 @@ public class Eve extends BasePersonality {
     
     public static final String EVE_FIRSTTYPE1_FOCUS = "EveFirst1Focus";
     public static final String EVE_FIRSTTYPE2_FOCUS = "EveFirst2Focus";
+    public static final String EVE_FIRSTTYPE_DONE = "EveFirstFocusDone";
     public static final String EVE_SECONDTYPE1_FOCUS = "EveSecond1Focus";
     public static final String EVE_SECONDTYPE2_FOCUS = "EveSecond2Focus";
+    public static final String EVE_SECONDTYPE_DONE = "EveFirstFocusDone";
     
     public Eve() {
         this(Optional.empty(), Optional.empty());
@@ -86,6 +91,9 @@ public class Eve extends BasePersonality {
         character.getGrowth().addTrait(0, Trait.insatiable);
         character.getGrowth().addTrait(0, Trait.assmaster);
         character.getGrowth().addTrait(0, Trait.analFanatic);
+        
+        this.addFirstFocusScene();
+        this.addSecondFocusScene();
 
         character.getGrowth().addTrait(2, Trait.alwaysready);
         character.getGrowth().addTrait(5, Trait.limbTraining1);
@@ -181,11 +189,13 @@ public class Eve extends BasePersonality {
 
         character.addLine(CharacterLine.NIGHT_LINER, (c, self, other) -> {
             return "";
+            
+            //<i>\"Heeeey! Let's go, my young ass-slut, COME ON! The Benefactor makes sure we can't get badly hurt, so let's have some fucking FUN tonight! I'm still wound up and I don't end my night until I pass out cumming.\"</i>" 
         });
 
         character.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> {
             if (c.getStance().anallyPenetrated(c, other)) {
-                return "<i>\"Oh fuck! You are one tight little cum bucket! Let's go again!\"</i>"
+                return "<i>\"Oh fuck! You are one tight little cum-bucket! Let's go again!\"</i>"
                                 + " Eve immediately resumes her thrusting.";
             }
             return "<i>\"Ahhh shit! Wouldn't it have been sooo much better to have " + "taken that load up your ass?\"</i>";
@@ -194,10 +204,32 @@ public class Eve extends BasePersonality {
         character.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> {
             if (c.getStance().anallyPenetrated(c, self)) {
                 return "Eve laughs maniacally as you cum. <i>\"I knew you'd like it"
-                                + ", you little ass slut! But you're not done yet!\"</i>";
+                                + ", you little ass-slut! But you're not done yet!\"</i>";
             }
             return "<i>\"That's it! Now, how about you return the favor?\"</i>";
         });
+        
+        
+        character.addLine(CharacterLine.LEVEL_DRAIN_LINER, (c, self, other) -> {
+            String part = Global.pickRandom(c.getStance()
+                                             .getPartsFor(c, self, other))
+                                .map(bp -> bp.getType())
+                                .orElse("pussy");
+            if (other.getLevel() < self.getLevel() - 5) {       //FIXME: Is self.body.getRandom(part).describe(self) the same funcationally as just using "part"? Should this be standardized? -DSM 
+                return "{self:SUBJECT} laughs uncontrolably while you feel your orgasm cause your power and experience to be sucked right into {self:SUBJECT}'s " + self.body.getRandom(part).describe(self) + ". {self:SUBJECT}'s hands squeeze and grope you lewdly while they continue slamming away, "
+                                + "<i>\"UNGH! Oh hohoooYEAH! You poor {other:guy}, being raped and dominated so much that you're cumming your worthless soul out. Holy shit, this feels so good, I don't wanna stoooop!\"</i> "
+                                + "They push their whole body into yours and grope you while whispering in your ear, "
+                                + "<i>\"Don't worry...We're gonna have lots of fun. Fucking the shit out of you is really <b>FUN! UNGH!</b>\"</i>";
+            } else if (other.getLevel() >= self.getLevel()) {
+                return "{self:SUBJECT} holds you down and slams themselves into you repeatedly until you violently climax. You cum as is you were a bursting dam - your strength and experience streams out of you and into {self:possessive} " + self.body.getRandom(part).describe(self) + ". "
+                                + "By the time you finally regain yopur senses, you're being held down by {self:SUBJECT}, who's licking your face while taunting you. "
+                                + "<i>\"That was good, my little slut - now get ready do it again. Cum your fucking soul out and make me stronger...\"</i>";
+            } else {
+                return "{self:SUBJECT} keeps at you without relenting in the slightest - you are cumming out of control right into her " + part + ". After you finally collapse from the ordeal, the wild girl laughs; she shows no sign that she's done. "
+                                + "<i>\"Oh, yeeeeah, you fucking slut...that was <b>good</b> - devouring your power like that. Maybe if I just keep pounding your soul out with my cock I'll ruin you enough that you can just become my slave! HA HA HA! Prepare your asshole!\"</i>";
+            }
+        });
+        
 
         character.addLine(CharacterLine.DESCRIBE_LINER, (c, self, other) -> {
             return "If there's one word to describe Eve's appearance, it would have to be 'wild'. Her face is quite pretty, though her eyes are an unnerving silver color. "
@@ -433,14 +465,105 @@ public class Eve extends BasePersonality {
      * 
      * */
     private void addFirstFocusScene(){
-        
+        character.addCombatScene(new CombatScene(
+                        (c, self, other) -> self.getLevel() >= 40 && !Global.checkFlag(EVE_FIRSTTYPE1_FOCUS) && !Global.checkFlag(EVE_FIRSTTYPE2_FOCUS) && !Global.checkFlag(EVE_FIRSTTYPE_DONE),
+                        (c, self, other) -> Global.format(
+                                        "[Placeholder] You see {self:name} in some sort of setup scenario. She asks you a question relevant to her advancement."
+                                        + "\n\n \"<i>Hey, fuccboi. You know what? I was thinking - What do you like more, I could focus on THIS or THAT. What do you think?</i>\"",
+                                        self, other),
+                        Arrays.asList(new CombatSceneChoice("DO TYPE1", (c, self, other) -> {
+                            c.write(Global.format(
+                                            "[Placeholder] You tell {self:direct-object} that you'd prefer the first thing. She responds in a manner befitting such a choice.",
+                                            self, other,
+                                            other.hasDick() ? "[Placeholder] {self:PRONOUN} does something bullyish to your {other:body-part:cock} in response to choosing the first choice."
+                                                            : "[Placeholder] {self:PRONOUN} does something bullyish to your {other:body-part:pussy}"
+                                                                            + " in response to choosing the first choice."));
+                            useFirstType1();
+                            return true;
+                        }), new CombatSceneChoice("DO TYPE2", (c, self, other) -> {
+                            c.write(Global.format(
+                                            "[Placeholder] You tell {self:direct-object} that you'd prefer the second thing. She responds in a manner befitting such a choice.", self, other));
+                            useFirstType2();
+                            return true;
+                        }), new CombatSceneChoice("Why not do both? [Hard Mode]", (c, self, other) -> {
+                            c.write(Global.format(
+                                            "[Placeholder] You tell {self:name} not to hold back. She DID she she's here to have fun, after all. Her response suggest she's about to get much tougher.", self, other));
+                            useFirstType2();
+                            useFirstType1();
+                            character.getGrowth().extraAttributes += 1;
+                            Global.getPlayer()
+                                  .getGrowth().addTraitPoints(new int[] {12, 39}, Global.getPlayer());
+                            return true;
+                        }))));
     }
+    
     /**Helper method to Add this character's second Combat focus scene 
      * EVE: 
      * 
      * */
     private void addSecondFocusScene(){
-        
+        character.addCombatScene(new CombatScene(
+                        (c, self, other) -> self.getLevel() >= 50 && !Global.checkFlag(EVE_SECONDTYPE1_FOCUS) && !Global.checkFlag(EVE_SECONDTYPE2_FOCUS) && Global.checkFlag(EVE_FIRSTTYPE_DONE) && !Global.checkFlag(EVE_SECONDTYPE_DONE),
+                        (c, self, other) -> Global.format(
+                                        "[Placeholder] You see {self:name} consider how strong the competition is now. She wonders if she should really cut loose and go full power, but how?",
+                                        self, other),
+                        Arrays.asList(new CombatSceneChoice("DO TYPE1", (c, self, other) -> {
+                            c.write(Global.format(
+                                            "[Placeholder] You tell {self:name} that she should make full use of her WHATEVER. She agrees, and shows off a little.",
+                                            self, other));
+                            useSecondType1();
+                            return true;
+                        }), new CombatSceneChoice("DO TYPE2", (c, self, other) -> {
+                            c.write(Global.format(
+                                            "[Placeholder] You tell {self:name} that she should make full use of her OTHERTHING. She agrees, and shows off a little.",
+                                            self, other));
+                            useSecondType2();
+                            return true;
+                        }), new CombatSceneChoice("Tell her she's washed up. [Hard Mode]",
+                                        (c, self, other) -> {
+                                            c.write(Global.format(
+                                                            "You joke at {self:name}, telling her that she's washed up. You have a laugh, but her face and eyes look like she's about to commit murder. You've definitely crossed some kind of line, because she's yelling at you in a rage. "
+                                                            + "<i>\"Washed up?! I'LL FUCKING SHOW YOU WHO'S WASHED UP! You think you're hot shit enough to say that to ME? "
+                                                            + "I'm going to turn your asshole inside out and fuck it until you have to sit on your face in class! I've had enough of your shit, {other:name}; Good fucking luck, champ. <b>You're going to fucking need it.</b>",
+                                                            self, other, character.useFemalePronouns() ? "ess" : ""));
+                                            useSecondType1();
+                                            useSecondType2();
+                                            character.getGrowth().extraAttributes += 1;
+                                            Global.getPlayer().getGrowth().addTraitPoints(new int[] {21, 48}, Global.getPlayer());
+                                            return true;
+                                        }))));
+    }
+    
+    /*
+     * BITS AND PIECES: 
+     * 
+     *   <i>\"Ohhhh I fucking love this thing. Ohhhunnngh. Yeah. Oh FUCK. You know, I forgot how many years I've had it, but I'll never go back. I love raping your pussies and assholes - I fucking love my cooooOOOCK! UNNNGH!\"</i>"
+     *   
+     *    Eve gets herself off without even caring that you're there. She really can just keep going and doesn't care if you're there.
+     *    
+     *    <i>\"Hoooohhhh shit. Ha ha! Well, {other:name}, I can see you staring. You like this shit, don't ya? What do you like more about me, huh?\"</i>
+     * 
+     *      <i>\"Hooo shit...That's fucking hot, {other:name}. Hey. You sound like you like some fucked up stuff, too. Want me to show you some slutty shit that you might like?\"</i>
+     * 
+     * */
+    
+    
+    private void useFirstType1(){
+        Global.flag(EVE_FIRSTTYPE1_FOCUS);
+        Global.flag(EVE_FIRSTTYPE_DONE);
+    }
+    private void useFirstType2(){
+        Global.flag(EVE_FIRSTTYPE2_FOCUS);
+        Global.flag(EVE_FIRSTTYPE_DONE);
+    }
+    
+    private void useSecondType1(){
+        Global.flag(EVE_SECONDTYPE1_FOCUS);
+        Global.flag(EVE_SECONDTYPE_DONE);
+    }
+    private void useSecondType2(){
+        Global.flag(EVE_SECONDTYPE1_FOCUS);
+        Global.flag(EVE_SECONDTYPE_DONE);
     }
     
 }

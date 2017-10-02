@@ -169,7 +169,7 @@ public class Invitation extends Skill {
     }
 
     public boolean hasDivinity() {
-        return getSelf().get(Attribute.Divinity) >= 25;
+        return getSelf().get(Attribute.Divinity) >= 25; //FIXME: Method is not properly descriptive to this Skill - it should be private as a helper. - DSM
     }
 
     @Override

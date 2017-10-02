@@ -28,9 +28,10 @@ public class Maya extends BasePersonality {
     
     public static final String MAYA_FIRSTTYPE1_FOCUS = "MayaFirst1Focus";
     public static final String MAYA_FIRSTTYPE2_FOCUS = "MayaFirst2Focus";
+    public static final String MAYA_FIRSTTYPE_DONE = "MayaFirstFocusDone";
     public static final String MAYA_SECONDTYPE1_FOCUS = "MayaSecond1Focus";
     public static final String MAYA_SECONDTYPE2_FOCUS = "MayaSecond2Focus";
-    
+    public static final String MAYA_SECONDTYPE_DONE = "MayaSecondFocusDone";
     
     public Maya(int playerLevel) {
         this(playerLevel, Optional.empty(), Optional.empty());
@@ -156,6 +157,23 @@ public class Maya extends BasePersonality {
             return "<i>\"Oh.. SHIT! Did I just actually... Fuck! Come here and let me return the favor, stud!\"</i>";
         });
 
+        
+        character.addLine(CharacterLine.LEVEL_DRAIN_LINER, (c, self, other) -> {
+            String part = Global.pickRandom(c.getStance().getPartsFor(c, self, other)).map(bp -> bp.describe(self)).orElse("pussy");
+            if (other.getLevel() < self.getLevel() - 5) {
+                return "\"<i>Oh yeah! I can feel it! Go ahead and cum, stud! Cuuummmmmm!</i>\" "
+                                + "{self:SUBJECT} closes her eyes while giving you a hard squeeze with {self:possessive} " + part + " - setting you off. You feel the desperate and alarming sensation of your strength entering {self:possessive} as you hopelessly climax beneath {self:possessive}. "
+                                + "You attempt to move away, but {self:subject} holds you down effortlessly while riding you - they are definitely more powerful than you, now. You can't escape even if you tried. "
+                                + "\"<i>Oh, no {other:NAME}, you're not going anywhere! Taking your power, strength, and even memories while you cum yourself into weakness <b>really</b> scratches my itch...I think I understand why succubi enjoy themselves so much! Want give me more?</i>\"";
+            } else if (other.getLevel() >= self.getLevel()) {
+                return "{self:SUBJECT}'s eyes narrow while savoring the feeling of robbing you of your hard-earned power into {self:possessive} " + part + " as you hopelessly cum. "
+                                + "<i>\"Ohhhh~ I'm not sure how you got stronger than me in the first place, {other:boy}, but feel free to try again - sucking it out of you feels <b>really</b> good.\"</i>";
+            } else {
+                return "\"<i>Ha ha ha! You know, what, {other:NAME}? I don't know why you thought you'd take on a graduate, but I can't help but enjoy keeping you in your place.</i>\"";
+            }
+        });
+
+        
         character.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> {
             return "<i>\"Aaaand there we are. Think you can go again?\"</i>";
         });
@@ -444,7 +462,7 @@ public class Maya extends BasePersonality {
      * */
     private void addFirstFocusScene(){
         character.addCombatScene(new CombatScene(
-                        (c, self, other) -> self.getLevel() >= 40 && !Global.checkFlag(MAYA_FIRSTTYPE1_FOCUS) && !Global.checkFlag(MAYA_FIRSTTYPE2_FOCUS),
+                        (c, self, other) -> self.getLevel() >= 40 && !Global.checkFlag(MAYA_FIRSTTYPE1_FOCUS) && !Global.checkFlag(MAYA_FIRSTTYPE2_FOCUS) && !Global.checkFlag(MAYA_FIRSTTYPE_DONE),
                         (c, self, other) -> Global.format(
                                         "[Placeholder] You see {self:name} in some sort of setup scenario. She asks you a question relevant to her advancement."
                                         + "\n\n \"<i>You know what? I was thinking - Now that I'm playing again, I could focus on THIS or THAT. What do you think?</i>\"",
@@ -484,7 +502,7 @@ public class Maya extends BasePersonality {
      * */
     private void addSecondFocusScene(){
         character.addCombatScene(new CombatScene(
-                        (c, self, other) -> self.getLevel() >= 50 && !Global.checkFlag(MAYA_FIRSTTYPE1_FOCUS) && !Global.checkFlag(MAYA_FIRSTTYPE2_FOCUS),
+                        (c, self, other) -> self.getLevel() >= 50 && !Global.checkFlag(MAYA_SECONDTYPE1_FOCUS) && !Global.checkFlag(MAYA_SECONDTYPE2_FOCUS) && Global.checkFlag(MAYA_FIRSTTYPE_DONE) && !Global.checkFlag(MAYA_SECONDTYPE_DONE),
                         (c, self, other) -> Global.format(
                                         "[Placeholder] You see {self:name} consider how strong the competition is now. She wonders if she should really cut loose and go full power, but how?",
                                         self, other),
@@ -510,21 +528,26 @@ public class Maya extends BasePersonality {
                                             useSecondType2();
                                             character.getGrowth().extraAttributes += 1;
                                             Global.getPlayer().getGrowth().addTraitPoints(new int[] {21, 48}, Global.getPlayer());
+                                            
                                             return true;
                                         }))));
     }
     
     private void useFirstType1(){
-        
+        Global.flag(MAYA_FIRSTTYPE1_FOCUS);
+        Global.flag(MAYA_FIRSTTYPE_DONE);
     }
     private void useFirstType2(){
-        
+        Global.flag(MAYA_FIRSTTYPE2_FOCUS);
+        Global.flag(MAYA_FIRSTTYPE_DONE);
     }
     
     private void useSecondType1(){
-        
+        Global.flag(MAYA_SECONDTYPE1_FOCUS);
+        Global.flag(MAYA_SECONDTYPE_DONE);
     }
     private void useSecondType2(){
-        
+        Global.flag(MAYA_SECONDTYPE1_FOCUS);
+        Global.flag(MAYA_SECONDTYPE_DONE);
     }
 }

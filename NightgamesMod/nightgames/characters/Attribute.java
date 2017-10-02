@@ -45,14 +45,14 @@ public enum Attribute {
     }
 
     public static boolean isBasic(Character self, Attribute a) {
-        return a == Power || a == Seduction || a == Perception || (self != null && self.has(Trait.nymphomania) && a == Attribute.Nymphomania);
+        return a == Power || a == Seduction || a == Perception || (self != null && self.has(Trait.nymphomania) && a == Attribute.Nymphomania); // Why is Nymphomania here? - DSM
     }
 
     public static boolean isTrainable(Character self, Attribute a) {
         if (a == Willpower) {
-            return self.getWillpower().max() + 2 <= self.getMaxWillpowerPossible();
+            return self.getWillpower().max() + 4 <= self.getMaxWillpowerPossible(); //TODO: Increase Willpower gain for selecting it over the other stats.
         }
-        return a != Speed && a != Perception && (self.has(Trait.divinity) || a != Divinity);
+        return a != Speed && a != Perception && (self.has(Trait.divinity) || a != Divinity);    //FIXME: Why are preception and divinity special? - DSM
     }
 
     public String getLowerPhrase() {

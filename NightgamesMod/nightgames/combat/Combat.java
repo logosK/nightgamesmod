@@ -80,6 +80,7 @@ import nightgames.status.Compulsive;
 import nightgames.status.Compulsive.Situation;
 import nightgames.status.CounterStatus;
 import nightgames.status.DivineCharge;
+import nightgames.status.EnemyButtslutTrainingStatus;
 import nightgames.status.Enthralled;
 import nightgames.status.Falling;
 import nightgames.status.Flatfooted;
@@ -117,6 +118,8 @@ public class Combat extends Observable implements Cloneable {
         FINISHED_SCENE,
         ENDED,
     }
+    
+    //TODO: Convert as much of this data as possible to CombatData - DSm
     public Character p1;
     public Character p2;
     public List<PetCharacter> otherCombatants;
@@ -139,6 +142,8 @@ public class Combat extends Observable implements Cloneable {
     private boolean wroteMessage;
     private boolean cloned;
     private List<CombatListener> listeners;
+    
+    private CombatData m_Data;
     
     String imagePath = "";
 
@@ -176,7 +181,7 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
     public static HashMap<String, HashMap<String, List<Integer>>> getResultTracker() {
         return resultTracker;
     }
-
+    
     public Combat(Character p1, Character p2, Area loc) {
         this.p1 = p1;
         combatantData = new HashMap<>();
@@ -697,7 +702,6 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
     private static final List<CombatPhase> SKIPPABLE_PHASES = 
                     Arrays.asList(
                     CombatPhase.PET_ACTIONS,
-                    CombatPhase.DETERMINE_SKILL_ORDER,
                     CombatPhase.P1_ACT_FIRST,
                     CombatPhase.P1_ACT_SECOND,
                     CombatPhase.P2_ACT_FIRST,
@@ -706,7 +710,6 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
     private static final List<CombatPhase> FAST_COMBAT_SKIPPABLE_PHASES = 
                     Arrays.asList(
                     CombatPhase.PET_ACTIONS,
-                    CombatPhase.DETERMINE_SKILL_ORDER,
                     CombatPhase.P1_ACT_FIRST,
                     CombatPhase.P1_ACT_SECOND,
                     CombatPhase.P2_ACT_FIRST,
@@ -887,6 +890,8 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
     private boolean paused;
     private boolean processedEnding;
 
+    
+    //FIXME: Worship skills may not be properly changing stance - resulting in the worshipped character orgasming and triggering orgasm effectgs as if the player was still inserted. - DSM 
     public Optional<Skill> getRandomWorshipSkill(Character self, Character other) {
         List<Skill> avail = new ArrayList<Skill>(WORSHIP_SKILLS);
         if (other.has(Trait.piety)) {
@@ -1069,7 +1074,7 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
         Addiction add = other.getAddiction(AddictionType.DOMINANCE).orElse(null);       //FIXME: Causes trigger even though addiction has 0 magnitude.
         if (add != null && add.atLeast(Severity.MED) && !add.wasCausedBy(self)) {
             write(self, Global.format("{self:name} does {self:possessive} best to be dominant, but with the "
-                        + "way "+ add.getCause().getName() + " has been working {other:direct-object} over {other:pronoun-action:are} completely desensitized." , self, other));
+                        + "way "+ add.getCause().getName() + " has been working {self:direct-object} over {self:pronoun-action:are} completely desensitized." , self, other));
             return;
         }
 
@@ -1299,7 +1304,7 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
         }
         wroteMessage = true;
     }
-
+    
     public String getMessage() {
         return message;
     }
@@ -1714,6 +1719,9 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
         offerImage(stance.image(), "");
     }
 
+    /**Checks if the opponent has breeder - currently presumes Kat is the only character with it and outputs text. 
+     * 
+     * FIXME: this is currently hardcoded and needs to be moved elsewhere. The text and activation for this trait needs to be sent into the traint itself.*/
     private void checkBreeder(Character checked, boolean voluntary) {
         Character opp = getStance().getPartner(this, checked);
         if (checked.checkAddiction(AddictionType.BREEDER, opp) && getStance().inserted(checked)) {
@@ -1872,7 +1880,11 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
         listeners.add(listener);
     }
     
-    /**Collects any substances gained in this victory into an empty bottle.*/
+    
+    /**Collects any substances gained in this victory into an empty bottle.
+     * 
+     * TODO: Mark this for combat rebuild - this goes to one of the final phases on combat end. 
+     * */
     public void doBottleCollection(Character victor, Character loser){
         
         if (loser.hasDick() && victor.has(Trait.succubus)) {
@@ -1959,5 +1971,63 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
         }
         return false;
     }
+       
+    /*COMBAT REWRITE METHODS======================================================================================================================*/
     
+    /**WIP Proceeds to the combat scene given based on p. This allows an observer to jump into a given Combat's current phase.
+     * TODO: hook this one once combat phases are done.
+     * */
+    public void gotoPhase(CombatPhase p) {
+        if (p == CombatPhase.START) {
+            
+        } else if (p == CombatPhase.PRETURN) {
+            
+        } else if (p == CombatPhase.SKILL_SELECTION) {
+            
+        } else if (p == CombatPhase.PET_ACTIONS) {
+            
+        } else if (p == CombatPhase.DETERMINE_SKILL_ORDER) {
+            
+        } else if (p == CombatPhase.P1_ACT_FIRST) {
+            
+        } else if (p == CombatPhase.P2_ACT_FIRST) {
+            
+        } else if (p == CombatPhase.P1_ACT_SECOND) {
+            
+        } else if (p == CombatPhase.P2_ACT_SECOND) {
+            
+        } else if (p == CombatPhase.UPKEEP) {
+            
+        } else if (p == CombatPhase.LEVEL_DRAIN) {
+            
+        } else if (p == CombatPhase.RESULTS_SCENE) {
+            
+        } else if (p == CombatPhase.FINISHED_SCENE) {
+            
+        } else if (p == CombatPhase.ENDED) {   
+            
+        } else {
+            
+        }
+    }
+    
+    /**WIP - starts this combat.*/
+    public void startCombat(nightgames.characters.Character P1, nightgames.characters.Character P2){
+        
+    }
+    
+    /**WIP - Ticks this combat, triggering all necessary updates internally. */
+    public void tickCombat(){
+        
+    }
+    
+    /**WIP - Progressings this combat's phases at this level.*/
+    public void progressCombat(){
+        
+    }
+    /**WIP - ends this combat, resolving and cleaning it up.*/
+    public void endCombat(){
+        
+    }
+
 }

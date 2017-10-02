@@ -131,7 +131,7 @@ public class Mara extends BasePersonality {
             } else {
                 return "\"<i>You know {other:NAME}, I don't know why I bothered working so hard before. "
                                 + "Training, studying, preparing took so much time! It's so much <b>easier</b> to just take it from you! "
-                                + "And now that I'm stronger than you, you can't say no anymore can you?</i>\"";
+                                + "And now that I'm stronger than you, you can't say no anymore, can you?</i>\"";
             }
         });
 

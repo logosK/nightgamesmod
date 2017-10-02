@@ -1072,7 +1072,6 @@ public class GUI extends JFrame implements Observer {
                             "<font face='Georgia' color='white' size='" + fontsize + "'>" + text + "</font><br/>",
                             0, 0, null);
         } catch (BadLocationException | IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

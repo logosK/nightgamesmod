@@ -282,13 +282,13 @@ public class Angel extends BasePersonality {
         character.addLine(CharacterLine.LEVEL_DRAIN_LINER, (c, self, other) -> {
             if (other.getLevel() < self.getLevel() - 5) {
                 return "{self:SUBJECT} gives you an intense kiss as the familiar feeling of your strength flowing into her rips through your body, "
-                                + "\"<i>Mmmm... Honestly I don't need any more of your power. I'm already quite a bit stronger than you now, you know? "
-                                + "But that look on your face as you realize your hard work and training amounts to nothing... I can't get enough of that.</i>\"";
+                                + "\"<i>Mmmm... Honestly? I don't need any more of your power. I'm already quite a bit stronger than you now, you know? "
+                                + "But...that look on your face as you realize your hard work and training amounts to nothing...? I can't get enough of that.</i>\"";
             } else if (other.getLevel() >= self.getLevel()) {
-                return "{self:SUBJECT} leans over your shoulder and purrs into your ear as the strength leaves your body, \"<i>Thank you for the donation. But you wont stop now right?</i>\"";
+                return "{self:SUBJECT} leans over your shoulder and purrs into your ear as the strength leaves your body, \"<i>Thank you for the donation. But you wont stop now, right?</i>\"";
             } else {
                 return "Angel finally seems to have caught up to you in strength. That's... not good. The divine seductress rocks her hips once more experimentally, "
-                                + "and shows you a satisfied smile as you uncontrollably let out a final splurt of cum.";
+                                + "and shows you a satisfied smile as you uncontrollably let out a final splurt of cum. \"<i>Good. Now, give me even more.</i>\"";
             }
         });
 

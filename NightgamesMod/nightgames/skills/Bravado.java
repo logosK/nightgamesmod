@@ -34,9 +34,9 @@ public class Bravado extends Skill {
     public boolean resolve(Combat c, Character target) {
         int x = cost;
         writeOutput(c, Result.normal, target);
-        getSelf().calm(c, 20 + x / 2);
-        getSelf().heal(c, x);
-        getSelf().restoreWillpower(c, 2 + x / 10);
+        getSelf().calm(c, 20 + x / 2);                  //TODO: Consider Buffing this. Also Parenthesize it properly.
+        getSelf().heal(c, x);                           //TODO: Consider nerfing this part. 
+        getSelf().restoreWillpower(c, 2 + x / 10);      //TODO: Buff this. Also Parenthesize it properly.
         getSelf().emote(Emotion.confident, 30);
         getSelf().emote(Emotion.dominant, 20);
         getSelf().emote(Emotion.nervous, -20);

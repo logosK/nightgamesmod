@@ -399,7 +399,7 @@ public class Jewel extends BasePersonality {
             } else {
                 return "Jewel rocks her powerful hips on top of you as you cum your soul out into her " + part + ". "
                                 + "When you finally collapse exhausted, the toned girl declares <i>\"And now we're even. Or maybe I'm a bit stronger? Who knows. "
-                                + "Even though I'm no longer the underdog, I still wont be showing you any mercy.\"</i>";
+                                + "Even though I'm no longer the underdog, I still won't be showing you any mercy.\"</i>";
             }
         });
 

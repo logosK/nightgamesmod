@@ -35,8 +35,8 @@ public class Sacrifice extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         writeOutput(c, Result.normal, target);
-        getSelf().pain(c, getSelf(), getSelf().getStamina().max() / 3);
-        getSelf().calm(c, getSelf().getArousal().max() / 3 + 20 + getSelf().get(Attribute.Dark));
+        getSelf().pain(c, getSelf(), getSelf().getStamina().max() / 3);                                   //Maso will have this backfire! LOL! -DSM
+        getSelf().calm(c, (getSelf().getArousal().max() / 3) + 20 + (2 * getSelf().get(Attribute.Dark)));       //Clarified Order of Operations, added 2* dark - DSM
         return true;
     }
 

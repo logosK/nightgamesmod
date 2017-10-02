@@ -68,7 +68,7 @@ public class Parasited extends Status {
             if (stage < 3) {
                 stage = 3;
                 Global.gui().message(c, other,
-                                Global.format("Suddenly, {self:pronoun-action:hear|hears} a disembodied but familiar voice. \"Testing... testing... Good, looks like it worked.\"",
+                                Global.format("Suddenly, {self:pronoun-action:hear|hears} a disembodied but familiar voice. \"Testing... testing... Good, looks like it worked.\"",     //TODO: Change these? Seems like Mara's. - DSM
                                 affected, other));
                 Global.gui().message(c, affected,
                                 Global.format("{self:SUBJECT}... {self:action:seem|seems} to be hearing {other:name-possessive} voice inside {self:possessive} head. That's not good.",

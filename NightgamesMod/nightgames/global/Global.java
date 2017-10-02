@@ -892,6 +892,9 @@ public class Global {
         return results;
     }
 
+    /**Sets up a match by assigning the player lineup.
+     * 
+     * FIXME: Also includes code that checks for Maya and adds her. This should be extracted out into some kind of event. - DSM*/
     public static void setUpMatch(Modifier matchmod) {
         assert day == null;
         Set<Character> lineup = new HashSet<>(debugChars);
@@ -923,6 +926,7 @@ public class Global {
             lineup.add(lover);
         }
         lineup.add(human);
+        //TODO: This really should be taken out of this in favor of something that processes extra events of this kind. - DSM
         if (matchmod.name().equals("maya")) {
             if (!checkFlag(Flag.Maya)) {
                 newChallenger(new Maya(human.getLevel()));
@@ -1025,7 +1029,10 @@ public class Global {
         return getNPCByType(type);
     }
 
-    /**Builds the main map of the game. This method also draws the map. */
+    /**Builds the main map of the game. This method also draws the map. 
+     * 
+     * TODO: This should be extracted out into a proper class and ADT that handles maps so they can be loaded independantly. This shouldn't be in Global. -DSM 
+     * */
     public static HashMap<String, Area> buildMap() {
         Area quad = new Area("Quad",
                         "You are in the <b>Quad</b> that sits in the center of the Dorm, the Dining Hall, the Engineering Building, and the Liberal Arts Building. There's "
