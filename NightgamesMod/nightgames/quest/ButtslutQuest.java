@@ -76,6 +76,7 @@ public class ButtslutQuest extends Quest {
         if (!(defeated instanceof NPC)) {throw new RuntimeException("Player-only loss event called for non-player fighting player");}
         Personality opponent = ((NPC)defeated).ai;
         int opponentIndex = Arrays.asList(WHICH_CHARACTER).indexOf(opponent.getClass());
+        if(opponentIndex==-1) {return;}//TODO (Maya)
         super.pointTo(Global.getPlayer(), opponentIndex);
         Global.getPlayer().mod(WHICH_ATTR[opponentIndex], 1);
         Global.gui().displayStatus();

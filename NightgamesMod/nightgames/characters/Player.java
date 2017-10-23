@@ -748,6 +748,9 @@ public class Player extends Character {
     @Override
     public boolean add(Trait t) {
         if (t==Trait.nymphomania) {mod(Attribute.Nymphomania, 1);}
+       /* if (t==Trait.comfortInAddiction1 || t==Trait.comfortInAddiction2 || t==Trait.comfortInAddiction3 || t==Trait.comfortInAddiction4 || t==Trait.comfortInAddiction5) {
+            mod()
+        }*/
         return super.add(t);
     }
 

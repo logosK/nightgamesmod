@@ -749,6 +749,40 @@
 		</Requirements>
 	</Trait>
 	<Trait>
+		<Name>comfortInAddiction1</Name>
+		<Requirements>
+				<LevelReq>2</LevelReq>
+		</Requirements>
+	</Trait>
+	<Trait>
+		<Name>comfortInAddiction2</Name>
+		<Requirements>
+				<TraitReq>comfortInAddiction1</TraitReq>
+				<LevelReq>12</LevelReq>
+		</Requirements>
+	</Trait>
+	<Trait>
+		<Name>comfortInAddiction3</Name>
+		<Requirements>
+				<TraitReq>comfortInAddiction2</TraitReq>
+				<LevelReq>22</LevelReq>
+		</Requirements>
+	</Trait>
+	<Trait>
+		<Name>comfortInAddiction4</Name>
+		<Requirements>
+				<TraitReq>comfortInAddiction3</TraitReq>
+				<LevelReq>32</LevelReq>
+		</Requirements>
+	</Trait>
+	<Trait>
+		<Name>comfortInAddiction5</Name>
+		<Requirements>
+				<TraitReq>comfortInAddiction4</TraitReq>
+				<LevelReq>42</LevelReq>
+		</Requirements>
+	</Trait>
+	<Trait>
 		<Name>cautious</Name>
 		<Requirements>
 			<AttributeReq type="Cunning">10</AttributeReq>

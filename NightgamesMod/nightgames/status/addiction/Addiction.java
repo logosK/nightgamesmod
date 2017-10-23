@@ -165,7 +165,13 @@ public abstract class Addiction extends Status {
     public Optional<Status> startNight() {
         if (!didDaytime || overloading) {
             if (!overloading) {
-                float amount = Global.randomfloat() / 4.f;
+                float reductionfactor=4.f;
+                if(affected.has(Trait.comfortInAddiction1)) reductionfactor+=2;
+                if(affected.has(Trait.comfortInAddiction2)) reductionfactor+=3;
+                if(affected.has(Trait.comfortInAddiction3)) reductionfactor+=4;
+                if(affected.has(Trait.comfortInAddiction4)) reductionfactor+=5;
+                if(affected.has(Trait.comfortInAddiction5)) reductionfactor+=6;
+                float amount = Global.randomfloat() / reductionfactor;
                 if (Global.isDebugOn(DebugFlags.DEBUG_ADDICTION)) {
                     System.out.println("Alleviating addiction " + this.getType() + " by " + amount);
                 }

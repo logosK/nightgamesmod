@@ -235,8 +235,14 @@ public enum Trait {
     limbTraining4("Hands&Feet Training 4", "Excellent hands and feet control."),
     limbTraining5("Hands&Feet Training 5", "Perfected hands and feet control."),
     limbTraining6("Hands&Feet Training 6", "Godly hands and feet control."),
-
-
+    
+    // other multilevel
+    comfortInAddiction1("Comfort In Addiction 1", "Being addicted increases willpower and arousal resistance, but slows addiction loss and gaining addiction significantly tempts."),
+    comfortInAddiction2("Comfort In Addiction 2", "Being addicted increases willpower and arousal resistance, but slows addiction loss and gaining addiction significantly tempts."),
+    comfortInAddiction3("Comfort In Addiction 3", "Being addicted increases willpower and arousal resistance, but slows addiction loss and gaining addiction significantly tempts."),
+    comfortInAddiction4("Comfort In Addiction 4", "Being addicted increases willpower and arousal resistance, but slows addiction loss and gaining addiction significantly tempts."),
+    comfortInAddiction5("Comfort In Addiction 5", "Being addicted increases willpower and arousal resistance, but slows addiction loss and gaining addiction significantly tempts."),
+    
     // resistances
     freeSpirit("Free Spirit", "Better at escaping pins and resisting mind control"),
     Slippery("Slippery", "Hard to hold onto"),

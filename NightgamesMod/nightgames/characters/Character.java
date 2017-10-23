@@ -973,6 +973,14 @@ public abstract class Character extends Observable implements Cloneable {
         if (has(Trait.desensitized2)) {
             bonus -= i / 2;
         }
+        
+        if (has(Trait.comfortInAddiction1)) {
+            bonus -= i/30.;
+            if (has(Trait.comfortInAddiction2)) bonus-=i/30.;
+            if (has(Trait.comfortInAddiction3)) bonus-=i/30.;
+            if (has(Trait.comfortInAddiction4)) bonus-=i/30.;
+            if (has(Trait.comfortInAddiction5)) bonus-=i/30.;
+        }
 
         String bonusString = "";
         if (bonus > 0) {
@@ -1605,6 +1613,16 @@ public abstract class Character extends Observable implements Cloneable {
                 buildMojo(c, -1);
             }
         }
+        if (has(Trait.comfortInAddiction1)) {
+            float totalAddiction=getAddictions().stream().map(ad->ad.getMagnitude()).reduce(0.f,(i,j)->i+j);
+            int level=1;
+            if(has(Trait.comfortInAddiction2)) level++;
+            if(has(Trait.comfortInAddiction3)) level++;
+            if(has(Trait.comfortInAddiction4)) level++;
+            if(has(Trait.comfortInAddiction5)) level++;
+            this.restoreWillpower(c, (int)(level*totalAddiction/10.));
+        }
+
     }
 
     public void preturnUpkeep() {
@@ -4618,6 +4636,15 @@ public abstract class Character extends Observable implements Cloneable {
             addNonCombat(addict);
             addict.describeInitial();
         }
+        if(this.has(Trait.comfortInAddiction1)) {
+            int level=1;
+            if(has(Trait.comfortInAddiction2)) level++;
+            if(has(Trait.comfortInAddiction3)) level++;
+            if(has(Trait.comfortInAddiction4)) level++;
+            if(has(Trait.comfortInAddiction5)) level++;
+            this.temptNoSkillNoSource(c, cause, (int)(mag*30*level));
+            c.write(cause, Global.format("{self:SUBJECT-ACTION:feel|feels} aroused by the thought of {self:possessive} addiction increasing. +<font color='rgb(240,100,100, arg1)'>"+(int)(mag*30*level)+"<font color='white'>\n lust", this, cause));
+        }
     }
 
     /**The reverse of Character.addict(). this alleviates the addiction by type.
@@ -4695,6 +4722,15 @@ public abstract class Character extends Observable implements Cloneable {
             Addiction addict = type.build(this, cause, Addiction.LOW_THRESHOLD);
             addict.aggravateCombat(c, mag);
             add(c, addict);
+        }
+        if(this.has(Trait.comfortInAddiction1)) {
+            int level=1;
+            if(has(Trait.comfortInAddiction2)) level++;
+            if(has(Trait.comfortInAddiction3)) level++;
+            if(has(Trait.comfortInAddiction4)) level++;
+            if(has(Trait.comfortInAddiction5)) level++;
+            this.temptNoSkillNoSource(c, cause, (int)(mag*30*level));
+            c.write(cause, Global.format("{self:SUBJECT-ACTION:feel|feels} aroused by the thought of {self:possessive} addiction increasing. +<font color='rgb(240,100,100, arg1)'>"+(int)(mag*30*level)+"<font color='white'>\n lust", this, cause));
         }
     }
 
