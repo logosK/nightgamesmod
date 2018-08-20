@@ -143,6 +143,34 @@ public enum Item implements Loot {
                     new AddTraitEffect("drink", "throw", Trait.addictivefluids),
                     new AddTraitEffect("drink", "throw", Trait.succubus),
                     new PartModEffect("drink", "throw", "pussy", DemonicMod.INSTANCE, 15),
+                    new BodyModEffect("drink", "throw", EarPart.pointed, BodyModEffect.Effect.replace),
+                    new BodyModEffect("drink", "throw", WingsPart.demonic, BodyModEffect.Effect.replace),
+                    new BodyModEffect("drink", "throw", TailPart.demonic, BodyModEffect.Effect.replace),
+                    new BodyModEffect("drink", "throw", BreastsPart.dd, BodyModEffect.Effect.growplus)),
+                    RequirementShortcuts.rev(RequirementShortcuts.noTrait(Trait.succubus)),
+                    15),
+    IncubusDraft("Incubus Draft", 600, "Temporarily turn into a incubus", "a ",
+                    Arrays.asList((ItemEffect) new BuffEffect("drink", "throw",
+                                    new Abuff(Global.noneCharacter(), Attribute.Dark, 10, 15)),
+                    new BuffEffect("drink", "throw", new Abuff(Global.noneCharacter(), Attribute.Seduction, 5, 15)),
+                    new AddTraitEffect("drink", "throw", Trait.addictivefluids),
+                    new AddTraitEffect("drink", "throw", Trait.incubus),
+                    new PartModEffect("drink", "throw", "cock", DemonicMod.INSTANCE, 15),
+                    //TODO: Grow a cock if you don't already have one.
+                    new BodyModEffect("drink", "throw", EarPart.pointed, BodyModEffect.Effect.replace),
+                    new BodyModEffect("drink", "throw", WingsPart.demonic, BodyModEffect.Effect.replace),
+                    new BodyModEffect("drink", "throw", TailPart.demonic, BodyModEffect.Effect.replace)
+                    //new BodyModEffect("drink", "throw", BreastsPart.dd, BodyModEffect.Effect.growplus)
+                    ),
+                    RequirementShortcuts.rev(RequirementShortcuts.noTrait(Trait.succubus)),
+                    15),
+    OmnibusDraft("Omnibus Draft", 1300, "Temporarily turn into a demonic omnibus", "a ",
+                    Arrays.asList((ItemEffect) new BuffEffect("drink", "throw",
+                                    new Abuff(Global.noneCharacter(), Attribute.Dark, 10, 15)),
+                    new BuffEffect("drink", "throw", new Abuff(Global.noneCharacter(), Attribute.Seduction, 5, 15)),
+                    new AddTraitEffect("drink", "throw", Trait.addictivefluids),
+                    new AddTraitEffect("drink", "throw", Trait.succubus),
+                    new PartModEffect("drink", "throw", "pussy", DemonicMod.INSTANCE, 15),
                     new PartModEffect("drink", "throw", "cock", CockMod.incubus, 15),
                     new BodyModEffect("drink", "throw", EarPart.pointed, BodyModEffect.Effect.replace),
                     new BodyModEffect("drink", "throw", WingsPart.demonic, BodyModEffect.Effect.replace),
@@ -276,10 +304,36 @@ public enum Item implements Loot {
         owner.gain(this);
     }
 
+    /**Constructor for any given Item.
+     * @param name
+     * The name of the Item
+     * @param price 
+     * The price of the item in the shop.
+     * @param desc
+     * A short text description of the item.
+     * @param prefix
+     * describes the item in a singular fashion; Ex: "A Bottle of"
+     * */
     private Item(String name, int price, String desc, String prefix) {
         this(name, price, desc, prefix, Collections.singleton(new ItemEffect()), RequirementShortcuts.none(), 0);
     }
 
+    /**Constructor for any given Item.
+     * @param name
+     * The name of the Item
+     * @param price 
+     * The price of the item in the shop.
+     * @param desc
+     * A short text description of the item.
+     * @param prefix
+     * describes the item in a singular fashion; Ex: "A Bottle of"
+     * @param effect
+     * A collection of ItemEffects. 
+     * @param req
+     * A requirement for this item
+     * @param duration
+     * The duration of the item's effects.
+     * */
     private Item(String name, int price, String desc, String prefix, Collection<ItemEffect> effect, Requirement req, int duration) {
         this.name = name;
         this.price = price;

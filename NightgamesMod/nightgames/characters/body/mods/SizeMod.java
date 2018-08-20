@@ -14,6 +14,8 @@ import nightgames.characters.body.GenericBodyPart;
 import nightgames.global.Global;
 
 public class SizeMod extends PartMod {
+    
+    //FIXME: Why are cocks not treated the same way as boobs?! - DSM
     public static int COCK_SIZE_TINY = 3;
     public static int COCK_SIZE_SMALL = 4;
     public static int COCK_SIZE_LITTLE = 5;
@@ -22,6 +24,9 @@ public class SizeMod extends PartMod {
     public static int COCK_SIZE_BIG = 8;
     public static int COCK_SIZE_HUGE = 9;
     public static int COCK_SIZE_MASSIVE = 10;
+    public static int COCK_SIZE_COLOSSAL = 11;
+    public static int COCK_SIZE_MAMMOTH = 12;
+    
     private static final Map<Integer, String> COCK_SIZE_DESCRIPTIONS = new HashMap<>(); 
     static {
         COCK_SIZE_DESCRIPTIONS.put(COCK_SIZE_TINY, "tiny ");
@@ -32,6 +37,8 @@ public class SizeMod extends PartMod {
         COCK_SIZE_DESCRIPTIONS.put(COCK_SIZE_BIG, "huge ");
         COCK_SIZE_DESCRIPTIONS.put(COCK_SIZE_HUGE, "gigantic ");
         COCK_SIZE_DESCRIPTIONS.put(COCK_SIZE_MASSIVE, "massive ");
+        COCK_SIZE_DESCRIPTIONS.put(COCK_SIZE_COLOSSAL, "colossal ");
+        COCK_SIZE_DESCRIPTIONS.put(COCK_SIZE_MAMMOTH, "mammoth ");
     }
     public static int ASS_SIZE_SMALL = 0;
     public static int ASS_SIZE_NORMAL = 1;
@@ -63,6 +70,8 @@ public class SizeMod extends PartMod {
         BREAST_SIZE_CUPS.put(7, "F Cup");
         BREAST_SIZE_CUPS.put(8, "G Cup");
         BREAST_SIZE_CUPS.put(9, "H Cup");
+        BREAST_SIZE_CUPS.put(10, "I Cup");
+        BREAST_SIZE_CUPS.put(11, "J Cup");
         BREAST_SIZE_DESCRIPTIONS.put(0, "flat");
         BREAST_SIZE_DESCRIPTIONS.put(1, "tiny");
         BREAST_SIZE_DESCRIPTIONS.put(2, "smallish");
@@ -73,6 +82,8 @@ public class SizeMod extends PartMod {
         BREAST_SIZE_DESCRIPTIONS.put(7, "glorious");
         BREAST_SIZE_DESCRIPTIONS.put(8, "massive");
         BREAST_SIZE_DESCRIPTIONS.put(9, "colossal");
+        BREAST_SIZE_DESCRIPTIONS.put(10, "mammoth");
+        BREAST_SIZE_DESCRIPTIONS.put(11, "godly");
     }
 
     @Override
@@ -150,9 +161,9 @@ public class SizeMod extends PartMod {
     public static int getMaximumSize(String type) {
         switch (type) {
             case "breasts":
-                return 9;
+                return 11;
             case "cock":
-                return COCK_SIZE_MASSIVE;
+                return COCK_SIZE_MAMMOTH;
             case "ass":
                 return ASS_SIZE_HUGE;
         }

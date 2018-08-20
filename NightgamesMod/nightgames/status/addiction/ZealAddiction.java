@@ -132,16 +132,16 @@ public class ZealAddiction extends Addiction {
             case HIGH:
                 return "<b>Your mind is completely preoccupied by " + cause.getName() + ". You didn't worship today!"
                                 + " Will " + cause.pronoun() + " be angry? What will you do if " + cause.pronoun()     //TODO: cause.DiectObject() =  Will "her" be angry?
-                                + " is? You aren't going to be able to focus on much else tonight.</b>";
+                                + " is? You aren't going to be able to focus on much else tonight.</b><br/>";
             case MED:
                 return "<b>You are terribly nervous at the thought of having to face " + cause.getName()
                 + " tonight after failing to pray to " + cause.directObject() + " today. The rampaging"
-                + " thoughts are throwing you off your game.</b>";
+                + " thoughts are throwing you off your game.</b><br/";
             case LOW:
                 return "<b>You didn't pay your respects to " + cause.getName() + " today... Is that bad? Or isn't it?"
-                                + " You are confused, and will have less mojo tonight.</b>";
+                                + " You are confused, and will have less mojo tonight.</b><br/";
             case NONE:
-                throw new IllegalStateException("Tried to describe withdrawal for an inactive zeal addiction.");
+                throw new IllegalStateException("Tried to describe withdrawal for an inactive zeal addiction.<br/");
             default:
                 return ""; // hide
         }

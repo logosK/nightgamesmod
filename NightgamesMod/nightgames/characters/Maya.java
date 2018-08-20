@@ -141,11 +141,28 @@ public class Maya extends BasePersonality {
         character.addLine(CharacterLine.TAUNT_LINER, (c, self, other) -> {
             return "Maya gives you a look of gentle disapproval. <i>\"You aren't putting up much of a fight, are you? Aren't you a little overeager to cum?\"</i>";
         });
-        character.addLine(CharacterLine.NIGHT_LINER, (c, self, other) -> {
+        character.addLine(CharacterLine.NIGHT_LINER, (c, self, other) -> {  
             //TODO: Maya might someday be able to play regularly, so this line will need multiple versions once that happens. For now, she plays monthly and is out of the player's league as an alumni. - DSM
+            int x = 1;
+            //IF Maya is actually a regular character now.
+            if (x == 0) {
+                //If the player is functionally male
+                if (other.hasDick() == true && other.hasPussy() == false) {
+                    return "[PLACEHOLDER] Maya approaches you after the games and gives you a passionate kiss while groping your dick. You make out for a bit before she straightens herself out and leaves.";
+                //If the player is functionally female
+                } else if (other.hasDick() == false && other.hasPussy() == true) {
+                    return "[PLACEHOLDER] Maya approaches you after the games and gives you a passionate kiss while groping your tits. You make out for a bit before she straightens herself out and leaves.";
+                //Whatever.
+                } else {
+                     return "[PLACEHOLDER] Maya approaches you after the games and gives you a passionate kiss. You make out for a bit before she straightens herself out and leaves.";
+                }
+            } else {
+                
             return "Maya approaches you after the night is over and puts her hand on your shoulder to get your attention. She sighs in a satisfied manner and gives you a subtle smile and a farewell. "
                             + "\"<i>Well, I'll see you next month. You're doing okay. Keep it up.</i>\" Maya fixes her glasses and puts out her hand for a handshake. You awkwardly shake her hand and she departs. "
                             + "You're left wondering what the hell that was about.";
+            }
+      
         });
 
         character.addLine(CharacterLine.TEMPT_LINER, (c, self, other) -> {
@@ -214,6 +231,14 @@ public class Maya extends BasePersonality {
                 return "Maya stiffens up in rapture as bits and pieces of your soul break off from you and are absorbed by her demonic " + part + " "
                                 + "\"<i>Ohhh-yeah, {other:name}, that's good. Shakes the rust right off. Want to do that again, stud?</i>\"";
             }
+        });
+        
+        character.addLine(CharacterLine.VICTORY_LINER, (c, self, other) -> {
+            return "Maya straightens herself out after hearing she's won and quietly says, <i>\"That was great. I should do this more.\"</i>";
+        });
+        
+        character.addLine(CharacterLine.LOSER_LINER, (c, self, other) -> {
+            return "Maya takes the news that she lost calmly and quietly says, <i>\"Well...next time.\"</i>";
         });
         
     }

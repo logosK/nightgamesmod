@@ -37,6 +37,7 @@ public class Drain extends Skill {
         return drainsAttributes(c) ? 30 : 0;
     }
 
+    /**returns true if this character's mojo is above 30.*/
     private boolean drainsAttributes(Combat c) {
         return getSelf().getMojo().get() >= 30;
     }
@@ -99,6 +100,14 @@ public class Drain extends Skill {
                 target.drain(c, getSelf(), (int) getSelf().modifyDamage(DamageType.drain, target, staminaStrength));
                 target.drainMojo(c, getSelf(), target.getMojo().get());
                 target.temptNoSource(c, getSelf(), 20, this);
+                break;
+            case 7:
+                //Dark Case
+                break;
+                
+            case 8:
+                //Divinity Case
+                
                 break;
             default:
                 break;

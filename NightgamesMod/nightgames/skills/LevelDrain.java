@@ -29,8 +29,11 @@ public class LevelDrain extends Drain {
 
     @Override
     public boolean usable(Combat c, Character target) {
-        return getSelf().canAct() && c.getStance().canthrust(c, getSelf()) && c.getStance().havingSexNoStrapped(c)
-                        && getSelf().getLevel() < 100 && getSelf().getLevel() < target.getLevel();
+        return getSelf().canAct() 
+                        && c.getStance().canthrust(c, getSelf()) 
+                        && c.getStance().havingSexNoStrapped(c)
+                        && target.getLevel() > 1
+                        && getSelf().getLevel() < target.getLevel();
     }
 
     @Override
@@ -44,7 +47,7 @@ public class LevelDrain extends Drain {
     }
 
     private int stealXP(Combat c, Character target) {
-        int xpStolen = target.getXP();
+        int xpStolen = target.getXP();      //Gets the target's current xp - this doesn't really reward the move.
         if (xpStolen <= 0) {
             return 0;
         }

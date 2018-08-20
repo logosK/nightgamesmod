@@ -80,7 +80,11 @@ public class PartFucked extends Status implements InsertedStatus {
     }
 
     public void onRemove(Combat c, Character other) {
-        c.write(other, Global.format("{other:NAME-POSSESSIVE} slick %s slips out of {self:direct-object} with an audible pop.", affected, other, penetrator.describe(other)));
+        if (c != null) {
+            c.write(other, Global.format("{other:NAME-POSSESSIVE} slick %s slips out of {self:direct-object} with an audible pop.", affected, other, penetrator.describe(other)));
+        } else {
+            System.out.println("ERROR: Combat c in PartFucked.onremove() is NULL.");
+        }
     }
 
     @Override

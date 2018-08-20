@@ -470,6 +470,16 @@ public class NPC extends Character {
     public String temptLiner(Combat c, Character target) {
         return getRandomLineFor(CharacterLine.TEMPT_LINER, c, target);
     }
+    
+    @Override 
+    public String victoryLiner(Combat c, Character target) {
+        return getRandomLineFor(CharacterLine.VICTORY_LINER, c, target);
+    }
+    
+    @Override 
+    public String loserLiner(Combat c, Character target) {
+        return getRandomLineFor(CharacterLine.LOSER_LINER, c, target);
+    }
 
     @Override
     public void detect() {

@@ -22,8 +22,16 @@ public class PartSucked extends Status implements InsertedStatus {
         target = targetType;
         this.penetrated = penetrated;
         this.other = other;
+        /*It's clear the way we control combat and scenes needs work. 
+         * This is the third thing that cropped up after a combat ends and we still are holding information we need in an object that gest garbaged.
+         * 
+         * Addictions, temporary parts, and multiple parts (like Mara's robot arms and Airi's tentacles) are all responsible. 
+         * */
         requirements.add((c, self, opponent) -> {
-            if (c==null || c.getStance()==null || c.getStance().distance() > 1) {
+	    if (c==null || c.getStance()==null) {
+                System.out.println("ERROR: c in PartSucked() constructor is null!"); 
+            }
+            if (c.getStance().distance() > 1) {
                 return false;
             }
             return false;
@@ -79,7 +87,11 @@ public class PartSucked extends Status implements InsertedStatus {
     }
 
     public void onRemove(Combat c, Character other) {
-        c.write(other, Global.format("{other:NAME-POSSESSIVE} slick %s falls off {self:direct-object} with an audible pop.", affected, other, penetrated.describe(other)));
+        if (c != null) {
+            c.write(other, Global.format("{other:NAME-POSSESSIVE} slick %s falls off {self:direct-object} with an audible pop.", affected, other, penetrated.describe(other)));
+        } else {
+            System.out.println("ERROR: combat c in PartSUcked.onRemove() is null."); 
+        }
     }
 
     @Override

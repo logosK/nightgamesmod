@@ -17,16 +17,23 @@ import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.AddictionType;
 
 public class BreastsPart extends GenericBodyPart {
+    
+    //FIXME: Why are breasts the only part that are set up like this? - DSM
+    //TODO: Copy this to Cocks or create some unifying structure to manage this mess.
     public static BreastsPart flat = (BreastsPart) new BreastsPart().applyMod(new SizeMod(0));
     public static BreastsPart a = (BreastsPart) new BreastsPart().applyMod(new SizeMod(1));
     public static BreastsPart b = (BreastsPart) new BreastsPart().applyMod(new SizeMod(2));
     public static BreastsPart c = (BreastsPart) new BreastsPart().applyMod(new SizeMod(3));
     public static BreastsPart d = (BreastsPart) new BreastsPart().applyMod(new SizeMod(4));
-    public static BreastsPart dd = (BreastsPart) new BreastsPart().applyMod(new SizeMod(4));
-    public static BreastsPart f = (BreastsPart) new BreastsPart().applyMod(new SizeMod(5));
-    public static BreastsPart g = (BreastsPart) new BreastsPart().applyMod(new SizeMod(6));
-    public static BreastsPart h = (BreastsPart) new BreastsPart().applyMod(new SizeMod(7));
-
+    public static BreastsPart dd = (BreastsPart) new BreastsPart().applyMod(new SizeMod(5));
+    public static BreastsPart e = (BreastsPart) new BreastsPart().applyMod(new SizeMod(6));
+    public static BreastsPart f = (BreastsPart) new BreastsPart().applyMod(new SizeMod(7));
+    public static BreastsPart g = (BreastsPart) new BreastsPart().applyMod(new SizeMod(8));
+    public static BreastsPart h = (BreastsPart) new BreastsPart().applyMod(new SizeMod(9));
+    
+    public static BreastsPart i = (BreastsPart) new BreastsPart().applyMod(new SizeMod(10));
+    public static BreastsPart j = (BreastsPart) new BreastsPart().applyMod(new SizeMod(11));
+    
     private double bonusSensitivity = 0;
 
     public static BreastsPart generateGeneric() {

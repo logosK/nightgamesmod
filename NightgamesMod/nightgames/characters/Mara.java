@@ -149,6 +149,15 @@ public class Mara extends BasePersonality {
                                 + "younger than {self:pronoun} actually is, and {self:pronoun} wears a near constant playful smile. {self:PRONOUN}'s far from physically intimidating, but {self:possessive} sharp eyes reveal {self:possessive} exceptional intellect.";
             }
         });
+        
+        character.addLine(CharacterLine.VICTORY_LINER, (c, self, other) -> {
+            return "{self:SUBJECT} shouts in triumph, <i>\"Ha-haaa! Science wins AGAIN!!\"</i>";
+        });
+        
+        character.addLine(CharacterLine.LOSER_LINER, (c, self, other) -> {
+            return "{self:SUBJECT} mutters, <i>\"Crap...Need to make adjustments...\"</i>";
+        });
+        
     }
 
     @Override

@@ -161,6 +161,16 @@ public class Cassie extends BasePersonality {
                                 + "Don't worry, I'll be sure to pay you back now that I've become stronger than you. I'll make you feel <b>incredible</b>!\"</i>";
             }
         });
+        
+        
+        character.addLine(CharacterLine.VICTORY_LINER, (c, self, other) -> {
+            return "{self:SUBJECT} shouts in triumph, <i>\"I did it! I won!\"</i>";
+        });
+        
+        character.addLine(CharacterLine.LOSER_LINER, (c, self, other) -> {
+            return "{self:SUBJECT} looks a bit heartbroken as she says, <i>\"Not even one point...?\"</i>";
+        });
+        
     }
 
     @Override

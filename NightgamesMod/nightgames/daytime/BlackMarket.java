@@ -22,6 +22,8 @@ public class BlackMarket extends Store {
         add(Item.FemDraft);
         add(Item.TinyDraft);
         add(Item.SuccubusDraft);
+        add(Item.IncubusDraft);
+        add(Item.OmnibusDraft);
         add(Item.TentacleTonic);
         add(Item.BewitchingDraught);
         add(Item.JuggernautJuice);

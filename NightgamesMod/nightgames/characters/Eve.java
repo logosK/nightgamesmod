@@ -32,7 +32,7 @@ public class Eve extends BasePersonality {
     public static final String EVE_FIRSTTYPE_DONE = "EveFirstFocusDone";
     public static final String EVE_SECONDTYPE1_FOCUS = "EveSecond1Focus";
     public static final String EVE_SECONDTYPE2_FOCUS = "EveSecond2Focus";
-    public static final String EVE_SECONDTYPE_DONE = "EveFirstFocusDone";
+    public static final String EVE_SECONDTYPE_DONE = "EveSecondFocusDone";
     
     public Eve() {
         this(Optional.empty(), Optional.empty());
@@ -188,9 +188,28 @@ public class Eve extends BasePersonality {
         });
 
         character.addLine(CharacterLine.NIGHT_LINER, (c, self, other) -> {
-            return "";
+            //If the player is functionally male
+            if (other.hasDick() == true && other.hasPussy() == false) {
+                return "[PLACEHOLDER] Eve grabs your ass as you are leaving the match before pressing herself into you from behind. <br/><br/>"
+                                + "<i>\"Hey! Let's go, my young ass-slut, COME ON! We're not done, yet! I'm still wound up and I don't end MY night until I pass out cumming. Don't you worry, "
+                                + "The Benefactor makes sure we can't get badly hurt, so let's have some fucking FUN!\"</i><br/><br/>"
+                                + "You spend the night having wild sex with Eve assaulting you cock without mercy - the rough sex with Eve is a bit overwhelming, but something about the blissed-out look on her face is really hot. After the rough fucking, you feel a physical sensation of relief wash over you as your bruises and scratches heal - apparently she's right.<br/>";
+            //If the player is functionally female
+            } else if (other.hasDick() == false && other.hasPussy() == true) {
+                return "[PLACEHOLDER] Eve grabs your ass as you are leaving the match before pressing herself into you from behind. <br/><br/>"
+                                + "<i>\"Hey! Let's go, my young ass-slut, COME ON! We're not done, yet! I'm still wound up and I don't end MY night until I pass out cumming. Don't you worry, "
+                                + "The Benefactor makes sure we can't get badly hurt, so let's have some fucking FUN!\"</i><br/><br/>"
+                                + "You spend the night having wild sex with Eve topping you without mercy - it's rough, but you feel a physical sensation of relief wash over you as your bruises and scratches heal - apparently she's right.<br/>";
+            //Whatever.
+            } else {
+                 return "[PLACEHOLDER] Eve grabs your ass as you are leaving the match before pressing herself into you from behind.<br/><br/>"
+                            + "<i>\"Hey! Let's go, my young ass-slut, COME ON! We're not done, yet! I'm still wound up and I don't end MY night until I pass out cumming. Don't you worry, "
+                            + "The Benefactor makes sure we can't get badly hurt, so let's have some fucking FUN!\"</i><br/><br/>"
+                            + "You spend the night having wild sex with Eve assaulting your ass without mercy. The entire time, she's very into it - her face is fixed in carnal bliss as she moans and sighs without restraint. It's rough, but by the end of the ordeal you feel a physical sensation of relief wash over you as your bruises and scratches heal - apparently she's right.<br/>";
+            }
             
-            //<i>\"Heeeey! Let's go, my young ass-slut, COME ON! The Benefactor makes sure we can't get badly hurt, so let's have some fucking FUN tonight! I'm still wound up and I don't end my night until I pass out cumming.\"</i>" 
+            
+   
         });
 
         character.addLine(CharacterLine.ORGASM_LINER, (c, self, other) -> {
@@ -235,6 +254,15 @@ public class Eve extends BasePersonality {
             return "If there's one word to describe Eve's appearance, it would have to be 'wild'. Her face is quite pretty, though her eyes are an unnerving silver color. "
                             + "She has bright purple hair gathered in a messy ponytail, a variety of tattoos decorating her extremely shapely body, and of course it's "
                             + "impossible to miss the larger than average cock and balls hanging between between her legs.";
+        });
+        
+        
+        character.addLine(CharacterLine.VICTORY_LINER, (c, self, other) -> {
+            return "Realzing she's won the night, Eve shouts in victory, <i>\"Hah! See? Your asses are ALL mine!\"</i>";
+        });
+        
+        character.addLine(CharacterLine.LOSER_LINER, (c, self, other) -> {
+            return "Eve doesn't bother seeing her lousy results and says, <i>\"Whatever, later.\"</i>";
         });
     }
 

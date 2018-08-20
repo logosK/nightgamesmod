@@ -79,13 +79,13 @@ public class MindControl extends Addiction {
     protected String describeWithdrawal() {
         switch (getSeverity()) {
             case HIGH:
-                return "<b>You are now constantly fighting your own body to keep from doing " + cause.getName() + "'s will.</b>";
+                return "<b>You are now constantly fighting your own body to keep from doing " + cause.getName() + "'s will.</b><br/>";
             case LOW:
                 return "<b>Your body tries to steer you towards " + cause.getName() + " all the time, and it's taking"
-                        + " serious effort to resist.</b>";
+                        + " serious effort to resist.</b><br/>";
             case MED:
                 return "<b>Keeping your body in line and away from " + cause.getName() + " is getting really difficult, now,"
-                        + " and it's a severe strain on your stamina.</b>";
+                        + " and it's a severe strain on your stamina.</b><br/>";
             case NONE:
             default:
                 return "";

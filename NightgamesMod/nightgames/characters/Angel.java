@@ -228,7 +228,7 @@ public class Angel extends BasePersonality {
             }
         }
     }
-    
+
     private void constructLines() {
         character.addLine(CharacterLine.BB_LINER, (c, self, other) -> "Angel seems to enjoy your anguish in a way that makes you more than a little nervous. <i>\"That's a great look for you, I'd like to see it more often.\"</i>");
         character.addLine(CharacterLine.NAKED_LINER, (c, self, other) -> "Angel gives you a haughty look, practically showing off her body. <i>\"I can't blame you for wanting to see me naked, everyone does.\"</i>");
@@ -271,6 +271,18 @@ public class Angel extends BasePersonality {
                 default:
                     return Global.pickRandom(Arrays.asList(finalLines)).get();
             }});
+        
+        /*  //If Angel is a Corrupted demigoddess  
+             if (character.has(Trait.demigoddess) && character.isDemonic()) {
+          
+             //if Angel is a demigoddess
+            } else if (other.getLevel() >= self.getLevel()) {
+            
+            //When she's not any of those
+             } else {
+             
+             }
+         */
         character.addLine(CharacterLine.NIGHT_LINER, (c, self, other) -> "As you start to head back after the match, Angel grabs your hand and drags you in the other direction. <i>\"You're officially kidnapped, because I haven't had "
                         + "enough sex yet tonight.\"</i> That makes sense... kinda? You did just finish three hours of intense sex-fighting. If she wants too much more than that, you're "
                         + "both going to end up pretty sleep deprived. Angel looks like she's struggling to put her thoughts into words. <i>\"I had enough sex in general, but I want some "
@@ -308,6 +320,29 @@ public class Angel extends BasePersonality {
                                 + "her, but you don't know it yet.";
             }
         });
+        
+            
+        //This is an example of a new kind of Line - a Line to be said if this character wins the entire night. 
+        character.addLine(CharacterLine.VICTORY_LINER, (c, self, other) -> {
+            if (character.has(Trait.demigoddess) && character.isDemonic()) {
+                return "[PLACEHOLDER] Angel (Corrupted Goddess) says, \"</i>That's right! Everyone on their knees!\"</i>";
+            } else if (character.has(Trait.demigoddess)) {
+                return "[PLACEHOLDER] Angel (Goddess) says, \"</i>How's that for some good religion? I could go for some more.\"</i>";
+            } else {
+                return "[PLACEHOLDER] Angel says, \"</i>MMm! That was nice. I could go for some more.\"</i>";
+            }
+        });
+        
+          //This is an example of a new kind of Line - a Line to be said if this character gets 0 victories. 
+        character.addLine(CharacterLine.LOSER_LINER, (c, self, other) -> {
+            if (character.has(Trait.demigoddess) && character.isDemonic()) {
+                return "[PLACEHOLDER] Angel (Corrupted Goddess) says, \"</i>Wow...I didn't win ANYTHING?\"</i>";
+            } else if (character.has(Trait.demigoddess)) {
+                return "[PLACEHOLDER] Angel (Goddess) says, \"</i>Wow...I didn't win ANYTHING?\"</i>";
+            } else {
+                return "[PLACEHOLDER] Angel says, \"</i>Wow...I didn't win ANYTHING?\"</i>";
+            }
+        });
     }
 
     @Override
@@ -331,7 +366,6 @@ public class Angel extends BasePersonality {
                             + "she could have been disappointed with that performance.  You can only gape as you look up to see Angel is gone along with your clothes. You sigh as you "
                             + "stand and ready yourself to move on. You wouldn't put past Angel to tell her girlfriends regardless of how well you performed, you just hope that's as "
                             + "far as that information goes.";
-            //if(Global.checkFlag(Flag.Buttslutification) && opponent.get(Attribute.Submissive) > 0) {opponent.add(c, new EnemyButtslutTrainingStatus(opponent));}
         } else if (c.getStance().anallyPenetrated(c, opponent) && (opponent.hasStatus(Stsflag.buttsluttraining) || Global.getButtslutQuest().isPresent())) {
          // This is supposed to be a mini-quest where the girls try to train you into a buttslut and you try to resist them. Every time you gain a level of the buttslut training status, you get
          // 1 point in submissive, and every time you win by fucking one of them who is training you in the pussy from a dominant position, you gain a point of power (Jewel), cunning (Mara), 
@@ -339,7 +373,10 @@ public class Angel extends BasePersonality {
          // your ass the next time you see a cock. Being fucked in the ass by anyone also slowly increases you progress, and it slowly decreases over time.
          // If you are trained to max sluttiness in any attribute (more are planned) then you get the trained slut trait, which causes any of your trainings being activated to convert some of your
          // stats into submissive.
-            dominance+=1;
+           
+            //TODO: Move this into its own method to save space? - DSM
+            
+            dominance += 1;
             String cockdesc = (character.hasDick() ? character.body.getRandomCock().describe(character) : "strapon");
             EnemyButtslutTrainingStatus.getThisTypeForPlayer().reactivate();
             if(!opponent.has(Trait.buttslut) || Global.random(Global.getButtslutQuest().get().getPointsForOfType(opponent, 9))<5) {
@@ -376,8 +413,8 @@ public class Angel extends BasePersonality {
                                 + "person who likes giving my friends what they want- and what you want is someone to fill that cute ass, and Mei and Caroline have decided they'd like to break you in- so "
                                 + "you're coming home with me tonight, kay? Caroline and Mei will take good care of you <i>all</i> night.\"";
             }
-        } else if (c.getStance().inserted(character) && (dominance < 10)) {
-            dominance+=1;
+        } else if (c.getStance().inserted(character) && character.getWillpower().percent() < 0.5) {
+            dominance += 1;
             message = "Angel stares you in the eye, while expertly thrusting in and out of your slobbering pussy. Your needy cunt quivers as she leans close and gives you a long steamy kiss, "
                             + "tongue and all. You try to get away from her, but she holds you down and merciless pounds away at your overused pussy. You can tell she is turned on as well, but "
                             + "it'll do you no good, as you're already feeling yourself slip over the edge. "
@@ -389,7 +426,7 @@ public class Angel extends BasePersonality {
                             + "<br/><br/>This could be a long night.";
         } else if (c.getStance().inserted(character) && character.getWillpower().percent()>=0.5 && dominance>=10) {
             dominance+=1;
-            mindominance=10;
+            minDominance=10;
             message = "Angel holds you in place with her hands on your breasts, rubbing the sides and pinching and flicking your nipples.  She's no longer holding you down and "
                             + "pounding your pussy mercilessly- she stopped doing that when you started moaning and grinding your hips back against her. Now she's lazily rocking "
                             + "back and forth, watching your response as she thrusts from different angles and with different speeds. She's clearly no longer rushing to make you "
@@ -475,7 +512,7 @@ public class Angel extends BasePersonality {
     public String defeat(Combat c, Result flag) {
         Character opponent = c.getOpponent(character);
         if (c.getStance().vaginallyPenetrated(c, character)) {
-            dominance=Math.max(dominance-1, mindominance);
+            dominance=Math.max(dominance-1, minDominance);
             return "You thrust your cock continously into Angel's dripping pussy. Her hot insides feel amazing, but you're sure you have enough of an advantage to risk "
                             + "it. She lets out breathy moans in time to your thrusts and her arms are trembling too much to hold herself up. She's clearly about to cum, you just "
                             + "need to push her over the edge. You maul her soft, heavy boobs and suck on her neck. Angel closes her eyes tightly and whimpers in pleasure. <br/><br/>You keep "
@@ -490,7 +527,7 @@ public class Angel extends BasePersonality {
                             + "I had a continuous orgasm for at least two minutes and that's way more exhausting. It's been a long time since anyone's made me do that.\"</i> Wait, what? You'd "
                             + "never have guessed that she came if she hadn't said anything. <i>\"Just because you managed to beat me this time doesn't mean you can suddenly start acting "
                             + "lazy. If you let your guard down, I'm going to turn you into my own personal toy.\"</i> At that, she walks away naked.";
-        } 
+        }
         if (opponent.hasDick()) {
             return "Angel trembles and moans as you guide her closer and closer to orgasm. You pump two fingers in and out of her pussy and lick her sensitive nether lips. "
                             + "Her swollen clit peeks out from under its hood and you pinch it gently between your teeth. Angel instantly screams in pleasure and arches her back. A "
@@ -693,7 +730,7 @@ public class Angel extends BasePersonality {
                             c.write("You tell Angel that her insatiable sex drive and amazing sex technique are both part of what makes her unique and amazing(ly attractive). "
                                             + "There are people out there with one or the other, but no one but Angel is as good at both. Angel grins and licks her lips"
                                             + "<i>\"From most people, that would sound like a pathetic wishy-washy non-answer, but the way you put that made it sound like "
-                                            + "a challenge. I'll take that challenge, but think you've just doomed yourself to being my sex toy\"</i>"
+                                            + "a challenge. I'll take that challenge, but think you've just doomed yourself to being my sex toy.\"</i>"
                                             + "<br/><br/>"
                                             + "Angel looks like she's found a whole new level of resolve- you suddenly realize that you've made a terrible mistake. You resolve to step up training yourself, if that's possible.");
                             useNymphomania();
@@ -780,6 +817,5 @@ public class Angel extends BasePersonality {
                             return true;
                         }))));
     }
-    
     
 }

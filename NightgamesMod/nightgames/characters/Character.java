@@ -20,13 +20,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.swing.plaf.basic.BasicTreeUI.TreeIncrementAction;
-
 import org.apache.commons.lang3.ObjectUtils;
+import javax.xml.stream.events.Characters;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -39,10 +38,8 @@ import nightgames.areas.Area;
 import nightgames.areas.NinjaStash;
 import nightgames.characters.body.Body;
 import nightgames.characters.body.BodyPart;
-import nightgames.characters.body.BreastsPart;
 import nightgames.characters.body.CockMod;
 import nightgames.characters.body.CockPart;
-import nightgames.characters.body.PussyPart;
 import nightgames.characters.body.TentaclePart;
 import nightgames.characters.body.ToysPart;
 import nightgames.characters.body.mods.DemonicMod;
@@ -65,12 +62,10 @@ import nightgames.json.JsonUtils;
 import nightgames.match.Encounter;
 import nightgames.match.Match;
 import nightgames.match.ftc.FTCMatch;
-import nightgames.nskills.tags.SkillTag;
 import nightgames.pet.CharacterPet;
 import nightgames.pet.PetCharacter;
-import nightgames.pet.arms.ArmType;
 import nightgames.pet.arms.ArmManager;
-import nightgames.skills.Command;
+import nightgames.pet.arms.ArmType;
 import nightgames.skills.AssFuck;
 import nightgames.skills.Nothing;
 import nightgames.skills.OrgasmicThrust;
@@ -87,17 +82,16 @@ import nightgames.status.BodyFetish;
 import nightgames.status.Disguised;
 import nightgames.status.DivineCharge;
 import nightgames.status.DivineRecoil;
+import nightgames.status.Drained;
 import nightgames.status.Enthralled;
 import nightgames.status.Falling;
 import nightgames.status.Feral;
 import nightgames.status.Frenzied;
-import nightgames.status.Horny;
 import nightgames.status.InsertedStatus;
 import nightgames.status.Masochistic;
 import nightgames.status.Resistance;
 import nightgames.status.Status;
 import nightgames.status.Stsflag;
-import nightgames.status.Trance;
 import nightgames.status.addiction.Addiction;
 import nightgames.status.addiction.Addiction.Severity;
 import nightgames.status.addiction.AddictionType;
@@ -838,6 +832,68 @@ public abstract class Character extends Observable implements Cloneable {
             }
             stamina.reduce(drained);
             drainer.stamina.restore(drained);
+        }
+    }
+    
+    /**Drains this character's given stat permenantly. Used by abilities that need to 
+     * bypass the Drained Status effect, because permenant drain doesn't require a debuff or a bufff.
+     * 
+     * TODO: Finish implementing this. 
+     * 
+     * @param c
+     * The combat that requires this method.
+     * 
+     * @param drainer
+     * the character that is performing the drain on this character.
+     * 
+     * @param i
+     * The base value to drain this character's drain.
+     * */
+    public void superdrain(Combat c, Character drainer, Attribute att, int value, int duration, boolean write) {
+        
+        Character drained = this;
+        
+        if (drainer.has(Trait.WillingSacrifice) && drained.is(Stsflag.charmed)) {
+            value *= 1.5;
+        }
+        if (drainer.has(Trait.Greedy)) {
+            duration *= 1.5;
+        }
+        
+       
+        int realValue = Math.min(drained.getPure(att) - (Attribute.isBasic(drained, att) ? 3 : 0), value);
+        int inverseVal = realValue - (realValue*2);
+        if (realValue > 0) {
+            Global.writeIfCombat(c, drainer, Global.format("{self:reflective}'s powerful drain permenantly takes a portion of {other:possessive}'s soul!"
+                            , drainer, drained, att.toString()));
+            //Do the actual stat transfer
+            drained.mod(att, inverseVal);
+            
+            drainer.mod(att, realValue);
+            
+            //drainer.add(c, new Drained(drainer, drained, att, realValue, duration));
+            //drained.add(c, new Drained(drained, drainer, att, -realValue, duration));
+
+            if (write) {
+                if (drainer.has(Trait.WillingSacrifice) && drained.is(Stsflag.charmed)) {
+                    Global.writeIfCombat(c, drainer, Global.format("With {other:name-possessive} mental defenses lowered as they are,"
+                                    + " {self:subject-action:are|is} able to draw in more of {other:possessive} %s than"
+                                    + " normal."
+                                    , drainer, drained, att.toString()));
+                }
+                if (drainer.has(Trait.RaptorMentis)) {
+                    Global.writeIfCombat(c, drainer, Global.format("Additionally, the draining leaves a profound emptiness in its"
+                                    + " wake, sapping {other:name-possessive} confidence.", drainer, drained));
+                }  
+                //Show results
+                
+            }
+            if (drainer.has(Trait.RaptorMentis)) {
+                drained.drainMojo(c, drainer, Math.max(5, realValue));
+            }
+        } else {
+            Global.writeIfCombat(c, drainer, Global.format("{self:subject-action:try} to drain {other:name-possessive} %s but {self:action:find} that there's nothing left to take.",
+                            drainer, drained, att.getDrainedDO()));
         }
     }
 
@@ -2180,11 +2236,9 @@ public abstract class Character extends Observable implements Cloneable {
             OrgasmicThrust thrustCopy = (OrgasmicThrust) THRUST_SKILL.copy(this);
             if (tightenCopy.usable(c, opponent)) {
                 tightenCopy.resolve(c, opponent);
-                System.out.println("lastStand triggered for "+this.getTrueName()+", tighten: "+tightenCopy.usable(c, opponent)+", thrust: "+thrustCopy.usable(c, opponent));
             }
             if (thrustCopy.usable(c, opponent)) {
                 thrustCopy.resolve(c, opponent);
-                System.out.println("lastStand triggered for "+this.getTrueName()+", tighten: "+tightenCopy.usable(c, opponent)+", thrust: "+thrustCopy.usable(c, opponent));
             }
         }
         if (this != opponent && times == totalTimes && canRespond()) {          //FIXME: Explicitly Parenthesize for clear order of operations. - DSM
@@ -2199,9 +2253,16 @@ public abstract class Character extends Observable implements Cloneable {
                 c.write(Global.format(
                                 "After {self:subject} comes down from {self:possessive} orgasmic high, {self:pronoun} doesn't look satisfied at all. There's a mad glint in {self:possessive} eye that seems to be endlessly asking for more.",
                                 this, opponent));
-            } //Nymphomania buffed, but doesn't work for orgasms with a dick unless penetrated, and makes it harder to struggle out of penetration. 
-            if(2.5*get(Attribute.Nymphomania) > get(Attribute.Animism) && !(lastOrgasmPart instanceof CockPart && !c.getStance().penetrated(c,this)) ) {restoreWillpower(c,5+get(Attribute.Nymphomania)/2);if(Global.isDebugOn(DebugFlags.DEBUG_DAMAGE)){System.out.println("Pure-nymphomania willpower recovery activated.");}}
-            else {restoreWillpower(c, 5 + Math.min((get(Attribute.Animism) + get(Attribute.Nymphomania)) / 5, (int)(0.7*(willloss+extra))));}
+            }
+            restoreWillpower(c, 5 + Math.min((get(Attribute.Animism) + get(Attribute.Nymphomania)) / 5, 15));
+        } 
+        //Nymphomania buffed, but doesn't work for orgasms with a dick unless penetrated, and makes it harder to struggle out of penetration. 
+        if(get(Attribute.Nymphomania) > 0 && 2.5*get(Attribute.Nymphomania) > get(Attribute.Animism)) {
+            if(!(lastOrgasmPart instanceof CockPart && !c.getStance().penetrated(c,this)) ) {
+                restoreWillpower(c,5+get(Attribute.Nymphomania)/2);
+            } else {
+                restoreWillpower(c, 5 + Math.min((get(Attribute.Animism) + get(Attribute.Nymphomania)) / 5, (int)(0.7*(willloss+extra))));
+            }
         }
 
         if (times == totalTimes) {
@@ -3972,6 +4033,16 @@ public abstract class Character extends Observable implements Cloneable {
         return getName();
     }
 
+    public String reflectivePronoun() {
+        String self = possessiveAdjective() + "self";
+        if (self.equals("hisself")) {
+            // goddammit english.
+            return "himself";
+        } else {
+            return self;
+        }
+    }
+
     public boolean clothingFuckable(BodyPart part) {
         if (part.isType("strapon")) {
             return true;
@@ -4780,5 +4851,13 @@ public abstract class Character extends Observable implements Cloneable {
     
     public BodyPart getLastOrgasmPart() {
         return lastOrgasmPart;
+    }
+
+    public String loserLiner(Combat c, Character target) {
+        return Global.format("{self:SUBJECT-ACTION:try} seems dissatisfied with losing so badly.", this, target);
+    }
+
+    public String victoryLiner(Combat c, Character target) {
+        return Global.format("{self:SUBJECT-ACTION:try} smiles in satisfaction with their victory.", this, target);
     }
 }

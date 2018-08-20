@@ -56,7 +56,11 @@ public class AngelTime extends BaseNPCTime {
             growCock.ingredients.put(Item.PriapusDraft, 3);
             growCock.addRequirement(RequirementShortcuts.rev(new NotRequirement(new BodyPartRequirement("cock"))), "Angel has no penis");
             growCock.option = "Angel: Grow a cock";
-            growCock.scene = "[Placeholder]<br/>Angel chugs down the three priapus drafts one after another and grows a splendid new blessed cock.";
+            growCock.scene = "[Placeholder] You hand Angel three Priapus Drafts and convince her to grow a cock.<br/><br/>"
+                            + "<i>\"Okay, well you've convinced me. Having a cock for a while should be interesting. Why not?\"</i><br/><br/>"
+                            + "Angel chugs each draft down, one after the next.<br/><br/>"
+                            + "After the third one goes down, you can see Angel visibly react as something begin to bluge out from behind her thong. Angel moves it out of the way before her new blessed cock grows out to its full size. She gives it a few nice rubs with a sigh.<br/><br/>"
+                            + "<i>\"Wow...when it feels like this, it's no wonder that guys get a feeling of power for having a big dick. Oh yeah...Hey, does this make you horny, too? I think I want to get to using this right away, so leave or assume some kind of position.\"</i><br/>";
             growCock.effect = (c, self, other) -> {
                 other.body.add(new CockPart().applyMod(new SizeMod(SizeMod.COCK_SIZE_BIG)).applyMod(CockMod.blessed));
                 return true;
@@ -68,7 +72,13 @@ public class AngelTime extends BaseNPCTime {
             removeCock.ingredients.put(Item.FemDraft, 3);
             removeCock.addRequirement(RequirementShortcuts.rev(new BodyPartRequirement("cock")), "Angel has a penis");
             removeCock.option = "Angel: Remove her cock";
-            removeCock.scene = "[Placeholder]<br/>Angel drinks the three femdrafts one after another and her blessed cock shrinks back into her normal clitoris.";
+            removeCock.scene = "[Placeholder]<br/>"
+                            + "You hand Angel three femdrafts and convince her to remove her cock.<br/><br/>"
+                            + "<i>\"Okay, sure. Whatever will get you having sex with me before one of us leaves. Here goes.\"</i><br/><br/>"
+                            + "Angel chugs each draft down, one after the next.<br/>"
+                            + "After the third one goes down, you can see Angel's bulge shrink until there's nothing left. Moving her thong out of the way, Angel shows your her blessed pussy before directing your eyes back up to her face.<br/> "
+                            + "<i>\"Okay, stud, nothing in the way, so get to the sex. Right now.\"</i><br/><br/>"
+                            + "The both of you make up for the loss with some sex. Exhausted with Angel's divine sexual endurance, you leave.<br/><br/>";
             removeCock.effect = (c, self, other) -> {
                 other.body.removeAll("cock");
                 return true;
@@ -82,7 +92,11 @@ public class AngelTime extends BaseNPCTime {
                 return self.get(Attribute.Divinity) >= 10;
             }, "At least 10 Divinity");
             blessedCock.option = "Blessed Cock";
-            blessedCock.scene = "[Placeholder]<br/>Angel performs a sacrament on your cock, imbuing it with holy powers.";
+            blessedCock.scene = "[Placeholder] You ask Angel if she could give your dick the same kind of powers that she has.<br/>"
+                            + "<i>\"Uhh...Sure, I guess? I mean, I can try. Sex might work. Special sex? Get on the bed.\"</i><br/>"
+                            + "You get on the bed before Angel stands over you, making somewhat dramatic motions with herself.<br/>"
+                            + "<i>\"With this fuck, my acolyte stud, your Goddess' pussy shall bless you with power!\"</i><br/>"
+                            + "<br/>She then sits down on you and rides you for a while - her eyes locked with yours while she performs a sacrament on your cock. When she's done (which takes a while), you can feel the new holy power of your cock...<br/>";
             transformationOptions.add(blessedCock);
         }
         {
@@ -92,8 +106,12 @@ public class AngelTime extends BaseNPCTime {
                 return self.get(Attribute.Divinity) >= 10;
             }, "At least 10 Divinity");
             divinePussy.option = "Divine Pussy";
-            divinePussy.scene =
-                            "[Placeholder]<br/>Angel performs a sacrament on your pussy, imbuing it with holy powers.";
+            divinePussy.scene = "[Placeholder] You ask Angel if she could bless your pussy with the same of powers that she has.<br/><br/>"
+                            + "<i>\"Uhh...Sure, I guess? I mean, I can try. Sex might work. Special sex? Get on the bed.\"</i><br/><br/>"
+                            + "You get on the bed before Angel crawls up to you and starts making out with you. Before long, you feel her divinity glow from her body and her own sex before she starts grinding it into yours."
+                            + "<br/>"
+                            + "<i>\"Oh yeah! Let your pussy be blessed with some of my power!\"</i><br/><br/>"
+                            + "<br/>Her eyes remain locked with yours during the divine sex session as she performs a sacrament on your pussy. When she's done (which takes a while), you can feel the new holy power of your pussy...<br/><br/>";
             transformationOptions.add(divinePussy);
         }
         {
@@ -103,8 +121,11 @@ public class AngelTime extends BaseNPCTime {
                 return self.get(Attribute.Divinity) >= 20;
             }, "At least 20 Divinity");
             sacredAss.option = "Sacred Ass";
-            sacredAss.scene =
-                            "[Placeholder]<br/>Angel blesses your ass, imbuing it with holy powers.";
+            sacredAss.scene = "[Placeholder] You ask Angel if she could bless your asshole with the same kind of powers as her's.<br/><br/>"
+                            + "<i>\"Uhh...Sure, I guess? I mean, I can try. Sex might work. Special sex? Get on the bed.\"</i><br/><br/>"
+                            + "You get on the bed before Angel crawls up to you and starts making out with you. Before long, you feel her divinity glow from her body and her own sex before she begins rubbing her holy sex, licking her own juices up before forcing her golden glowing tongue into your ass.<br/>"
+                            + "<i>\"MMM come ohnn! I bleth yurr ass! Cummm! Mmmnnnnth!\"</i><br/>"
+                            + "<br/>>Angel continues urging you to come from her perverted anal sacrament before following it up with more sex. When she's done (which takes a while), you can feel the new holy power of your ass...<br/><br/>";
             transformationOptions.add(sacredAss);
         }
         {
@@ -118,7 +139,12 @@ public class AngelTime extends BaseNPCTime {
                 return self.get(Attribute.Divinity) >= 10;
             }, "At least 10 Divinity");
             angelWings.option = "Angelic Wings";
-            angelWings.scene = "[Placeholder]<br/>Angel gives you white feathery wings on your back.";
+            angelWings.scene = "[Placeholder] You ask Angel if she could use her divinity to give you angelic wings.<br/><br/>"
+                            + "<i>\"Ohh, you want to be the first of my choir? I guess we could try to give you wings. Sex might work. Special sex. Get on the bed.\"</i><br/><br/>"
+                            + "You get on the bed before Angel crawls up to you and starts making out with you. Before long, you feel her divinity glow from her body. The golden glow radiates out from her while you have really passionate sex for a while, her hands rubbign and grasping your back for most of it while she concetrates as best as she can through the sex.<br/>"
+                            + "<i>\"Mmmmm! Come on! Wings! Aah!\"</i><br/><br/>"
+                            + "<br/>Angel eventually orgasms and her roaming hands shine brightly from behind your back. Your back feels the beyond-orgasmic sensation that her powers usually cause before your back feels like it's "
+                            + "swelling and bursting. As angel is squeezeing you in holy bliss, you feel some new weight on your body and back. You now have angelic wings! After some time, you depart from the sex session satisfied with the exchange.<br/><br/>";
             angelWings.effect = (c, self, other) -> {
                 self.body.addReplace(WingsPart.angelic, 1);
                 return true;
@@ -129,7 +155,15 @@ public class AngelTime extends BaseNPCTime {
             TransformationOption divinity = new TransformationOption();
             divinity.ingredients.put(Item.HolyWater, 1);
             divinity.option = "Bestow Divinity";
-            divinity.scene = "[Placeholder]<br/>Angel has sex with you, lending you a part of her divinity.";
+            divinity.scene = "[Placeholder] You ask Angel if she could bestow some of her divinity onto you. You wave a bottle of her holy juices as an offering?<br/><br/>"
+                            + "<i>\"Oh, ho! Jealous, are we? Do you want to become like me? Well, I only like sharing if there's sex. So we'll be using this.\"</i><br/><br/>"
+                            + "Angel takes the bottle and drinks it - her golden divine aura intensifying. She reveals her holy form to you, which seems almost overpowering. She takes your hand and pulls you towards the bed, her voice seems to match her Godddess-like countenence."
+                            + "<i>\"Come on. Let's practice some good religion.\"</i><br/><br/>"
+                            + "Her lavicious gaze and beautiful form invite you easily onto the bed, where you both have incredible sex. During this, you can feel the glowing power of her divinity reach into your soul, making you feel warm and wonderful. After a while, the sex session ends and you feel that the power has become part of you."
+                             + "<br/>Afterwards, Angel's hands are all over you, doting on you now that you have consummated her own divinity by allowing her to put a bit of it into you.<br/><br/>"
+                             + "<i>\"Use it well, lover. Just don't forget who YOUR goddess really is.\"</i><br/><br/>"
+                             + "Angel kisses you lovingly on the lips once more before you decide to leave, feeling a bit closer to the recently-minted Goddess.<br/><br/>"; 
+
             divinity.effect = (c, self, other) -> {
                 self.modAttributeDontSaveData(Attribute.Divinity, 1);
                 return true;

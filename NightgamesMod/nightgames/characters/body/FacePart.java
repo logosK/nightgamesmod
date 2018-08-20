@@ -5,6 +5,7 @@ import nightgames.global.Global;
 
 public class FacePart extends GenericBodyPart {
     private double femininity;
+    private double masculinity;
 
     /* femininity goes from [-5, 5] */
     public FacePart(double hotness, double femininity) {
@@ -16,6 +17,10 @@ public class FacePart extends GenericBodyPart {
         this(0, 0);
     }
 
+    /**Long description of the face, based upon Femininity, which is a single axis variable.  
+     *  
+     * TODO: Implement Masculinty and reimplement femininity to accomodate two-axis builds and behavior.
+     * */
     @Override
     public void describeLong(StringBuilder b, Character c) {
         String desc;
@@ -41,6 +46,10 @@ public class FacePart extends GenericBodyPart {
     @Override
     public double getFemininity(Character c) {
         return femininity;
+    }
+    @Override
+    public double getMasculinity(Character c) {
+        return this.masculinity;
     }
 
     @Override

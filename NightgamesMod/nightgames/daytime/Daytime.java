@@ -178,6 +178,9 @@ public class Daytime {
         if (Global.checkFlag(Flag.Maya)) {
             activities.add(new MayaTime(player));
         }
+        if (Global.checkFlag(Flag.Eve)) {
+            activities.add(new EveTime(player));
+        }
         if (Global.checkFlag(Flag.YuiLoyalty)) {
             activities.add(new YuiTime(player));
         }

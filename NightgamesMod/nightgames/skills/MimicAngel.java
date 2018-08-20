@@ -45,6 +45,7 @@ public class MimicAngel extends Skill {
             else 
                 printBlinded(c);
         }
+        //NOTE: Should Airi really mimic the traits of the other characters?
         if (getSelf().has(Trait.ImitatedStrength)) {
             getSelf().addTemporaryTrait(Trait.divinity, 10);
             if (getSelf().getLevel() >= 20) {

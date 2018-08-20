@@ -258,7 +258,13 @@ public class Match {
         output.append(Global.capitalizeFirstLetter(winner.subject()))
               .append(" won the match, earning an additional $")
               .append(winner.prize() * 5)
-              .append("");
+              .append("<br/>");
+              if (winner.human() == false) {
+                  output.append(winner.victoryLiner(null, null)+"<br/>");
+              } else {
+                  
+              }
+        
     }
 
     protected int calculateReward(Character combatant, StringBuilder output) {
@@ -300,7 +306,7 @@ public class Match {
         }
         Global.gui()
               .clearText();
-        StringBuilder sb = new StringBuilder("Tonight's match is over.<br/>");
+        StringBuilder sb = new StringBuilder("Tonight's match is over.<br/><br/>");
         Optional<Character> winner = decideWinner();
         Player player = Global.getPlayer();
 
@@ -312,6 +318,11 @@ public class Match {
             combatant.modMoney(score.get(combatant) * combatant.prize());
             combatant.modMoney(calculateReward(combatant, sb));
 
+            //TODO: If they got 0 points, play their loser liner
+            if (score.get(combatant) == 0 && combatant.human() == false) {
+                sb.append(combatant.loserLiner(null, null) + "<br/>");
+            }
+            
             combatant.challenges.clear();
             combatant.state = State.ready;
             condition.undoItems(combatant);

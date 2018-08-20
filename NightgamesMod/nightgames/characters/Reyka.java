@@ -116,6 +116,7 @@ public class Reyka extends BasePersonality {
         character.getGrowth().addTrait(55, Trait.desensitized2);
         character.getGrowth().addTrait(58, Trait.carnalvirtuoso);
 
+        character.getGrowth().addTrait(80, Trait.archSuccubus);
         
         this.addFirstFocusScene();      
         this.addSecondFocusScene();     
@@ -308,6 +309,16 @@ public class Reyka extends BasePersonality {
                 return "Reyka gives off a rapturous air as bits and pieces of your soul is absorbed by her demonic " + part + "  <i>\"Mmmm that is <b>good</b>! This is usually the part where I turn on my summoner and do my demon thing, but I think I'll make an exception this time... for now.\"</i>";
             }
         });
+        
+        //To be said when this character wins the entire night.
+        character.addLine(CharacterLine.VICTORY_LINER, (c, self, other) -> {
+            return "{self:SUBJECT} smiles in satisfaction and says nothing, folding her arms while her tail swishes around. She seems pleased with the outcome.";
+        });
+        //To be said when they earn 0 points.
+        character.addLine(CharacterLine.LOSER_LINER, (c, self, other) -> {
+            return "{self:SUBJECT} mutters, <i>\"Well, that's a little boring...\"</i>";
+        });
+        
     }
 
     @Override

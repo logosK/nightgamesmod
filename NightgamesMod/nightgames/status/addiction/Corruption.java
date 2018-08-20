@@ -263,13 +263,13 @@ public class Corruption extends Addiction {
         switch (getSeverity()) {
             case HIGH:
                 return "<b>" + cause.getName() + "'s corruption is working hard to punish you "
-                                + "for not feeding it today, and it will cause all kinds of trouble tonight.</b>";
+                                + "for not feeding it today, and it will cause all kinds of trouble tonight.</b><br/";
             case LOW:
                 return "<b>Something is not quite right. The blackness " + cause.getName()
-                                + " put in you is stirring, causing all kinds of strange sensations. Perhaps it's hungry?</b>";
+                                + " put in you is stirring, causing all kinds of strange sensations. Perhaps it's hungry?</b><br/";
             case MED:
                 return "<b>The powerful corruption within {self:name-do} is rebelling"
-                                + " against not being fed today. Expect the unexpected tonight.</b>";
+                                + " against not being fed today. Expect the unexpected tonight.</b><br/";
             case NONE:
             default:
                 return "";

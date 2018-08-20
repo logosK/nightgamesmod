@@ -22,7 +22,7 @@ public abstract class Postmatch implements Scene {
     
     protected final void run() {
         runInternal();
-        Global.endNight();
+        Global.endNight();          //NOTE: This file is extended by a default, which is confusing and located elsewhere in the project. When someone wants to work on the the normal postMatch, they should be in this file. - DSM
     }
     
 }

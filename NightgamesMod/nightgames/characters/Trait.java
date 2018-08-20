@@ -508,13 +508,19 @@ public enum Trait {
 
     // Reyka Draining Focus
     Greedy("Greedy", "Attribute draining lasts 50% longer"),
-    RaptorMentis("Raptor Mentis", "Attribute draining effects also drain Willpower"),
+    RaptorMentis("Raptor Mentis", "Attribute draining effects also drain Mojo"),
     BottomlessPit("Bottomless Pit", "Enhances draining by demonic genitalia"),
     SpecificSapping("Specific Sapping", "Draining effects make escape more difficult for 1 turn"),
     WillingSacrifice("Willing Sacrifice", "Draining is stronger while Charmed"),
     
     stronghold("Strong Hold", "Harder to escape Arm/Leg Locks"),
 
+    //Experimental - Reyka
+    archSuccubus("ArchSuccubus", "Attribute draining is permenant"),
+    
+    //Experimenal - Angel
+    divineAssumption("Divine Assumption", "Coital orgasm Permenantly Increases Divinity."),
+    
     // Item
     strapped("Strapped", "Penis envy", (b, c, t) -> {
         if (c.human()) {

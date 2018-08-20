@@ -418,7 +418,7 @@ public class GenericBodyPart implements BodyPart {
     
     @Override
     public double getFetishEffectiveness() {
-        return sensitivity==0?0.25:1.0;
+        return sensitivity==0?0.25:1.0;             //This Syntactic Sugar needs to be made clear through documentation. - DSM
     }
     
     @Override

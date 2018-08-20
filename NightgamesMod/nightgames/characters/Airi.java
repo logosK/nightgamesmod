@@ -101,8 +101,19 @@ public class Airi extends BasePersonality {
             }
         });
         character.addLine(CharacterLine.MAKE_ORGASM_LINER, (c, self, other) -> self.has(Trait.slime) ? "<i>\"...Feels good..? I'll suck more out... I'll milk you dry...\"</i>" : "<i>\"Hyaa! Oh please warn me next time...\"</i>");
-        character.addLine(CharacterLine.NIGHT_LINER, (c, self, other) -> "You walk back to your dorm after the match, and decide to take a shower after all that exertion. Who knew sex fighting a bunch of girls would be so exhausting? You strip off your shirt and boxers and head straight into the bathroom. As you flip on the lights, you notice that the tub seems already filled with water. Just as you wonder if you forgot to drain the tub from last night, the liquid in the tub quivers and… stands up. "
-                        + "<br/><br/>It’s Airi. What’s she doing here? You ask her how did get in, since you were sure the door was locked. <i>Followed you… flowed under door… No problem…</i> Well, that explains it. Noticing the time, you let her know that you really need to take your shower now and head to bed or you won’t make it tomorrow for your morning classes. Airi looks at you for a second and nods. <i>Un… will help you clean…</i> Wait what? Oh n-! Airi pulls you into the tub with her gooey appendages and submerges you inside her body. <i>Relax… I’ll clean you up… Inside and out…</i>");
+        
+        character.addLine(CharacterLine.NIGHT_LINER, (c, self, other) -> "You walk back to your dorm after the match, and decide to take a shower after all that exertion. Who knew sex fighting a bunch of girls "
+                        + "would be so exhausting? You strip off your shirt and boxers and head straight into the bathroom. As you flip on the lights, you notice that the tub seems already filled with water. "
+                        + "Just as you wonder if you forgot to drain the tub from last night, the liquid in the tub quivers and… stands up. "
+                        + "<br/>"
+                        + "It’s Airi. What’s she doing here? You ask her how did get in, since you were sure the door was locked. <br/><br/>"
+                        + "<i>Followed you… flowed under door… No problem…</i><br/> "
+                        + "Well, that explains it. Noticing the time, you let her know that you really need to take your shower now and head to bed or you won’t "
+                        + "make it tomorrow for your morning classes. Airi looks at you for a second and nods.<br/><br/>"
+                        + "<i>Un… will help you clean…</i><br/><br/> "
+                        + "Wait what? Oh n-!<br/>"
+                        + "Airi pulls you into the tub with her gooey appendages and submerges you inside her body. <i>Relax… I’ll clean you up… Inside and out…</i><br/>");
+        
         character.addLine(CharacterLine.CHALLENGE, (c, self, other) -> {
             if (other.human()) {
                 return character.has(Trait.slime)
@@ -140,6 +151,15 @@ public class Airi extends BasePersonality {
             : "Airi looks at you cautiously. The lithe Japanese girl sports a cute face and a tight body with shoulder length black hair "
                             + "almost covering her bright intelligent black eyes. You're not too sure what she's thinking "
                             + "so you approach her cautiously.";
+        });
+        
+        //To be said when this character wins the entire night.
+        character.addLine(CharacterLine.VICTORY_LINER, (c, self, other) -> {
+            return "{self:SUBJECT} smiles and hides her face in her hands but says nothing; It's obvious that she's happy that she won.";
+        });
+        //To be said when they earn 0 points.
+        character.addLine(CharacterLine.LOSER_LINER, (c, self, other) -> {
+            return "{self:SUBJECT} looks down at the ground and hides her face, obviously disappointed at her loss.\"</i>";
         });
     }
 

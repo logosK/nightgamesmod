@@ -16,9 +16,24 @@ import nightgames.items.clothing.ClothingSlot;
 import nightgames.status.Sensitized;
 
 public class CockPart extends GenericBodyPart {
+    
+    //FIXME: Sort out how Breast got support for mutation completely separate from cocks.
+    
     public static String synonyms[] = {"cock", "dick", "shaft", "phallus"};
 
     public static CockPart generic = new CockPart();
+    
+    public static CockPart inch3 = (CockPart) new CockPart().applyMod(new SizeMod(3));
+    public static CockPart inch4 = (CockPart) new CockPart().applyMod(new SizeMod(4));
+    public static CockPart inch5 = (CockPart) new CockPart().applyMod(new SizeMod(5));
+    public static CockPart inch6 = (CockPart) new CockPart().applyMod(new SizeMod(6));
+    public static CockPart inch7 = (CockPart) new CockPart().applyMod(new SizeMod(7));
+    public static CockPart inch8 = (CockPart) new CockPart().applyMod(new SizeMod(8));
+    public static CockPart inch9 = (CockPart) new CockPart().applyMod(new SizeMod(9));
+    public static CockPart inch10 = (CockPart) new CockPart().applyMod(new SizeMod(10));
+    public static CockPart inch11 = (CockPart) new CockPart().applyMod(new SizeMod(11));
+    public static CockPart inch12 = (CockPart) new CockPart().applyMod(new SizeMod(12));
+    
 
     public static CockPart generateGeneric() {
         return new CockPart(0, 1.2, 1);
@@ -36,6 +51,17 @@ public class CockPart extends GenericBodyPart {
     public double getFemininity(Character c) {
         return SizeMod.COCK_SIZE_SMALL - getSize();
     }
+    
+    @Override
+    public double getMasculinity(Character c) {
+        return getSize() - SizeMod.COCK_SIZE_SMALL;     //TODO: Implement Masculinity Mechanic From BodyPart down to all parts. -DSM
+    }
+    
+    
+    public static CockPart maximumSize() {
+        return inch12;
+    }
+
 
     @Override
     public int mod(Attribute a, int total) { 
@@ -174,6 +200,8 @@ public class CockPart extends GenericBodyPart {
     public BodyPart downgrade() {
         return this.applyMod(new SizeMod(SizeMod.clampToValidSize(this, getSize() - 1)));
     }
+    
+    
 
     public PussyPart getEquivalentPussy() {
         List<PartMod> newMods = getPartMods().stream().map(BodyUtils.EQUIVALENT_MODS::get).filter(mod -> mod != null).distinct().collect(Collectors.toList());

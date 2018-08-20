@@ -109,6 +109,7 @@ import nightgames.modifier.CustomModifierLoader;
 import nightgames.modifier.Modifier;
 import nightgames.modifier.standard.FTCModifier;
 import nightgames.modifier.standard.LevelDrainModifier;
+import nightgames.modifier.standard.MayaModifier;
 import nightgames.modifier.standard.NoItemsModifier;
 import nightgames.modifier.standard.NoModifier;
 import nightgames.modifier.standard.NoRecoveryModifier;
@@ -141,6 +142,7 @@ import nightgames.trap.StripMine;
 import nightgames.trap.TentacleTrap;
 import nightgames.trap.Trap;
 import nightgames.trap.Tripline;
+import nightgames.debug.MatchModifierPicker;
 
 public class Global {
     private static Random rng;                                      //Isn't the convention for static variables at this level is to put them in all caps? -DSM
@@ -317,7 +319,6 @@ public class Global {
         }
         Map<String, Boolean> configurationFlags = JsonUtils.mapFromJson(JsonUtils.rootJson(new InputStreamReader(ResourceLoader.getFileResourceAsStream("data/globalflags.json"))).getAsJsonObject(), String.class, Boolean.class);
         configurationFlags.forEach((flag, val) -> Global.setFlag(flag, val));
-        
         if (!cfgDebugFlags.isEmpty()) {
             for (DebugFlags db:cfgDebugFlags.stream().collect(Collectors.toSet())) {
                 debug[db.ordinal()]=true;
@@ -331,7 +332,6 @@ public class Global {
             ButtslutQuest bsq = getButtslutQuest().get();
             for(Character ch:players) {
                 if (ch instanceof Player) {continue;}
-                System.out.println(ch.getTrueName());
                 bsq.addPlayerLossPoint(ch);
                 bsq.addPlayerLossPoint(ch);
                 bsq.addPlayerLossPoint(ch);
@@ -727,6 +727,7 @@ public class Global {
         modifierPool.add(new VibrationModifier());
         modifierPool.add(new VulnerableModifier());
         modifierPool.add(new LevelDrainModifier());
+        modifierPool.add(new MayaModifier());           //Checks its own condition, so it should be fine, here. - DSM
 
         File customModFile = new File("data/customModifiers.json");
         if (customModFile.canRead()) {
@@ -802,9 +803,8 @@ public class Global {
     
     public static void endNight() {
         double level = 0;
-        int maxLeve = 0;
-        int maxLeve2 = 0;
-
+        int maxLevelTracker1 = 0;
+        int maxLevelTracker2 = 0;
         for (Character player : players) {
             player.getStamina().fill();
             player.getArousal().empty();
@@ -812,24 +812,23 @@ public class Global {
             player.change();
             level += player.getLevel();
             if (!player.has(Trait.unnaturalgrowth) && !player.has(Trait.naturalgrowth)) {
-                maxLeve = Math.max(player.getLevel(), maxLeve);
+                maxLevelTracker = Math.max(player.getLevel(), maxLevelTracker);
             }
-            maxLeve2 = Math.max(player.getLevel(), maxLeve2);
+            maxLevelTracker2 = Math.max(player.getLevel(), maxLevelTracker2);
         }
-        final int maxLevel=maxLeve;
-        final int maxLevel2=maxLeve2;
+        final int maxLevel = maxLevelTracker; // Was final int maxLevel = maxLevelTracker / players.size();
         players.stream().filter(c -> c.has(Trait.naturalgrowth)).filter(c -> c.getLevel() < maxLevel + 2).forEach(c -> {
             while (c.getLevel() < maxLevel + 2) {
                 c.ding(null);
             }
         });
         players.stream().filter(c -> c.has(Trait.unnaturalgrowth)).filter(c -> c.getLevel() < maxLevel + 5).forEach(c -> {
-            while (c.getLevel() < maxLevel + 5) {
+            while (c.getLevel() < maxLevelTracker1 + 5) {
                 c.ding(null);
             }
         });
         players.stream().filter(c -> c.has(Trait.selfstudy)).filter(c -> c.getLevel() < maxLevel2 - 2).forEach(c -> {
-            while (c.getLevel() < maxLevel2 - 2) {
+            while (c.getLevel() < maxLevelTracker2 - 2) {
                 c.ding(null);
             }
         });
@@ -871,6 +870,9 @@ public class Global {
     public static void startNight() {
         if (isDebugOn(DebugFlags.DEBUG_MATCHTYPES)) {
             current = new MatchTypePicker();
+            current.respond("Start");
+        } else if (isDebugOn(DebugFlags.DEBUG_MATCHMODIFIERS)) {
+            current = new MatchModifierPicker();
             current.respond("Start");
         } else {
             currentMatchType = decideMatchType();

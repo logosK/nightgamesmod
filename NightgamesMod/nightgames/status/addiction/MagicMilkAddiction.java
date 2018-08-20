@@ -80,15 +80,15 @@ public class MagicMilkAddiction extends Addiction {
         switch (getSeverity()) {
             case HIGH:
                 return "<b>You haven't had any of " + cause.getName() + "'s milk today, and the thirst threatens"
-                                + " to overwhelm you. You won't last long in fights tonight...</b>";
+                                + " to overwhelm you. You won't last long in fights tonight...</b><br/>";
             case LOW:
                 return "<b>You feel a little uneasy going without " + cause.getName() + "'s milk for a whole day,"
-                                + " and it's distracting you to the point where it lowers your willpower!</b>";
+                                + " and it's distracting you to the point where it lowers your willpower!</b><br/>";
             case MED:
                 return "<b>The thirst for " + cause.getName() + "'s milk burns within you, "
-                                + "scorching away such useless things as a strong will.</b>";
+                                + "scorching away such useless things as a strong will.</b><br/>";
             case NONE:
-                throw new IllegalStateException("Tried to describe withdrawal for an inactive milk addiction.");
+                throw new IllegalStateException("Tried to describe withdrawal for an inactive milk addiction.<br/>");
             default:
                 return ""; // hide
         }

@@ -497,8 +497,10 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
             opponents.forEach(opponent -> opponent.weaken(this, opponent.getStamina().max() / 10));
         }
         String beguilingbreastCompletedFlag = Trait.beguilingbreasts.name() + "Completed";
-        if (character.has(Trait.beguilingbreasts) && !getCombatantData(character).getBooleanFlag(beguilingbreastCompletedFlag)
-                        && character.outfit.slotOpen(ClothingSlot.top)) {
+        //Fix for Beguiling Breasts being seen when it shouldn't.
+        if (character.has(Trait.beguilingbreasts) && !getCombatantData(character).getBooleanFlag(beguilingbreastCompletedFlag) && 
+                        character.outfit.slotOpen(ClothingSlot.top) && getStance().facing(character, getOpponent(character)) && 
+                        !getOpponent(character).is(Stsflag.blinded)) {
             Character mainOpponent = getOpponent(character);
             write(character, Global.format("The instant {self:subject-action:lay|lays} {self:possessive} eyes on {other:name-possessive} bare breasts, {self:possessive} consciousness flies out of {self:possessive} mind. " +
                             (character.canAct() ? "{other:SUBJECT-ACTION:giggle|giggles} a bit and {other:action:cup} {other:possessive} {other:body-part:breasts}"
@@ -1072,6 +1074,9 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
 
         Character other = getStance().getPartner(this, self);
         Addiction add = other.getAddiction(AddictionType.DOMINANCE).orElse(null);       //FIXME: Causes trigger even though addiction has 0 magnitude.
+        boolean isDomSubjectpresent = false;                                            //TODO: determine if the subject of the addiction is the actual opponent           
+        
+        //This is okay, as it represents the lasting effects of domination outside combat.
         if (add != null && add.atLeast(Severity.MED) && !add.wasCausedBy(self)) {
             write(self, Global.format("{self:name} does {self:possessive} best to be dominant, but with the "
                         + "way "+ add.getCause().getName() + " has been working {self:direct-object} over {self:pronoun-action:are} completely desensitized." , self, other));
@@ -1360,7 +1365,7 @@ private static HashMap<String, HashMap<String, List<Integer>>> resultTracker=new
                                 / 8, 15), true);
             }
             if (other.has(Trait.dominatrix)) {
-                if (p.hasAddiction(AddictionType.DOMINANCE)) {
+                if (p.hasAddiction(AddictionType.DOMINANCE)) {      //TODO: Ensure that The person that IS this person's Dom is the opponent. - DSM
                     write(other, String.format("Being dominated by %s again reinforces %s"
                                     + " submissiveness towards %s.", other.getName(), p.nameOrPossessivePronoun(),
                                     other.directObject()));

@@ -17,3 +17,4 @@ combatlogs
 **/Thumbs.db
 **/.DS_Store
 ./*.log
+*.orig

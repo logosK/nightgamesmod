@@ -83,15 +83,15 @@ public class Breeder extends Addiction {
             case HIGH:
                 return "<b>Finding and seeding a willing pussy is foremost in your mind after not"
                                 + " fucking " + cause.getName() + " all day, and you are already hard at the prospect of"
-                                + " mending that unfortunate situation.</b>";
+                                + " mending that unfortunate situation.</b><br/";
             case LOW:
                 return "<b>Having not fucked " + cause.getName() + " all day, you feel a tingle in your balls telling you it's"
-                                + " time to do something about that.</b>";
+                                + " time to do something about that.</b><br/";
             case MED:
                 return "<b>Your instincts are telling you that you haven't fucked enough today, and"
-                                + " they are driving up your arousal.</b>";
+                                + " they are driving up your arousal.</b><br/";
             case NONE:
-                throw new IllegalStateException("Tried to describe withdrawal for an inactive breeder addiction.");
+                throw new IllegalStateException("Tried to describe withdrawal for an inactive breeder addiction.<br/");
             default:
                 return ""; // hide
         }

@@ -177,21 +177,29 @@ public class Collared extends Status implements Compulsive {
     
     @Override
     public void doPostCompulsion(Combat c, Situation sit) {
-        int cost;
+        int cost;       //Included fix for Mara's costs for shocking you. 
         switch (sit) {
             case PREVENT_ESCAPE:
+                cost = 1;
+                break;
             case PREVENT_STRUGGLE:
+                cost = 1;
+                break;
+            case PREVENT_REVERSAL:
+                cost = 1;
+                break;
             case STANCE_FLIP:
                 cost = 2;
                 break;
             case PREVENT_REMOVE_BOMB:
+                cost = 1;
+                break;
             case PUNISH_PAIN:
                 cost = 1;
                 break;
             default:
                 cost = 0;
         }
-        charges = Math.max(0, charges - cost);
-    }
 
+    }
 }

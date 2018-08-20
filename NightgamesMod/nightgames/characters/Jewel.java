@@ -419,6 +419,15 @@ public class Jewel extends BasePersonality {
                                 + "She practically radiates confidence. By her expression alone, it's like her victory is already assured.";
             }
         });
+        
+        
+        character.addLine(CharacterLine.VICTORY_LINER, (c, self, other) -> {
+            return "{self:SUBJECT} shouts in triumph, <i>\"YEAH! That'll show you. I'm the strongest.\"</i>";
+        });
+        
+        character.addLine(CharacterLine.LOSER_LINER, (c, self, other) -> {
+            return "{self:SUBJECT} mutters, <i>\"Son of a bitch...\"</i>";
+        });
     }
 
     @Override

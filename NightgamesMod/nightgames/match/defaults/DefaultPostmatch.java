@@ -52,7 +52,7 @@ public class DefaultPostmatch extends Postmatch {
             }
         }
         if(Global.isDebugOn(DebugFlags.DEBUG_AFFECTION)) {System.out.println("maxaffection is "+maxaffection+" for "+closest.getTrueName());}
-
+        //TODO: Fix Angel always being picked for the afterparty event. Given how often she can win, it's not a surprise she ends up with highest affection? - DSM
         if (maxaffection >= 15 && closest != null) {
             closest.afterParty();
         } else {

@@ -393,6 +393,15 @@ public class Kat extends BasePersonality {
                 return "The sexy kitty doesn't pause for even a second as you cum your life force into her gluttonous " + part + ". <i>Aahh ahh! You're delicious nyaa!</i>";
             }
         });
+        
+        character.addLine(CharacterLine.VICTORY_LINER, (c, self, other) -> {
+            return "{self:SUBJECT} shouts in triumph, <i>\"NYAAA! I'm the strongest!\"</i>";
+        });
+        
+        character.addLine(CharacterLine.LOSER_LINER, (c, self, other) -> {
+            return "{self:SUBJECT} mutters, <i>\"Nyaaaaa...I lost? :3\"</i>";
+        });
+        
     }
 
     @Override

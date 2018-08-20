@@ -16,6 +16,8 @@ public interface CharacterLine {
     public static String LEVEL_DRAIN_LINER = "levelDrain";
     public static String DESCRIBE_LINER = "describe";
     public static String ENGULF_LINER = "engulf";
+    public static String VICTORY_LINER = "winner";    //To be said if they win the night's game.
+    public static String LOSER_LINER = "loser";    //To be said if they score 0 points during a night.
     public static String ALL_LINES[] = {DESCRIBE_LINER, ENGULF_LINER, CHALLENGE, ORGASM_LINER, MAKE_ORGASM_LINER, NIGHT_LINER, BB_LINER, STUNNED_LINER, NAKED_LINER, TEMPT_LINER, TAUNT_LINER, LEVEL_DRAIN_LINER};
 
     String getLine(Combat c, Character self, Character other);
